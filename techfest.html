@@ -92,16 +92,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- Pillars Section -->
+  <style>
+    .four-pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 1024px) {
+      .four-pillars-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .four-pillars-grid { grid-template-columns: 1fr; }
+    }
+    .techfest-card {
+      background: var(--color-light);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: 4px 4px 0px var(--color-border);
+      transition: var(--transition-bounce);
+      text-align: center;
+    }
+    .techfest-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 6px 6px 0px var(--color-primary);
+      border-color: var(--color-primary);
+    }
+  </style>
   <section class="section" id="pillars">
     <div class="container">
       <div class="section-header">
         <h2>The Four Pillars</h2>
       </div>
-      <div class="features-row">
-        <div class="feature-card"><h3>Explorer</h3><p>Green Pass</p></div>
-        <div class="feature-card"><h3>Maker</h3><p>Blue Pass</p></div>
-        <div class="feature-card"><h3>Competitor</h3><p>Red Pass</p></div>
-        <div class="feature-card"><h3>Innovator</h3><p>Gold Pass</p></div>
+      <div class="four-pillars-grid">
+        <div class="techfest-card"><h3>Explorer</h3><p>Green Pass</p></div>
+        <div class="techfest-card"><h3>Maker</h3><p>Blue Pass</p></div>
+        <div class="techfest-card"><h3>Competitor</h3><p>Red Pass</p></div>
+        <div class="techfest-card"><h3>Innovator</h3><p>Gold Pass</p></div>
       </div>
     </div>
   </section>
