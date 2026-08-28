@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makerspace Curriculum – Grades 1–9 &amp; 11</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1a2e;--ink2:#3d3c52;--muted:#7b7a90;--bg:#f7f6f2;--card:#fff;--rule:#e5e3dc;
+  --g1:#e8f5e9;--g1d:#2e7d32;--g2:#e3f2fd;--g2d:#1565c0;--g3:#fff8e1;--g3d:#e65100;
+  --g4:#fce4ec;--g4d:#c62828;--g5:#f3e5f5;--g5d:#6a1b9a;--g6:#e0f7fa;--g6d:#00695c;
+  --g7:#fff3e0;--g7d:#bf360c;--g8:#e8eaf6;--g8d:#283593;--g9:#fdf2e9;--g9d:#784212;
+  --g11:#f9f0ff;--g11d:#4a235a;--r:10px;--sh:0 2px 12px rgba(0,0,0,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6}
+header{background:var(--ink);color:#fff;padding:34px 44px 26px;position:relative;overflow:hidden}
+header::after{content:'MAKERSPACE';position:absolute;right:-10px;top:-10px;font-family:'DM Serif Display',serif;font-size:110px;color:rgba(255,255,255,.04);pointer-events:none;user-select:none}
+header h1{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;line-height:1.2;margin-bottom:6px}
+header p{color:rgba(255,255,255,.5);font-size:13px;max-width:700px;line-height:1.6}
+.mt{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.mt span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.75);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.cap-key{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+@media(max-width:600px){.cap-key{grid-template-columns:1fr}}
+.ck{border-radius:8px;padding:11px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15)}
+.ck .ck-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.45);margin-bottom:3px}
+.ck .ck-title{font-weight:600;font-size:13px;color:#fff}
+.ck .ck-grades{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+nav{background:var(--card);border-bottom:1px solid var(--rule);padding:0 24px;display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+nav button{background:none;border:none;padding:12px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+nav button:hover{color:var(--ink)}
+nav button.active{color:var(--ink);border-bottom-color:var(--ink)}
+nav .sep{width:1px;background:var(--rule);margin:8px 3px;flex-shrink:0}
+main{max-width:1320px;margin:0 auto;padding:26px 26px 60px}
+.gs{display:none}.gs.active{display:block}
+/* grade header */
+.gh{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;padding:18px 22px;border-radius:var(--r);border-left:4px solid}
+.gb{font-family:'DM Serif Display',serif;font-size:38px;line-height:1;opacity:.18;min-width:54px;text-align:center}
+.gi h2{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;margin-bottom:3px}
+.gi .tl{font-size:12px;opacity:.58;margin-bottom:6px}
+.pr{display:flex;flex-wrap:wrap;gap:5px}
+.pill{padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500;background:rgba(0,0,0,.07)}
+/* section title */
+.st{font-family:'DM Serif Display',serif;font-size:15px;font-weight:400;margin:20px 0 9px;color:var(--ink2);display:flex;align-items:center;gap:9px}
+.st::after{content:'';flex:1;height:1px;background:var(--rule)}
+/* notes */
+.cn{background:#f0f7ff;border:1px solid #b3d1f7;border-radius:8px;padding:10px 13px;font-size:12px;color:#1a3f6f;margin-bottom:14px}
+.cn strong{font-weight:600}
+/* capstone banners */
+.ban{border-radius:9px;padding:15px 19px;margin:14px 0 6px;border-left:4px solid}
+.ban h3{font-family:'DM Serif Display',serif;font-size:16px;font-weight:400;margin-bottom:4px}
+.ban p{font-size:13px;line-height:1.65}
+.ban .sr{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.ban .sp{border-radius:6px;padding:3px 9px;font-size:11px;font-weight:500}
+.ban-bridge{background:linear-gradient(to right,#f0fdf8,#f5fbf9);border-color:#00695c}
+.ban-bridge h3{color:#004d40}.ban-bridge p{color:#1a4a40}
+.ban-bridge .sp{background:rgba(0,105,92,.1);border:1px solid rgba(0,105,92,.22);color:#003d30}
+.ban-boat{background:linear-gradient(to right,#f0f6ff,#f5f8ff);border-color:#1565c0}
+.ban-boat h3{color:#0d3b80}.ban-boat p{color:#1a3060}
+.ban-boat .sp{background:rgba(21,101,192,.1);border:1px solid rgba(21,101,192,.22);color:#0d3070}
+/* tables */
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:13px;margin-bottom:20px}
+thead tr{background:var(--ink);color:#fff}
+thead th{padding:9px 11px;text-align:left;font-weight:500;font-size:11px;letter-spacing:.4px;text-transform:uppercase}
+tbody tr{border-bottom:1px solid var(--rule);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(0,0,0,.013)}
+tbody td{padding:9px 11px;vertical-align:top;line-height:1.5}
+tbody tr.cr{background:#fffbf0}
+tbody tr.cr:hover{background:#fff6e3}
+tbody tr.cr td.wn{color:#b8870b}
+td.wn{font-family:'DM Serif Display',serif;font-size:16px;color:var(--muted);width:38px;text-align:center;vertical-align:middle}
+td.fc{font-weight:600;color:var(--ink);width:148px}
+td.tb{width:66px;vertical-align:middle}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.b1{background:#e8f5e9;color:#1b5e20}.b2{background:#e3f2fd;color:#0d47a1}.bc{background:#fff3cd;color:#7c4700}
+td.oc{color:var(--muted);font-size:12px;width:138px}
+td.ac{min-width:205px}
+td.mc{font-size:12px;color:var(--muted);min-width:115px}
+.dtag{background:#f0f0ec;border:1px solid var(--rule);border-radius:5px;padding:1px 7px;font-size:10px;color:var(--muted);font-weight:500;margin-left:5px}
+/* assessment */
+.ab{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:13px 17px;box-shadow:var(--sh);margin-bottom:18px}
+.ab h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:7px}
+.cl{display:flex;flex-wrap:wrap;gap:6px}
+.ci{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--ink2)}
+/* role cards */
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-bottom:18px}
+.rc{background:var(--card);border:1px solid var(--rule);border-left:3px solid;border-radius:var(--r);padding:11px 13px;box-shadow:var(--sh)}
+.rc h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.rc p{font-size:12px;color:var(--muted)}
+/* light/simple layout for G1-G2 */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
+.theme-card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.theme-card h4{font-size:14px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+.theme-card .weeks{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;opacity:.55}
+.theme-card ul{list-style:none;padding:0}
+.theme-card li{font-size:13px;padding:3px 0 3px 14px;position:relative;color:var(--ink2)}
+.theme-card li::before{content:'·';position:absolute;left:3px;color:var(--muted)}
+.theme-card .outcome{margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--rule);padding-top:7px}
+/* colour classes */
+.g1{background:var(--g1);border-color:var(--g1d);color:var(--g1d)}.g2{background:var(--g2);border-color:var(--g2d);color:var(--g2d)}
+.g3{background:var(--g3);border-color:var(--g3d);color:var(--g3d)}.g4{background:var(--g4);border-color:var(--g4d);color:var(--g4d)}
+.g5{background:var(--g5);border-color:var(--g5d);color:var(--g5d)}.g6{background:var(--g6);border-color:var(--g6d);color:var(--g6d)}
+.g7{background:var(--g7);border-color:var(--g7d);color:var(--g7d)}.g8{background:var(--g8);border-color:var(--g8d);color:var(--g8d)}
+.g9{background:var(--g9);border-color:var(--g9d);color:var(--g9d)}.g11{background:var(--g11);border-color:var(--g11d);color:var(--g11d)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Makerspace Curriculum &middot; Grades 1&ndash;9 &amp; 11<br>
+  <em style="font-style:italic;opacity:.5;font-size:18px">15 Weeks &middot; 90 min/session &middot; Each grade belongs to exactly one capstone</em></h1>
+  <p>Grades 1 &amp; 2 follow a light play-based overview. Grades 3&ndash;11 have detailed week-by-week plans. Capstone projects are outcomes of regular sessions &mdash; the final weeks redirect skills already built toward one shared deliverable per grade group.</p>
+  <div class="cap-key">
+    <div class="ck">
+      <div class="ck-label">Capstone 1 &mdash; Grades 3 &amp; 4</div>
+      <div class="ck-title">&#127968; Dream Village</div>
+      <div class="ck-grades">G3: school model &middot; G4: energy district</div>
+    </div>
+    <div class="ck">
+      <div class="ck-label">Capstone 2 &mdash; Grades 6, 7 &amp; 8</div>
+      <div class="ck-title">&#127968; Suspension Bridge</div>
+      <div class="ck-grades">G6: electronics &middot; G7: fabrication &middot; G8: design lead</div>
+    </div>
+    <div class="ck">
+      <div class="ck-label">Capstone 3 &mdash; Grades 9 &amp; 11</div>
+      <div class="ck-title">&#9973; Floating Boat</div>
+      <div class="ck-grades">G9: systems &amp; hull &middot; G11: IoT &amp; advanced fabrication</div>
+    </div>
+  </div>
+  <div class="mt">
+    <span>Grades 1&ndash;9 &amp; 11</span><span>CBSE Composite Lab Aligned</span><span>Makedo Invent Kit (360 pcs)</span>
+    <span>MakeBlock Kits</span><span>3D Printer &middot; Laser &middot; CNC</span>
+    <span>Sewing &amp; Embroidery Machines</span><span>Clay / Pottery</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="show('g1')">Grade 1</button>
+  <button onclick="show('g2')">Grade 2</button>
+  <div class="sep"></div>
+  <button onclick="show('g3')">Grade 3</button>
+  <button onclick="show('g4')">Grade 4</button>
+  <div class="sep"></div>
+  <button onclick="show('g5')">Grade 5</button>
+  <div class="sep"></div>
+  <button onclick="show('g6')">Grade 6</button>
+  <button onclick="show('g7')">Grade 7</button>
+  <button onclick="show('g8')">Grade 8</button>
+  <div class="sep"></div>
+  <button onclick="show('g9')">Grade 9</button>
+  <button onclick="show('g11')">Grade 11</button>
+</nav>
+<main>
+
+<section class="gs active" id="g1">
+  <div class="gh g1">
+    <div class="gb">1</div>
+    <div class="gi">
+      <h2>Grade 1 · Ages 6–7</h2>
+      <p class="tl">Play-Based Overview &nbsp;|&nbsp; Manual only · No machines · No detailed week table</p>
+      <div class="pr"><span class="pill">Makedo Invent Kit</span><span class="pill">Air-Dry Clay</span><span class="pill">Paper Craft</span><span class="pill">Hand Sewing Intro</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Level 1 Pre-Vocational:</strong> fine motor, creative expression, material awareness. G1 follows a light theme-based overview — not a week-by-week table. Individual outcome: <strong>Mini Exhibition at Week 15</strong> (no shared capstone).</div>
+  <div class="st">15-Week Overview (Play-Based — No detailed week-by-week table)</div>
+  <div class="theme-grid"><div class="theme-card">
+      <div class="weeks">Weeks 1–3</div>
+      <h4>Material Exploration</h4>
+      <ul><li>Touch &amp; feel: paper, clay, cardboard, Makedo pieces</li><li>Tear, fold, roll paper (builds finger strength)</li><li>First Makedo connection: Sawtool + connect two cardboard cards</li></ul>
+      <div class="outcome">&#10003; Sensory awareness · Makedo familiarity · Lab confidence</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 4–5</div>
+      <h4>Clay &amp; Pottery Play</h4>
+      <ul><li>Pinch, roll, flatten air-dry clay</li><li>Make an animal or fruit shape</li><li>Teacher-demo coil bowl; students try their own</li></ul>
+      <div class="outcome">&#10003; Shape-making · Texture awareness · Clay handling</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 6–7</div>
+      <h4>Makedo Building</h4>
+      <ul><li>Build a cardboard house using Makedo connectors + re-clips</li><li>Build a cardboard car or bus</li><li>Decorate with crayons, stickers, paper windows</li></ul>
+      <div class="outcome">&#10003; 3D construction · Tool confidence · Geometric thinking</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 8–9</div>
+      <h4>Soft Toy &amp; Sewing Intro</h4>
+      <ul><li>Thread a large plastic needle (with help)</li><li>Running stitch on a felt strip (practice)</li><li>Join two felt pieces into a fish or bird shape</li></ul>
+      <div class="outcome">&#10003; Fine motor · Sewing intro · Imagination</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 10–11</div>
+      <h4>Story &amp; Character</h4>
+      <ul><li>Draw a story character</li><li>Make the character with felt + Makedo cardboard</li><li>Match toy to a 3-sentence story; act it out</li></ul>
+      <div class="outcome">&#10003; Narrative thinking · Character design · Confidence</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 12–13</div>
+      <h4>Decorate &amp; Fix</h4>
+      <ul><li>Add buttons, beads, paint to soft toy</li><li>Clay pendant: roll, poke hole, decorate</li><li>Identify one thing to fix on any earlier work; fix it</li></ul>
+      <div class="outcome">&#10003; Aesthetics · Iteration mindset · Quality focus</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 14–15</div>
+      <h4>Mini Exhibition &amp; Portfolio</h4>
+      <ul><li>Set up a display of all work from the term</li><li>Each child explains 2 items in 2 sentences to visitors</li><li>Teacher + parent feedback; sticker voting; portfolio photos</li></ul>
+      <div class="outcome">&#10003; Communication · Reflection · Pride of craft</div>
+    </div></div>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Observation-Based (No Tests)</h4>
+    <div class="cl">
+      <span class="ci">Participation &amp; engagement</span>
+      <span class="ci">Makedo tool handling</span>
+      <span class="ci">Clay / craft quality</span>
+      <span class="ci">Ability to follow steps</span>
+      <span class="ci">Verbal explanation (1–2 sentences)</span>
+      <span class="ci">Portfolio completeness</span>
+    </div>
+  </div>
+</section>
+<section class="gs" id="g2">
+  <div class="gh g2">
+    <div class="gb">2</div>
+    <div class="gi">
+      <h2>Grade 2 · Ages 7–8</h2>
+      <p class="tl">Play → Purpose → Problem-Solving &nbsp;|&nbsp; Manual tools · Makedo · Clay</p>
+      <div class="pr"><span class="pill">Toy &amp; Game Design</span><span class="pill">Pottery</span><span class="pill">Recycled Craft</span><span class="pill">Hand Sewing</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Level 2 Pre-Vocational:</strong> purposeful making, rule logic, material reuse. G2 follows a light theme-based overview. Individual outcome: <strong>Game Fair at Week 15</strong> (no shared capstone).</div>
+  <div class="st">15-Week Overview (Play-Based — No detailed week-by-week table)</div>
+  <div class="theme-grid"><div class="theme-card">
+      <div class="weeks">Weeks 1–3</div>
+      <h4>Toy &amp; Game Exploration</h4>
+      <ul><li>Disassemble a simple toy to see its parts</li><li>Build a Makedo rolling cylinder; test on a ramp</li><li>Make a moveable-arm Makedo figure using re-clips as hinges</li></ul>
+      <div class="outcome">&#10003; Systems thinking · Motion understanding · Mechanical curiosity</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 4–6</div>
+      <h4>Board Game Design</h4>
+      <ul><li>Invent 3 game rules on paper; sketch the board layout</li><li>Build the board with Makedo cardboard panels; add paths, hazards, rewards</li><li>Swap and play each other's games; give 'one change' feedback</li></ul>
+      <div class="outcome">&#10003; Logical sequencing · Rule writing · Iteration</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 7–8</div>
+      <h4>Clay Pottery</h4>
+      <ul><li>Coil bowl + slab tile using air-dry clay</li><li>Make a useful object: pen stand or small bowl</li><li>Texture stamps with Makedo pieces pressed into clay</li></ul>
+      <div class="outcome">&#10003; Form control · Functional thinking · Cultural craft</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 9–10</div>
+      <h4>Recycled Craft &amp; Sewing</h4>
+      <ul><li>Transform a bottle or box into something useful (Makedo + paint)</li><li>Running stitch: join two felt squares into a small pouch</li><li>Stuff and close the pouch; decorate with buttons</li></ul>
+      <div class="outcome">&#10003; Sustainability · Dexterity · Upcycling</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 11–12</div>
+      <h4>Free Make &amp; Improve</h4>
+      <ul><li>Open build session: make anything using any available material</li><li>Review all work; fix one weak or incomplete item</li><li>Peer feedback: 2 compliments + 1 suggestion</li></ul>
+      <div class="outcome">&#10003; Creative confidence · Self-assessment · Problem-solving</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 13–14</div>
+      <h4>Game Fair Preparation</h4>
+      <ul><li>Finalise and beautify board game; write rule booklet</li><li>Teach the game to a Grade 1 student (cross-grade session)</li><li>Practise explaining: 'This is how you play…'</li></ul>
+      <div class="outcome">&#10003; Teaching skills · Communication · Cross-grade empathy</div>
+    </div>
+<div class="theme-card">
+      <div class="weeks">Weeks 14–15</div>
+      <h4>Game Fair &amp; Portfolio</h4>
+      <ul><li>Host a Game Fair: invite Grade 1 to play G2 games</li><li>Each student presents 2 items: game + one craft</li><li>Portfolio: photos + teacher observation + 2-sentence student reflection</li></ul>
+      <div class="outcome">&#10003; Confidence · Public communication · Portfolio completion</div>
+    </div></div>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Observation-Based (No Tests)</h4>
+    <div class="cl">
+      <span class="ci">Participation &amp; engagement</span>
+      <span class="ci">Makedo tool handling</span>
+      <span class="ci">Clay / craft quality</span>
+      <span class="ci">Ability to follow steps</span>
+      <span class="ci">Verbal explanation (1–2 sentences)</span>
+      <span class="ci">Portfolio completeness</span>
+    </div>
+  </div>
+</section>
+<section class="gs" id="g3">
+  <div class="gh g3">
+    <div class="gb">3</div>
+    <div class="gi">
+      <h2>Grade 3 · Ages 8–9</h2>
+      <p class="tl">Think → Design → Build → Improve &nbsp;|&nbsp; Makedo · Clay · Low-temp glue (T)</p>
+      <div class="pr"><span class="pill">Design Thinking</span><span class="pill">Scale Modelling</span><span class="pill">Board Game Design</span><span class="pill">Pottery</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 3 &mdash; design process, measurement, structured model making. Weeks 11&ndash;15 redirect toward <strong>Capstone 1: Dream Village (G3+G4)</strong>.</div>
+  <div class="ban ban-bridge"><h3>&#127968; Capstone 2 &mdash; Dream Village: School Building (with Grade 4)</h3><p>From Week 11, G3 sessions build the <strong>School Building</strong> for the shared Dream Village — a 1:20 scaled multi-storey model with Makedo-hinged doors and labelled classrooms. G4 builds the Green Energy District alongside it. <strong>Week 15 is the shared G3+G4 exhibition.</strong></p><div class="sr"><span class="sp">Grades 3 + 4 only</span><span class="sp">G3 role: school building (scale model)</span><span class="sp">1:20 scale · multi-storey · hinged doors</span><span class="sp">Exhibition = Week 15 of both grades</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">What is Design?</td><td class="ac">Observation walk: spot problems at school (20 min) → Present findings (15 min) → 5-step design process poster (15 min) → Makedo free-build challenge (35 min) → Reflection (5 min)</td><td class="mc">Makedo, notebooks</td><td class="oc">Problem identification</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Idea Sketching</td><td class="ac">Draw 3 solutions with labels (35 min) → Add ruler dimensions (20 min) → 'One star, one wish' peer feedback (20 min) → Refine sketch (15 min)</td><td class="mc">Pencils, rulers, grid paper</td><td class="oc">Visual thinking; measurement</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Scale &amp; Proportion</td><td class="ac">1:2 scale model demo (10 min) → Measure objects; draw at half size (25 min) → Build scaled Makedo structure (45 min) → Compare with real (10 min)</td><td class="mc">Ruler, Makedo, cardboard</td><td class="oc">Proportion; measurement accuracy</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Building a Model</td><td class="ac">Assemble cardboard base structure with Makedo (65 min) → Teacher low-temp glue for joins (5 min) → Standing test (15 min) → Note what wobbles (5 min)</td><td class="mc">Cardboard, Makedo, glue (T)</td><td class="oc">Construction skills</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Strength &amp; Stability</td><td class="ac">Stack books on model (10 min) → Identify weak points (15 min) → Reinforce with triangulation + Makedo (45 min) → Retest (15 min) → Record (5 min)</td><td class="mc">Makedo, glue, cardboard strips</td><td class="oc">Engineering thinking; load testing</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Clay Pottery: Coil + Slab</td><td class="ac">Clay handling intro (10 min) → Coil bowl (35 min) → Slab tile with Makedo texture stamps (30 min) → Set to dry (10 min) → Discuss functional pottery (5 min)</td><td class="mc">Air-dry clay, boards, tools</td><td class="oc">Form control; cultural craft</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Model + Craft Presentation</td><td class="ac">2-min pitch: problem → sketch → model → improvement (50 min) → Display clay work alongside model (15 min) → Class Q&amp;A (15 min) → Peer awards (10 min)</td><td class="mc">Models, clay work, notebooks</td><td class="oc">Communication; design storytelling</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Board Game Concept</td><td class="ac">Analyse Chess, Snakes &amp; Ladders, Ludo: what makes them fun? (25 min) → Choose theme; write goal + 3 rules (20 min) → Rough board sketch (30 min) → Peer feedback (15 min)</td><td class="mc">Game samples, chart paper, markers</td><td class="oc">Critical analysis; rule logic</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Board Game Build</td><td class="ac">Transfer sketch to large chart board with ruler (40 min) → Colour zones, paths, illustrations (30 min) → Make tokens from clay scraps (15 min) → Makedo cardboard dice (5 min)</td><td class="mc">Chart board, clay, Makedo cube template</td><td class="oc">Spatial planning; craft</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Test + Improve Game</td><td class="ac">Write complete rule booklet (30 min) → Play with peers; give feedback (30 min) → Implement one change (20 min) → Package in Makedo box (10 min)</td><td class="mc">Paper, all game components</td><td class="oc">User testing; iteration</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Village Prep: School Design</td><td class="ac">Dream Village brief: G3 + G4 overview (15 min) → G3 role: design the school building at 1:20 scale → Sketch school with labelled classrooms (30 min) → Begin ground-floor cardboard frame with Makedo (45 min)</td><td class="mc">Ruler, grid paper, Makedo, cardboard</td><td class="oc">Scale design; capstone ownership</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Build: School Multi-Storey</td><td class="ac">Add second storey with Makedo column connectors (40 min) → Teacher glue gun for structural joins (5 min) → Makedo-hinged front door (20 min) → Label classrooms (15 min) → First stand test (10 min)</td><td class="mc">Cardboard, Makedo, glue (T), labels</td><td class="oc">Structural complexity</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Finish + Place on Base</td><td class="ac">Paint school exterior (25 min) → Insert mini 'timetable' paper inside (game rule-writing skill reused) (10 min) → Place at village centre on shared base board (15 min) → Add clay tree + flagpole (20 min) → Connect to G4 energy zone path (20 min)</td><td class="mc">Paint, clay, base board</td><td class="oc">Village integration; skill reuse</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Rehearse + Full Walk-Through</td><td class="ac">Practise school zone explanation: scale, hinged door demo, timetable (25 min) → G3 + G4 combined rehearsal (30 min) → Final fixes on model (25 min) → Portfolio: model photo + sketch (10 min)</td><td class="mc">Village model, portfolio</td><td class="oc">Communication; cross-grade rehearsal</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Dream Village Exhibition</td><td class="ac">G3 + G4 combined exhibition → G3 explains School District; visitors open the hinged door + read timetable (40 min) → G4 activates solar LED streetlight (crowd moment) → Live load demo on bridge if G4 includes it (15 min) → Portfolio: photo + sketch + reflection (25 min) → Celebration (10 min)</td><td class="mc">Village model, portfolio, camera</td><td class="oc">Confidence; design communication</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Skill-Based</h4><div class="cl"><span class="ci">Scale accuracy (1:20)</span><span class="ci">Structural strength (load test)</span><span class="ci">Makedo hinge quality</span><span class="ci">Village integration with G4</span><span class="ci">Oral design explanation</span><span class="ci">Portfolio completeness</span></div></div>
+</section>
+<section class="gs" id="g4">
+  <div class="gh g4">
+    <div class="gb">4</div>
+    <div class="gi">
+      <h2>Grade 4 · Ages 9–10</h2>
+      <p class="tl">Observe → Design → Build → Test &nbsp;|&nbsp; Carpentry · MakeBlock · Makedo</p>
+      <div class="pr"><span class="pill">Carpentry</span><span class="pill">MakeBlock Motors</span><span class="pill">Wind &amp; Solar Energy</span><span class="pill">Pottery</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 4 &mdash; carpentry, product thinking, energy systems. Weeks 11&ndash;15 redirect toward <strong>Capstone 1: Dream Village (G3+G4)</strong>.</div>
+  <div class="ban ban-bridge"><h3>&#127968; Capstone 1 &mdash; Dream Village: Green Energy District (with Grade 3)</h3><p>G4&rsquo;s carpentry (Topic 1) + solar energy (Topic 2) converge: a wood-strip lamppost powered by solar panel becomes the village streetlight. When G4 connects the panel, the whole village lights up. <strong>Week 15 is the shared G3+G4 exhibition.</strong></p><div class="sr"><span class="sp">Grades 3 + 4 only</span><span class="sp">G4 role: solar LED streetlight + windmill</span><span class="sp">Carpentry + energy skills combined</span><span class="sp">Solar panel = crowd moment at exhibition</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">What is a Product?</td><td class="ac">Study 5 everyday objects: function, material, user (20 min) → Makedo product model (50 min) → Product card: labelled parts (15 min) → Share (5 min)</td><td class="mc">Product samples, Makedo, cardboard</td><td class="oc">Functional awareness</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Understanding Components</td><td class="ac">Disassemble torch/fan toy (10 min) → Exploded parts diagram (20 min) → MakeBlock: motors, gears (20 min) → Reassemble (30 min) → Document (10 min)</td><td class="mc">MakeBlock kit, torch sample</td><td class="oc">Systems thinking</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Sketch &amp; Measure</td><td class="ac">Measure 3 objects with ruler (15 min) → Draw with cm dimensions (30 min) → Transfer to cardboard; mark cut lines (30 min) → Teacher cuts; students sand edges (15 min)</td><td class="mc">Ruler, pencil, cardboard, sandpaper</td><td class="oc">Precision; measurement</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Carpentry Basics</td><td class="ac">Wood types: pine, MDF, plywood (10 min) → Sandpaper grits (10 min) → Sand strip smooth (20 min) → Join with screw + screwdriver supervised (35 min) → L-bracket stand (15 min)</td><td class="mc">Pine strips, sandpaper, screws, screwdrivers</td><td class="oc">Tool confidence; wood knowledge</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Mechanical Movement</td><td class="ac">Levers: 1st, 2nd, 3rd class (15 min) → MakeBlock lever mechanism (30 min) → Wheel + axle on cardboard vehicle (30 min) → Incline test (15 min)</td><td class="mc">MakeBlock, Makedo, cardboard</td><td class="oc">Motion understanding</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Load Testing</td><td class="ac">Makedo strongest bridge challenge (60 min) → Stack pennies until failure (15 min) → Record + compare (10 min) → Discussion: what made it strong? (5 min)</td><td class="mc">Makedo, cardboard, coins</td><td class="oc">Engineering mindset</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Product Presentation</td><td class="ac">Present best product/model (60 min) → Design journal: 5 sentences + sketch (20 min) → Display (10 min)</td><td class="mc">All work</td><td class="oc">Communication; documentation</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Energy Around Us</td><td class="ac">Energy types video (10 min) → Energy audit: 10 users at home (15 min) → Clay energy model: sun, turbine, dam (45 min) → Present (20 min)</td><td class="mc">Clay, video resource</td><td class="oc">Energy concepts; clay practice</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Wind Energy + MakeBlock</td><td class="ac">How wind makes power? (10 min) → MakeBlock + cardboard windmill (60 min) → Blow test: does LED light? (15 min) → Sketch + label (5 min)</td><td class="mc">MakeBlock motor, cardboard, LED, Makedo</td><td class="oc">Energy conversion</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Solar Energy + Carpentry Lamppost</td><td class="ac">Solar panel demo (10 min) → Connect panel to LED (30 min) → Build wood-strip lamppost: sand + screw (35 min) → Mount LED on top (15 min)</td><td class="mc">Solar panel kit, MakeBlock, pine strip</td><td class="oc">Renewable energy; carpentry applied</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Village Prep: Energy District + G3 Brief</td><td class="ac">Dream Village joint brief (from G3 Week 11) → G4 role: Green Energy District with live solar LED streetlight → Measure G4 zone (10 min) → Plan: windmill + solar lamppost + eco garden (20 min) → Clay pottery planters: 3 per group (50 min) → Dry (10 min)</td><td class="mc">Clay, rulers, base board</td><td class="oc">Spatial planning; pottery for village</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Build: Energy District</td><td class="ac">Mount windmill model in G4 zone (20 min) → Install lamppost + solar wiring (30 min) → Test: cover panel → no light; uncover → on (15 min) → Fix planters to base board (15 min) → Clay eco-garden path (10 min)</td><td class="mc">Solar panel, LED, lamppost, Makedo, clay</td><td class="oc">Live energy system; capstone build</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Connect + Village Comes Alive</td><td class="ac">Paint energy zone (20 min) → Clay 'Solar Farm' nameplate (10 min) → Route wire neatly across base; tape down (15 min) → FULL VILLAGE TEST: G4 connects solar → G3 school + G4 streetlight glow (20 min) → Celebrate! (15 min) → Plan rehearsal roles (10 min)</td><td class="mc">Paint, clay, tape, solar kit</td><td class="oc">Village integration; peak moment</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Rehearse + Explain Energy</td><td class="ac">Practise: explain solar + windmill to a Grade 1 student (cross-grade, 25 min) → Rehearse live demo: cover/uncover panel for visitors (20 min) → Label all components (20 min) → G3 + G4 full run-through (25 min)</td><td class="mc">Village model</td><td class="oc">Teaching; cross-grade communication</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Dream Village Exhibition</td><td class="ac">G3 + G4 combined exhibition → G4 activates solar LED for audience (crowd moment, 10 min) → Explain wind + solar in 3 minutes (20 min) → Visitors interact: cover panel themselves (10 min) → Portfolio: energy sketch + photo + reflection (20 min) → Dismantling plan (10 min) → Celebration (20 min)</td><td class="mc">Village model, solar kit, camera</td><td class="oc">Peak confidence; live demo mastery</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Skill-Based</h4><div class="cl"><span class="ci">Safe tool handling</span><span class="ci">Carpentry lamppost quality</span><span class="ci">Solar LED functionality</span><span class="ci">Bridge integration with G3</span><span class="ci">Load-bearing performance</span><span class="ci">Design journal</span></div></div>
+</section>
+<section class="gs" id="g5">
+  <div class="gh g5">
+    <div class="gb">5</div>
+    <div class="gi">
+      <h2>Grade 5 · Ages 10–11</h2>
+      <p class="tl">Empathise → Design → Build → Test &nbsp;|&nbsp; Sewing machine · MakeBlock · Makedo</p>
+      <div class="pr"><span class="pill">User-Centred Design</span><span class="pill">Sewing Machine</span><span class="pill">Embroidery</span><span class="pill">LED Circuits</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 5 &mdash; textile technology, user-centred design, basic electronics. Individual capstone: <strong>Wearable Showcase</strong> at Week 15.</div>
+  <div class="cn"><strong>Note:</strong> Grade 5 has its own individual capstone outcome &mdash; the Wearable Showcase (Week 15) &mdash; and does not share a capstone with another grade.</div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Understanding Users</td><td class="ac">Empathy map intro (10 min) → Interview classmate about frustration (15 min) → Fill empathy map (20 min) → Sketch 2 solutions (35 min) → Share (10 min)</td><td class="mc">Empathy map sheets, pencils</td><td class="oc">Empathy; observation</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Problem Definition</td><td class="ac">'How might we…' statement (15 min) → Refine sketch with dimensions (25 min) → Makedo rough prototype (40 min) → User reaction (10 min)</td><td class="mc">Makedo, cardboard, ruler</td><td class="oc">Problem clarity; rapid prototyping</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Idea Generation</td><td class="ac">5-in-5 sketch: 5 ideas × 3 rounds (30 min) → Vote on best (10 min) → Material choice (15 min) → Begin prototype (35 min)</td><td class="mc">All materials</td><td class="oc">Divergent thinking</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Material Prototyping</td><td class="ac">Build soft prototype: foam / fabric / Makedo (65 min) → MakeBlock: add one moving part (15 min) → Photo documentation (10 min)</td><td class="mc">Foam, fabric, Makedo, MakeBlock</td><td class="oc">Form exploration</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">User Testing + Redesign</td><td class="ac">3 peer testers + feedback (30 min) → 3 changes identified (15 min) → Revisions (35 min) → 1-page product brief (10 min)</td><td class="mc">Feedback forms</td><td class="oc">Evaluation; iteration</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Product Pitch</td><td class="ac">3-min pitch: problem → user → solution → demo (55 min) → Peer Q&amp;A (20 min) → Reflection journal (15 min)</td><td class="mc">All prototypes</td><td class="oc">Communication; confidence</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Sewing Machine Intro</td><td class="ac">Teacher demo: straight stitch (20 min) → Thread + run scrap piece (35 min) → Straight + zigzag practice lines (25 min) → Sketch wearable idea (10 min)</td><td class="mc">Sewing machine, fabric scraps</td><td class="oc">Machine intro</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Sewing Machine Practice</td><td class="ac">Sew along drawn lines (30 min) → Sew two pieces: bookmark or bag (40 min) → Inspect + trim (10 min) → Embroidery machine demo: teacher runs pattern (10 min)</td><td class="mc">Sewing machine, cotton fabric</td><td class="oc">Dexterity; machine confidence</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Embroidery Design</td><td class="ac">Running + cross stitch on hoop (50 min) → Design embroidery pattern (25 min) → Peer feedback on design (15 min)</td><td class="mc">Embroidery hoops, floss</td><td class="oc">Aesthetics; hand-eye coordination</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Basic Circuits</td><td class="ac">LED + coin cell demo (10 min) → Simple LED circuit on cardboard (25 min) → MakeBlock LDR: light-activated LED (40 min) → Circuit diagram sketch (15 min)</td><td class="mc">LEDs, coin cells, MakeBlock LDR</td><td class="oc">Electronics intro</td></tr>
+<tr><td class="wn">11</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Textile Circuit</td><td class="ac">Conductive thread demo (10 min) → Stitch glowing LED into felt patch (60 min) → Test + troubleshoot (20 min)</td><td class="mc">Conductive thread, felt, LEDs, coin cells</td><td class="oc">Fabric + electronics integration</td></tr>
+<tr><td class="wn">12</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Smart Wearable Assembly</td><td class="ac">Combine: sewn fabric + embroidery design + working LED circuit (65 min) → Add on/off switch using fabric flap (15 min) → Document (10 min)</td><td class="mc">All textile + electronics materials</td><td class="oc">Systems thinking; integration</td></tr>
+<tr><td class="wn">13</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Testing + Improvement</td><td class="ac">Wear test: comfort, durability, LED visibility (20 min) → Fix loose stitches + re-route shorts (50 min) → Add clay decorative charm (15 min) → Peer review (5 min)</td><td class="mc">All wearables, clay</td><td class="oc">Quality mindset</td></tr>
+<tr><td class="wn">14</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Wearable Showcase Prep</td><td class="ac">Write 1-page product summary: problem → user → design choices (20 min) → Practise 2-minute explanation (25 min) → Final photography (15 min) → Portfolio prep (30 min)</td><td class="mc">Wearables, portfolio</td><td class="oc">Documentation; presentation</td></tr>
+<tr><td class="wn">15</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Wearable Showcase</td><td class="ac">Fashion show: model your wearable (25 min) → Explain circuit + design decisions (30 min) → Portfolio: design brief + photos + circuit diagram (25 min) → Peer awards (10 min)</td><td class="mc">Wearables, portfolio</td><td class="oc">Confidence; presentation</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Competency-Based</h4><div class="cl"><span class="ci">Empathy depth</span><span class="ci">Sewing machine operation</span><span class="ci">Embroidery quality</span><span class="ci">Textile circuit working</span><span class="ci">Wearable aesthetics</span><span class="ci">Design brief completeness</span></div></div>
+</section>
+<section class="gs" id="g6">
+  <div class="gh g6">
+    <div class="gb">6</div>
+    <div class="gi">
+      <h2>Grade 6 · Ages 11–12</h2>
+      <p class="tl">Design → Build → Ensure Function &nbsp;|&nbsp; MakeBlock · 3D Printer · CNC intro</p>
+      <div class="pr"><span class="pill">Physical Computing</span><span class="pill">Sensors &amp; Logic</span><span class="pill">3D Printing</span><span class="pill">Smart Pottery</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 6 &mdash; physical computing, digital fabrication. Weeks 11&ndash;15 redirect toward <strong>Capstone 2: Suspension Bridge (G6+G7+G8)</strong>.</div>
+  <div class="ban ban-bridge"><h3>&#127968; Capstone 2 &mdash; Suspension Bridge: Electronics Team (with G7 + G8)</h3><p>From Week 11, G6 builds the bridge's <strong>load-sensing electronics</strong>: LEDs that change colour as load increases, and a buzzer that fires at overload. The circuit uses G6's MakeBlock sensor skills from Topic 1. <strong>Week 15 is the shared G6+G7+G8 exhibition.</strong></p><div class="sr"><span class="sp">Grades 6 + 7 + 8</span><span class="sp">G6 role: load-indicator electronics only</span><span class="sp">LED colour progression + overload buzzer</span><span class="sp">Exhibition = Week 15 of all three grades</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Physical Computing Intro</td><td class="ac">What is a microcontroller? (15 min) → MakeBlock unboxing + parts ID (15 min) → First blink: LED via block code (45 min) → Change blink speed challenge (15 min)</td><td class="mc">MakeBlock kit, USB, laptop</td><td class="oc">Concept clarity; first program</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Inputs &amp; Outputs</td><td class="ac">Button → LED (30 min) → Buzzer tone sequence (20 min) → Doorbell: button + buzzer (30 min) → Debug (10 min)</td><td class="mc">MakeBlock, LED, buzzer, button</td><td class="oc">Cause-effect; I/O logic</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Sensor Basics</td><td class="ac">LDR: light level (30 min) → IR: object detection (25 min) → Ultrasonic: distance (25 min) → Sketch sensor use cases (10 min)</td><td class="mc">MakeBlock: LDR, IR, ultrasonic</td><td class="oc">Data awareness; real sensing</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Logic Building</td><td class="ac">If-else: light &lt; X → LED on (30 min) → Nested condition (25 min) → Build night-light (35 min)</td><td class="mc">MakeBlock, LDR, LED</td><td class="oc">Computational thinking</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Interactive Project</td><td class="ac">Choose: smart light, motion alarm, or display (15 min) → Build + code (60 min) → First test (15 min)</td><td class="mc">MakeBlock full kit</td><td class="oc">Integration; project planning</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Debug + Enclosure</td><td class="ac">Systematic debug (20 min) → Fix project (50 min) → Makedo cardboard enclosure (20 min)</td><td class="mc">Makedo, all electronics</td><td class="oc">Problem-solving; enclosure design</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Demo Day</td><td class="ac">Demonstrate working system (40 min) → Explain circuit + code logic (30 min) → Reflect: what would you add? (20 min)</td><td class="mc">Finished projects</td><td class="oc">Technical communication</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">3D Design (Tinkercad)</td><td class="ac">Tinkercad orientation (15 min) → Basic shapes (30 min) → Box with lid (35 min) → Export + queue for print (10 min)</td><td class="mc">Laptops, Tinkercad, 3D printer</td><td class="oc">3D spatial thinking; CAD basics</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Smart Pottery: Clay Body</td><td class="ac"><strong>Signature project.</strong> Clay lamp body with hidden LED → Sketch (15 min) → Build clay lamp with LED chamber (55 min) → Dry (20 min)</td><td class="mc">Clay, boards, tools</td><td class="oc">Cross-domain integration begins</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Smart Pottery: Circuit</td><td class="ac">Wire MakeBlock LED + LDR: glows when dark (45 min) → Test on breadboard (20 min) → Plan wire routing (15 min) → Sketch (10 min)</td><td class="mc">MakeBlock, LED, LDR, wires</td><td class="oc">Electronics in clay product</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Prep: Electronics Role</td><td class="ac">Bridge brief: G6 + G7 + G8 overview (15 min) → G6 role: instrument panel + lighting electronics for the bridge deck → Design LED indicator strip (lights when load is applied) + buzzer overload alarm (20 min) → Wire + test on breadboard (55 min)</td><td class="mc">MakeBlock, LED strip, buzzer, load sensor (or pressure pad)</td><td class="oc">Bridge electronics subsystem</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Electronics: Load Indicator</td><td class="ac">Calibrate pressure pad / load sensor: threshold → LED yellow, overload → LED red + buzzer (45 min) → House circuit in a 3D-printed or Makedo enclosure (30 min) → Test with hand pressure (15 min)</td><td class="mc">MakeBlock, 3D-printed case, tape</td><td class="oc">Load-sensing electronics</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Integrate onto Bridge</td><td class="ac">(Shared session with G7 + G8) → Mount G6 electronics onto completed bridge deck: load indicator under deck plate, buzzer visible (35 min) → Final calibration: 5-book load → yellow; 15-book → red + buzz (30 min) → Tidy wiring (15 min) → Test full system (10 min)</td><td class="mc">All electronics, bridge structure</td><td class="oc">Full integration; cross-grade teamwork</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Test + Rehearse</td><td class="ac">Load demo run: show LED colour progression + buzzer (20 min) → Fix any calibration drift (20 min) → Rehearse explanation: 'The bridge tells you when it's overloaded' (30 min) → G6 + G7 + G8 combined rehearsal (20 min)</td><td class="mc">Bridge, electronics</td><td class="oc">Communication; reliability check</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Exhibition</td><td class="ac">G6 + G7 + G8 combined exhibition → Live load demo: add books → watch LEDs change → buzzer fires at overload (20 min) → G6 explains electronics to audience (15 min) → Portfolio: circuit diagram + code screenshot + reflection (30 min) → Celebration (25 min)</td><td class="mc">Bridge, portfolio, camera</td><td class="oc">Engineering communication; live demo</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Skill &amp; Process Based</h4><div class="cl"><span class="ci">MakeBlock sensor logic</span><span class="ci">Load-sensing circuit accuracy</span><span class="ci">LED + buzzer calibration</span><span class="ci">Cross-grade integration (G7+G8)</span><span class="ci">Troubleshooting documentation</span><span class="ci">Circuit diagram</span></div></div>
+</section>
+<section class="gs" id="g7">
+  <div class="gh g7">
+    <div class="gb">7</div>
+    <div class="gi">
+      <h2>Grade 7 · Ages 12–13</h2>
+      <p class="tl">Engineer → Integrate → Fabricate &nbsp;|&nbsp; mBot2 · Laser · CNC · Embroidery</p>
+      <div class="pr"><span class="pill">Robotics (mBot2)</span><span class="pill">Laser Cutting</span><span class="pill">CNC Milling</span><span class="pill">Embroidery Machine</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 7 &mdash; robotics, laser cutting, CNC. Weeks 11&ndash;15 redirect toward <strong>Capstone 2: Suspension Bridge (G6+G7+G8)</strong>.</div>
+  <div class="ban ban-bridge"><h3>&#127968; Capstone 2 &mdash; Suspension Bridge: Fabrication Team (with G6 + G8)</h3><p>G7&rsquo;s laser cutting skills (Topic 2) are applied to cut the bridge&rsquo;s plywood deck panels with finger joints. The deck slots into G8&rsquo;s towers. G6 mounts electronics on top. <strong>Week 15 is the shared G6+G7+G8 exhibition.</strong></p><div class="sr"><span class="sp">Grades 6 + 7 + 8</span><span class="sp">G7 role: laser-cut deck panels + cable channels</span><span class="sp">Finger-joint assembly on plywood</span><span class="sp">Exhibition = Week 15 of all three grades</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Robotics Overview</td><td class="ac">Robot anatomy (20 min) → mBot2 unboxing + parts ID (20 min) → First remote drive (30 min) → Maze challenge (20 min)</td><td class="mc">MakeBlock mBot2, laptop, cones</td><td class="oc">System awareness</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Motors &amp; Movement</td><td class="ac">PWM speed + direction (35 min) → Figure-8 program (30 min) → Measure actual vs. expected (15 min) → Calibrate (10 min)</td><td class="mc">MakeBlock mBot2</td><td class="oc">Motion control; calibration</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Sensor Integration</td><td class="ac">Ultrasonic: stop before wall (25 min) → IR: line follow (40 min) → Combine (25 min)</td><td class="mc">MakeBlock, tape for line</td><td class="oc">Environmental response</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Decision-Making Code</td><td class="ac">State machine: idle/moving/avoiding (15 min) → Autonomous maze code (30 min) → Challenge run (35 min) → Debug (10 min)</td><td class="mc">MakeBlock, maze board</td><td class="oc">Computational thinking</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Custom Robot Build</td><td class="ac">Task design: delivery, sorting, or guard (15 min) → Modify mBot2 with Makedo / 3D-printed brackets (60 min) → Custom sensor (15 min)</td><td class="mc">MakeBlock, Makedo, 3D-printed parts</td><td class="oc">Engineering skills</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Optimise + Demo</td><td class="ac">Timed test (20 min) → Code optimisation (40 min) → Re-test (20 min) → Design diary (10 min)</td><td class="mc">mBot2, stopwatch</td><td class="oc">Metrics; documentation</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Robot Demo Day</td><td class="ac">Live task demo (40 min) → Technical explanation (30 min) → Design diary entry (20 min)</td><td class="mc">Finished robots</td><td class="oc">Technical communication</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Digital Fabrication Overview</td><td class="ac">Hand vs. CNC vs. laser vs. 3D printer (20 min) → CNC demo: teacher mills MDF (20 min) → Handle finished pieces (10 min) → Sketch multi-method product (40 min)</td><td class="mc">CNC, 3D printer, laser, samples</td><td class="oc">Manufacturing landscape</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">CAD for Laser (2D)</td><td class="ac">Inkscape: finger-joint box design (40 min) → Cut vs. engrave layers (20 min) → Dimension check (20 min) → Submit to teacher (10 min)</td><td class="mc">Laptops, Inkscape</td><td class="oc">Precision CAD; tolerances</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Assembly + Integration</td><td class="ac">Collect + assemble laser-cut box (25 min) → Material test: plywood vs. MDF vs. acrylic (20 min) → MakeBlock LED inside box (35 min) → Test (10 min)</td><td class="mc">Plywood, MDF, acrylic, glue, MakeBlock</td><td class="oc">Material science; integration</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Prep: Fabrication Role</td><td class="ac">Bridge brief recap → G7 role: laser-cut plywood deck panels + CNC-milled support brackets → Design deck panel in Inkscape: finger-joint edges to slot into G8 towers (40 min) → Teacher laser-cuts panels (20 min) → Students sand + label (20 min) → Test fit (10 min)</td><td class="mc">Inkscape, laser cutter, 6 mm plywood</td><td class="oc">Fabrication for bridge</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Deck + Cable Channels</td><td class="ac">Assemble deck panels with wood glue + finger joints (40 min) → Add cable channels: laser-cut slots for G8's suspension string (20 min) → Load test deck alone: 5 books (15 min) → Reinforce if needed (15 min)</td><td class="mc">Plywood, wood glue, sandpaper</td><td class="oc">Structural deck assembly</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Integrate: Deck + Towers + Electronics</td><td class="ac">(Shared with G6 + G8) → Slot G7 deck into G8 towers + cables (30 min) → G6 mounts electronics onto deck (30 min) → Full bridge assembly: first complete stand (20 min) → Load test: 10 books (10 min) → Identify + fix (10 min)</td><td class="mc">All bridge components</td><td class="oc">Cross-grade integration</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Final Load Test + Rehearse</td><td class="ac">Record max load (20 min) → Reinforce joints (20 min) → Rehearse: G7 explains deck fabrication + material choices (25 min) → G6+G7+G8 combined run-through (25 min)</td><td class="mc">Bridge, books, notebook</td><td class="oc">Metrics; communication</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Exhibition</td><td class="ac">G6+G7+G8 combined → G7 explains deck: laser cutting, finger joints, material choice (15 min) → Live load demo (15 min) → Portfolio: Inkscape file + fabrication photo + reflection (25 min) → Celebration (25 min) → Tidy + display (10 min)</td><td class="mc">Bridge, portfolio, camera</td><td class="oc">Fabrication showcase; pride of craft</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Engineering-Based</h4><div class="cl"><span class="ci">Robot autonomous performance</span><span class="ci">Laser CAD accuracy + fit</span><span class="ci">CNC / fabrication quality</span><span class="ci">Deck structural performance</span><span class="ci">Cross-grade integration</span><span class="ci">Product data sheet</span></div></div>
+</section>
+<section class="gs" id="g8">
+  <div class="gh g8">
+    <div class="gb">8</div>
+    <div class="gi">
+      <h2>Grade 8 · Ages 13–14</h2>
+      <p class="tl">Research → Prototype → Integrate &nbsp;|&nbsp; Full lab · Fusion 360 · IoT</p>
+      <div class="pr"><span class="pill">Advanced Prototyping</span><span class="pill">IoT &amp; ESP32</span><span class="pill">Fusion 360 CAD</span><span class="pill">Bridge Design Lead</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 8 &mdash; advanced prototyping, IoT. Weeks 11&ndash;15 redirect toward <strong>Capstone 2: Suspension Bridge (G6+G7+G8)</strong>.</div>
+  <div class="ban ban-bridge"><h3>&#127968; Capstone 2 &mdash; Suspension Bridge: Design Lead (with G6 + G7)</h3><p>G8 owns the structural design: towers, anchorage, and suspension cable system. G8&rsquo;s Fusion 360 CAD skills design the towers; G8&rsquo;s IoT skills are used to log load data on a dashboard. <strong>Week 15 is the shared G6+G7+G8 exhibition.</strong></p><div class="sr"><span class="sp">Grades 6 + 7 + 8</span><span class="sp">G8 role: towers + cables + structural lead</span><span class="sp">Fusion 360 tower design</span><span class="sp">IoT load data on dashboard</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Problem Framing</td><td class="ac">Problem domains: accessible design, disaster relief, local agriculture, elderly care (15 min) → Choose domain (5 min) → Stakeholder map + SWOT (30 min) → User interviews (30 min) → Mind map (10 min)</td><td class="mc">Whiteboard, notebooks</td><td class="oc">Problem framing; research</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">User Research + Ideation</td><td class="ac">Compile data (15 min) → 'How might we…' (10 min) → Crazy 8s (10 min) → Select + sketch with dimensions (30 min) → Group critique (25 min)</td><td class="mc">Grid paper, markers</td><td class="oc">Empathy; divergent thinking</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">CAD for Prototyping</td><td class="ac">Fusion 360 intro (20 min) → Model product body (50 min) → Dimensions + tolerances (15 min) → Export STL (5 min)</td><td class="mc">Laptops, Fusion 360 / Tinkercad</td><td class="oc">Precision CAD</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Fabrication Planning</td><td class="ac">Bill of materials (10 min) → Decide: 3D / laser / CNC / hand (20 min) → Submit to queue (10 min) → Clay component (50 min)</td><td class="mc">All machines (T queued)</td><td class="oc">Process planning</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Prototype Fabrication</td><td class="ac">Collect 3D + laser parts (20 min) → Assembly: glue, screw, sew (60 min) → Fit check (10 min)</td><td class="mc">All fabricated parts</td><td class="oc">Manufacturing</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Assembly + Testing</td><td class="ac">Complete assembly (30 min) → Usability test: 3 peers (20 min) → Structural test (10 min) → Feedback + 2 revisions (30 min)</td><td class="mc">Prototypes, feedback forms</td><td class="oc">Validation; quality</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Design Review</td><td class="ac">Formal review: problem → CAD → fabrication → results (60 min) → Rubric feedback (20 min) → Update design journal (10 min)</td><td class="mc">All prototypes, rubric</td><td class="oc">Engineering communication</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">IoT Intro (ESP32)</td><td class="ac">IoT ecosystem (15 min) → ESP32 WiFi blink (30 min) → Read sensor via serial (30 min) → Sketch IoT product (15 min)</td><td class="mc">ESP32, USB, laptop</td><td class="oc">System awareness; first IoT code</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Sensor Data + Alerts</td><td class="ac">DHT11 temp + humidity (20 min) → Gas sensor (20 min) → Alert: temp &gt; 35°C → LED + buzzer (30 min) → Log to serial (20 min)</td><td class="mc">ESP32, DHT11, gas sensor</td><td class="oc">Analytical thinking</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Connectivity + Dashboard</td><td class="ac">ESP32 → Blynk / Google Sheets via WiFi (50 min) → Mobile dashboard (20 min) → Trigger LED from phone (20 min)</td><td class="mc">ESP32, Blynk, WiFi</td><td class="oc">Device-to-cloud networking</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Prep: Design Lead + Towers</td><td class="ac">Bridge brief: G8 owns structural design → Towers + anchorage in Fusion 360 (40 min) → CNC or 3D-print tower bases (teacher queues, 10 min) → Build cardboard + plywood tower columns with Makedo cross-bracing (30 min) → First stand test (10 min)</td><td class="mc">Fusion 360, CNC/3D printer, Makedo, plywood</td><td class="oc">Structural design lead</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Suspension System + Cables</td><td class="ac">Attach wood-strip anchorage blocks to base board (20 min) → Run suspension string cables from anchorages over towers; pre-tension (35 min) → Attach hanger wires to cable for deck support (25 min) → Cable tension test: does deck stay level? (10 min)</td><td class="mc">String, pine strips, base board, Makedo</td><td class="oc">Tension engineering; cable physics</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Integrate All Three Grades</td><td class="ac">(Shared with G6 + G7) → Slot G7 deck into towers + cables (30 min) → G6 mounts electronics (30 min) → First full assembly: bridge standing (10 min) → Full load test: 10 books (15 min) → Fix failures (5 min)</td><td class="mc">All bridge components</td><td class="oc">Cross-grade systems integration</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Final Test + Presentation Lead</td><td class="ac">Record max load (15 min) → G8 prepares overall bridge pitch: design decisions + structural physics + what failed (30 min) → G6+G7+G8 full combined rehearsal (35 min) → Safety check: stable on display base (10 min)</td><td class="mc">Bridge, notebooks</td><td class="oc">Lead communication; engineering confidence</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#127968; Bridge Exhibition</td><td class="ac">G6+G7+G8 combined → G8 opens with 3-min structural overview (15 min) → Live load demo: max books record attempt (15 min) → G6 LED overload alarm demo (10 min) → G7 explains fabrication (10 min) → Portfolio: Fusion 360 file + cable photo + full reflection (25 min) → Celebration (15 min)</td><td class="mc">Bridge, portfolio, camera</td><td class="oc">Structural engineering showcase</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Design &amp; Engineering Based</h4><div class="cl"><span class="ci">Structural design quality</span><span class="ci">Suspension cable technique</span><span class="ci">Tower load-bearing performance</span><span class="ci">Cross-grade integration (G6+G7)</span><span class="ci">Fusion 360 file quality</span><span class="ci">Launch presentation leadership</span></div></div>
+</section>
+<section class="gs" id="g9">
+  <div class="gh g9">
+    <div class="gb">9</div>
+    <div class="gi">
+      <h2>Grade 9 · Ages 14–15</h2>
+      <p class="tl">Design → Fabricate → Validate &nbsp;|&nbsp; Full lab · Advanced CAD · CNC</p>
+      <div class="pr"><span class="pill">Advanced Problem Framing</span><span class="pill">Multi-Material Fabrication</span><span class="pill">IoT Systems</span><span class="pill">Boat Hull Lead</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 9 &mdash; advanced CAD, multi-material fabrication, IoT systems. Weeks 11&ndash;15 redirect toward <strong>Capstone 3: Floating Boat (G9+G11)</strong>.</div>
+  <div class="ban ban-boat"><h3>&#9973; Capstone 3 &mdash; Floating Boat: Hull Design Lead (with Grade 11)</h3><p>From Week 11, G9 owns the hull: buoyancy calculations, Fusion 360 hull CAD, CNC-milled plywood ribs, Makedo cardboard skin assembly, waterproofing, and the safety protocol. G11 builds the IoT sensor network. <strong>Week 15 is the shared G9+G11 launch day.</strong></p><div class="sr"><span class="sp">Grades 9 + 11 only</span><span class="sp">G9 role: hull design, fabrication, safety lead</span><span class="sp">Buoyancy maths + CNC ribs + waterproofing</span><span class="sp">Launch = Week 15 of both grades</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced Problem Framing</td><td class="ac">Understand design thinking at engineering level: empathy → define → ideate → prototype → test (20 min) → Choose a real societal problem: water access, mobility, food storage (25 min) → Stakeholder interview plan (20 min) → Begin interviews (25 min)</td><td class="mc">Notebooks, reference sheets</td><td class="oc">Engineering-level problem framing</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Systems Thinking + Ideation</td><td class="ac">Compile interview data; affinity map (20 min) → System diagram: inputs, processes, outputs, feedback loops (25 min) → Crazy 8s ideation (10 min) → Select idea; create concept brief with sketch + dimensions (35 min)</td><td class="mc">Large paper, markers</td><td class="oc">Systems thinking; structured ideation</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced CAD (Fusion 360)</td><td class="ac">Fusion 360: parametric modelling (20 min) → Model concept product with assembly joints (50 min) → Engineering drawing: dimensions, tolerances, section view (15 min) → Export STL + DXF (5 min)</td><td class="mc">Laptops, Fusion 360</td><td class="oc">Precision parametric CAD</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Multi-Material Fabrication</td><td class="ac">Bill of materials + process map (15 min) → Divide parts: 3D-print (structural), laser-cut (panels), CNC (base), hand-craft (clay / sewed elements) (10 min) → Begin fabrication: each student owns 1 part (60 min) → Fit test (5 min)</td><td class="mc">3D printer, laser, CNC, all materials</td><td class="oc">Multi-process manufacturing</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Assembly + Validation</td><td class="ac">Assemble all fabricated parts (35 min) → Function test: does it do what it was designed to do? (20 min) → Structural test (10 min) → Peer usability test: 3 users (20 min) → Improvement list (5 min)</td><td class="mc">All parts, feedback forms</td><td class="oc">Validation; engineering quality</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Iteration + Documentation</td><td class="ac">Implement top 2 improvements (45 min) → Engineering design journal: problem → research → CAD → fabrication → test results (30 min) → Photo + video documentation (15 min)</td><td class="mc">All materials, journal</td><td class="oc">Iteration; professional documentation</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Design Review Presentation</td><td class="ac">10-min structured presentation: stakeholder map → system diagram → CAD → fabrication → test data → next iteration (60 min) → Peer rubric scoring (20 min) → Teacher feedback (10 min)</td><td class="mc">All prototypes, rubric</td><td class="oc">Engineering communication; critique culture</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">IoT Deep Dive (ESP32)</td><td class="ac">ESP32: WiFi + Bluetooth architecture (15 min) → Multi-sensor setup: temp, humidity, motion, gas (30 min) → MQTT or HTTP data push to dashboard (35 min) → Live data visualisation (10 min)</td><td class="mc">ESP32, multiple sensors, laptop</td><td class="oc">Advanced IoT; data architecture</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Automation + Control Systems</td><td class="ac">PID concept: proportional-integral-derivative intro (15 min) → Relay + ESP32: automate a fan/pump based on sensor threshold (40 min) → Code a simple automation rule set (25 min) → Test reliability (10 min)</td><td class="mc">ESP32, relay, DC motor/fan</td><td class="oc">Control systems; automation logic</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Enclosure + Product Finish</td><td class="ac">Design IoT product enclosure in Fusion 360 (25 min) → Fabricate: 3D-print housing or laser-cut box (teacher queues) (15 min) → Assemble electronics in enclosure (35 min) → Final IoT test: sensor → dashboard → relay (15 min)</td><td class="mc">Fusion 360, 3D printer, laser</td><td class="oc">Industrial design thinking</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Boat Prep: Hull Design Lead</td><td class="ac">Boat brief: G9 + G11 overview (15 min) → G9 role: hull structural design, waterproofing strategy, fabrication schedule, safety protocols → Buoyancy maths: calculate volume needed to float 80 kg (20 min) → Hull design in Fusion 360: flat-bottomed barge with internal ribs (40 min) → Brief G11 on integration points (15 min)</td><td class="mc">Fusion 360, whiteboard, calculators</td><td class="oc">Structural lead; design physics</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Hull Fabrication + Makedo Assembly</td><td class="ac">G9 + G11 joint fabrication session → G9: CNC-mill 6 mm plywood hull ribs (teacher-supervised CNC) (30 min) → Sand + label all ribs (15 min) → Join large Makedo cardboard panels into hull skin; slot ribs inside (35 min) → First structural test: kneel on hull? (10 min)</td><td class="mc">CNC, plywood, Makedo, cardboard, sandpaper</td><td class="oc">Hull construction; structural test</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Waterproofing + Integration</td><td class="ac">Teacher applies fibreglass cloth + epoxy on exterior hull (30 min) → G9: seal Makedo interior joints with marine tape (20 min) → Dry load test: sandbags = 80 kg (15 min) → Integrate G11 contributions: IoT sensor, electronics, wearables (if any) fit-check (25 min)</td><td class="mc">Epoxy (T), marine tape, sandbags</td><td class="oc">Structural validation; integration</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Pre-Launch + Safety Protocol</td><td class="ac">Complete safety checklist: life jacket, water depth (max 50 cm), rescue rope, all electronics battery-only (20 min) → Full combined rehearsal: all systems active (20 min) → Unmanned pool test if facilities available (15 min) → Dry load test final: 80 kg sandbags float simulation (15 min) → Practise launch-day explanation (20 min)</td><td class="mc">Checklist, all systems, sandbags</td><td class="oc">Safety; readiness</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Launch Day</td><td class="ac">G9 leads pre-launch safety check (10 min) → Unmanned float (10 min) → G11 IoT dashboard active (5 min) → Adult boards the boat (10 min) → BOAT FLOATS → G9 explains hull design + buoyancy to audience (15 min) → G11 explains IoT + automation (10 min) → Portfolio: Fusion 360 hull + fabrication log + launch video (15 min) → All-grade reflection (15 min)</td><td class="mc">Boat, ESP32 dashboard, life jacket, camera</td><td class="oc">Engineering capstone; launch success</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Advanced Engineering Based</h4><div class="cl"><span class="ci">Buoyancy calculation accuracy</span><span class="ci">Hull CAD + structural design</span><span class="ci">CNC fabrication quality</span><span class="ci">Waterproofing effectiveness</span><span class="ci">Cross-grade integration (G11)</span><span class="ci">Launch presentation quality</span></div></div>
+</section>
+<section class="gs" id="g11">
+  <div class="gh g11">
+    <div class="gb">11</div>
+    <div class="gi">
+      <h2>Grade 11 · Ages 16–17</h2>
+      <p class="tl">Systems Engineering → Advanced IoT → Validate &nbsp;|&nbsp; Full lab · Embedded C++ · Edge Computing</p>
+      <div class="pr"><span class="pill">Systems Engineering</span><span class="pill">Advanced CAD + Simulation</span><span class="pill">Embedded C++ (Arduino)</span><span class="pill">IoT Edge Computing</span></div>
+    </div>
+  </div>
+  <div class="cn"><strong>CBSE Composite Lab:</strong> Level 11 &mdash; systems engineering, advanced IoT, embedded C++. Weeks 11&ndash;15 redirect toward <strong>Capstone 3: Floating Boat (G9+G11)</strong>.</div>
+  <div class="ban ban-boat"><h3>&#9973; Capstone 3 &mdash; Floating Boat: IoT &amp; Advanced Systems (with Grade 9)</h3><p>G11&rsquo;s advanced IoT and embedded C++ skills (Topic 2) are applied to the boat: a multi-sensor ESP32 network monitors tilt, water ingress, and temperature in real time on a live dashboard during the launch. <strong>Week 15 is the shared G9+G11 launch day.</strong></p><div class="sr"><span class="sp">Grades 9 + 11 only</span><span class="sp">G11 role: IoT sensor network + real-time dashboard</span><span class="sp">ESP32 multi-sensor: tilt + water-ingress + temp</span><span class="sp">Launch = Week 15 of both grades</span></div></div>
+  <div class="st">Full 15-Week Plan</div>
+  <table>
+    <thead><tr><th>#</th><th>Phase</th><th>Focus</th><th>Activities <span class="dtag">90 min</span></th><th>Materials</th><th>Outcome</th></tr></thead>
+    <tbody><tr><td class="wn">1</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced Systems Design</td><td class="ac">Systems engineering intro: requirements → architecture → verification → validation (20 min) → Case studies: engineered systems that failed + why (20 min) → Define a complex system to design (20 min) → Write system requirements spec (30 min)</td><td class="mc">Reference sheets, notebooks</td><td class="oc">Systems engineering mindset</td></tr>
+<tr><td class="wn">2</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced CAD + Simulation</td><td class="ac">Fusion 360: generative design or stress simulation intro (20 min) → Apply stress test to previous product CAD model (40 min) → Interpret results: identify failure zones (20 min) → Redesign weakest element (10 min)</td><td class="mc">Laptops, Fusion 360</td><td class="oc">Simulation-led design; failure analysis</td></tr>
+<tr><td class="wn">3</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Multi-Axis CNC + PCB Concept</td><td class="ac">CNC operations: G-code awareness, toolpath planning (20 min) → Students design a CNC relief carving in CAD (30 min) → Teacher mills piece; students analyse toolpaths (20 min) → PCB concept: what is a printed circuit board? (20 min)</td><td class="mc">CAD, CNC, sample PCBs</td><td class="oc">Advanced manufacturing; PCB literacy</td></tr>
+<tr><td class="wn">4</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced Electronics: Custom Circuits</td><td class="ac">Breadboard: design multi-component circuit (30 min) → Breadboard to schematic diagram (25 min) → Introduce soldering: teacher demo only; students hand-solder one joint supervised (25 min) → Test circuit (10 min)</td><td class="mc">Breadboard, components, soldering iron (supervised)</td><td class="oc">Circuit design; soldering intro</td></tr>
+<tr><td class="wn">5</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Embedded C++ Programming</td><td class="ac">Arduino IDE: intro to C++ vs. block code (15 min) → Write custom sensor-reading function (35 min) → Serial plotter: visualise live data (20 min) → Debug: intentional error exercise (20 min)</td><td class="mc">Arduino / ESP32, laptop</td><td class="oc">Low-level programming; debugging</td></tr>
+<tr><td class="wn">6</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Advanced Fabrication Sprint</td><td class="ac">Fabricate a complex multi-part assembly using 3D print + laser + hand tools (60 min) → Assembly + fit test (20 min) → Engineering drawing: annotated assembly diagram (10 min)</td><td class="mc">3D printer, laser, all tools</td><td class="oc">Advanced multi-process fabrication</td></tr>
+<tr><td class="wn">7</td><td class="tb"><span class="badge b1">T1</span></td><td class="fc">Product Design Review</td><td class="ac">Formal engineering review: 15-min structured presentation → requirements spec → system diagram → fabrication process → test data → next iteration (60 min) → External or peer-panel critique (20 min) → Update journal (10 min)</td><td class="mc">All prototypes, rubric</td><td class="oc">Advanced engineering communication</td></tr>
+<tr><td class="wn">8</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Advanced IoT + Edge Computing</td><td class="ac">ESP32: edge processing — run ML inference on-device (gesture or voice command detection) (35 min) → MQTT broker setup: device-to-device communication (30 min) → Build 2-node IoT network: sensor node + actuator node (25 min)</td><td class="mc">ESP32 ×2, MQTT broker (local), laptop</td><td class="oc">Edge computing; networked IoT</td></tr>
+<tr><td class="wn">9</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Data Pipeline + Dashboard</td><td class="ac">Design data pipeline: sensor → ESP32 → MQTT → Node-RED or Google Sheets → dashboard (40 min) → Build live dashboard with alert thresholds (35 min) → Test end-to-end (15 min)</td><td class="mc">ESP32, Node-RED or Google Sheets, WiFi</td><td class="oc">Data architecture; monitoring systems</td></tr>
+<tr><td class="wn">10</td><td class="tb"><span class="badge b2">T2</span></td><td class="fc">Smart Enclosure + System Integration</td><td class="ac">Design system enclosure with cable management (Fusion 360, 25 min) → Fabricate (teacher queue, 15 min) → Full system integration test: all sensors → pipeline → dashboard → relay action (40 min) → Reliability test: 30-min uptime log (10 min)</td><td class="mc">Fusion 360, 3D printer, all electronics</td><td class="oc">Industrial integration; reliability</td></tr>
+<tr class="cr"><td class="wn">11</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Boat Prep: IoT + Advanced Systems Role</td><td class="ac">Boat brief recap (from G9 Week 11) → G11 role: ESP32 IoT sensor network on the boat + advanced electronics + structural calculations to verify G9 hull design → Install moisture sensor at hull base (water-ingress alert) (30 min) → Wire multi-sensor array: tilt, water-ingress, temp (40 min) → Test on breadboard (20 min)</td><td class="mc">ESP32, moisture sensor, tilt sensor, DHT11</td><td class="oc">IoT safety system for boat</td></tr>
+<tr class="cr"><td class="wn">12</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; IoT Dashboard + Fabrication Support</td><td class="ac">Build boat IoT dashboard: live tilt + water-ingress + temp readings via WiFi (45 min) → Fabricate 3D-printed or laser-cut waterproof sensor housing (teacher queues, 20 min) → Support G9 with hull skin Makedo assembly (25 min)</td><td class="mc">ESP32, 3D printer / laser, laptop</td><td class="oc">Real-time dashboard; multi-grade support</td></tr>
+<tr class="cr"><td class="wn">13</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Full Integration + Waterproofing Support</td><td class="ac">Integrate all G11 electronics onto G9 hull: route wires inside hull, seal entries (35 min) → Waterproof all sensor housings (15 min) → Test complete IoT system: tilt → dashboard alert (20 min) → Rehearse: how to explain IoT layer to audience (20 min)</td><td class="mc">All electronics, sealant, tape</td><td class="oc">System integration; waterproofing</td></tr>
+<tr class="cr"><td class="wn">14</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Verification + Safety Check</td><td class="ac">Run full system verification: each sensor triggers correct alert? (20 min) → Load the hull: does water-ingress sensor stay dry? (15 min) → Final IoT dashboard polish (20 min) → G11 presents IoT explanation in G9+G11 combined rehearsal (35 min)</td><td class="mc">All systems, checklist</td><td class="oc">Verification; engineering rigour</td></tr>
+<tr class="cr"><td class="wn">15</td><td class="tb"><span class="badge bc">CAP</span></td><td class="fc">&#9973; Launch Day</td><td class="ac">Combined G9+G11 launch → G11 activates IoT dashboard; shows live readings to audience (10 min) → Adult boards boat; G11 monitors water-ingress + tilt in real time (15 min) → BOAT FLOATS → G11 explains IoT + data pipeline to audience (15 min) → Portfolio: ESP32 code + dashboard screenshot + system diagram + reflection (20 min) → All-grade reflection (20 min)</td><td class="mc">Boat, ESP32 dashboard, laptop, camera</td><td class="oc">Advanced IoT in real-world product</td></tr></tbody>
+  </table>
+  <div class="st">Assessment</div>
+  <div class="ab"><h4>Advanced Systems &amp; IoT Based</h4><div class="cl"><span class="ci">IoT multi-sensor integration</span><span class="ci">Dashboard real-time accuracy</span><span class="ci">Water-ingress alarm reliability</span><span class="ci">Enclosure design quality</span><span class="ci">Cross-grade support (G9)</span><span class="ci">System verification log + reflection</span></div></div>
+
+  <div class="st">Capstone Partition — One Project Per Grade, No Overlap</div>
+  <div class="rg" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
+    <div class="rc" style="border-color:#2e7d32">
+      <h4>&#127968; Capstone 1 — Dream Village</h4>
+      <p><strong>Grades 3 &amp; 4.</strong> G3: scaled school model (hinged Makedo doors). G4: solar LED streetlight on a carpentry lamppost. One shared exhibition, Week 15.</p>
+    </div>
+    <div class="rc" style="border-color:#00695c">
+      <h4>&#127968; Capstone 2 — Suspension Bridge</h4>
+      <p><strong>Grades 6, 7 &amp; 8.</strong> G6: load-sensing electronics (LEDs + buzzer). G7: laser-cut plywood deck. G8: towers + cables + structural lead. One shared exhibition, Week 15.</p>
+    </div>
+    <div class="rc" style="border-color:#1565c0">
+      <h4>&#9973; Capstone 3 — Floating Boat</h4>
+      <p><strong>Grades 9 &amp; 11.</strong> G9: hull design, CNC ribs, waterproofing, safety lead. G11: ESP32 IoT sensor network + live dashboard. One shared launch day, Week 15.</p>
+    </div>
+    <div class="rc" style="border-color:#7b7a90">
+      <h4>Individual Outcomes</h4>
+      <p><strong>Grades 1 &amp; 2:</strong> Mini Exhibition (Week 15). <strong>Grade 5:</strong> Wearable Showcase (Week 15). All individual — no shared capstone.</p>
+    </div>
+    <div class="rc" style="border-color:#c62828">
+      <h4>&#128210; Design Rule</h4>
+      <p>Every grade is in <strong>exactly one</strong> project. No grade carries two capstones. Every capstone week is a regular 90-min session. Week 15 is always the outcome event.</p>
+    </div>
+  </div>
+
+</section>
+</main>
+<script>
+function show(id){
+  document.querySelectorAll('.gs').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t=['g1','g2','g3','g4','g5','g6','g7','g8','g9','g11'];
+  const i=t.indexOf(id);
+  if(i>=0) document.querySelectorAll('nav button')[i].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

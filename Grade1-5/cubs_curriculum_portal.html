@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cubs & Bulbuls Curriculum Portal — Bharat Scouts & Guides</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cubs:#1d4ed8;--cubs-light:#dbeafe;--cubs-border:#93c5fd;
+  --skill:#b45309;--skill-light:#fef3c7;--skill-border:#fcd34d;
+  --sidebar:245px;--header:62px;
+  --g1:#4f46e5;--g1l:#eef2ff;--g1b:#c7d2fe;
+  --g2:#059669;--g2l:#ecfdf5;--g2b:#a7f3d0;
+  --g3:#d97706;--g3l:#fffbeb;--g3b:#fcd34d;
+  --g4:#7c3aed;--g4l:#f5f3ff;--g4b:#ddd6fe;
+  --g5:#dc2626;--g5l:#fef2f2;--g5b:#fecaca;
+  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+.app{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#0f172a;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);height:var(--header);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.content{padding:22px}
+.sidebar-logo{padding:18px 16px 12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar-logo h1{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+.sidebar-logo p{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.sidebar-sect{padding:12px 16px 4px;font-size:10px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em}
+.sitem{display:flex;align-items:center;gap:9px;padding:8px 16px;color:rgba(255,255,255,.65);cursor:pointer;transition:all .15s;border-left:3px solid transparent;font-size:13px;user-select:none}
+.sitem:hover{background:rgba(255,255,255,.07);color:#fff}
+.sitem.active{background:rgba(255,255,255,.11);color:#fff;border-left-color:#a5b4fc}
+.gdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sbadge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,.13);color:rgba(255,255,255,.75)}
+.topbar-title{flex:1;min-width:0}
+.topbar-title h2{font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-title p{font-size:11px;color:var(--muted)}
+.srchwrap{position:relative;flex-shrink:0}
+.srchwrap input{padding:7px 32px 7px 11px;border:1px solid var(--border);border-radius:8px;font-size:13px;width:210px;background:var(--bg);color:var(--text);outline:none}
+.srchwrap input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.srchwrap svg{position:absolute;right:9px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;width:14px;height:14px}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);font-size:11px;cursor:pointer;background:var(--card);color:var(--muted);transition:all .15s;white-space:nowrap}
+.chip.on{background:#6366f1;color:#fff;border-color:#6366f1}
+.chip:hover:not(.on){border-color:#6366f1;color:#6366f1}
+.btn{padding:7px 14px;border-radius:8px;border:none;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btnp{background:#6366f1;color:#fff}.btnp:hover{background:#4f46e5}
+.btng{background:transparent;color:var(--muted);border:1px solid var(--border)}.btng:hover{background:var(--bg);color:var(--text)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;background:none;border:none}
+.hbg span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px}
+.grade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:24px}
+.gcard{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border);cursor:pointer;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.gcard:hover{box-shadow:0 4px 10px rgba(0,0,0,.1);transform:translateY(-1px)}
+.gcard-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:11px;font-size:18px}
+.gcard h3{font-size:13px;font-weight:600;margin-bottom:3px}
+.gcard p{font-size:11px;color:var(--muted)}
+.pbar{height:4px;border-radius:2px;background:var(--border);overflow:hidden;margin-top:10px}
+.pfill{height:100%;border-radius:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:22px}
+.scard{background:var(--card);border-radius:10px;padding:13px 15px;border:1px solid var(--border)}
+.scard .sv{font-size:22px;font-weight:700}
+.scard .sl{font-size:11px;color:var(--muted);margin-top:1px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-head h2{font-size:17px;font-weight:600}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:13px}
+.wcard{background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .2s}
+.wcard:hover{box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.wch{padding:13px 15px;display:flex;justify-content:space-between;align-items:flex-start}
+.wnum{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:10px}
+.wtheme{font-size:13px;font-weight:600;margin:7px 15px 0;line-height:1.4}
+.wtags{display:flex;flex-wrap:wrap;gap:4px;padding:7px 15px 11px}
+.tag{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500}
+.tc{background:var(--cubs-light);color:var(--cubs);border:1px solid var(--cubs-border)}
+.ts{background:var(--skill-light);color:var(--skill);border:1px solid var(--skill-border)}
+.wcf{padding:7px 15px 13px;display:flex;gap:7px;border-top:1px solid var(--border)}
+.expbtn{flex:1;padding:6px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s;text-align:center}
+.expbtn:hover{background:#6366f1;color:#fff;border-color:#6366f1}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--card);border-radius:16px;width:100%;max-width:700px;box-shadow:0 25px 50px rgba(0,0,0,.28);overflow:hidden;margin:auto}
+.mhead{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.mhead h2{font-size:16px;font-weight:700;line-height:1.3}
+.mhead p{font-size:12px;color:var(--muted);margin-top:2px}
+.mclose{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:10px;font-size:14px}
+.mclose:hover{background:var(--border)}
+.mbody{padding:18px 22px;overflow-y:auto;max-height:72vh}
+.mbadges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.mb{padding:3px 9px;border-radius:8px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.mbc{background:var(--cubs-light);color:var(--cubs);border:1px solid var(--cubs-border)}
+.mbs{background:var(--skill-light);color:var(--skill);border:1px solid var(--skill-border)}
+.ls{margin-bottom:14px}
+.ls h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px}
+.ll{list-style:none;display:flex;flex-direction:column;gap:3px}
+.ll li{padding:5px 9px;border-radius:6px;background:var(--bg);font-size:13px;border-left:3px solid transparent}
+.ll li.ci{border-left-color:var(--cubs);background:var(--cubs-light)}
+.ll li.si{border-left-color:var(--skill);background:var(--skill-light)}
+.ablk{background:var(--bg);border-radius:8px;padding:11px 13px;font-size:13px;line-height:1.6;border:1px solid var(--border)}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ri{background:var(--bg);border-radius:6px;padding:7px 9px;font-size:12px;border:1px solid var(--border)}
+.obox{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:11px 13px}
+.obox li{font-size:13px;padding:2px 0;color:#166534;list-style:none}
+.mfooter{padding:13px 22px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end}
+.adv-strip{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.abadge{display:flex;align-items:center;gap:7px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600}
+.tline{display:flex;align-items:center;overflow-x:auto;padding:4px 0 8px;gap:0}
+.tldot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid transparent;cursor:pointer;transition:all .15s;flex-shrink:0}
+.tldot:hover{transform:scale(1.15)}
+.tlcon{flex:1;height:2px;background:var(--border);min-width:6px}
+.nores{text-align:center;padding:40px;color:var(--muted);grid-column:1/-1}
+@media print{.sidebar,.topbar,.mfooter,.overlay .mclose,.chips,.srchwrap,.hbg{display:none!important}.modal{box-shadow:none;max-width:100%;border-radius:0}.overlay{position:static;padding:0;background:none;display:block!important}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.mo{transform:translateX(0)}.main{margin-left:0}.hbg{display:flex}.stats{grid-template-columns:1fr 1fr}.grade-grid{grid-template-columns:1fr 1fr}.wgrid{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr}.chips{display:none}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}.grade-grid{grid-template-columns:1fr}.content{padding:14px}}
+
+.home-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#e0e7ff;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.home-btn:hover{background:rgba(99,102,241,.25);border-color:rgba(99,102,241,.6);color:#c7d2fe;transform:translateY(-1px)}
+.home-btn svg{flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sb">
+  <div class="sidebar-logo">
+    <h1>⚜ Cubs &amp; Bulbuls</h1>
+    <p>Curriculum Planning Portal</p>
+  </div>
+  <div class="sidebar-sect">Navigation</div>
+  <div class="sitem active" id="n-ov" onclick="showView('overview')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Overview Dashboard
+  </div>
+  <div class="sidebar-sect">Grades</div>
+  <div class="sitem" id="n-g1" onclick="showGrade(1)"><span class="gdot" style="background:#4f46e5"></span>Grade 1 — Pravesh<span class="sbadge">20</span></div>
+  <div class="sitem" id="n-g2" onclick="showGrade(2)"><span class="gdot" style="background:#059669"></span>Grade 2 — Pravesh<span class="sbadge">20</span></div>
+  <div class="sitem" id="n-g3" onclick="showGrade(3)"><span class="gdot" style="background:#d97706"></span>Grade 3 — Pratham<span class="sbadge">20</span></div>
+  <div class="sitem" id="n-g4" onclick="showGrade(4)"><span class="gdot" style="background:#7c3aed"></span>Grade 4 — Pratham<span class="sbadge">20</span></div>
+  <div class="sitem" id="n-g5" onclick="showGrade(5)"><span class="gdot" style="background:#dc2626"></span>Grade 5 — Dwitiya<span class="sbadge">20</span></div>
+  <div class="sidebar-sect">Program</div>
+  <div class="sitem" id="n-sk" onclick="showView('skills')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Skill Strands
+  </div>
+  <div class="sitem" id="n-inspired" onclick="showView('inspired')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 3-5 9-5 9S7 10 7 7a5 5 0 0 1 5-5z"/><circle cx="12" cy="7" r="2"/></svg>
+    Inspired Living
+  </div>
+  <div class="sitem" onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print Portal
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <button class="hbg" onclick="toggleSB()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a class="home-btn" href="cubs_home.html" title="Back to Home">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      Home
+    </a>
+    <a class="home-btn" href="cubs_implementation_flow.html" target="_blank" title="Program Year Flow" style="background:rgba(217,119,6,.15);border-color:rgba(217,119,6,.35);color:#fbbf24">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Year Flow
+    </a>
+    <div class="topbar-title">
+      <h2 id="th2">Curriculum Dashboard</h2>
+      <p id="tsub">Bharat Scouts &amp; Guides — Cubs &amp; Bulbuls Enrichment Program</p>
+    </div>
+    <div class="srchwrap">
+      <input type="text" id="si" placeholder="Search lessons…" oninput="doSearch()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="chips" id="fchips">
+      <div class="chip" onclick="toggleF('cubs')">🟦 Cubs</div>
+      <div class="chip" onclick="toggleF('leadership')">Leadership</div>
+      <div class="chip" onclick="toggleF('heritage')">Heritage</div>
+      <div class="chip" onclick="toggleF('astronomy')">Astronomy</div>
+      <div class="chip" onclick="toggleF('communication')">Communication</div>
+      <div class="chip" onclick="toggleF('logic')">Logic</div>
+      <div class="chip" onclick="toggleF('service')">Service</div>
+      <div class="chip" onclick="toggleF('nature')">Nature</div>
+    </div>
+  </header>
+  <div class="content" id="mc"></div>
+</div>
+</div>
+<div class="overlay" id="ov" onclick="closeMO(event)">
+  <div class="modal" id="mo">
+    <div class="mhead">
+      <div><h2 id="mt"></h2><p id="mst"></p></div>
+      <button class="mclose" onclick="closeM()">✕</button>
+    </div>
+    <div class="mbody" id="mb"></div>
+    <div class="mfooter">
+      <button class="btn btng" onclick="closeM()">✕ Close</button>
+      <button class="btn btng" onclick="window.print()">🖨 Print</button>
+      <button class="btn btnp" onclick="exportPDF()">⬇ Export PDF</button>
+    </div>
+  </div>
+</div>
+<script>
+const CURRICULUM_DATA = {
+  grades: [
+    {
+      id: 1, label: "Grade 1", level: "Pravesh",
+      color: "#4f46e5", colorLight: "#eef2ff", colorBorder: "#c7d2fe",
+      icon: "ti-star",
+      weeks: [
+        { week: 1, theme: "Welcome to Cubs & Bulbuls", objectives: ["Understand what Cubs/Bulbuls is", "Know the program's origin in Bharat Scouts & Guides", "Feel welcomed and excited"], cubsTopics: ["Introduction to Cubs/Bulbuls", "History of Scouting in India", "The Cub/Bulbul identity"], skillTopics: ["Listening: Active listening in groups", "Vocabulary: Scout terminology"], materials: ["Welcome chart", "Nametags", "Coloured pencils", "Storybook about cubs"], icebreaker: "Name circle: each child says their name and one animal they like", mainActivity: "Story time about the first Cubs and how Scouting came to India. Children draw what they imagine a Cub/Bulbul looks like.", discussion: ["What does it mean to be part of a group?", "Why do you think animals are used as symbols in Scouting?"], reflection: "Each child shares one word that describes how they feel about joining", rubric: "Participation in discussion (1–3), Attentiveness during story (1–3)", homeConnection: "Tell a family member about what Cubs/Bulbuls is and draw a picture together", outcomes: ["Child knows the program name", "Child feels welcomed", "Child can describe one thing about Scouting"] },
+        { week: 2, theme: "Our Motto: Do Your Best", objectives: ["Learn and memorise the Cub/Bulbul motto", "Understand what 'Do Your Best' means daily", "Connect motto to personal effort"], cubsTopics: ["Cub Motto: Do Your Best", "Bulbul Motto: Be Prepared", "Applying mottos daily"], skillTopics: ["Expression: Expressing personal meaning", "Storytelling: Sharing experiences of trying hard"], materials: ["Motto poster", "Blank bookmarks", "Colouring materials"], icebreaker: "Two truths and a wish: something you do well and something you wish to do better", mainActivity: "Create a personal Motto Bookmark with the motto and a drawing. Share stories of a time they did their best.", discussion: ["What does doing your best look like at home? At school?", "Is doing your best the same for everyone?"], reflection: "Complete: 'My best means…'", rubric: "Bookmark completion (1–3), Story sharing confidence (1–3)", homeConnection: "Do one chore at home with full effort and report back next week", outcomes: ["Child can recite the motto", "Child connects motto to personal experience"] },
+        { week: 3, theme: "The Cub Sign & Salute", objectives: ["Learn the correct sign and salute", "Understand their meaning", "Practice with confidence"], cubsTopics: ["The Cub Sign (two fingers)", "The Salute", "When and how to use them"], skillTopics: ["Observation: Watching and copying accurately", "Teamwork: Practising in pairs"], materials: ["Demonstration chart", "Mirror cards", "Practice cards"], icebreaker: "Mirror game: children copy each other's hand movements in pairs", mainActivity: "Teacher demonstrates sign and salute with meaning. Children practise in mirrors, then check each other in pairs.", discussion: ["Why do you think Scouts have special signs?", "When might you use the salute?"], reflection: "Children demonstrate sign and salute to the group", rubric: "Accuracy of gesture (1–3), Confidence in demonstration (1–3)", homeConnection: "Teach the sign and salute to a family member", outcomes: ["Child correctly demonstrates the sign", "Child correctly demonstrates the salute"] },
+        { week: 4, theme: "The Handshake of Friendship", objectives: ["Learn the Scout handshake", "Understand friendship and trust values", "Practice respectful greetings"], cubsTopics: ["The Scout Handshake (left hand)", "Meaning: friendship and trust", "Global Scouting brotherhood/sisterhood"], skillTopics: ["Expression: Body language and greetings", "Heritage Awareness: Scouting as a global movement"], materials: ["World Scouting map", "Handshake practice cards", "Friendship pledge strips"], icebreaker: "Friendship web: pass yarn while sharing a friend's name", mainActivity: "Learn the left-hand handshake and its origin. Map activity showing Scouting worldwide. Make a friendship pledge.", discussion: ["Why is the left hand used for the handshake?", "What makes someone a trustworthy friend?"], reflection: "Write or draw one quality of a good friend", rubric: "Handshake execution (1–3), Participation in map activity (1–3)", homeConnection: "Use the handshake to greet a Scout or elder respectfully", outcomes: ["Child performs the handshake", "Child names one friendship value"] },
+        { week: 5, theme: "The Cub/Bulbul Promise", objectives: ["Learn the full Promise", "Understand each line's meaning", "Feel the importance of keeping promises"], cubsTopics: ["The Cub Promise text", "Duty to God and Country", "Making personal commitments"], skillTopics: ["Vocabulary: Promise-related words", "Listening: Hearing nuance in language"], materials: ["Promise poster", "Promise cards", "Journals"], icebreaker: "Promise circle: each child shares a small promise they can keep this week", mainActivity: "Read the Promise together line by line. Discuss each part. Children write or illustrate their favourite line.", discussion: ["What is the difference between a wish and a promise?", "What does 'duty to God and Country' mean to you?"], reflection: "Recite the Promise together with hand on heart", rubric: "Understanding of Promise lines (1–3), Personal connection expressed (1–3)", homeConnection: "Recite the Promise to a parent and explain its meaning", outcomes: ["Child can recite the Promise", "Child understands at least two lines"] },
+        { week: 6, theme: "The Cub/Bulbul Law", objectives: ["Learn the Cub/Bulbul Law", "Connect it to everyday behaviour", "Identify rules they already follow"], cubsTopics: ["The Cub Law: obedient / clean in thought, word, deed", "Comparison with class rules"], skillTopics: ["Teamwork: Group discussion of fair rules", "Gratitude: Appreciating rules that protect us"], materials: ["Law poster", "Rule comparison chart", "Craft sticks for Law wheel"], icebreaker: "Rule or no rule? Read scenarios; children raise hands if a rule applies", mainActivity: "Learn the Law, make a Law wheel. Groups create a scenario showing one Law in action.", discussion: ["Which Law do you already follow at home?", "Why do groups need laws?"], reflection: "Draw a picture of following one Law today", rubric: "Law recitation (1–3), Scenario creation quality (1–3)", homeConnection: "Find one house rule that matches a Cub Law", outcomes: ["Child can state the Law", "Child connects Law to personal behaviour"] },
+        { week: 7, theme: "Grand Howl — Our Pack Call", objectives: ["Learn and perform the Grand Howl", "Understand its role in pack identity", "Feel a sense of belonging"], cubsTopics: ["Grand Howl ceremony steps", "Pack identity and togetherness", "Jungle Book connection: Akela"], skillTopics: ["Expression: Voice and movement coordination", "Storytelling: Jungle Book characters"], materials: ["Grand Howl script card", "Akela poster", "Jungle Book excerpt"], icebreaker: "Animal sound circle: each child makes their favourite animal sound", mainActivity: "Learn the Grand Howl step by step. Discuss Akela from the Jungle Book. Practice as a group.", discussion: ["How do you feel when you do something together as a group?", "Why do you think Scouts howl like wolves?"], reflection: "Perform the Grand Howl confidently as a whole group", rubric: "Grand Howl participation (1–3), Voice/energy (1–3)", homeConnection: "Share the Grand Howl with family and explain what it means", outcomes: ["Child can participate in Grand Howl", "Child knows who Akela is"] },
+        { week: 8, theme: "Good Turn — One Act of Kindness", objectives: ["Understand the concept of a Good Turn", "Plan and do a Good Turn independently", "Reflect on how it felt"], cubsTopics: ["Good Turn: helping others without being asked", "Baden Powell's first Good Turn story"], skillTopics: ["Gratitude: Recognising others' needs", "Observation: Noticing when someone needs help"], materials: ["Good Turn diary cards", "Scenario cards", "BP picture book"], icebreaker: "Helping hands: trace hands and write one way they help at home", mainActivity: "Story: How BP started Good Turns. Children plan a Good Turn and record it.", discussion: ["Why is it important to help without being asked?", "How do you feel after helping someone?"], reflection: "Share Good Turn plan with a partner", rubric: "Good Turn plan detail (1–3), Reflection on feelings (1–3)", homeConnection: "Do the planned Good Turn and bring the diary card back next week", outcomes: ["Child can explain a Good Turn", "Child commits to a Good Turn"] },
+        { week: 9, theme: "Our National Flag", objectives: ["Identify features of the Indian national flag", "Know the meaning of each element", "Show respect for national symbols"], cubsTopics: ["National Flag: colours, Ashoka Chakra", "Correct flag etiquette", "Flags in Scouting"], skillTopics: ["Heritage Awareness: Indian national identity", "Vocabulary: Flag-related terms"], materials: ["Indian flag visual", "Colouring flag templates", "Flag etiquette chart"], icebreaker: "Colour quiz: teacher shows colours, children call out what they stand for", mainActivity: "Detailed lesson on the Tricolour and Ashoka Chakra. Children colour their flag template and write three facts.", discussion: ["Why does every country have a flag?", "How should we behave when we see the national flag?"], reflection: "Each child states one fact they learned about the flag", rubric: "Flag accuracy (1–3), Facts written (1–3)", homeConnection: "Watch the flag hoisting at school or on TV and report back", outcomes: ["Child identifies flag colours and meanings", "Child shows respect for the flag"] },
+        { week: 10, theme: "Personal Hygiene — Healthy Habits", objectives: ["List key hygiene practices", "Understand why hygiene matters", "Commit to daily hygiene habits"], cubsTopics: ["Clean in thought, word and deed — the Cub Law", "Daily routines of a Cub"], skillTopics: ["Observation: Identifying hygiene habits", "Wellbeing: Gratitude for a healthy body"], materials: ["Hygiene habit chart", "Handwashing demo materials", "Personal hygiene pledge card"], icebreaker: "Good habit or bad habit? Scenarios with thumbs up or down", mainActivity: "Handwashing demonstration. Children create a Morning Routine chart with hygiene steps.", discussion: ["Why do we wash our hands before eating?", "How does staying clean show respect for others?"], reflection: "Design a personal hygiene badge", rubric: "Handwashing technique (1–3), Routine chart completeness (1–3)", homeConnection: "Follow the morning routine chart every day for one week", outcomes: ["Child lists 5 hygiene habits", "Child demonstrates correct handwashing"] },
+        { week: 11, theme: "Discipline — Being Your Best Self", objectives: ["Define discipline in simple terms", "Connect discipline to the Cub Law", "Practice discipline through structured activity"], cubsTopics: ["Discipline in daily Scout life", "Marching and formation as discipline practice"], skillTopics: ["Teamwork: Moving in sync requires discipline", "Gratitude: Appreciating structure"], materials: ["Discipline pledge cards", "Marching space", "Timer"], icebreaker: "Freeze dance: when music stops, freeze perfectly still", mainActivity: "Discussion on discipline. Practice marching in formation. Timed quiet reading challenge. Group reflection.", discussion: ["Is discipline punishment or practice?", "When is discipline hardest for you?"], reflection: "Complete: 'Discipline helps me because…'", rubric: "Marching precision (1–3), Reflection depth (1–3)", homeConnection: "Set a bedtime routine and follow it for three nights", outcomes: ["Child defines discipline", "Child demonstrates disciplined behaviour"] },
+        { week: 12, theme: "Service — Helping Our Community", objectives: ["Define service and its importance", "Identify where service is needed", "Plan a small service activity"], cubsTopics: ["Service as a Scout value", "Community helpers and their work"], skillTopics: ["Heritage Awareness: Culture of seva (service)", "Observation: Spotting needs in environment"], materials: ["Community helper flashcards", "Service planning worksheet", "Thank you card templates"], icebreaker: "Match the helper: community workers matched to their tools", mainActivity: "Visit or virtual tour of a community service space. Children plan a service activity for their classroom.", discussion: ["Who are the helpers in your neighbourhood?", "How can a child serve the community?"], reflection: "Draw a picture of the service activity they will do", rubric: "Service plan clarity (1–3), Community helper knowledge (1–3)", homeConnection: "Help a neighbour or elderly family member with one task", outcomes: ["Child explains service", "Child plans a service activity"] },
+        { week: 13, theme: "Nature Walk — Observing the World", objectives: ["Practice careful observation outdoors", "Identify common plants and insects", "Express wonder about nature"], cubsTopics: ["Nature observation in Scouting", "Outdoor safety rules"], skillTopics: ["Nature Observation: Looking closely", "Vocabulary: Nature-related words"], materials: ["Observation journals", "Magnifying glasses", "Nature bingo cards"], icebreaker: "What do you hear? One minute of silence, then share", mainActivity: "Guided nature walk around school. Children record observations in journals. Nature bingo.", discussion: ["What surprised you most on the walk?", "Why is it important to take care of nature?"], reflection: "Share one discovery from the nature walk", rubric: "Journal entries quality (1–3), Observation detail (1–3)", homeConnection: "Observe one plant or insect at home and describe it", outcomes: ["Child identifies 3 things in nature", "Child describes what they saw"] },
+        { week: 14, theme: "Teamwork — Together We Achieve", objectives: ["Understand the value of teamwork", "Practice cooperation in group activities", "Resolve simple disagreements respectfully"], cubsTopics: ["Pack system: working as a team", "Each member's role in the pack"], skillTopics: ["Teamwork: Cooperation and communication", "Expression: Communicating needs clearly"], materials: ["Team challenge equipment", "Role cards", "Teamwork reflection sheets"], icebreaker: "Human knot: untangle without letting go of hands", mainActivity: "Team building challenges: build a tower, complete a puzzle. Debrief on what worked.", discussion: ["What made your team succeed or struggle?", "What is each person's strength in a team?"], reflection: "Each child names one strength they brought to the team", rubric: "Cooperation during activity (1–3), Reflection quality (1–3)", homeConnection: "Do a chore together with a sibling as a team", outcomes: ["Child participates cooperatively", "Child identifies own strengths"] },
+        { week: 15, theme: "Stories We Tell — Oral Traditions", objectives: ["Appreciate the importance of storytelling", "Listen actively and recall details", "Tell a short story with expression"], cubsTopics: ["Storytelling in Scout tradition", "Campfire stories and their purpose"], skillTopics: ["Storytelling: Structure and expression", "Listening: Recall and comprehension"], materials: ["Storytelling prompt cards", "Story mapping sheet", "Campfire setup (symbolic)"], icebreaker: "One-word story: each child adds one word to build a group story", mainActivity: "Simulated campfire setup. Teacher tells a folk tale. Children map the story then take turns telling a part.", discussion: ["Why have people always told stories?", "What makes a story memorable?"], reflection: "Each child chooses a story element for their own future story", rubric: "Listening recall (1–3), Story telling expression (1–3)", homeConnection: "Ask a family member to share an old family story", outcomes: ["Child retells key story points", "Child tells a story with beginning, middle, end"] },
+        { week: 16, theme: "Gratitude — Being Thankful", objectives: ["Define gratitude and its effect on wellbeing", "Identify things to be grateful for", "Express gratitude creatively"], cubsTopics: ["Gratitude as part of Cub values", "Saying thank you to community helpers"], skillTopics: ["Wellbeing: Emotional awareness and gratitude", "Expression: Creative expression of thanks"], materials: ["Gratitude journals", "Thank you card supplies", "Gratitude jar"], icebreaker: "Gratitude toss: toss a soft ball and share one thing you are grateful for", mainActivity: "Discuss gratitude. Create gratitude jar entries. Make thank you cards for a school staff member.", discussion: ["What is the difference between wanting and being grateful?", "Who deserves your thanks today?"], reflection: "Write or draw three things they are grateful for", rubric: "Gratitude expressions (1–3), Thank you card effort (1–3)", homeConnection: "Say thank you to three different people at home", outcomes: ["Child defines gratitude", "Child expresses gratitude in writing/art"] },
+        { week: 17, theme: "National Symbols of India", objectives: ["Know India's major national symbols", "Understand the significance of each", "Show pride in national identity"], cubsTopics: ["National symbols in Scout pledge context", "Respecting the nation"], skillTopics: ["Heritage & Citizenship: National identity", "Vocabulary: Symbol names and meanings"], materials: ["National symbols chart", "Symbol matching cards", "Art supplies"], icebreaker: "Quick quiz: show symbol image, children call out the name", mainActivity: "Lesson on national animal, flower, bird, tree, anthem, sport. Children create a 'My India' booklet.", discussion: ["Why does a country choose symbols to represent it?", "Which symbol is your favourite and why?"], reflection: "Present one symbol from the booklet to the class", rubric: "Symbol knowledge (1–3), Booklet quality (1–3)", homeConnection: "Teach family members three national symbols", outcomes: ["Child names 5 national symbols", "Child can explain why symbols matter"] },
+        { week: 18, theme: "Expressing Myself — Communication Skills", objectives: ["Use clear language to express thoughts", "Practise speaking in front of the group", "Listen respectfully when others speak"], cubsTopics: ["Scout communication traditions", "Clear speech in ceremony"], skillTopics: ["Communication: Clarity and confidence", "Listening: Respectful audience behaviour"], materials: ["Topic cards for short speeches", "Listening checklist", "Feedback stars"], icebreaker: "Show and tell: bring one object and describe it in 3 sentences", mainActivity: "Mini public speaking: each child draws a topic card and speaks for 30 seconds. Peers use listening checklist.", discussion: ["What makes a good speaker?", "What makes a good listener?"], reflection: "Identify one thing to improve about their speaking", rubric: "Clarity of speech (1–3), Listening behaviour (1–3)", homeConnection: "Tell a family member about their day using three complete sentences", outcomes: ["Child speaks clearly in front of group", "Child demonstrates active listening"] },
+        { week: 19, theme: "Preparing for Investiture", objectives: ["Understand the Investiture ceremony", "Review all Promise, Law, sign, salute, handshake", "Feel proud and prepared"], cubsTopics: ["Investiture ceremony: meaning and format", "Pravesh requirements review"], skillTopics: ["Expression: Ceremonial presentation", "Teamwork: Supporting each other in preparation"], materials: ["Investiture checklist", "Practice cards for all gestures", "Ceremonial poster"], icebreaker: "Knowledge lightning round: rapid questions on all topics", mainActivity: "Full dress rehearsal of the Investiture ceremony. Each child practices promise, gestures, and responses.", discussion: ["Why do we make the promise formally?", "How have you grown since Week 1?"], reflection: "Write a letter to their future self about joining", rubric: "Ceremony readiness (1–3), All gestures correct (1–3)", homeConnection: "Prepare smart clothing for Investiture; tell family what will happen", outcomes: ["Child is fully prepared for Investiture", "Child can perform all Pravesh requirements"] },
+        { week: 20, theme: "Investiture & Celebration", objectives: ["Complete the Investiture ceremony formally", "Celebrate one year of growth", "Look forward to the journey ahead"], cubsTopics: ["Full Investiture ceremony", "Receiving the Pravesh badge", "Welcome into the Cub/Bulbul family"], skillTopics: ["Expression: Public ceremonial participation", "Gratitude: Celebrating growth and community"], materials: ["Pravesh badges", "Certificates", "Decorations", "Reflection journals"], icebreaker: "Memory wall: each child pins one favourite memory from the year", mainActivity: "Formal Investiture ceremony with parents/staff invited. Badge presentation. Children share one achievement. Group photo.", discussion: ["What does it mean to officially be a Cub/Bulbul?", "What are you most proud of this year?"], reflection: "Write or draw their biggest growth moment this year", rubric: "Ceremony participation (1–3), Reflection quality (1–3)", homeConnection: "Display the badge at home and tell family what it represents", outcomes: ["Child receives Pravesh badge", "Child articulates personal growth"] }
+      ]
+    },
+    {
+      id: 2, label: "Grade 2", level: "Pravesh",
+      color: "#059669", colorLight: "#ecfdf5", colorBorder: "#a7f3d0",
+      icon: "ti-star",
+      weeks: [
+        { week: 1, theme: "Remembering Our Promise", objectives: ["Reinforce the Promise", "Connect promise to daily actions", "Celebrate returning to the program"], cubsTopics: ["Review of Cub/Bulbul Promise", "Promise in context of a new year"], skillTopics: ["Communication: Verbal expression of commitments", "Logical Thinking: Sequencing daily actions to match promise"], materials: ["Promise poster", "Commitment wheel", "Journals"], icebreaker: "Summer memory share: one thing each child did well over the holidays", mainActivity: "Review and re-enact the Promise. Create a 'Promise in Action' wheel showing daily behaviours that match each promise line.", discussion: ["How did you keep the Promise during the holidays?", "Which line is hardest to keep and why?"], reflection: "Write one new way to keep the Promise this year", rubric: "Promise recall (1–3), Wheel completeness (1–3)", homeConnection: "Read the Promise each morning before school for one week", outcomes: ["Child recites Promise with confidence", "Child connects Promise to personal actions"] },
+        { week: 2, theme: "The Cub Law Revisited", objectives: ["Restate the Law with deeper understanding", "Find examples of Law in stories", "Create a Law-based pledge"], cubsTopics: ["Review of Cub Law", "Law in real-life situations"], skillTopics: ["Storytelling: Laws in folk tales and fables", "Heritage: Rules across Indian traditions"], materials: ["Fable collection", "Law role play cards", "Pledge booklet"], icebreaker: "Story starters: begin a story about someone who broke a rule and fixed it", mainActivity: "Read a fable where a character lives by good values. Map the fable to the Cub Law. Children create a pledge booklet.", discussion: ["Which law did the story character follow or break?", "How are laws different from rules?"], reflection: "Each child chooses their strongest law and explains why", rubric: "Law-fable mapping (1–3), Pledge booklet quality (1–3)", homeConnection: "Find a story that shows a character following a law", outcomes: ["Child states Law with understanding", "Child connects Law to stories"] },
+        { week: 3, theme: "Good Turn Stories", objectives: ["Recall the meaning of Good Turn", "Share Good Turn experiences", "Plan a group Good Turn"], cubsTopics: ["Good Turn in daily life", "Service beyond self"], skillTopics: ["Storytelling: Narrating personal experiences", "Emotional Intelligence: Empathy and care"], materials: ["Good Turn journal", "Community needs map", "Planning worksheets"], icebreaker: "Kindness domino: one child shares a Good Turn; next shares a related one", mainActivity: "Children share Good Turn stories from home. Group maps community needs and selects one Good Turn activity.", discussion: ["What is the difference between a Good Turn and being told to help?", "How did your Good Turn affect someone else?"], reflection: "Draw the impact of a Good Turn — before and after", rubric: "Story sharing detail (1–3), Group plan participation (1–3)", homeConnection: "Do one unasked Good Turn each day this week", outcomes: ["Child narrates a Good Turn experience", "Child contributes to group service plan"] },
+        { week: 4, theme: "National Symbols — Deeper Understanding", objectives: ["Expand knowledge of national symbols", "Understand the history behind symbols", "Express pride through creative work"], cubsTopics: ["National symbols in Scouting context", "Salute and respect for national flag"], skillTopics: ["Heritage: History of national symbols", "Logical Thinking: Reason and research"], materials: ["Symbol fact cards", "Research booklets", "Art supplies"], icebreaker: "Symbol auction: bid using play tokens on most valued symbol", mainActivity: "Research activity on national symbols using fact cards. Children present one symbol. Create an India Symbol poster.", discussion: ["Why is the Ashoka Chakra on the flag?", "How do symbols change over time?"], reflection: "Choose one symbol and write why it matters personally", rubric: "Symbol presentation (1–3), Poster quality (1–3)", homeConnection: "Interview a family elder about a symbol they remember", outcomes: ["Child explains 6+ national symbols", "Child researches and presents independently"] },
+        { week: 5, theme: "Service in Our School", objectives: ["Identify service opportunities in school", "Carry out a class service activity", "Reflect on the experience"], cubsTopics: ["Service activities for Cubs", "Clean India as a Scout value"], skillTopics: ["Teamwork: Organising a group task", "Communication: Explaining service to others"], materials: ["School map", "Cleaning supplies", "Service reflection cards"], icebreaker: "School walk: notice one area that needs care", mainActivity: "Group identifies a service area in school. Organise and carry out a 20-minute service activity. Debrief.", discussion: ["How did it feel to improve something for others?", "Who benefits from keeping our school clean?"], reflection: "Write: 'My service today helped…'", rubric: "Service participation (1–3), Reflection quality (1–3)", homeConnection: "Clean or organise one area at home without being asked", outcomes: ["Child participates in school service", "Child reflects on impact of service"] },
+        { week: 6, theme: "Discipline in Action", objectives: ["Practice discipline through structured tasks", "Identify self-regulation strategies", "Understand discipline as self-respect"], cubsTopics: ["Cub Law: obedient and disciplined", "Formation, drill, and focus exercises"], skillTopics: ["Logical Thinking: Following multi-step instructions", "Emotional Intelligence: Managing impulses"], materials: ["Drill instruction cards", "Mindfulness bell", "Focus journal"], icebreaker: "Statue challenge: hold a pose for 30 seconds", mainActivity: "Drill and formation exercise. Mindful breathing activity. Children write in focus journal about what helps them concentrate.", discussion: ["What distracts you most?", "How does discipline help you learn?"], reflection: "Design a personal discipline symbol", rubric: "Formation accuracy (1–3), Journal depth (1–3)", homeConnection: "Set a 15-minute focus task at home each day", outcomes: ["Child demonstrates discipline", "Child names two self-regulation strategies"] },
+        { week: 7, theme: "Pack Activities — Our Team", objectives: ["Understand the pack system", "Participate in team-building activities", "Value each member's contribution"], cubsTopics: ["Six system in Cubs", "Roles within a pack/six"], skillTopics: ["Teamwork: Roles and responsibilities", "Communication: Listening to team members"], materials: ["Role cards", "Team challenge kits", "Pack name creation sheets"], icebreaker: "Strength cards: each child picks a card showing one strength they have", mainActivity: "Organise into sixes. Each six selects a name and emblem. Complete a team relay challenge. Debrief.", discussion: ["What happens when one team member doesn't contribute?", "What is your strongest role in a team?"], reflection: "Write a job description for their team role", rubric: "Team participation (1–3), Role awareness (1–3)", homeConnection: "Identify the roles family members play at home", outcomes: ["Child knows their pack role", "Child participates actively in team activity"] },
+        { week: 8, theme: "Logical Patterns Around Us", objectives: ["Identify patterns in nature and daily life", "Create and extend simple patterns", "Connect pattern thinking to problem solving"], cubsTopics: ["Observation skills in nature", "Pattern tracking for Scouts"], skillTopics: ["Logical Thinking: Patterns and numeracy", "Observation: Spotting regularities"], materials: ["Pattern cards", "Natural objects for sorting", "Grid paper"], icebreaker: "Clap pattern: teacher claps a rhythm, children repeat it more complex each round", mainActivity: "Pattern walk finding patterns in tiles, plants, and objects. Create nature patterns. Extend sequences on grid paper.", discussion: ["Where do you see patterns in everyday life?", "How do patterns help us predict what comes next?"], reflection: "Create an original pattern and explain the rule", rubric: "Pattern identification (1–3), Extension accuracy (1–3)", homeConnection: "Find 5 patterns at home and draw them", outcomes: ["Child identifies and extends patterns", "Child explains pattern rules"] },
+        { week: 9, theme: "Observing the Natural World", objectives: ["Practise careful scientific observation", "Record observations accurately", "Ask questions about what they see"], cubsTopics: ["Nature study in Scouting", "Outdoor observation skills"], skillTopics: ["Scientific Inquiry: Observation and curiosity", "Vocabulary: Descriptive science words"], materials: ["Observation sheets", "Magnifying glasses", "Natural specimens", "Sketch pads"], icebreaker: "Feely bag: reach in and describe an object without seeing it", mainActivity: "Observe plant specimens, describe in detail, sketch, and generate questions.", discussion: ["What did you notice that you had not noticed before?", "What question do you most want answered about nature?"], reflection: "Rate curiosity level: what made you most curious today?", rubric: "Observation detail (1–3), Questions generated (1–3)", homeConnection: "Observe one natural object each day and write one new observation", outcomes: ["Child produces detailed observation records", "Child generates scientific questions"] },
+        { week: 10, theme: "Stories from Indian Heritage", objectives: ["Know one Indian folk tale or legend", "Identify values within the story", "Retell with expression"], cubsTopics: ["Heritage stories in Scout culture", "Indian legends and their Scout connections"], skillTopics: ["Storytelling: Traditional narrative structures", "Heritage: Folk tales and their values"], materials: ["Indian folk tale book", "Story map template", "Puppets or props"], icebreaker: "Story title hunt: show titles and guess what story might be about", mainActivity: "Teacher tells an Indian folk tale. Children map the story. In pairs retell with props.", discussion: ["What values does the story teach?", "How are Indian stories similar to stories from other cultures?"], reflection: "Write: 'The value this story taught me is…'", rubric: "Retelling accuracy (1–3), Value identification (1–3)", homeConnection: "Ask a grandparent or elder to share a folk tale", outcomes: ["Child retells a folk tale accurately", "Child identifies a story value"] },
+        { week: 11, theme: "Introduction to Astronomy", objectives: ["Know the Sun, Moon, and some stars", "Understand day and night cycles", "Express wonder about space"], cubsTopics: ["Scout stargazing traditions", "Outdoor night observation"], skillTopics: ["Astronomy: Sun, moon, stars", "Scientific Inquiry: Curiosity about the universe"], materials: ["Constellation cards", "Day/night wheel", "Torch and globe"], icebreaker: "Star name game: each child picks a constellation name", mainActivity: "Day/night cycle demonstration with torch and globe. Learn constellation stories. Create a mini star map.", discussion: ["Why do stars seem to move in the sky?", "What constellation would you name after yourself?"], reflection: "Draw and label the day/night cycle", rubric: "Cycle understanding (1–3), Constellation knowledge (1–3)", homeConnection: "Go outside at night with family and find one constellation", outcomes: ["Child explains day/night cycle", "Child identifies 2 constellations"] },
+        { week: 12, theme: "Communication — Listening and Speaking", objectives: ["Practise active listening strategies", "Speak clearly on a chosen topic", "Give constructive feedback"], cubsTopics: ["Communication in Scout groups", "Listening at ceremonies and meetings"], skillTopics: ["Communication: Active listening", "Expression: Speaking confidently"], materials: ["Listening checklist", "Topic spinner", "Feedback cards"], icebreaker: "Chinese whispers: compare message at start and end of line", mainActivity: "Listening activities: remember 7 items, re-state instructions, spot mistakes. Mini presentations with peer feedback.", discussion: ["What is the difference between hearing and listening?", "What makes a presenter easy to follow?"], reflection: "Identify one listening habit to improve", rubric: "Listening accuracy (1–3), Presentation clarity (1–3)", homeConnection: "Listen to a family story without interrupting; summarise it", outcomes: ["Child demonstrates active listening", "Child presents clearly"] },
+        { week: 13, theme: "Problem Solving — Think It Through", objectives: ["Apply a simple problem-solving process", "Work through puzzles and scenarios", "Stay calm under challenge"], cubsTopics: ["Scout problem solving: preparedness mindset", "Finding solutions outdoors"], skillTopics: ["Logical Thinking: Reasoning and problem solving", "Teamwork: Collaborative solutions"], materials: ["Puzzle cards", "Scenario problem sets", "4-step solving template"], icebreaker: "Brain buster: three quick riddles to warm up thinking", mainActivity: "Introduce 4-step problem solving: understand, plan, do, review. Apply to 3 scenarios. Team puzzle challenge.", discussion: ["What do you do when you feel stuck?", "What strategies helped you solve the problem?"], reflection: "Draw the 4-step process with personal examples", rubric: "Strategy use (1–3), Team problem solving (1–3)", homeConnection: "Solve one real problem at home using the 4 steps", outcomes: ["Child applies 4-step problem solving", "Child stays focused under challenge"] },
+        { week: 14, theme: "Indian Culture and Traditions", objectives: ["Name major Indian festivals and meanings", "Understand regional diversity", "Celebrate cultural identity proudly"], cubsTopics: ["Heritage awareness in Scout oath", "Cultural celebrations in pack meetings"], skillTopics: ["Heritage & Citizenship: Traditions and culture", "Expression: Sharing cultural stories"], materials: ["Festival cards", "India map with regions", "Art supplies"], icebreaker: "Festival food quiz: describe a food, others guess the festival", mainActivity: "India's diversity lesson. Each six researches one festival. Create a 'Festivals of India' wall.", discussion: ["How do different festivals show Indian unity in diversity?", "Which festival is special to your family?"], reflection: "Write one thing they are proud of about Indian culture", rubric: "Festival knowledge (1–3), Presentation quality (1–3)", homeConnection: "Cook or celebrate one traditional element of a family festival", outcomes: ["Child names 5 Indian festivals", "Child values cultural diversity"] },
+        { week: 15, theme: "Emotional Intelligence — Knowing My Feelings", objectives: ["Name and describe core emotions", "Understand emotional triggers", "Respond constructively"], cubsTopics: ["Scout wellbeing: healthy body and mind", "Managing feelings in group settings"], skillTopics: ["Wellbeing: Emotional awareness", "Communication: Expressing feelings"], materials: ["Emotion wheel", "Scenario cards", "Feelings journal"], icebreaker: "Emotion mirror: teacher shows a face, children mirror and name the emotion", mainActivity: "Learn the emotion wheel. Role-play scenarios. Practice healthy response strategies.", discussion: ["What does anger feel like in your body?", "How can you help a friend who is sad?"], reflection: "Journal: 'Something that made me happy/sad/angry this week'", rubric: "Emotion vocabulary (1–3), Response strategies (1–3)", homeConnection: "Check in with family: ask everyone about one feeling they had today", outcomes: ["Child names 6 emotions", "Child describes healthy emotional responses"] },
+        { week: 16, theme: "The Sky at Night — Stars and Planets", objectives: ["Distinguish planets from stars", "Know the planets in our solar system", "Observe with curiosity"], cubsTopics: ["Stargazing as Scout outdoor skill", "Navigation basics using stars"], skillTopics: ["Astronomy: Solar system", "Scientific Inquiry: Questioning and wonder"], materials: ["Solar system model cards", "Planet fact sheets", "Glow star stickers"], icebreaker: "Planet hot seat: one child is a planet, others ask questions", mainActivity: "Solar system layout activity. Planet fact-finding. Create 'My Solar System' booklet.", discussion: ["How far away are the planets?", "Would you want to travel to another planet?"], reflection: "Draw the solar system from memory", rubric: "Planet order knowledge (1–3), Booklet accuracy (1–3)", homeConnection: "Watch a short documentary about one planet with family", outcomes: ["Child names planets in order", "Child explains one fact about each planet"] },
+        { week: 17, theme: "Heritage Walk — Our School's Story", objectives: ["Discover the history of their school", "Connect personal identity to community", "Practice documentation skills"], cubsTopics: ["Community awareness in Scouting", "Local heritage as part of national heritage"], skillTopics: ["Heritage: Local history", "Observation: Noticing historical features"], materials: ["School history notes", "Camera or sketch pads", "Interview questions"], icebreaker: "Old vs new: show old and new photos of school, spot differences", mainActivity: "Heritage walk around school. Interview oldest staff member. Document findings.", discussion: ["What is the most interesting thing you discovered about your school?", "Why is it important to know where we come from?"], reflection: "Write three things they learned about school's history", rubric: "Documentation quality (1–3), Interview participation (1–3)", homeConnection: "Learn the history of their home neighbourhood", outcomes: ["Child documents school heritage", "Child connects to local history"] },
+        { week: 18, theme: "Teamwork Challenge — Build It Together", objectives: ["Apply teamwork in a complex task", "Practice communication under pressure", "Celebrate collective achievement"], cubsTopics: ["Team challenges in Scouting camps", "Roles in pack competitions"], skillTopics: ["Teamwork: Advanced cooperation", "Communication: Instructions under pressure"], materials: ["Building challenge kit", "Timer", "Evaluation rubric"], icebreaker: "Trust fall in pairs: build trust before the big challenge", mainActivity: "Team engineering challenge: build the tallest tower using limited materials. Assign roles. Debrief.", discussion: ["What strategy did your team use?", "What would you do differently?"], reflection: "Score own teamwork out of 10 and explain", rubric: "Team effectiveness (1–3), Role fulfilment (1–3)", homeConnection: "Design a family challenge where everyone must contribute", outcomes: ["Child contributes effectively to team task", "Child evaluates team performance"] },
+        { week: 19, theme: "Preparing for Progress", objectives: ["Review all Grade 2 topics", "Identify areas of personal growth", "Set goals for Grade 3"], cubsTopics: ["Pravesh recap", "Preview of Pratham Charan for Grade 3"], skillTopics: ["Logical Thinking: Self-assessment and review", "Expression: Presenting personal portfolio"], materials: ["Portfolio folders", "Self-assessment checklists", "Goal setting cards"], icebreaker: "Year in review: fastest recall challenge on all topics", mainActivity: "Self-assessment of all skills and knowledge. Create a portfolio. Set three goals for Grade 3.", discussion: ["What are you most proud of learning?", "What are you most looking forward to in Grade 3?"], reflection: "Write a letter from current self to Grade 3 self", rubric: "Portfolio quality (1–3), Goal specificity (1–3)", homeConnection: "Share portfolio with family and discuss Grade 3 goals", outcomes: ["Child completes self-assessment", "Child sets specific Grade 3 goals"] },
+        { week: 20, theme: "Celebration and Reflection", objectives: ["Celebrate achievements with community", "Express gratitude for the year", "Mark the transition to Grade 3"], cubsTopics: ["Closing ceremony with pack", "Acknowledging progress toward Pratham Charan"], skillTopics: ["Gratitude: Celebrating others", "Teamwork: Preparing celebration together"], materials: ["Achievement certificates", "Celebration decorations", "Memory journals"], icebreaker: "Appreciation circle: each child receives one compliment from a classmate", mainActivity: "Class celebration with portfolio sharing. Certificate presentation. Group reflection on the year.", discussion: ["What moment are you most proud of?", "How have you grown as a team member?"], reflection: "Write or draw: 'This year I became…'", rubric: "Celebration participation (1–3), Reflection expression (1–3)", homeConnection: "Host a small celebration at home to share achievements", outcomes: ["Child celebrates own and others' growth", "Child articulates year's development"] }
+      ]
+    },
+    {
+      id: 3, label: "Grade 3", level: "Pravesh + Pratham Charan",
+      color: "#d97706", colorLight: "#fffbeb", colorBorder: "#fcd34d",
+      icon: "ti-medal",
+      weeks: [
+        { week: 1, theme: "Into the Jungle Book World", objectives: ["Understand Jungle Book characters", "Connect Akela, Baloo, Bagheera to Scout values", "Engage with narrative learning"], cubsTopics: ["Jungle Book characters: Akela, Baloo, Bagheera, Mowgli", "Jungle Book as Scout tradition"], skillTopics: ["Quiz Skills: Character knowledge challenge", "Communication: Character analysis"], materials: ["Jungle Book story cards", "Character fact sheets", "Art supplies"], icebreaker: "Which character are you? Quick personality quiz", mainActivity: "Story session: key Jungle Book scenes. Character analysis. Create character cards with Scout value links.", discussion: ["Which character would make the best Cub leader?", "What is the difference between rules from fear and rules from respect?"], reflection: "Write which character they most identify with and why", rubric: "Character knowledge (1–3), Value connections (1–3)", homeConnection: "Read or watch part of The Jungle Book and report back", outcomes: ["Child names and describes all four characters", "Child links characters to Scout values"] },
+        { week: 2, theme: "Nature Study — Plants and Their Lives", objectives: ["Identify parts of a plant", "Understand photosynthesis simply", "Appreciate plants in the ecosystem"], cubsTopics: ["Nature study for Pratham Charan", "Scout outdoor knowledge"], skillTopics: ["Scientific Inquiry: Plant biology", "Observation: Close observation of specimens"], materials: ["Plant specimens", "Diagram templates", "Magnifying glasses", "Seeds"], icebreaker: "Guess the plant part: hold up root, stem, leaf, or flower", mainActivity: "Observe plant specimens, label parts, discuss photosynthesis. Plant a seed to observe over weeks.", discussion: ["What would happen if there were no plants on Earth?", "How do plants use sunlight?"], reflection: "Draw and label a complete plant with functions", rubric: "Parts identification (1–3), Observation notes (1–3)", homeConnection: "Water their cup plant every day and track growth", outcomes: ["Child labels all plant parts", "Child explains photosynthesis simply"] },
+        { week: 3, theme: "Observation Skills — Scout Detective", objectives: ["Practise systematic observation", "Use all five senses", "Record observations scientifically"], cubsTopics: ["Observation as core Scout skill", "Kim's Game for memory and observation"], skillTopics: ["Logical Thinking: Evidence-based reasoning", "Scientific Inquiry: Systematic observation"], materials: ["Kim's Game tray of objects", "Observation journal", "Blindfold", "Scent/texture samples"], icebreaker: "Kim's Game: 20 objects, cover, recall as many as possible", mainActivity: "Multi-sensory observation stations: sight, sound, touch, smell. Record results. Practice systematic description.", discussion: ["Which sense do you rely on most?", "Why do scientists need to observe carefully before concluding?"], reflection: "Rank their senses and explain which is strongest for observation", rubric: "Observation journal detail (1–3), Kim's Game recall accuracy (1–3)", homeConnection: "Use all five senses to describe one object at home", outcomes: ["Child records systematic observations", "Child uses all five senses"] },
+        { week: 4, theme: "Introduction to Knotting", objectives: ["Learn two basic knots", "Understand practical uses", "Practise fine motor skills"], cubsTopics: ["Knotting for Pratham Charan: reef knot, slip knot", "History of knotting in Scouting"], skillTopics: ["Innovation Skills: Practical problem solving", "Logical Thinking: Sequencing steps"], materials: ["Ropes 50cm per child", "Knot guide cards", "Practice boards"], icebreaker: "Tying race: who can tie and untie their shoes fastest?", mainActivity: "Step-by-step instruction and practice of reef knot and slip knot. Pair practice with guide cards.", discussion: ["Where do sailors, climbers, and doctors use knots?", "Which knot was hardest and why?"], reflection: "Demonstrate both knots to the teacher", rubric: "Knot accuracy (1–3), Independent tying (1–3)", homeConnection: "Practice both knots at home until done without guide card", outcomes: ["Child ties reef and slip knot independently", "Child states a use for each knot"] },
+        { week: 5, theme: "First Aid — Help in an Emergency", objectives: ["Know first aid priorities: check, call, care", "Treat small cuts and bruises", "Stay calm in an emergency"], cubsTopics: ["First Aid basics for Pratham Charan", "When to get adult help"], skillTopics: ["Leadership & Service: Taking responsible action", "Communication: Calling for help clearly"], materials: ["First aid kit", "Role play scenario cards", "Bandage strips"], icebreaker: "True or false: first aid scenarios", mainActivity: "Learn and practice: check the scene, call for help, care for the person. Bandaging practice. Role play 3 scenarios.", discussion: ["When should a child just call an adult rather than help?", "Why is staying calm important in an emergency?"], reflection: "Write the three steps from memory", rubric: "Scenario response (1–3), Bandaging technique (1–3)", homeConnection: "Find the family's first aid kit and tell parents the three steps", outcomes: ["Child applies check-call-care", "Child demonstrates basic bandaging"] },
+        { week: 6, theme: "Community Awareness — Who Makes Our Town Work?", objectives: ["Map community services", "Understand how people serve the community", "Develop civic awareness"], cubsTopics: ["Community service in Scouting values", "Scout surveys of local area"], skillTopics: ["Heritage & Citizenship: Civic awareness", "Logical Thinking: Mapping and categorising"], materials: ["Community map template", "Community helper interview cards", "Poster supplies"], icebreaker: "Community bingo: call out a service, mark if family has used it", mainActivity: "Map community services. Research two community helpers. Create a 'Community Heroes' poster.", discussion: ["Which community service is most important?", "How can children be community heroes?"], reflection: "Identify one way they have already served their community", rubric: "Map accuracy (1–3), Community helper research (1–3)", homeConnection: "Thank a community helper (post person, security guard, cleaner) this week", outcomes: ["Child maps community services", "Child values community helpers"] },
+        { week: 7, theme: "Service Activities — We Make a Difference", objectives: ["Plan and execute a service activity", "Reflect on service impact", "Build service as a habit"], cubsTopics: ["Service activities for Pratham Charan", "Organising a group service project"], skillTopics: ["Leadership & Service: Organising and executing", "Teamwork: Coordinating service tasks"], materials: ["Service project plan templates", "Materials for chosen project", "Reflection journals"], icebreaker: "Service brainstorm: 60-second idea storm for school activities", mainActivity: "Choose, plan, and execute one service activity. Debrief on experience.", discussion: ["How do you feel when you give your time to help?", "How does service connect to being a Scout?"], reflection: "Service impact statement: who benefited and how", rubric: "Service participation (1–3), Impact statement quality (1–3)", homeConnection: "Identify one ongoing service role at home to commit to", outcomes: ["Child executes a service activity", "Child articulates service impact"] },
+        { week: 8, theme: "Heritage Quiz — India's History", objectives: ["Know major events in Indian history", "Appreciate freedom fighters", "Develop research skills"], cubsTopics: ["Heritage awareness in Scout pledge", "Indian scouts in history"], skillTopics: ["Heritage & Citizenship: Indian history", "Quiz Skills: Rapid recall and research"], materials: ["History timeline cards", "Quiz question banks", "Research folders"], icebreaker: "Who am I? Describe a freedom fighter with clues", mainActivity: "Timeline activity placing major events in order. Team heritage quiz. Research project on one freedom fighter.", discussion: ["What did freedom fighters sacrifice for India?", "How can modern children honour their sacrifice?"], reflection: "Write a tribute to one freedom fighter", rubric: "Timeline accuracy (1–3), Quiz performance (1–3)", homeConnection: "Visit a local monument or research one local hero", outcomes: ["Child places 10 events on a timeline", "Child writes a tribute"] },
+        { week: 9, theme: "Scientific Inquiry — Questions and Experiments", objectives: ["Form a simple hypothesis", "Conduct a basic experiment", "Record and interpret results"], cubsTopics: ["Science in the outdoors: weather, plants, animals", "Observation as Scout skill"], skillTopics: ["Scientific Inquiry: Hypothesis and experiment", "Logical Thinking: Cause and effect"], materials: ["Experiment kits", "Lab record sheets", "Hypothesis cards"], icebreaker: "Predict it: teacher pours water on surfaces — what happens?", mainActivity: "Introduce: question, hypothesis, experiment, observe, conclude. Conduct two experiments. Record results.", discussion: ["What happened that you did not expect?", "How do scientists know if an experiment is fair?"], reflection: "Write one new question their experiment raised", rubric: "Hypothesis quality (1–3), Lab record accuracy (1–3)", homeConnection: "Design a simple experiment at home and bring results next week", outcomes: ["Child forms a hypothesis", "Child records experimental results"] },
+        { week: 10, theme: "Leadership Basics — What Leaders Do", objectives: ["Define leadership with examples", "Identify leadership qualities in themselves", "Practice leading a small group"], cubsTopics: ["Leadership in the six system", "Sixer role and responsibilities"], skillTopics: ["Leadership & Service: Qualities of a leader", "Communication: Giving clear instructions"], materials: ["Leadership qualities cards", "Mini-project task", "Reflection rubric"], icebreaker: "Leader sorting: given a trait, is it leadership or not?", mainActivity: "Identify qualities of a good leader. Each child leads a 3-minute group task. Peer and self-reflection.", discussion: ["Can everyone be a leader? In what ways?", "What is the difference between a boss and a leader?"], reflection: "Write three leadership qualities they personally have", rubric: "Leadership task performance (1–3), Self-reflection quality (1–3)", homeConnection: "Lead a family activity (game, meal prep, storytelling)", outcomes: ["Child defines leadership", "Child leads a small group task"] },
+        { week: 11, theme: "Communication — The Art of Clear Talking", objectives: ["Speak clearly on a structured topic", "Use appropriate vocabulary", "Practise peer feedback"], cubsTopics: ["Communication in pack meetings", "Reporting duties clearly"], skillTopics: ["Communication: Public speaking basics", "Vocabulary: Domain-specific language"], materials: ["Speech structure cards", "Vocabulary lists", "Peer feedback forms"], icebreaker: "One-minute challenge: speak for exactly 60 seconds on any topic", mainActivity: "Structured speaking: point, reason, example. 2-minute talk per child. Peer feedback forms.", discussion: ["What makes a talk easy to follow?", "How does vocabulary affect how others see you?"], reflection: "Each child identifies one strong aspect and one area to improve", rubric: "Speech structure (1–3), Vocabulary use (1–3)", homeConnection: "Give the 2-minute talk to family and note their feedback", outcomes: ["Child delivers structured 2-minute talk", "Child gives constructive feedback"] },
+        { week: 12, theme: "Advanced Nature Study — Animals and Habitats", objectives: ["Match animals to their habitats", "Understand food chains", "Appreciate biodiversity"], cubsTopics: ["Nature study for Pratham Charan: animal identification", "Jungle habitats from Jungle Book"], skillTopics: ["Scientific Inquiry: Ecology and habitats", "Logical Thinking: Food chain sequencing"], materials: ["Habitat sorting cards", "Food chain kits", "Indian wildlife guide"], icebreaker: "Habitat sort: animals on cards sorted into correct habitat bins", mainActivity: "Habitat matching activity. Build three food chains. Indian wildlife focus: endangered species discussion.", discussion: ["What happens when one species in a food chain disappears?", "Which Indian animal do you most want to protect?"], reflection: "Draw a food chain from your local area", rubric: "Habitat matching (1–3), Food chain accuracy (1–3)", homeConnection: "Research one endangered Indian animal and bring two facts next week", outcomes: ["Child creates a three-level food chain", "Child names 5 Indian animals and habitats"] },
+        { week: 13, theme: "Knotting Advanced — Square Knot & Round Turn", objectives: ["Learn two more knots", "Understand load-bearing applications", "Practise precision tying"], cubsTopics: ["Advanced knotting for Pratham Charan", "Outdoor survival skills"], skillTopics: ["Innovation Skills: Sequential problem solving", "Logical Thinking: Step-by-step processes"], materials: ["Ropes", "Advanced knot guide cards", "Demonstration posts"], icebreaker: "Knot speed challenge: reef knot speed competition", mainActivity: "Teach square knot and round turn with two half hitches. Practice with applications. Knot relay race.", discussion: ["Why do mountaineers need to know knots perfectly?", "How does practising a skill make it automatic?"], reflection: "Demonstrate all four knots to the teacher", rubric: "Knot accuracy (1–3), Speed with accuracy (1–3)", homeConnection: "Create a knot practice board at home", outcomes: ["Child ties four knots independently", "Child explains a use for each knot"] },
+        { week: 14, theme: "First Aid Advanced — Burns and Bleeding", objectives: ["Apply correct first aid for burns", "Treat minor bleeding", "Know when to call emergency services"], cubsTopics: ["Advanced first aid for Pratham Charan", "Emergency responses"], skillTopics: ["Leadership & Service: Taking responsible action", "Communication: Calling emergency services"], materials: ["First aid kit", "Scenario cards", "Bandage and gauze", "Cold pack"], icebreaker: "First aid myth or fact: common myths debunked", mainActivity: "Burns (cool running water 10 minutes), cuts (pressure and bandage). Role play emergency call. Scenario practice.", discussion: ["Why is it dangerous to put butter on a burn?", "What information does an emergency operator need?"], reflection: "Quiz each other on correct responses", rubric: "Burn treatment accuracy (1–3), Emergency call quality (1–3)", homeConnection: "Review family emergency contacts and practice the call", outcomes: ["Child correctly treats a burn scenario", "Child demonstrates emergency calling"] },
+        { week: 15, theme: "Thinking Logically — Puzzles and Patterns", objectives: ["Solve multi-step logical problems", "Use pattern recognition for prediction", "Collaborate on reasoning challenges"], cubsTopics: ["Strategic thinking in Scout challenges", "Outdoor logic puzzles"], skillTopics: ["Logical Thinking: Multi-step reasoning", "Quiz Skills: Logic competitions"], materials: ["Logic puzzle sets", "Pattern completion sheets", "Team reasoning challenges"], icebreaker: "Lateral thinking starter: 3 lateral thinking puzzles in 5 minutes", mainActivity: "Individual logic puzzles graded in difficulty. Team reasoning challenge. Pattern completion competition.", discussion: ["How do you approach a problem you have never seen before?", "When is it better to think alone than in a team?"], reflection: "Write their personal problem-solving strategy", rubric: "Puzzle completion (1–3), Team reasoning (1–3)", homeConnection: "Complete a puzzle book page each night this week", outcomes: ["Child solves multi-step logic problems", "Child describes their reasoning strategy"] },
+        { week: 16, theme: "Science of the Sky — Weather and Climate", objectives: ["Distinguish weather from climate", "Read a simple weather chart", "Understand the Indian monsoon"], cubsTopics: ["Weather observation for scouts", "Navigation using weather signs"], skillTopics: ["Scientific Inquiry: Earth science", "Astronomy: Sky observation"], materials: ["Weather chart templates", "Temperature and rainfall data", "Cloud identification cards"], icebreaker: "Cloud types: show photos, children name cloud types", mainActivity: "Weather vs climate discussion. Read and interpret a weather chart. Track school weather. Discuss Indian monsoon.", discussion: ["How does climate affect where people live in India?", "How do farmers use weather knowledge?"], reflection: "Create a 5-day weather forecast for their city", rubric: "Chart reading accuracy (1–3), Monsoon knowledge (1–3)", homeConnection: "Check weather forecast every morning and note accuracy", outcomes: ["Child distinguishes weather and climate", "Child reads a weather chart"] },
+        { week: 17, theme: "Values in Action — Honesty and Courage", objectives: ["Define honesty and courage", "Share stories of honest and courageous acts", "Commit to acting with integrity"], cubsTopics: ["Scout Law: honesty and courage", "Stories of courageous Scouts"], skillTopics: ["Leadership & Service: Integrity and character", "Heritage: Values in Indian traditions"], materials: ["Courage stories collection", "Values pledge cards", "Discussion scenarios"], icebreaker: "Would you...? Scenarios about honesty choices", mainActivity: "Story of a courageous act. Discussion of dilemmas. Children write a personal courage pledge.", discussion: ["Is it ever right to be dishonest?", "What is the difference between bravery and recklessness?"], reflection: "Write: 'One act of courage I will commit to…'", rubric: "Dilemma reasoning quality (1–3), Pledge specificity (1–3)", homeConnection: "Do one act requiring personal courage at school or home", outcomes: ["Child defines honesty and courage", "Child commits to a courageous act"] },
+        { week: 18, theme: "Our Environment — Taking Care of Earth", objectives: ["Understand environmental challenges", "Practice eco-friendly habits", "Lead a small environmental action"], cubsTopics: ["Environmental conservation in Scouting", "Leave no trace principles"], skillTopics: ["Scientific Inquiry: Environmental science", "Leadership & Service: Environmental action"], materials: ["Eco-audit checklist", "Recycling sorting activity", "Environmental pledge cards"], icebreaker: "Eco audit: how many lights are on that should be off?", mainActivity: "School eco-audit. Sorting waste into recycle, reuse, reduce. Create environment action plan for classroom.", discussion: ["What one change by every person would make the biggest difference?", "How does Leave No Trace connect to your life?"], reflection: "Commit to one 30-day eco habit", rubric: "Eco-audit accuracy (1–3), Action plan quality (1–3)", homeConnection: "Lead a recycling initiative at home for one week", outcomes: ["Child identifies environmental challenges", "Child leads a small eco action"] },
+        { week: 19, theme: "Quiz Skills — Preparing to Compete", objectives: ["Practice rapid knowledge recall", "Develop quiz teamwork strategies", "Build confidence in competitive settings"], cubsTopics: ["Scout knowledge competitions", "Pack quiz events"], skillTopics: ["Quiz Skills: Speed and accuracy", "Teamwork: Quiz team roles"], materials: ["Quiz question bank", "Buzzers or hand signals", "Score sheets"], icebreaker: "Individual lightning round: 20 questions in 2 minutes", mainActivity: "Team quiz on all Grade 3 topics. Assign team roles. Practice quiz format.", discussion: ["What strategies make a quiz team effective?", "How do you handle answering when unsure?"], reflection: "Rate confidence in each topic area covered this year", rubric: "Individual recall (1–3), Team strategy (1–3)", homeConnection: "Host a family quiz using Grade 3 topics", outcomes: ["Child demonstrates broad knowledge recall", "Child contributes to team quiz strategy"] },
+        { week: 20, theme: "Pratham Charan Celebration", objectives: ["Mark completion of Pratham Charan", "Celebrate collective and individual growth", "Set aspirations for Grade 4"], cubsTopics: ["Pratham Charan badge ceremony", "Advancement recognition"], skillTopics: ["Expression: Presenting personal growth", "Gratitude: Celebrating the community"], materials: ["Pratham Charan badges", "Portfolio folders", "Celebration decorations"], icebreaker: "Year highlights reel: class creates top 10 moments from the year", mainActivity: "Portfolio presentation to parents. Badge ceremony. Class sets collective goals for Grade 4 on a vision wall.", discussion: ["What skill are you really proud of developing?", "What does Pratham Charan mean to you personally?"], reflection: "Write a letter to next year's Grade 3 students", rubric: "Portfolio quality (1–3), Ceremony participation (1–3)", homeConnection: "Celebrate with family and share portfolio", outcomes: ["Child receives Pratham Charan badge", "Child presents portfolio confidently"] }
+      ]
+    },
+    {
+      id: 4, label: "Grade 4", level: "Pravesh + Pratham Charan",
+      color: "#7c3aed", colorLight: "#f5f3ff", colorBorder: "#ddd6fe",
+      icon: "ti-award",
+      weeks: [
+        { week: 1, theme: "Advanced Nature Study — Ecosystems", objectives: ["Define ecosystem and its components", "Understand interdependence", "Apply knowledge to local environment"], cubsTopics: ["Advanced nature study for Grade 4", "Ecosystem observation skills"], skillTopics: ["Astronomy: Earth as an ecosystem", "Scientific Inquiry: Systems thinking"], materials: ["Ecosystem diagram cards", "Local habitat map", "Observation sheets"], icebreaker: "Ecosystem web: string connecting interdependent organisms", mainActivity: "Build a full ecosystem diagram. Explore school garden as a mini ecosystem. Identify producers, consumers, decomposers.", discussion: ["What would happen if all insects disappeared?", "How is the school garden an ecosystem?"], reflection: "Draw and annotate a local ecosystem", rubric: "Ecosystem components (1–3), Local application (1–3)", homeConnection: "Photograph 5 organisms in their neighbourhood and classify them", outcomes: ["Child builds an ecosystem diagram", "Child identifies roles within ecosystems"] },
+        { week: 2, theme: "Citizenship — Rights and Responsibilities", objectives: ["Know fundamental rights and duties", "Connect citizenship to Scout values", "Practice active citizenship in school"], cubsTopics: ["Citizenship in Scout oath: duty to country", "Being a responsible citizen"], skillTopics: ["Heritage & Citizenship: Constitutional rights", "Leadership: Civic responsibility"], materials: ["Fundamental rights cards", "Duties checklist", "Citizenship pledge"], icebreaker: "Rights or privilege? Sort cards into two categories", mainActivity: "Learn fundamental rights and duties. Role play civic scenarios. Create a class citizenship charter.", discussion: ["What is the difference between a right and a privilege?", "What is one duty you already fulfil?"], reflection: "Write a personal citizenship pledge", rubric: "Rights and duties knowledge (1–3), Pledge quality (1–3)", homeConnection: "Discuss one fundamental right with the family", outcomes: ["Child names 5 fundamental rights", "Child distinguishes rights from duties"] },
+        { week: 3, theme: "Knotting Mastery — Practical Applications", objectives: ["Tie all learned knots from memory", "Apply knots to real-world scenarios", "Teach a knot to a peer"], cubsTopics: ["Knotting mastery for Grade 4", "Outdoor applications of knotting"], skillTopics: ["Innovation Skills: Practical problem solving", "Leadership: Teaching others"], materials: ["Rope sets", "Practical scenario equipment", "Knot testing cards"], icebreaker: "Blind knot: identify a knot by feel alone", mainActivity: "Knot revision race. Practical applications: secure a load, create a clothesline, tie a splint. Peer teaching.", discussion: ["How does teaching something help you understand it better?", "What outdoor situation would require immediate knotting?"], reflection: "Demonstrate all knots without a guide card", rubric: "Knot accuracy from memory (1–3), Peer teaching clarity (1–3)", homeConnection: "Create a knot display board with all learned knots labelled", outcomes: ["Child ties all knots from memory", "Child teaches a knot to a peer"] },
+        { week: 4, theme: "Advanced First Aid — Fractures and Shock", objectives: ["Recognise signs of a fracture", "Manage shock correctly", "Apply triangular bandage"], cubsTopics: ["Advanced first aid for Grade 4", "Supporting injured persons"], skillTopics: ["Leadership & Service: Emergency management", "Observation: Reading symptoms"], materials: ["First aid mannequin", "Triangular bandages", "Fracture scenario cards", "Splint materials"], icebreaker: "What is wrong? Show photos of injuries, children identify them", mainActivity: "Teach fracture signs (STOP). Shock management position. Triangular bandage practice.", discussion: ["Why should you never try to straighten a broken bone?", "How do you calm someone who is in shock?"], reflection: "Demonstrate fracture management and shock position to teacher", rubric: "Fracture response accuracy (1–3), Bandage technique (1–3)", homeConnection: "Review and update the family first aid kit", outcomes: ["Child manages a fracture scenario", "Child applies triangular bandage correctly"] },
+        { week: 5, theme: "Team Leadership — Organising a Group", objectives: ["Lead a group through a multi-step task", "Delegate responsibilities effectively", "Evaluate own leadership"], cubsTopics: ["Sixer and team leader responsibilities", "Leading a Scout six"], skillTopics: ["Leadership & Service: Delegation and organisation", "Communication: Instructions and follow-up"], materials: ["Leadership challenge kit", "Delegation cards", "Leadership reflection form"], icebreaker: "Leadership styles quiz: authoritative, democratic, laissez-faire", mainActivity: "Each child takes a turn as team leader for a 10-minute task. Observer evaluates. Group debrief.", discussion: ["Which leadership style worked best for the task?", "How does a leader keep calm when things go wrong?"], reflection: "Complete leadership self-evaluation form", rubric: "Task completion under leadership (1–3), Delegation effectiveness (1–3)", homeConnection: "Plan and lead a family activity as the designated leader", outcomes: ["Child leads a group task effectively", "Child evaluates own leadership"] },
+        { week: 6, theme: "Astronomy — Stars, Constellations, and Navigation", objectives: ["Know 6 major constellations", "Understand how stars are used for navigation", "Observe the night sky systematically"], cubsTopics: ["Star navigation for outdoor Scouts", "Night observation skills"], skillTopics: ["Astronomy: Constellations and navigation", "Scientific Inquiry: Star observation"], materials: ["Star charts", "Constellation glow cards", "Navigation compass", "Night sky printout"], icebreaker: "Constellation challenge: connect star dots to form a shape", mainActivity: "Learn 6 constellations with stories. Practice finding North using the North Star. Navigation activity.", discussion: ["How did sailors navigate before GPS?", "Why do different parts of the world see different constellations?"], reflection: "Create a personal star map showing 6 constellations", rubric: "Constellation identification (1–3), Navigation knowledge (1–3)", homeConnection: "Go outside and try to find the North Star with family", outcomes: ["Child identifies 6 constellations", "Child explains how to find North using stars"] },
+        { week: 7, theme: "Heritage — India's Ancient Achievements", objectives: ["Know India's contribution to science, maths, and art", "Feel pride in India's historical legacy", "Connect ancient achievement to modern knowledge"], cubsTopics: ["Heritage in Scout pledge: duty to country", "India's role in world civilisation"], skillTopics: ["Heritage & Citizenship: Ancient Indian knowledge", "Logical Thinking: History of mathematics"], materials: ["Ancient India achievement cards", "Zero and numeral activity", "Art history prints"], icebreaker: "Did India invent that? True/false on Indian inventions", mainActivity: "Lesson on ancient achievements: zero, Ayurveda, astronomy, yoga, art. Research project on one achievement.", discussion: ["How does knowing India's history make you feel?", "How is the number zero used in your daily life?"], reflection: "Present research on one ancient achievement", rubric: "Research quality (1–3), Presentation clarity (1–3)", homeConnection: "Share one ancient Indian achievement story with family", outcomes: ["Child names 6 ancient Indian achievements", "Child presents one achievement confidently"] },
+        { week: 8, theme: "Problem Solving — Systems and Strategies", objectives: ["Apply systematic problem-solving approaches", "Use trial and improvement strategies", "Evaluate solutions critically"], cubsTopics: ["Scout problem-solving challenges", "Critical thinking in team challenges"], skillTopics: ["Logical Thinking: Systems and strategies", "Innovation: Design thinking basics"], materials: ["Complex problem scenario kits", "Evaluation matrices", "Design thinking worksheets"], icebreaker: "The bridge problem: cross a river using limited materials in theory", mainActivity: "Three complex team challenges with different constraints. Evaluate: what worked, what would you change?", discussion: ["What is the difference between a good solution and the best?", "When is it smart to try something you know might fail?"], reflection: "Choose best solution and justify", rubric: "Problem approach quality (1–3), Critical evaluation depth (1–3)", homeConnection: "Design an improved system for something at home", outcomes: ["Child applies systematic problem solving", "Child evaluates solutions critically"] },
+        { week: 9, theme: "Observation and Measurement — Practical Science", objectives: ["Use measurement tools accurately", "Record quantitative observations", "Compare and interpret results"], cubsTopics: ["Scientific measurement as outdoor skill", "Estimating distances and heights"], skillTopics: ["Scientific Inquiry: Measurement and data", "Logical Thinking: Quantitative reasoning"], materials: ["Rulers, measuring tapes, thermometers", "Data recording sheets", "Comparison tables"], icebreaker: "Estimate it: how tall is this chair/door/desk? Best estimate wins", mainActivity: "Measurement stations around school: height of plants, temperature, shadow length. Record and compare.", discussion: ["Why do scientists use standard units?", "What story does your data tell?"], reflection: "Write three conclusions from their data", rubric: "Measurement accuracy (1–3), Data recording quality (1–3)", homeConnection: "Measure 5 objects at home and record in a table", outcomes: ["Child uses measurement tools accurately", "Child draws conclusions from data"] },
+        { week: 10, theme: "Public Speaking — Confident Presentation", objectives: ["Structure a 3-minute presentation", "Use visual aids effectively", "Manage nerves through preparation"], cubsTopics: ["Reporting to the pack: presentation skills", "Scout meeting presentations"], skillTopics: ["Communication: Public speaking with visual aids", "Leadership: Confidence in presentation"], materials: ["Presentation planning template", "Art supplies for visual aids", "Peer feedback forms"], icebreaker: "Power pose activity: 2-minute confident posture warm-up", mainActivity: "Plan and deliver a 3-minute presentation with one visual aid. Structured peer feedback.", discussion: ["What physical signs tell you someone is nervous presenting?", "How does preparation reduce nerves?"], reflection: "Rate confidence before and after: what changed?", rubric: "Presentation structure (1–3), Visual aid quality (1–3)", homeConnection: "Present to family and collect three feedback points", outcomes: ["Child delivers 3-minute presentation with visual aid", "Child gives structured feedback"] },
+        { week: 11, theme: "Service Leadership — Planning a Project", objectives: ["Plan a multi-week service project", "Assign roles and create timelines", "Lead peers through project stages"], cubsTopics: ["Service project planning for Scouts", "Leadership in community service"], skillTopics: ["Leadership & Service: Project management", "Communication: Project presentation"], materials: ["Project planning templates", "Resource lists", "Timeline charts"], icebreaker: "Project pitch in 60 seconds: propose a service idea", mainActivity: "Groups select and plan a two-week service project. Assign roles, create timeline, identify resources. Present plan.", discussion: ["What makes a service project sustainable?", "How do you know if a service project was successful?"], reflection: "Write a project vision statement", rubric: "Plan completeness (1–3), Role clarity (1–3)", homeConnection: "Share project plan with family and get input", outcomes: ["Child creates a complete service project plan", "Child presents plan clearly"] },
+        { week: 12, theme: "Service Project — Execution Week", objectives: ["Execute the planned service project", "Adapt to challenges in real time", "Document and reflect on process"], cubsTopics: ["Service in action: Scout tradition of contribution", "Adapting plans when things change"], skillTopics: ["Leadership: Real-time decision making", "Teamwork: Supporting each other"], materials: ["Service project materials", "Documentation journal", "Camera or sketchbook"], icebreaker: "Team check-in: how is everyone feeling about today's project?", mainActivity: "Execute service project. Document with photos or sketches. Overcome at least one challenge. Debrief.", discussion: ["What was the biggest challenge and how did you solve it?", "Would you do the project differently next time?"], reflection: "Document one moment of leadership from today", rubric: "Project execution quality (1–3), Adaptation to challenges (1–3)", homeConnection: "Write a report on the service project outcome", outcomes: ["Child executes service project", "Child demonstrates adaptive leadership"] },
+        { week: 13, theme: "Astronomy — Planets, Moons, and Beyond", objectives: ["Know moons of planets", "Understand space exploration history", "Discuss India's role in space"], cubsTopics: ["Advanced stargazing for Grade 4", "ISRO and Indian space exploration"], skillTopics: ["Astronomy: Deep space knowledge", "Heritage: India's space programme"], materials: ["Planet and moon fact cards", "ISRO timeline", "Space exploration video"], icebreaker: "Name that moon: quick quiz on famous moons", mainActivity: "Deep dive: moons, rings, dwarf planets. ISRO history: Chandrayaan, Mangalyaan. Create a space mission proposal.", discussion: ["Why should countries invest in space exploration?", "What does Chandrayaan success mean for India?"], reflection: "Design a mission badge for your space mission proposal", rubric: "Solar system knowledge (1–3), Mission proposal creativity (1–3)", homeConnection: "Research one ISRO mission and present three facts next week", outcomes: ["Child names moons and explains ISRO missions", "Child creates a space mission proposal"] },
+        { week: 14, theme: "Heritage — Festivals, Art, and Music", objectives: ["Understand classical art forms of India", "Experience rhythm through classical music", "Connect art to cultural heritage"], cubsTopics: ["Heritage activities in Scout program", "Cultural celebrations and Scout significance"], skillTopics: ["Heritage & Citizenship: Classical arts", "Expression: Experiencing Indian classical forms"], materials: ["Classical dance video clips", "Percussion instruments or rhythm sticks", "Folk art examples"], icebreaker: "Rhythm circle: pass a rhythm pattern around the circle", mainActivity: "Video intro to classical dance. Explore folk art (Madhubani, Warli). Try basic rhythm patterns. Create folk art piece.", discussion: ["How does art express culture without words?", "Which art form would you like to learn?"], reflection: "Write: 'What I felt when I experienced Indian classical art…'", rubric: "Art understanding (1–3), Creative expression (1–3)", homeConnection: "Watch a classical Indian performance with family", outcomes: ["Child names two classical dance forms", "Child creates a piece of folk art"] },
+        { week: 15, theme: "Logic and Reasoning — Arguments and Evidence", objectives: ["Distinguish fact from opinion", "Build a logical argument", "Evaluate others' arguments"], cubsTopics: ["Scout law: honesty and logical reasoning", "Debate in pack meetings"], skillTopics: ["Logical Thinking: Argumentation", "Communication: Structured debate"], materials: ["Fact vs opinion card sets", "Argument structure frames", "Debate topics"], icebreaker: "Fact or opinion? Rapid classification of 20 statements", mainActivity: "Teach argument structure: claim, evidence, reasoning. Practice mini debates on Scout-related topics. Peer evaluation.", discussion: ["What makes evidence strong?", "Can two people use the same facts and reach different conclusions?"], reflection: "Write a two-sentence argument on a chosen topic", rubric: "Fact/opinion distinction (1–3), Argument structure quality (1–3)", homeConnection: "Watch the news with family and identify one fact and one opinion", outcomes: ["Child distinguishes facts from opinions", "Child builds a structured argument"] },
+        { week: 16, theme: "Environmental Conservation — Taking Action", objectives: ["Understand conservation challenges in India", "Research one local environmental issue", "Plan a conservation awareness activity"], cubsTopics: ["Scout environmental conservation pledge", "Leave no trace advanced"], skillTopics: ["Scientific Inquiry: Environmental research", "Leadership: Conservation advocacy"], materials: ["India environmental issues data cards", "Research template", "Awareness campaign planning sheets"], icebreaker: "Environmental auction: which problem is most urgent?", mainActivity: "Research one Indian environmental challenge. Design an awareness poster. Plan a 5-minute awareness activity.", discussion: ["Why is environmental action a leadership responsibility?", "What small action can make a real difference over time?"], reflection: "Write a conservation commitment with measurable targets", rubric: "Research quality (1–3), Awareness activity plan (1–3)", homeConnection: "Implement one conservation commitment at home for two weeks", outcomes: ["Child researches an environmental issue", "Child plans an awareness activity"] },
+        { week: 17, theme: "Observation Expedition — Field Science", objectives: ["Apply all observation skills in field setting", "Make quantitative and qualitative records", "Draw evidence-based conclusions"], cubsTopics: ["Outdoor observation expedition", "Scouts in the field"], skillTopics: ["Scientific Inquiry: Field methods", "Observation: Combined sensory observation"], materials: ["Field journals", "Measurement tools", "Identification guides", "Maps"], icebreaker: "Prediction walk: predict what you will observe before going out", mainActivity: "School garden or nearby area field expedition. Use all observation tools to document plants, insects, weather, soil.", discussion: ["How does observing in the field differ from the classroom?", "What would a scientist do next with this data?"], reflection: "Write a field report with three conclusions", rubric: "Field journal quality (1–3), Conclusions quality (1–3)", homeConnection: "Conduct a mini-expedition in their home garden or street", outcomes: ["Child produces a complete field journal entry", "Child draws evidence-based conclusions"] },
+        { week: 18, theme: "Public Speaking — Debate and Persuasion", objectives: ["Construct a persuasive argument", "Speak persuasively in a structured debate", "Listen critically and respond"], cubsTopics: ["Communication excellence in Scout tradition", "Pack debates and discussions"], skillTopics: ["Communication: Persuasive speaking", "Logical Thinking: Counter-argument"], materials: ["Debate motion cards", "Preparation time", "Peer judging rubric"], icebreaker: "Persuade me in 30 seconds: convince class of something silly", mainActivity: "Structured two-team debate. Preparation time, for/against, rebuttals. (E.g., 'Schools should grow their own food')", discussion: ["Is it ethical to argue for something you do not believe?", "How do debaters control their emotions?"], reflection: "Write the strongest counter-argument to their own position", rubric: "Argument quality (1–3), Rebuttal skill (1–3)", homeConnection: "Debate a topic at home: each family member takes a side", outcomes: ["Child delivers a persuasive argument", "Child constructs a counter-argument"] },
+        { week: 19, theme: "Review and Portfolio — Ready for Grade 5", objectives: ["Consolidate all Grade 4 learning", "Create a comprehensive portfolio", "Prepare goals for Grade 5 Dwitiya Charan"], cubsTopics: ["Pratham Charan mastery review", "Preview of Dwitiya Charan requirements"], skillTopics: ["Expression: Portfolio presentation", "Logical Thinking: Self-assessment and goal setting"], materials: ["Portfolio folders", "Self-assessment rubrics", "Goal setting templates"], icebreaker: "Grade 4 greatest hits: class vote on best activity of the year", mainActivity: "Portfolio curation: select best work across all areas. Self-assess against Pratham Charan requirements. Set five Grade 5 goals.", discussion: ["Which skill grew the most this year?", "What do you expect will be different in Grade 5?"], reflection: "Write a letter to their Grade 5 teacher describing themselves as a learner", rubric: "Portfolio curation (1–3), Goal specificity (1–3)", homeConnection: "Present portfolio to family and gather their observations", outcomes: ["Child completes a curated portfolio", "Child sets specific Grade 5 goals"] },
+        { week: 20, theme: "Advancement Ceremony — Pratham Charan", objectives: ["Complete Pratham Charan formally", "Celebrate two years of advancement", "Look forward to Dwitiya Charan in Grade 5"], cubsTopics: ["Pratham Charan badge ceremony", "Formal advancement celebration"], skillTopics: ["Expression: Public recognition of achievement", "Gratitude: Celebrating growth together"], materials: ["Pratham Charan badges", "Certificates", "Family invitations", "Celebration decorations"], icebreaker: "Appreciation letters: children write appreciation to one classmate", mainActivity: "Formal advancement ceremony with families. Portfolio sharing. Badge presentation. Class creates a collective achievement mural.", discussion: ["What does it mean to advance in Scouts?", "How will Dwitiya Charan be different?"], reflection: "Write a manifesto for Grade 5: what kind of Scout they will be", rubric: "Ceremony participation (1–3), Manifesto quality (1–3)", homeConnection: "Frame the badge at home and explain Dwitiya Charan to family", outcomes: ["Child receives Pratham Charan badge", "Child articulates readiness for Dwitiya Charan"] }
+      ]
+    },
+    {
+      id: 5, label: "Grade 5", level: "Pravesh + Pratham + Dwitiya Charan",
+      color: "#dc2626", colorLight: "#fef2f2", colorBorder: "#fecaca",
+      icon: "ti-trophy",
+      weeks: [
+        { week: 1, theme: "Mapping — Reading the Land", objectives: ["Read a simple map with symbols", "Draw a basic school map with key", "Understand scale and direction"], cubsTopics: ["Mapping for Dwitiya Charan", "Compass directions and navigation"], skillTopics: ["Logical Thinking: Spatial reasoning", "Observation: Translating reality to representation"], materials: ["Compass", "Blank map templates", "School aerial photo", "Symbol key cards"], icebreaker: "Left, right, forward, back: navigation game in classroom", mainActivity: "Teach map symbols and compass points. Students draw a school map with a key. Navigate to 3 locations using their map.", discussion: ["Why do maps use symbols instead of pictures?", "How accurate does a map need to be to be useful?"], reflection: "Evaluate accuracy of own map", rubric: "Map accuracy (1–3), Navigation success (1–3)", homeConnection: "Draw a map of their home route from memory, then verify accuracy", outcomes: ["Child reads and creates a map with key", "Child navigates using a basic map"] },
+        { week: 2, theme: "Community Service — Needs Assessment", objectives: ["Identify community needs systematically", "Consult stakeholders respectfully", "Prioritise needs and match to action"], cubsTopics: ["Community service planning for Dwitiya Charan", "Scout contribution to society"], skillTopics: ["Leadership & Service: Needs assessment", "Communication: Stakeholder consultation"], materials: ["Needs assessment template", "Interview questions", "Community map"], icebreaker: "Community problem tree: map causes and effects of one community challenge", mainActivity: "Needs assessment: interview school staff and students. Map community needs. Prioritise and match to service activities.", discussion: ["How do you know what a community really needs?", "What is the risk of doing service without consulting the community?"], reflection: "Write a needs assessment report (half page)", rubric: "Assessment quality (1–3), Consultation skill (1–3)", homeConnection: "Conduct a mini-needs assessment in their neighbourhood", outcomes: ["Child conducts a needs assessment", "Child consults stakeholders for genuine needs"] },
+        { week: 3, theme: "Environmental Conservation — Project Planning", objectives: ["Design a multi-week conservation project", "Set measurable conservation targets", "Present the plan to peers"], cubsTopics: ["Environmental conservation for Dwitiya Charan", "Scout as environmental guardian"], skillTopics: ["Scientific Inquiry: Environmental project design", "Leadership: Advocacy and planning"], materials: ["Conservation project kit", "Target setting template", "Presentation boards"], icebreaker: "Conservation pitch: 90-second pitch for a conservation idea", mainActivity: "Groups design a 3-week conservation project with SMART targets. Present to class and receive feedback. Refine plan.", discussion: ["What makes a conservation project measurable?", "How do you motivate others to care about the environment?"], reflection: "Write a one-page project proposal", rubric: "SMART targets (1–3), Plan presentation quality (1–3)", homeConnection: "Consult with family to integrate project into home routines", outcomes: ["Child writes a project proposal with SMART targets", "Child presents conservation plan clearly"] },
+        { week: 4, theme: "Advanced First Aid — Emergencies and CPR Awareness", objectives: ["Know adult CPR steps (awareness level)", "Manage a multi-casualty scene", "Create a family emergency plan"], cubsTopics: ["Advanced first aid for Dwitiya Charan", "Scout as emergency responder"], skillTopics: ["Leadership: Emergency coordination", "Communication: Calm and clear under pressure"], materials: ["CPR awareness poster", "Multi-casualty scenario cards", "Family emergency plan template"], icebreaker: "Emergency triage: sort severity of 5 injuries in 2 minutes", mainActivity: "CPR awareness lesson. Multi-casualty simulation: assign priorities. Create family emergency plan.", discussion: ["Why do you check your own safety before helping others?", "What would you do if you were first at an accident?"], reflection: "Present completed family emergency plan", rubric: "CPR awareness (1–3), Emergency plan completeness (1–3)", homeConnection: "Implement the family emergency plan: practice it once at home", outcomes: ["Child explains CPR steps at awareness level", "Child creates a family emergency plan"] },
+        { week: 5, theme: "Leadership in Action — Running a Meeting", objectives: ["Plan and run a structured Scout meeting", "Use agenda, timekeeping, and facilitation", "Evaluate meeting effectiveness"], cubsTopics: ["Pack leader responsibilities", "Running efficient meetings"], skillTopics: ["Leadership & Service: Meeting facilitation", "Communication: Formal language in meetings"], materials: ["Agenda template", "Meeting evaluation form", "Timekeeping tools"], icebreaker: "Meeting roles sorting: chair, secretary, timekeeper, observer", mainActivity: "Each group plans and runs a 15-minute mini Scout meeting with agenda. Observer evaluates. Group debrief.", discussion: ["What makes a meeting productive rather than just busy?", "How does a chair handle a participant who dominates?"], reflection: "Write meeting evaluation with specific improvements", rubric: "Agenda use (1–3), Facilitation quality (1–3)", homeConnection: "Run a family meeting using the agenda template", outcomes: ["Child plans and runs a structured meeting", "Child evaluates meeting effectiveness"] },
+        { week: 6, theme: "Team Management — Handling Conflict", objectives: ["Identify sources of team conflict", "Apply conflict resolution strategies", "Mediate a peer disagreement"], cubsTopics: ["Team management for senior Cubs", "Conflict within Scout groups"], skillTopics: ["Leadership: Conflict resolution", "Communication: Mediation skills"], materials: ["Conflict scenario cards", "Resolution strategy guides", "Mediation scripts"], icebreaker: "Conflict or disagreement? Sort scenarios: what is the difference?", mainActivity: "Learn 4 conflict resolution strategies. Practice mediation in role plays. Debrief.", discussion: ["When is compromise not the right choice?", "What is the difference between resolving conflict and suppressing it?"], reflection: "Write a personal conflict resolution strategy", rubric: "Strategy knowledge (1–3), Mediation skill (1–3)", homeConnection: "Use one conflict resolution strategy in a real situation at home", outcomes: ["Child applies conflict resolution strategies", "Child mediates a peer disagreement"] },
+        { week: 7, theme: "Outdoor Skills — Compass and Navigation", objectives: ["Use a compass accurately", "Navigate using compass bearings", "Complete an orienteering course"], cubsTopics: ["Outdoor navigation for Dwitiya Charan", "Orienteering as Scout skill"], skillTopics: ["Logical Thinking: Spatial navigation", "Observation: Environmental landmarks"], materials: ["Compass per pair", "Bearing cards", "Orienteering course map", "Control markers"], icebreaker: "Compass basics quiz: N, S, E, W and their degrees", mainActivity: "Compass skills: taking a bearing, following a bearing. Simple orienteering course. Teams navigate to 5 checkpoints.", discussion: ["How did explorers navigate before compasses?", "What is more reliable: compass or landmarks?"], reflection: "Draw their orienteering route and note one challenge overcome", rubric: "Compass accuracy (1–3), Course completion (1–3)", homeConnection: "Practice compass directions on a walk with family", outcomes: ["Child navigates using compass bearings", "Child completes an orienteering course"] },
+        { week: 8, theme: "Debate & Communication — Persuasive Leadership", objectives: ["Lead a structured class debate", "Use rhetoric and persuasive devices", "Evaluate debate quality critically"], cubsTopics: ["Communication excellence for senior Scouts", "Leadership through speech"], skillTopics: ["Communication: Advanced debate", "Leadership: Rhetoric and persuasion"], materials: ["Debate motion cards", "Rhetoric device guide", "Judging rubric"], icebreaker: "Rhetoric examples: identify metaphor, repetition, rhetorical questions in famous speeches", mainActivity: "Formal debate with chair, two teams, judges (rotating). Use rhetoric devices. Post-debate critical evaluation.", discussion: ["Can powerful speaking be irresponsible? When?", "What is the ethical responsibility of a persuasive speaker?"], reflection: "Write a speech opening using two rhetoric devices", rubric: "Rhetoric use (1–3), Debate leadership quality (1–3)", homeConnection: "Deliver speech opening to family and get feedback", outcomes: ["Child leads a formal debate", "Child uses rhetoric devices consciously"] },
+        { week: 9, theme: "Logical Thinking — Strategy and Games", objectives: ["Apply strategic thinking to games", "Analyse position and predict moves", "Develop patience and long-term planning"], cubsTopics: ["Strategic thinking in Scout challenges", "Patience and planning"], skillTopics: ["Logical Thinking: Strategy and prediction", "Innovation: Creative moves"], materials: ["Chess sets / strategy game sets", "Analysis worksheets", "Tournament brackets"], icebreaker: "Estimation game: 10 questions requiring estimates and reasoning", mainActivity: "Introduce chess or strategy game. Mini tournament. Analyse positions, predict future states, discuss strategies.", discussion: ["How is strategic thinking in games similar to leadership?", "What do you do when your plan is not working?"], reflection: "Write three strategic lessons from the game", rubric: "Strategic thinking (1–3), Analysis quality (1–3)", homeConnection: "Teach a family member to play the strategy game", outcomes: ["Child applies strategic thinking", "Child analyses a game position logically"] },
+        { week: 10, theme: "Entrepreneurship — Ideas and Value", objectives: ["Define entrepreneurship in Scout and social context", "Generate a social enterprise idea", "Pitch an idea convincingly"], cubsTopics: ["Leadership through enterprise", "Scout bazaars and fundraising tradition"], skillTopics: ["Innovation: Entrepreneurial thinking", "Communication: Pitch and persuasion"], materials: ["Business idea canvas", "Market research guide", "Pitch template"], icebreaker: "Problem hunt: identify 5 problems in school with product solutions", mainActivity: "Introduction to social entrepreneurship. Use business canvas to develop an idea. Prepare and deliver a 2-minute pitch.", discussion: ["What is the difference between a business and a social enterprise?", "What problem in your community could you solve?"], reflection: "Write: 'My enterprise would change ___ by ___'", rubric: "Idea viability (1–3), Pitch persuasiveness (1–3)", homeConnection: "Research one successful social enterprise in India", outcomes: ["Child creates a social enterprise concept", "Child delivers a persuasive pitch"] },
+        { week: 11, theme: "Astronomy — The Universe Beyond", objectives: ["Understand light years and scale", "Know major discoveries in astronomy", "Connect India's space history"], cubsTopics: ["Advanced astronomy for senior Cubs", "Future of Indian space programme"], skillTopics: ["Astronomy: Galaxies and beyond", "Heritage: India's space achievements"], materials: ["Galaxy fact cards", "Scale model materials", "ISRO timeline poster"], icebreaker: "How big? Scale challenge: if the Sun is a football, how far is the Earth?", mainActivity: "Scale model of solar system and nearest stars. Lesson on galaxies, black holes. ISRO advanced missions. Student space symposium.", discussion: ["Does knowing the universe is so large make you feel small or important?", "What should India's next space mission be?"], reflection: "Write a 'space discoveries I want to make' vision statement", rubric: "Concept understanding (1–3), Vision statement quality (1–3)", homeConnection: "Follow a current ISRO or NASA mission news story for one week", outcomes: ["Child explains light years and galaxies", "Child connects India's space achievements"] },
+        { week: 12, theme: "Conservation Project — Execution", objectives: ["Execute the planned conservation project", "Lead peers through challenges", "Document and measure impact"], cubsTopics: ["Conservation service for Dwitiya Charan", "Scout as environmental steward"], skillTopics: ["Leadership: Project execution", "Scientific Inquiry: Impact measurement"], materials: ["Project materials", "Impact measurement tools", "Documentation journal"], icebreaker: "Project check-in: what is your confidence level today?", mainActivity: "Week 1 execution of conservation project. Students lead assigned tasks. Measure baseline data. Document everything.", discussion: ["How do you know your actions are making a real difference?", "What would you do if the project is harder than expected?"], reflection: "Write a project progress report: planned vs actual", rubric: "Execution quality (1–3), Leadership during challenges (1–3)", homeConnection: "Continue conservation actions at home and document", outcomes: ["Child leads project execution", "Child measures conservation impact"] },
+        { week: 13, theme: "Heritage — India as a Civilisation", objectives: ["Understand India's position in world civilisation", "Trace influences India has had globally", "Develop deep cultural pride"], cubsTopics: ["Advanced heritage for senior Scouts", "India's global influence"], skillTopics: ["Heritage & Citizenship: Global cultural influence", "Logical Thinking: Historical cause and effect"], materials: ["India's world influence cards", "Trade routes map", "Ancient texts excerpts"], icebreaker: "India's global exports quiz: what did India give the world?", mainActivity: "Lesson on India's global influence: spice trade, mathematics, textiles, yoga, Buddhism. Map trade routes. Student presentations.", discussion: ["How does ancient influence shape the modern world?", "What is India's most important contribution to human civilisation?"], reflection: "Write a 'Why India matters' essay (one page)", rubric: "Historical knowledge (1–3), Essay quality (1–3)", homeConnection: "Discuss India's global legacy with a parent or grandparent", outcomes: ["Child traces India's global cultural influence", "Child writes a reflective essay on heritage"] },
+        { week: 14, theme: "Scientific Inquiry — Designing Experiments", objectives: ["Design a complete experiment", "Identify variables and controls", "Present findings clearly"], cubsTopics: ["Science in Scouting: investigation skills", "Record keeping and accuracy"], skillTopics: ["Scientific Inquiry: Full investigation cycle", "Communication: Scientific presentation"], materials: ["Lab equipment", "Investigation planning template", "Presentation boards"], icebreaker: "Variable identification: spot the variable in 5 quick experiments", mainActivity: "Students design their own experiment on a chosen question. Plan, execute, and present findings.", discussion: ["Why is the control group important?", "How do scientists decide if results are reliable?"], reflection: "Peer review: evaluate another group's investigation method", rubric: "Experimental design (1–3), Findings presentation (1–3)", homeConnection: "Continue a long-term experiment observation at home", outcomes: ["Child designs and executes a full experiment", "Child presents findings with evidence"] },
+        { week: 15, theme: "Conservation Project — Completion", objectives: ["Complete the conservation project", "Measure and report impact", "Celebrate and share outcomes"], cubsTopics: ["Project completion for Dwitiya Charan", "Service completion and reflection"], skillTopics: ["Leadership: Project wrap-up and reporting", "Scientific Inquiry: Impact analysis"], materials: ["Final report template", "Presentation materials", "Celebration supplies"], icebreaker: "Project highlight reel: choose one best moment to share", mainActivity: "Final activities, measurement, and documentation. Prepare presentation of outcomes. Share with school community.", discussion: ["What evidence do you have that the project made a difference?", "What would you do differently?"], reflection: "Write a 'lessons learned' document for future project leaders", rubric: "Impact evidence (1–3), Presentation quality (1–3)", homeConnection: "Present conservation results to family and neighbourhood", outcomes: ["Child completes and presents conservation project", "Child measures and reports impact"] },
+        { week: 16, theme: "Advanced Mapping — Topography and Route Planning", objectives: ["Read contour lines on a topographic map", "Plan a safe route considering terrain", "Brief a team on a route plan"], cubsTopics: ["Advanced mapping for Dwitiya Charan", "Route planning for Scout camps"], skillTopics: ["Logical Thinking: Topographic reasoning", "Communication: Route briefing"], materials: ["Topographic maps", "Contour model", "Route planning template"], icebreaker: "Contour lines: hold up a shape and children say if going uphill or downhill", mainActivity: "Teach contour line reading using 3D model. Plan a hypothetical route considering terrain, distance, safety. Brief the route to class.", discussion: ["Why does a Scout need to understand topography?", "What terrain features are most important in route planning?"], reflection: "Write a risk assessment for the planned route", rubric: "Contour reading (1–3), Route plan quality (1–3)", homeConnection: "Find a topographic map of their area online and identify features", outcomes: ["Child reads contour lines", "Child plans a topographically aware route"] },
+        { week: 17, theme: "Entrepreneurship — From Idea to Plan", objectives: ["Develop a business model canvas", "Identify target customers and value proposition", "Present a full social enterprise plan"], cubsTopics: ["Leadership through enterprise", "Scout service through innovation"], skillTopics: ["Innovation: Business model thinking", "Communication: Investor-style presentation"], materials: ["Business model canvas", "Customer persona template", "Financial basics template"], icebreaker: "Elevator pitch game: 30 seconds to sell a stranger an idea", mainActivity: "Complete business model canvas for social enterprise. Identify customers, value proposition, channels, revenue. Full-class presentation.", discussion: ["How do you create value for customers while serving a social mission?", "What is one risk in your enterprise model?"], reflection: "Write a 'day in the life' of their enterprise one year from now", rubric: "Canvas completeness (1–3), Presentation persuasiveness (1–3)", homeConnection: "Research funding opportunities for social enterprises in India", outcomes: ["Child completes a business model canvas", "Child presents a full social enterprise plan"] },
+        { week: 18, theme: "Leadership Legacy — What Will You Leave Behind?", objectives: ["Define personal leadership legacy", "Identify ways to mentor younger Cubs", "Commit to ongoing Scout values"], cubsTopics: ["Senior Cub leadership responsibilities", "Mentoring younger Scouts"], skillTopics: ["Leadership: Legacy thinking", "Communication: Mentoring skills"], materials: ["Legacy reflection template", "Mentoring guide cards", "Promise renewal cards"], icebreaker: "Legacy letters: write a one-sentence legacy statement", mainActivity: "Discussion on legacy and long-term impact. Plan one mentoring activity for Grade 1 Cubs. Renew the Scout Promise.", discussion: ["What does it mean to lead by example over many years?", "How will you continue Scout values after leaving the program?"], reflection: "Write a leadership manifesto: 5 commitments for life", rubric: "Legacy statement quality (1–3), Mentoring plan (1–3)", homeConnection: "Discuss what leadership legacy means with family", outcomes: ["Child defines personal leadership legacy", "Child plans a mentoring activity"] },
+        { week: 19, theme: "Final Portfolio — Five Years of Growth", objectives: ["Curate a five-year growth portfolio", "Articulate personal development journey", "Present to school community"], cubsTopics: ["Dwitiya Charan mastery: all requirements", "Full portfolio of Scout journey"], skillTopics: ["Expression: Portfolio curation and presentation", "Logical Thinking: Narrative of personal growth"], materials: ["Portfolio folders", "Five-year reflection template", "Presentation space"], icebreaker: "Grade 1 memory: what do you remember about your first week in the program?", mainActivity: "Create a five-year portfolio narrative. Select one piece from each year. Write reflection. Rehearse presentation for Dwitiya Charan ceremony.", discussion: ["How are you different from the child who first joined?", "What gift has this program given you?"], reflection: "Write an opening statement for the Dwitiya Charan ceremony", rubric: "Portfolio narrative quality (1–3), Reflection depth (1–3)", homeConnection: "Present portfolio draft to family and gather stories they remember", outcomes: ["Child creates a five-year portfolio", "Child delivers a compelling personal narrative"] },
+        { week: 20, theme: "Dwitiya Charan Ceremony — The Summit", objectives: ["Complete the Dwitiya Charan ceremony", "Be recognised as a senior Cub/Bulbul leader", "Celebrate five years of commitment and growth"], cubsTopics: ["Dwitiya Charan badge ceremony: formal investiture", "Recognition as a senior Cub"], skillTopics: ["Expression: Ceremony leadership", "Gratitude: Honouring the journey and community"], materials: ["Dwitiya Charan badges", "Certificates of advancement", "Family invitations", "School celebration"], icebreaker: "Five years in five words: each child names five words that describe their journey", mainActivity: "Formal Dwitiya Charan ceremony. Portfolio presentations. Badge and certificate ceremony. Class creates a time capsule.", discussion: ["What message would you send to a new Grade 1 Cub?", "How will you carry these values through your life?"], reflection: "Place a letter in the time capsule for the next generation", rubric: "Ceremony leadership (1–3), Time capsule letter quality (1–3)", homeConnection: "Celebrate with family and decide how to display the Dwitiya Charan badge", outcomes: ["Child receives Dwitiya Charan badge", "Child completes and presents five-year portfolio"] }
+      ]
+    }
+  ]
+};
+
+</script>
+<script>
+const GC={1:'#4f46e5',2:'#059669',3:'#d97706',4:'#7c3aed',5:'#dc2626'};
+const GL={1:'#eef2ff',2:'#ecfdf5',3:'#fffbeb',4:'#f5f3ff',5:'#fef2f2'};
+const GB={1:'#c7d2fe',2:'#a7f3d0',3:'#fcd34d',4:'#ddd6fe',5:'#fecaca'};
+const GI={1:'⭐',2:'⭐',3:'🏅',4:'🥇',5:'🏆'};
+const GL2={1:'Pravesh',2:'Pravesh',3:'Pravesh + Pratham Charan',4:'Pravesh + Pratham Charan',5:'Pravesh + Pratham + Dwitiya Charan'};
+
+let view='overview', grade=null, filters=[], sq='';
+
+function nav(id){
+  document.querySelectorAll('.sitem').forEach(e=>e.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el)el.classList.add('active');
+}
+function showView(v){nav('n-'+v);view=v;grade=null;render();}
+function showGrade(id){nav('n-g'+id);view='grade';grade=id;render();}
+function toggleSB(){document.getElementById('sb').classList.toggle('mo');}
+
+function render(){
+  const el=document.getElementById('mc');
+  if(view==='overview')renderOV(el);
+  else if(view==='grade')renderG(el,grade);
+  else if(view==='skills')renderSK(el);
+  else if(view==='inspired')renderIL(el);
+}
+
+function renderOV(el){
+  document.getElementById('th2').textContent='Curriculum Dashboard';
+  document.getElementById('tsub').textContent='Bharat Scouts & Guides — Cubs & Bulbuls Enrichment Program';
+  let h=`<div class="adv-strip">
+    <strong style="font-size:13px">Advancement Pathway:</strong>
+    <div class="abadge" style="background:#eef2ff;color:#4f46e5">⭐ Pravesh (Gr 1–2)</div>
+    <span style="color:#94a3b8;font-size:18px">→</span>
+    <div class="abadge" style="background:#fffbeb;color:#d97706">🏅 Pratham Charan (Gr 3–4)</div>
+    <span style="color:#94a3b8;font-size:18px">→</span>
+    <div class="abadge" style="background:#fef2f2;color:#dc2626">🏆 Dwitiya Charan (Gr 5)</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+      <a href="cubs_implementation_flow.html" target="_blank" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:#fffbeb;color:#d97706;border:1px solid #fcd34d;text-decoration:none">📅 Year Flow →</a>
+      <a href="cubs_home.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;text-decoration:none">🏠 Home →</a>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="scard"><div class="sv">5</div><div class="sl">Grade Levels</div></div>
+    <div class="scard"><div class="sv">100</div><div class="sl">Total Lesson Plans</div></div>
+    <div class="scard"><div class="sv">90 min</div><div class="sl">Per Session</div></div>
+    <div class="scard"><div class="sv">7</div><div class="sl">Skill Strands</div></div>
+    <div class="scard"><div class="sv">🌱</div><div class="sl">Inspired Living</div></div>
+  </div>
+  <div class="sec-head"><h2>Grade Overviews — Click to Explore</h2></div>
+  <div class="grade-grid">`;
+  CURRICULUM_DATA.grades.forEach(g=>{
+    h+=`<div class="gcard" style="border-color:${GB[g.id]}" onclick="showGrade(${g.id})">
+      <div class="gcard-icon" style="background:${GL[g.id]};color:${GC[g.id]};font-size:22px">${GI[g.id]}</div>
+      <h3>${g.label}</h3>
+      <p>${GL2[g.id]}</p>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted)"><span>20 Lessons</span><span>100%</span></div>
+        <div class="pbar"><div class="pfill" style="width:100%;background:${GC[g.id]}"></div></div>
+      </div>
+    </div>`;
+  });
+  h+=`</div><div class="sec-head" style="margin-top:6px"><h2>Integrated Skill Strands</h2></div><div class="grade-grid">`;
+  [['🗣','Communication Skills','#4f46e5'],['🔢','Logical Thinking Skills','#0891b2'],['🏅','Leadership & Service','#059669'],['🏛','Heritage & Citizenship','#d97706'],['🔭','Scientific Inquiry','#7c3aed'],['💚','Wellbeing Skills','#db2777'],['💡','Innovation Skills','#dc2626']].forEach(([ic,nm,cl])=>{
+    h+=`<div class="gcard" style="cursor:default;border-color:${cl}33">
+      <div style="font-size:28px;margin-bottom:8px">${ic}</div>
+      <h3 style="color:${cl}">${nm}</h3>
+      <p>Integrated across all grades</p>
+    </div>`;
+  });
+  h+=`</div>`;
+  h+=`<div class="sec-head" style="margin-top:8px"><h2>🌱 Inspired Living — Life Skills</h2><button class="btn btng" onclick="showView('inspired')" style="font-size:12px">View Full Programme →</button></div><div class="grade-grid">`;
+  [['🍽','Culinary Arts','#9a3412'],['🏠','Household Skills','#166534'],['🧹','Cleaning & Organisation','#6b21a8'],['🔧','Home Maintenance','#854d0e'],['🌱','Gardening & Growing','#065f46'],['🎉','Thematic & Cultural','#86198f'],['👕','Laundry Skills','#0369a1']].forEach(([ic,nm,cl])=>{
+    h+=`<div class="gcard" style="cursor:default;border-color:${cl}33">
+      <div style="font-size:28px;margin-bottom:8px">${ic}</div>
+      <h3 style="color:${cl}">${nm}</h3>
+      <p>Monthly concepts — Grades 1–5</p>
+    </div>`;
+  });
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function matchF(w){
+  if(!filters.length)return true;
+  const all=(w.theme+' '+w.cubsTopics.join(' ')+' '+w.skillTopics.join(' ')+' '+w.objectives.join(' ')+' '+w.mainActivity).toLowerCase();
+  return filters.every(f=>{
+    if(f==='cubs')return all.includes('cub')||all.includes('bulbul')||all.includes('scout')||all.includes('promise')||all.includes('law')||all.includes('howl');
+    if(f==='leadership')return all.includes('leader')||all.includes('service')||all.includes('team');
+    if(f==='heritage')return all.includes('heritage')||all.includes('india')||all.includes('cultur')||all.includes('national')||all.includes('festival');
+    if(f==='astronomy')return all.includes('astronom')||all.includes('star')||all.includes('planet')||all.includes('space')||all.includes('sky');
+    if(f==='communication')return all.includes('communicat')||all.includes('speak')||all.includes('listen')||all.includes('storytell')||all.includes('debate');
+    if(f==='logic')return all.includes('logic')||all.includes('pattern')||all.includes('puzzle')||all.includes('reason')||all.includes('problem');
+    if(f==='service')return all.includes('service')||all.includes('community')||all.includes('help')||all.includes('conserv');
+    if(f==='nature')return all.includes('nature')||all.includes('plant')||all.includes('animal')||all.includes('ecosystem')||all.includes('environment');
+    return true;
+  });
+}
+
+function renderG(el,gid){
+  const g=CURRICULUM_DATA.grades.find(x=>x.id===gid);
+  document.getElementById('th2').textContent=g.label+' Lesson Plans';
+  document.getElementById('tsub').textContent=GL2[gid]+' · 20 Weeks × 90 Minutes';
+  let weeks=g.weeks.filter(w=>matchF(w));
+  if(sq){const q=sq.toLowerCase();weeks=weeks.filter(w=>(w.theme+w.cubsTopics.join()+w.skillTopics.join()+w.objectives.join()+w.mainActivity).toLowerCase().includes(q));}
+
+  let tl=`<div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 18px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">20-Week Progress Timeline — Click a week to open</div>
+    <div class="tline">`;
+  g.weeks.forEach((w,i)=>{
+    tl+=`<div class="tldot" title="Week ${w.week}: ${w.theme}" style="background:${GL[gid]};color:${GC[gid]};border-color:${GC[gid]}" onclick="openL(${gid},${w.week})">${w.week}</div>`;
+    if(i<g.weeks.length-1)tl+=`<div class="tlcon"></div>`;
+  });
+  tl+=`</div></div>`;
+
+  let cards=`<div class="wgrid">`;
+  if(!weeks.length){
+    cards+=`<div class="nores">No lessons match the current filters or search.</div>`;
+  } else {
+    weeks.forEach(w=>{
+      cards+=`<div class="wcard">
+        <div class="wch">
+          <div class="wnum" style="background:${GL[gid]};color:${GC[gid]}">Week ${w.week}</div>
+          <span style="font-size:18px">${GI[gid]}</span>
+        </div>
+        <div class="wtheme">${w.theme}</div>
+        <div class="wtags">
+          <span class="tag tc">🟦 ${w.cubsTopics[0].split(':')[0]}</span>
+          <span class="tag ts">🟨 ${w.skillTopics[0].split(':')[0]}</span>
+        </div>
+        <div class="wcf">
+          <button class="expbtn" onclick="openL(${gid},${w.week})">📖 View Full Lesson Plan</button>
+        </div>
+      </div>`;
+    });
+  }
+  cards+=`</div>`;
+
+  el.innerHTML=`<div class="adv-strip">
+    <div class="abadge" style="background:${GL[gid]};color:${GC[gid]}">${GI[gid]} ${g.label}</div>
+    <span style="font-size:13px;color:var(--muted)">Level:</span>
+    <strong style="font-size:13px">${GL2[gid]}</strong>
+    <span style="margin-left:auto;font-size:12px;color:var(--muted)">20 lessons × 90 min = 30 hrs total</span>
+  </div>${tl}
+  <div class="sec-head"><h2>${g.label} — ${weeks.length} Lesson${weeks.length!==1?'s':''}</h2>
+  <span style="font-size:12px;color:var(--muted)">${GL2[gid]}</span></div>${cards}`;
+}
+
+function renderSK(el){
+  document.getElementById('th2').textContent='Skill Strands';
+  document.getElementById('tsub').textContent='7 integrated skill areas across Grades 1–5';
+  const sk=[
+    {ic:'🗣',nm:'Communication Skills',cl:'#4f46e5',st:['Vocabulary','Storytelling','Listening','Expression','Public Speaking']},
+    {ic:'🔢',nm:'Logical Thinking Skills',cl:'#0891b2',st:['Patterns','Numeracy','Problem Solving','Reasoning']},
+    {ic:'🏅',nm:'Leadership & Service Skills',cl:'#059669',st:['Responsibility','Discipline','Community Service','Teamwork']},
+    {ic:'🏛',nm:'Heritage & Citizenship Skills',cl:'#d97706',st:['Culture','Traditions','National Symbols','Values']},
+    {ic:'🔭',nm:'Scientific Inquiry Skills',cl:'#7c3aed',st:['Observation','Astronomy','Curiosity','Nature Study']},
+    {ic:'💚',nm:'Wellbeing Skills',cl:'#db2777',st:['Gratitude','Emotional Awareness','Confidence','Positive Relationships']},
+    {ic:'💡',nm:'Innovation Skills',cl:'#dc2626',st:['Sequencing','Creativity','Problem Solving','Entrepreneurial Thinking']},
+  ];
+  let h=`<div class="grade-grid" style="grid-template-columns:repeat(auto-fill,minmax(235px,1fr))">`;
+  sk.forEach(s=>{
+    h+=`<div class="gcard" style="cursor:default;border-color:${s.cl}44">
+      <div style="font-size:32px;margin-bottom:10px">${s.ic}</div>
+      <h3 style="color:${s.cl};margin-bottom:8px">${s.nm}</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${s.st.map(x=>`<span style="padding:2px 8px;border-radius:6px;font-size:11px;background:${s.cl}18;color:${s.cl};border:1px solid ${s.cl}44">${x}</span>`).join('')}
+      </div>
+      <p style="margin-top:10px;font-size:11px;color:var(--muted)">Integrated across Grades 1–5</p>
+    </div>`;
+  });
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+function openL(gid,wn){
+  const g=CURRICULUM_DATA.grades.find(x=>x.id===gid);
+  const w=g.weeks.find(x=>x.week===wn);
+  document.getElementById('mt').textContent=`Week ${wn}: ${w.theme}`;
+  document.getElementById('mst').textContent=`${g.label} · ${GL2[gid]} · 90-minute session`;
+
+  let b=`<div class="mbadges">
+    <span class="mb mbc">🟦 Cubs/Bulbuls Curriculum</span>
+    <span class="mb mbs">🟨 Skill Development Curriculum</span>
+    <span class="mb" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1">⏱ 90 Minutes</span>
+    <span class="mb" style="background:${GL[gid]};color:${GC[gid]};border:1px solid ${GB[gid]}">${GI[gid]} ${g.label}</span>
+  </div>`;
+
+  b+=lsec('🎯','Learning Objectives',w.objectives,'');
+  b+=lsec('🟦','Cubs/Bulbuls Topics',w.cubsTopics,'ci');
+  b+=lsec('🟨','Skill Development Topics',w.skillTopics,'si');
+  b+=lsec('📦','Materials Required',w.materials,'');
+
+  b+=`<div class="ls"><h4>⚡ Icebreaker Activity</h4><div class="ablk">${w.icebreaker}</div></div>`;
+  b+=`<div class="ls"><h4>📚 Main Activity</h4><div class="ablk">${w.mainActivity}</div></div>`;
+  b+=lsec('💬','Discussion Questions',w.discussion,'');
+  b+=`<div class="ls"><h4>🪞 Reflection Activity</h4><div class="ablk">${w.reflection}</div></div>`;
+
+  b+=`<div class="ls"><h4>📊 Assessment Rubric</h4><div class="rgrid">${
+    w.rubric.split(',').map(r=>`<div class="ri"><strong>Criterion:</strong> ${r.trim()}</div>`).join('')
+  }</div></div>`;
+
+  b+=`<div class="ls"><h4>🏠 Home Connection</h4><div class="ablk">${w.homeConnection}</div></div>`;
+  b+=`<div class="ls"><h4>✅ Expected Outcomes</h4><div class="obox"><ul class="ll">${w.outcomes.map(o=>`<li style="border:none;background:none;padding:2px 0;color:#166534">✓ ${o}</li>`).join('')}</ul></div></div>`;
+
+  document.getElementById('mb').innerHTML=b;
+  document.getElementById('ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function lsec(ic,lbl,items,cls){
+  return`<div class="ls"><h4>${ic} ${lbl}</h4><ul class="ll">${items.map(it=>`<li class="${cls}">${it}</li>`).join('')}</ul></div>`;
+}
+
+function closeM(){document.getElementById('ov').classList.remove('open');document.body.style.overflow='';}
+function closeMO(e){if(e.target===document.getElementById('ov'))closeM();}
+function exportPDF(){alert('To save as PDF: use your browser Print → Save as PDF.');window.print();}
+
+function toggleF(f){
+  const idx=filters.indexOf(f);
+  if(idx===-1)filters.push(f);else filters.splice(idx,1);
+  document.querySelectorAll('.chip').forEach(c=>{
+    const label=c.textContent.toLowerCase().replace(/[^a-z]/g,'');
+    const match=filters.some(flt=>label.includes(flt.replace(/[^a-z]/g,'')));
+    c.classList.toggle('on',match);
+  });
+  if(view==='grade')render();
+}
+
+function doSearch(){
+  sq=document.getElementById('si').value.trim();
+  if(sq.length>=2 && view!=='grade'){
+    searchAll(sq);
+  } else if(view==='grade'){
+    render();
+  } else if(!sq){
+    render();
+  }
+}
+
+function searchAll(q){
+  const ql=q.toLowerCase();
+  const res=[];
+  CURRICULUM_DATA.grades.forEach(g=>{
+    g.weeks.forEach(w=>{
+      if((w.theme+w.cubsTopics.join()+w.skillTopics.join()+w.objectives.join()+w.mainActivity).toLowerCase().includes(ql)){
+        res.push({g,w});
+      }
+    });
+  });
+  const el=document.getElementById('mc');
+  document.getElementById('th2').textContent=`Search: "${q}"`;
+  document.getElementById('tsub').textContent=`${res.length} lesson${res.length!==1?'s':''} found`;
+  let h=`<div class="sec-head"><h2>${res.length} result${res.length!==1?'s':''} for "${q}"</h2><button class="btn btng" onclick="showView('overview')">✕ Clear</button></div>`;
+  if(!res.length){h+=`<div class="nores">No lessons found for "${q}".</div>`;}
+  else{
+    h+=`<div class="wgrid">`;
+    res.forEach(({g,w})=>{
+      h+=`<div class="wcard">
+        <div class="wch">
+          <div class="wnum" style="background:${GL[g.id]};color:${GC[g.id]}">${g.label} · Wk ${w.week}</div>
+          <span style="font-size:16px">${GI[g.id]}</span>
+        </div>
+        <div class="wtheme">${w.theme}</div>
+        <div class="wtags">
+          <span class="tag tc">🟦 ${w.cubsTopics[0].split(':')[0]}</span>
+          <span class="tag ts">🟨 ${w.skillTopics[0].split(':')[0]}</span>
+        </div>
+        <div class="wcf">
+          <button class="expbtn" onclick="openL(${g.id},${w.week})">📖 View Lesson Plan</button>
+        </div>
+      </div>`;
+    });
+    h+=`</div>`;
+  }
+  el.innerHTML=h;
+}
+
+
+// ── INSPIRED LIVING DATA ──
+const IL_DATA = {
+  1: {
+    label: "Grade 1", color: "#4f46e5", colorL: "#eef2ff", colorB: "#c7d2fe",
+    months: [
+      { month: "June", topics: [
+        { area: "Personal Hygiene", icon: "🧼", skills: ["Brushing teeth correctly", "Washing hands thoroughly"], outcomes: ["Importance of daily hygiene routines"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Planting seeds", "Watering plants"], outcomes: ["Care for living things", "Understanding plant growth"] }
+      ]},
+      { month: "July", topics: [
+        { area: "Personal Hygiene", icon: "🧼", skills: ["Combing hair"], outcomes: ["Importance of neat appearance"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "August", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Tidying up toys"], outcomes: ["Responsibility and organisation"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "September", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Organizing school supplies"], outcomes: ["Developing organisational skills"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Preparing for Navaratri with simple decorations"], outcomes: ["Cultural awareness"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "October", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Helping to set the table"], outcomes: ["Cooperation and teamwork"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Creating simple Navaratri and Diwali decorations"], outcomes: ["Cultural creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "November", topics: [
+        { area: "Basic Food Preparation", icon: "🍽", skills: ["Washing fruits and vegetables"], outcomes: ["Introduction to kitchen tasks"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "December", topics: [
+        { area: "Basic Food Preparation", icon: "🍽", skills: ["Spreading butter or jam on bread"], outcomes: ["Basic food handling"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Decorating Christmas Biscuits or Cupcakes with jam or icing"], outcomes: ["Festive creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Planting seeds", "Habit building", "Watering plants"], outcomes: ["Care for living things", "Understanding plant growth"] }
+      ]},
+      { month: "January", topics: [
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Celebrating Pongal with stories and simple rituals"], outcomes: ["Cultural heritage"] }
+      ]},
+      { month: "February", topics: [
+        { area: "Thematic Activity", icon: "🎉", skills: ["Observe the making of traditional Pongal snacks"], outcomes: ["Culinary heritage awareness"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "March", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Sweeping floors"], outcomes: ["Clean living space"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Participating in spring cleaning and organising for the new year"], outcomes: ["Responsibility and renewal"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]}
+    ]
+  },
+  2: {
+    label: "Grade 2", color: "#059669", colorL: "#ecfdf5", colorB: "#a7f3d0",
+    months: [
+      { month: "June", topics: [
+        { area: "Personal Hygiene", icon: "🧼", skills: ["Proper teeth brushing", "Hand washing"], outcomes: ["Reinforcing hygiene habits"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Planting seeds", "Watering plants"], outcomes: ["Care for living things", "Understanding plant growth"] }
+      ]},
+      { month: "July", topics: [
+        { area: "Personal Hygiene", icon: "🧼", skills: ["Learning to bathe independently"], outcomes: ["Personal care and independence"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "August", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Making the bed"], outcomes: ["Independence and routine"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "September", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Sorting toys"], outcomes: ["Responsibility"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Preparing for Navaratri with simple decorations"], outcomes: ["Cultural awareness"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "October", topics: [
+        { area: "Simple Chores", icon: "🏠", skills: ["Helping to clear the table"], outcomes: ["Teamwork"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Creating simple Navaratri and Diwali decorations"], outcomes: ["Cultural creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "November", topics: [
+        { area: "Basic Food Preparation", icon: "🍽", skills: ["Peeling simple fruits (bananas, oranges)"], outcomes: ["Confidence in food preparation"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "December", topics: [
+        { area: "Basic Food Preparation", icon: "🍽", skills: ["Making simple snacks like cheese sandwiches"], outcomes: ["Culinary basics"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Decorating Christmas Biscuits or Cupcakes with jam or icing"], outcomes: ["Festive creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Planting seeds", "Habit building", "Watering plants"], outcomes: ["Care for living things", "Understanding plant growth"] }
+      ]},
+      { month: "January", topics: [
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Celebrating Pongal with stories and simple rituals"], outcomes: ["Cultural heritage"] }
+      ]},
+      { month: "February", topics: [
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]},
+      { month: "March", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Sweeping floors"], outcomes: ["Clean living space"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Participating in spring cleaning and organising for the new year"], outcomes: ["Responsibility and renewal"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants"], outcomes: ["Care for living things"] }
+      ]}
+    ]
+  },
+  3: {
+    label: "Grade 3", color: "#d97706", colorL: "#fffbeb", colorB: "#fcd34d",
+    months: [
+      { month: "June", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Sweeping floors", "Dusting surfaces"], outcomes: ["Basic cleaning skills"] }
+      ]},
+      { month: "July", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Organising bookshelves"], outcomes: ["Maintaining organisation"] }
+      ]},
+      { month: "August", topics: [
+        { area: "Gardening Basics", icon: "🌱", skills: ["Planting seeds", "Habit building", "Watering plants"], outcomes: ["Environmental responsibility", "Care for living things", "Understanding plant growth"] }
+      ]},
+      { month: "September", topics: [
+        { area: "Basic Food Preparation", icon: "🍽", skills: ["Peeling complex fruits like pomegranate"], outcomes: ["Confidence in food preparation"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]},
+      { month: "October", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Making salads"], outcomes: ["Basic culinary skills"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Basic weeding"], outcomes: ["Gardening maintenance"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Decorating for Navaratri Golu"], outcomes: ["Cultural creativity"] }
+      ]},
+      { month: "November", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Preparing simple cold snacks like vegetable sticks with dip"], outcomes: ["Food preparation basics"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]},
+      { month: "December", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Basic kitchen safety"], outcomes: ["Safety awareness"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Decorating Christmas Biscuits or Cupcakes with jam or icing"], outcomes: ["Festive creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]},
+      { month: "January", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Making healthy snacks"], outcomes: ["Nutritional understanding"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Cooking traditional Pongal dishes"], outcomes: ["Cultural culinary heritage"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]},
+      { month: "February", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Making healthy snacks"], outcomes: ["Nutritional understanding"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]},
+      { month: "March", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Cleaning windows"], outcomes: ["Clean living space"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Participating in spring cleaning and organising for the new year"], outcomes: ["Responsibility and renewal"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Habit building", "Watering plants", "Weeding"], outcomes: ["Plant care"] }
+      ]}
+    ]
+  },
+  4: {
+    label: "Grade 4", color: "#7c3aed", colorL: "#f5f3ff", colorB: "#ddd6fe",
+    months: [
+      { month: "June", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Vacuuming", "Mopping floors"], outcomes: ["Advanced cleaning techniques"] }
+      ]},
+      { month: "July", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Cleaning windows"], outcomes: ["Maintaining a clean home"] }
+      ]},
+      { month: "August", topics: [
+        { area: "Gardening Basics", icon: "🌱", skills: ["Identifying common plants around school, park and local nursery"], outcomes: ["Plant knowledge"] }
+      ]},
+      { month: "September", topics: [
+        { area: "Thematic Activity", icon: "🎉", skills: ["Preparing for Navaratri with traditional recipes"], outcomes: ["Cultural cooking heritage"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Understanding plant care needs"], outcomes: ["Deepening environmental stewardship"] }
+      ]},
+      { month: "October", topics: [
+        { area: "Thematic Activity", icon: "🎉", skills: ["Creating Navaratri and Diwali decorations"], outcomes: ["Cultural creativity"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]},
+      { month: "November", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Preparing breakfast items like scrambled eggs and toast"], outcomes: ["Cooking independence"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]},
+      { month: "December", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Making simple meals safely"], outcomes: ["Culinary confidence"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]},
+      { month: "January", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Using kitchen appliances safely"], outcomes: ["Safety awareness"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Cooking traditional Pongal dishes"], outcomes: ["Cultural culinary heritage"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]},
+      { month: "February", topics: [
+        { area: "Simple Cooking", icon: "🍳", skills: ["Preparing traditional sweets for festivals"], outcomes: ["Cultural appreciation"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]},
+      { month: "March", topics: [
+        { area: "Household Cleaning", icon: "🧹", skills: ["Deep cleaning bathrooms"], outcomes: ["Detailed cleaning techniques"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Participating in spring cleaning and organising for the new academic year"], outcomes: ["Responsibility and renewal"] },
+        { area: "Gardening Basics", icon: "🌱", skills: ["Caring for a small garden plot"], outcomes: ["Gardening responsibility"] }
+      ]}
+    ]
+  },
+  5: {
+    label: "Grade 5", color: "#dc2626", colorL: "#fef2f2", colorB: "#fecaca",
+    months: [
+      { month: "June", topics: [
+        { area: "Cooking Skills", icon: "🍳", skills: ["Baking cookies"], outcomes: ["Baking basics"] }
+      ]},
+      { month: "July", topics: [
+        { area: "Cooking Skills", icon: "🍳", skills: ["Making simple lunches like pasta with sauce"], outcomes: ["Meal preparation"] }
+      ]},
+      { month: "August", topics: [
+        { area: "Laundry", icon: "👕", skills: ["Sorting clothes by colour"], outcomes: ["Laundry basics"] }
+      ]},
+      { month: "September", topics: [
+        { area: "Thematic Activity", icon: "🎉", skills: ["Preparing for Navaratri with traditional recipes"], outcomes: ["Cultural cooking heritage"] },
+        { area: "Laundry", icon: "👕", skills: ["Using a washing machine with supervision"], outcomes: ["Understanding laundry processes"] }
+      ]},
+      { month: "October", topics: [
+        { area: "Laundry", icon: "👕", skills: ["Folding and organising clothes"], outcomes: ["Clothing care"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Creating Navaratri and Diwali decorations"], outcomes: ["Cultural creativity"] }
+      ]},
+      { month: "November", topics: [
+        { area: "Home Maintenance", icon: "🔧", skills: ["Fixing loose screws (in pots, pans, furniture)"], outcomes: ["Basic repair skills"] }
+      ]},
+      { month: "December", topics: [
+        { area: "Home Maintenance", icon: "🔧", skills: ["Replacing light bulbs"], outcomes: ["Home upkeep awareness"] }
+      ]},
+      { month: "January", topics: [
+        { area: "Home Maintenance", icon: "🔧", skills: ["Basic sewing — hemming and sewing on buttons"], outcomes: ["Sewing skills"] },
+        { area: "Thematic Activity", icon: "🎉", skills: ["Celebrating Pongal with traditional activities"], outcomes: ["Cultural heritage"] }
+      ]},
+      { month: "February", topics: [
+        { area: "Home Maintenance", icon: "🔧", skills: ["More advanced sewing projects"], outcomes: ["Sewing proficiency"] }
+      ]},
+      { month: "March", topics: [
+        { area: "Thematic Activity", icon: "🎉", skills: ["Participating in spring cleaning and organising for the new year"], outcomes: ["Responsibility and renewal"] },
+        { area: "Home Maintenance", icon: "🔧", skills: ["Basic plumbing (fixing leaks)"], outcomes: ["Home repair skills"] }
+      ]}
+    ]
+  }
+};
+
+const AREA_COLORS = {
+  "Personal Hygiene":     { bg:"#eff6ff", bd:"#93c5fd", tx:"#1e40af" },
+  "Simple Chores":        { bg:"#f0fdf4", bd:"#86efac", tx:"#166534" },
+  "Household Cleaning":   { bg:"#faf5ff", bd:"#d8b4fe", tx:"#6b21a8" },
+  "Gardening Basics":     { bg:"#ecfdf5", bd:"#6ee7b7", tx:"#065f46" },
+  "Basic Food Preparation":{ bg:"#fff7ed", bd:"#fdba74", tx:"#9a3412" },
+  "Simple Cooking":       { bg:"#fff7ed", bd:"#fdba74", tx:"#9a3412" },
+  "Cooking Skills":       { bg:"#fff7ed", bd:"#fdba74", tx:"#9a3412" },
+  "Thematic Activity":    { bg:"#fdf4ff", bd:"#e879f9", tx:"#86198f" },
+  "Laundry":              { bg:"#f0f9ff", bd:"#7dd3fc", tx:"#0369a1" },
+  "Home Maintenance":     { bg:"#fef9c3", bd:"#fde047", tx:"#854d0e" }
+};
+
+function renderIL(el){
+  document.getElementById('th2').textContent='Inspired Living';
+  document.getElementById('tsub').textContent='Life Skills Curriculum — Monthly Concepts for Grades 1–5';
+
+  const MONTHS = ['June','July','August','September','October','November','December','January','February','March'];
+
+  // Grade tab state
+  window.ilGrade = window.ilGrade || 1; let ilGrade = window.ilGrade;
+  window.setILGrade = function(g){
+    ilGrade = g; window.ilGrade = g;
+    document.querySelectorAll('.il-tab').forEach(t=>t.classList.toggle('il-active', parseInt(t.dataset.g)===g));
+    document.getElementById('il-body').innerHTML = buildILGrade(g);
+  };
+
+  function topicCard(topic){
+    const ac = AREA_COLORS[topic.area] || { bg:'#f8fafc', bd:'#e2e8f0', tx:'#374151' };
+    return `<div style="background:${ac.bg};border:1px solid ${ac.bd};border-radius:10px;padding:10px 12px;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:700;color:${ac.tx};margin-bottom:5px">${topic.icon} ${topic.area}</div>
+      <div style="font-size:11px;font-weight:600;color:#374151;margin-bottom:3px">Skills:</div>
+      ${topic.skills.map(s=>`<div style="font-size:11px;color:#374151;padding:1px 0">• ${s}</div>`).join('')}
+      <div style="font-size:11px;font-weight:600;color:#374151;margin-top:5px;margin-bottom:3px">Outcomes:</div>
+      ${topic.outcomes.map(o=>`<div style="font-size:11px;color:#64748b;padding:1px 0">✓ ${o}</div>`).join('')}
+    </div>`;
+  }
+
+  function buildILGrade(g){
+    const gd = IL_DATA[g];
+    const monthMap = {};
+    gd.months.forEach(m => { monthMap[m.month] = m.topics; });
+    
+    let rows = '';
+    MONTHS.forEach(mon => {
+      const topics = monthMap[mon] || [];
+      const isEmpty = topics.length === 0;
+      rows += `<div style="display:flex;gap:0;border-bottom:1px solid var(--border)">
+        <div style="width:100px;flex-shrink:0;padding:12px 14px;background:${isEmpty?'#fafbfc':gd.colorL};border-right:3px solid ${isEmpty?'#e2e8f0':gd.color};display:flex;align-items:center">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:${isEmpty?'#94a3b8':gd.color}">${mon}</div>
+          </div>
+        </div>
+        <div style="flex:1;padding:10px 14px;${isEmpty?'background:#fafbfc':''}">
+          ${isEmpty ? '<div style="font-size:11px;color:#94a3b8;font-style:italic">No specific concept this month</div>' : topics.map(topicCard).join('')}
+        </div>
+      </div>`;
+    });
+
+    // Concept summary bar
+    const allAreas = [...new Set(gd.months.flatMap(m=>m.topics.map(t=>t.area)))];
+    const summaryChips = allAreas.map(a=>{
+      const ac = AREA_COLORS[a]||{bg:'#f1f5f9',bd:'#cbd5e1',tx:'#475569'};
+      return `<span style="padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;background:${ac.bg};border:1px solid ${ac.bd};color:${ac.tx}">${a}</span>`;
+    }).join(' ');
+
+    return `
+      <div style="background:${gd.colorL};border:1px solid ${gd.colorB};border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="font-size:13px;font-weight:700;color:${gd.color}">${gd.label} — Life Skill Areas:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">${summaryChips}</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+        ${rows}
+      </div>`;
+  }
+
+  // Area legend
+  const legend = Object.entries(AREA_COLORS).map(([k,v])=>
+    `<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:16px;font-size:11px;font-weight:600;background:${v.bg};border:1px solid ${v.bd};color:${v.tx}">${k}</span>`
+  ).join(' ');
+
+  el.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">What is Inspired Living?</div>
+      <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:10px">Inspired Living is a practical life-skills programme integrated across Grades 1–5. It develops real-world competencies in <strong>Culinary Arts, Household Management, Cleaning & Organisation, Repair Skills, Gardening, and Cultural Heritage</strong> — through monthly thematic concepts that grow in complexity each year.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${legend}</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">
+      ${[1,2,3,4,5].map(g=>`<button class="il-tab${g===ilGrade?' il-active':''}" data-g="${g}" onclick="setILGrade(${g})" style="padding:8px 18px;border-radius:8px;border:2px solid ${g===ilGrade?IL_DATA[g].color:'var(--border)'};background:${g===ilGrade?IL_DATA[g].colorL:'var(--card)'};color:${g===ilGrade?IL_DATA[g].color:'var(--muted)'};font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">${IL_DATA[g].label}</button>`).join('')}
+    </div>
+    <div id="il-body">${buildILGrade(ilGrade)}</div>`;
+}
+
+// Boot
+render();
+</script>
+</body>
+</html>

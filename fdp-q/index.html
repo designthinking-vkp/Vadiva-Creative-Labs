@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Ready Teacher Index - Teaching Beyond the Textbook</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            black: '#020617',
+                            dark: '#0f172a',
+                            blue: '#00f0ff',
+                            purple: '#bc34fa',
+                            pink: '#ff007f',
+                            green: '#39ff14',
+                            yellow: '#ffd700',
+                            card: 'rgba(15, 23, 42, 0.65)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cyber: ['Orbitron', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 240, 255, 0.45)',
+                        'neon-purple': '0 0 15px rgba(188, 52, 250, 0.45)',
+                        'neon-green': '0 0 15px rgba(57, 255, 20, 0.45)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            overflow-x: hidden;
+        }
+        .cyber-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .glassmorphism {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-border-blue:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .glow-border-purple:hover {
+            border-color: #bc34fa;
+            box-shadow: 0 0 15px rgba(188, 52, 250, 0.3);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .neon-text-blue {
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+        .neon-text-purple {
+            text-shadow: 0 0 8px rgba(188, 52, 250, 0.6);
+        }
+        .neon-text-green {
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen relative">
+
+    <!-- Particle Background -->
+    <canvas id="particles" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <div class="relative z-10 min-h-screen flex flex-col justify-between">
+        
+        <!-- Header -->
+        <header class="w-full py-6 px-8 border-b border-slate-800/60 glassmorphism flex justify-between items-center z-20">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-cyber-purple to-cyber-blue flex items-center justify-center shadow-neon-blue">
+                    <i class="fa-solid fa-graduation-cap text-lg text-white"></i>
+                </div>
+                <div>
+                    <h1 class="cyber-font text-lg md:text-xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-cyber-blue to-cyber-purple">
+                        FUTURE READY TEACHER INDEX
+                    </h1>
+                    <p class="text-xs text-slate-400 tracking-widest uppercase">Teaching Beyond the Textbook</p>
+                </div>
+            </div>
+            <div id="live-indicator" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/50">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyber-green animate-ping"></span>
+                <span class="text-xs font-medium text-slate-300 tracking-wider uppercase cyber-font">Simulation Engine Active</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 flex flex-col justify-center items-center relative z-10">
+            
+            <!-- 1. WELCOME SCREEN -->
+            <section id="welcome-screen" class="w-full max-w-2xl glassmorphism rounded-2xl p-6 md:p-10 shadow-2xl relative overflow-hidden transition-all duration-500 opacity-100">
+                <div class="absolute -top-24 -left-24 w-48 h-48 bg-cyber-blue/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-cyber-purple/10 rounded-full blur-3xl"></div>
+
+                <div class="text-center mb-8 relative">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-slate-900/60 border border-slate-800 text-xs text-cyber-blue cyber-font tracking-widest uppercase mb-4 shadow-neon-blue">
+                        Professional Reflection Space
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-extrabold cyber-font tracking-tight text-white mb-2 leading-tight">
+                        Are You Ready for the <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue to-cyber-purple">Future Classroom?</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm max-w-md mx-auto mt-4">
+                        Step into a 28-scenario simulation game designed for forward-thinking Indian educators. Reflect, make trade-offs, and discover your innovative pedagogy index.
+                    </p>
+                </div>
+
+                <form id="welcome-form" onsubmit="handleStartSimulation(event)" class="space-y-5 relative">
+                    <div>
+                        <label for="teacher-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2 cyber-font">Teacher Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-user-ninja"></i></span>
+                            <input type="text" id="teacher-name" required placeholder="e.g., Anjali Sharma" 
+                                   class="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue transition-all duration-300 text-sm placeholder-slate-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="school-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2 cyber-font">School Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-school"></i></span>
+                            <input type="text" id="school-name" required placeholder="e.g., Delhi Public School, Sector 4" 
+                                   class="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue transition-all duration-300 text-sm placeholder-slate-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="grade-handling" class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2 cyber-font">Grade Handling</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-children"></i></span>
+                                <input type="text" id="grade-handling" required placeholder="e.g., Grade 6 - 8" 
+                                       class="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue transition-all duration-300 text-sm placeholder-slate-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="subject-handling" class="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2 cyber-font">Subject Focus</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-flask-vial"></i></span>
+                                <input type="text" id="subject-handling" required placeholder="e.g., Science & Technology" 
+                                       class="w-full bg-slate-900/80 border border-slate-700/60 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-cyber-blue focus:ring-1 focus:ring-cyber-blue transition-all duration-300 text-sm placeholder-slate-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full mt-6 bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-purple hover:to-cyber-blue text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-500 uppercase tracking-wider cyber-font text-sm shadow-neon-blue hover:shadow-neon-purple transform active:scale-95 flex items-center justify-center gap-2">
+                        Start Simulation Game <i class="fa-solid fa-rocket animate-pulse"></i>
+                    </button>
+                </form>
+            </section>
+
+            <!-- 2. QUIZ SCREEN -->
+            <section id="quiz-screen" class="w-full hidden opacity-0 transition-all duration-500 flex flex-col lg:flex-row gap-6 items-stretch">
+                
+                <!-- Left Panel: Question and Options -->
+                <div class="flex-1 glassmorphism rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-2xl relative">
+                    <!-- Progress Bar Header -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs text-cyber-blue font-bold tracking-widest uppercase cyber-font" id="progress-text">Scenario 1 of 28</span>
+                            <span class="text-xs text-slate-400 cyber-font" id="percent-complete">Session Active</span>
+                        </div>
+                        <div class="w-full bg-slate-800/80 h-2.5 rounded-full overflow-hidden border border-slate-700/40">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-cyber-blue to-cyber-purple transition-all duration-300 w-0"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div class="flex-1 flex flex-col justify-center my-4">
+                        <div class="flex gap-3 items-start mb-4">
+                            <span class="w-6 h-6 shrink-0 mt-1 flex items-center justify-center rounded bg-cyber-blue/15 border border-cyber-blue/40 text-cyber-blue text-xs font-bold cyber-font">Q</span>
+                            <h3 class="text-lg md:text-xl font-medium text-slate-100 leading-relaxed" id="question-text">
+                                Scenario description loading...
+                            </h3>
+                        </div>
+                        
+                        <!-- Options Grid -->
+                        <div class="space-y-3.5 mt-6" id="options-container">
+                            <!-- Javascript generated options -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="mt-8 pt-4 border-t border-slate-800/80 flex justify-between items-center">
+                        <p class="text-xs text-slate-500 italic">Scores and outcomes are processed in the background. Select the approach that fits your philosophy.</p>
+                        <span class="text-xs font-bold text-cyber-purple cyber-font uppercase tracking-widest">Active Session</span>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Live Future Readiness Meter & Details -->
+                <div class="w-full lg:w-80 shrink-0 flex flex-col gap-6">
+                    
+                    <!-- Live Stats Card -->
+                    <div class="glassmorphism rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
+                        <h4 class="cyber-font text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Classroom Coordinates</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col border-l-2 border-cyber-blue pl-3 py-0.5">
+                                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Educator</span>
+                                <span id="stat-name" class="text-sm font-semibold text-slate-200">User</span>
+                            </div>
+                            <div class="flex flex-col border-l-2 border-cyber-purple pl-3 py-0.5">
+                                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Institution</span>
+                                <span id="stat-school" class="text-sm font-semibold text-slate-200">School</span>
+                            </div>
+                            <div class="flex flex-col border-l-2 border-cyber-pink pl-3 py-0.5">
+                                <span class="text-[10px] text-slate-500 uppercase tracking-wider">Focus</span>
+                                <span id="stat-subject" class="text-sm font-semibold text-slate-200">Subject</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Future Readiness Meter -->
+                    <div class="glassmorphism rounded-2xl p-6 shadow-2xl flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="cyber-font text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Live Readiness Index</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-6">Your index updates dynamically. No numeric scores are revealed until the final analysis.</p>
+                            
+                            <!-- Graphic Meter -->
+                            <div class="relative flex flex-col items-center justify-center py-4">
+                                <div class="w-full bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 shadow-inner text-center">
+                                    <div class="text-[10px] text-slate-500 tracking-wider uppercase mb-1">Current Standing</div>
+                                    <div id="live-meter-title" class="cyber-font text-sm font-bold text-cyber-blue tracking-wide uppercase transition-all duration-300">Beginner Educator</div>
+                                    <div id="live-meter-visual-bar" class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-3 border border-slate-700/50">
+                                        <div id="live-meter-visual-progress" class="h-full bg-gradient-to-r from-cyber-blue to-cyber-purple transition-all duration-300 w-0"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Stages indicator -->
+                        <div class="space-y-2.5 mt-4">
+                            <div id="stage-beginner" class="flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300">
+                                <span>Beginner Educator</span>
+                            </div>
+                            <div id="stage-developing" class="flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300">
+                                <span>Developing Educator</span>
+                            </div>
+                            <div id="stage-adaptive" class="flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300">
+                                <span>Adaptive Educator</span>
+                            </div>
+                            <div id="stage-innovative" class="flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300">
+                                <span>Innovative Educator</span>
+                            </div>
+                            <div id="stage-futureready" class="flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300">
+                                <span>Future Ready Educator</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. RESULT SCREEN -->
+            <section id="result-screen" class="w-full hidden opacity-0 transition-all duration-500 space-y-6">
+                
+                <!-- Summary Card Row -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="glassmorphism rounded-xl p-4 flex flex-col justify-center">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest cyber-font mb-1">Educator</span>
+                        <span id="res-name" class="text-base font-bold text-white truncate">Name</span>
+                        <span id="res-subject" class="text-xs text-slate-400 truncate">Subject</span>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 flex flex-col justify-center">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest cyber-font mb-1">Institution</span>
+                        <span id="res-school" class="text-base font-bold text-white truncate">School</span>
+                        <span id="res-grade" class="text-xs text-slate-400 truncate">Grade</span>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 flex flex-col justify-center border-l-2 border-l-cyber-blue">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest cyber-font mb-1">Future Ready Index</span>
+                        <span id="res-overall-score" class="text-2xl font-black text-cyber-blue cyber-font">0%</span>
+                        <span class="text-xs text-slate-400">Average Readiness</span>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 flex flex-col justify-center border-l-2 border-l-cyber-purple">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest cyber-font mb-1">Dominant Archetype</span>
+                        <span id="res-archetype" class="text-base font-black text-cyber-purple cyber-font truncate">Relationship Builder</span>
+                        <span class="text-xs text-slate-400" id="res-classification">Methodology Profile</span>
+                    </div>
+                </div>
+
+                <!-- Main Analysis Dash & Metrics -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left: Metrics Breakdown -->
+                    <div class="glassmorphism rounded-2xl p-6 shadow-2xl space-y-5 lg:col-span-1">
+                        <h3 class="text-base font-bold cyber-font text-white border-b border-slate-800 pb-3 uppercase tracking-wider">
+                            <i class="fa-solid fa-chart-bar text-cyber-blue mr-2"></i> Category Profile Scores
+                        </h3>
+                        <div class="space-y-4" id="category-metrics-container">
+                            <!-- Category progress bars generated in JS -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Plotly Charts -->
+                    <div class="lg:col-span-2 flex flex-col gap-6">
+                        <!-- Chart Tabs/Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Radar Chart Card -->
+                            <div class="glassmorphism rounded-2xl p-5 shadow-2xl">
+                                <h3 class="text-sm font-bold cyber-font text-white mb-3 uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-nodes text-cyber-purple mr-2"></i> Cognitive Radar Profile
+                                </h3>
+                                <div id="radar-chart" class="w-full h-80 rounded-lg overflow-hidden bg-slate-950/20"></div>
+                            </div>
+                            <!-- Growth Potential Meter Card -->
+                            <div class="glassmorphism rounded-2xl p-5 shadow-2xl">
+                                <h3 class="text-sm font-bold cyber-font text-white mb-3 uppercase tracking-wider">
+                                    <i class="fa-solid fa-gauge-high text-cyber-pink mr-2"></i> Growth Room Index
+                                </h3>
+                                <div id="gauge-chart" class="w-full h-80 rounded-lg overflow-hidden bg-slate-950/20"></div>
+                            </div>
+                        </div>
+
+                        <!-- Surface Chart Card -->
+                        <div class="glassmorphism rounded-2xl p-5 shadow-2xl">
+                            <h3 class="text-sm font-bold cyber-font text-white mb-3 uppercase tracking-wider">
+                                <i class="fa-solid fa-cube text-cyber-blue mr-2"></i> Classroom Topology Surface (3D)
+                            </h3>
+                            <div id="surface-chart" class="w-full h-96 rounded-lg overflow-hidden bg-slate-950/20"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analysis Diagnostic Section -->
+                <div class="glassmorphism rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 text-8xl text-cyber-purple pointer-events-none">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-lg font-bold cyber-font text-white border-b border-slate-800 pb-3 mb-6 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-cyber-blue"></i> Automated AI Pedagogical Diagnostics
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-cyber-green uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-square-check mr-1.5"></i> Primary Strength Vector</h4>
+                                <p id="ai-strengths" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-cyber-pink uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-circle-exclamation mr-1.5"></i> Primary Growth Opportunities</h4>
+                                <p id="ai-opportunities" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-cyber-purple uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-lightbulb mr-1.5"></i> Innovation Capability Rating</h4>
+                                <p id="ai-innovation" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-cyber-blue uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-bullseye mr-1.5"></i> Student Impact Forecast</h4>
+                                <p id="ai-impact" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-cyber-yellow uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-handshake mr-1.5"></i> Parent Confidence Index Forecast</h4>
+                                <p id="ai-confidence" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
+                                <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-2 cyber-font"><i class="fa-solid fa-circle-nodes mr-1.5"></i> Future Classroom Readiness</h4>
+                                <p id="ai-readiness" class="text-slate-300 text-sm leading-relaxed">Analyzing response matrix...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classroom Blueprint section -->
+                <div class="glassmorphism rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden border border-cyber-blue/20">
+                    <div class="absolute -right-24 -bottom-24 w-64 h-64 bg-cyber-blue/5 rounded-full blur-3xl"></div>
+                    <h3 class="text-lg font-bold cyber-font text-white border-b border-slate-800 pb-3 mb-6 uppercase tracking-wider">
+                        <i class="fa-solid fa-cubes-stacked text-cyber-blue mr-2"></i> Your Future Classroom Blueprint
+                    </h3>
+                    <p class="text-slate-400 text-sm mb-6 max-w-2xl leading-relaxed">
+                        These customized recommendations are derived directly from your scoring lows and strengths. Introduce these practices step-by-step to scale your index standing.
+                    </p>
+                    <div id="blueprint-container" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <!-- Blueprint cards injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Action Button Controls -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center py-6">
+                    <button onclick="generatePDFReport()" 
+                            class="w-full sm:w-auto bg-gradient-to-r from-cyber-blue to-cyber-purple hover:from-cyber-purple hover:to-cyber-blue text-white font-bold py-3.5 px-8 rounded-lg transition-all duration-500 uppercase tracking-wider cyber-font text-sm shadow-neon-blue hover:shadow-neon-purple flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+                    </button>
+                    <button onclick="resetSimulation()" 
+                            class="w-full sm:w-auto bg-slate-900 border border-slate-700 hover:border-cyber-blue text-slate-300 hover:text-white font-semibold py-3.5 px-8 rounded-lg transition-all duration-300 uppercase tracking-wider cyber-font text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i> Retake Simulation
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full py-4 text-center text-slate-500 text-xs border-t border-slate-900 bg-slate-950/80 z-20">
+            <p class="tracking-wide">
+                &copy; 2026 Future Ready Teacher Index. Structured for private pedagogical reflection and professional evolution.
+            </p>
+        </footer>
+    </div>
+
+    <!-- SCRIPT DATA & SIMULATION LOGIC -->
+    <script>
+        // 28 Indian School Scenarios Database
+        // Standardized short keys (PT, ST, UTM, IW, M, MP, FRTS) to align categories configuration.
+        const questions = [
+            {
+                scenario: "A Grade 8 student who was once highly active has suddenly stopped participating in class discussions and group activities.",
+                options: [
+                    {
+                        text: "Inform the parents immediately and ask them to ensure the student studies and participates more at home.",
+                        deltas: { PT: 5, MP: 2, IW: -2 }
+                    },
+                    {
+                        text: "Leave the student alone for a few weeks, assuming it is a passing phase, and focus on the rest of the active class.",
+                        deltas: { ST: -4, FRTS: -5 }
+                    },
+                    {
+                        text: "Schedule a private chat to understand their emotional state, then co-create a flexible classroom role (like technology director or discussion lead) that aligns with their current comfort level.",
+                        deltas: { ST: 8, M: 8, FRTS: 7, UTM: 5 }
+                    },
+                    {
+                        text: "Group them with their close friends for the next project to lower their anxiety and monitor their involvement.",
+                        deltas: { ST: 6, MP: 5, M: 4 }
+                    }
+                ]
+            },
+            {
+                scenario: "Several parents say their children understand concepts in class but struggle to apply them independently at home.",
+                options: [
+                    {
+                        text: "Launch an interactive online dashboard with short, student-led micro-explanation videos and create open-ended, real-world application challenges rather than repetitive drills.",
+                        deltas: { FRTS: 8, UTM: 8, PT: 7, IW: 6 }
+                    },
+                    {
+                        text: "Dedicate the last 10 minutes of class to guided independent practice and send parents a weekly summary sheet of key concepts.",
+                        deltas: { PT: 6, MP: 5, UTM: 4 }
+                    },
+                    {
+                        text: "Assign more solved examples from the textbook for homework to build confidence through imitation.",
+                        deltas: { PT: 4, IW: -2 }
+                    },
+                    {
+                        text: "Tell parents that homework is meant to be difficult and that they should hire home tutors if their children struggle.",
+                        deltas: { PT: -6, ST: -4 }
+                    }
+                ]
+            },
+            {
+                scenario: "Your students complete worksheets quickly but seem to forget concepts after a few weeks.",
+                options: [
+                    {
+                        text: "Conduct regular surprise tests and give extra writing work to students who score poorly to force retention.",
+                        deltas: { PT: 3, ST: -3 }
+                    },
+                    {
+                        text: "Re-teach the forgotten chapters from scratch, sacrificing the timeline of the current term's syllabus.",
+                        deltas: { MP: -5, FRTS: -4 }
+                    },
+                    {
+                        text: "Incorporate a 'spiral review' section in every new worksheet, dedicating 15% of the content to previously learned chapters.",
+                        deltas: { IW: 7, MP: 6, UTM: 4 }
+                    },
+                    {
+                        text: "Transition from static worksheets to spaced-repetition digital journals and game-based, student-created simulations that require applying old concepts in new scenarios.",
+                        deltas: { FRTS: 8, IW: 9, UTM: 7, ST: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "A high-performing student finishes tasks much faster than classmates and frequently appears bored.",
+                options: [
+                    {
+                        text: "Ask them to sit quietly and read the next chapter of the textbook on their own so they do not disturb the class.",
+                        deltas: { ST: -2, M: -3 }
+                    },
+                    {
+                        text: "Invite the student to become a classroom 'Learning Architect,' designing extension quests or mentoring peers, while providing them with self-paced advanced learning tracks.",
+                        deltas: { FRTS: 8, M: 9, ST: 7, UTM: 6 }
+                    },
+                    {
+                        text: "Give them challenging, higher-order thinking skill (HOTS) questions related to the topic instead of more of the same drills.",
+                        deltas: { IW: 7, MP: 5, ST: 4 }
+                    },
+                    {
+                        text: "Give them extra sets of standard worksheets to keep them busy and grading other students' papers.",
+                        deltas: { IW: -3, M: -4 }
+                    }
+                ]
+            },
+            {
+                scenario: "Parents increasingly ask how AI tools should be used responsibly for assignments and projects.",
+                options: [
+                    {
+                        text: "Ban the use of AI tools entirely for all assignments, insisting on hand-written submissions done in front of the teacher.",
+                        deltas: { PT: 4, UTM: -5, FRTS: -6 }
+                    },
+                    {
+                        text: "Ignore the queries, advising parents that AI is a passing trend and they should focus on standard textbook writing.",
+                        deltas: { PT: -5, UTM: -6 }
+                    },
+                    {
+                        text: "Host an interactive workshop for parents and students demonstrating how to use AI as a collaborative brainstorming and editing partner, and co-design guidelines for citing AI contributions.",
+                        deltas: { FRTS: 9, PT: 8, UTM: 8, M: 6 }
+                    },
+                    {
+                        text: "Teach students specific AI prompts for learning and allow them to use AI tools for drafting outlines, provided they submit their reflection on what they learned.",
+                        deltas: { UTM: 7, ST: 6, IW: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "Your class includes students with very different learning speeds, making lesson pacing difficult.",
+                options: [
+                    {
+                        text: "Structure lessons with tiered learning paths (Foundation, Practice, and Mastery) using digital playlists, allowing students to progress at their own speed while you run small-group targeted sessions.",
+                        deltas: { FRTS: 8, MP: 9, UTM: 7, ST: 6 }
+                    },
+                    {
+                        text: "Divide the class into mixed-ability peer support squads where faster learners help explain concepts to peers, supported by scaffolded worksheets.",
+                        deltas: { M: 8, IW: 6, ST: 5 }
+                    },
+                    {
+                        text: "Teach to the middle of the class, offering remedial classes for slow learners before exams and extra homework for fast learners.",
+                        deltas: { MP: 4, PT: 3 }
+                    },
+                    {
+                        text: "Stick rigidly to the predefined school syllabus calendar to ensure all chapters are finished in time for the common exams.",
+                        deltas: { MP: -6, ST: -5 }
+                    }
+                ]
+            },
+            {
+                scenario: "Students can answer textbook questions but struggle when faced with real-world problem-solving situations.",
+                options: [
+                    {
+                        text: "Solve more application-based problems on the blackboard and ask students to memorize the steps for the exam.",
+                        deltas: { UTM: -3, PT: 3 }
+                    },
+                    {
+                        text: "Focus strictly on textbook exercises, as the board exams do not test real-world application anyway.",
+                        deltas: { FRTS: -7, ST: -6 }
+                    },
+                    {
+                        text: "Redesign lessons to start with a real-life case study, asking students to debate potential solutions before looking at the textbook formulas.",
+                        deltas: { UTM: 7, IW: 6, ST: 5 }
+                    },
+                    {
+                        text: "Partner with local community organizations to turn chapters into project-based learning (PBL) challenges where students design actual solutions for local issues.",
+                        deltas: { FRTS: 9, UTM: 9, ST: 7, IW: 8 }
+                    }
+                ]
+            },
+            {
+                scenario: "A parent says your classroom activities are enjoyable, but they are unsure how much actual learning is happening.",
+                options: [
+                    {
+                        text: "Reduce the number of hands-on activities and increase traditional written quizzes to provide physical proof of marks.",
+                        deltas: { PT: 5, UTM: -6, IW: -5 }
+                    },
+                    {
+                        text: "Invite parents to an student-led 'Exhibition of Learning' where students demonstrate their projects, map them to syllabus benchmarks, and present reflective digital portfolios.",
+                        deltas: { FRTS: 9, PT: 9, UTM: 7, M: 6 }
+                    },
+                    {
+                        text: "Start sending a bi-weekly 'Learning Insight' newsletter containing photos of activities mapped directly to the educational objectives and rubrics.",
+                        deltas: { PT: 7, IW: 5, MP: 4 }
+                    },
+                    {
+                        text: "Tell the parent that modern education theories are beyond their understanding and they should trust your credentials.",
+                        deltas: { PT: -8, ST: -4 }
+                    }
+                ]
+            },
+            {
+                scenario: "Students are becoming dependent on teacher guidance and rarely take ownership of their learning.",
+                options: [
+                    {
+                        text: "Provide detailed step-by-step guides for every activity so students can complete tasks without asking questions.",
+                        deltas: { ST: -3, M: -4 }
+                    },
+                    {
+                        text: "Accept that the students are young and continue to guide them through every minor task to avoid errors.",
+                        deltas: { ST: -5, FRTS: -5 }
+                    },
+                    {
+                        text: "Implement a 'Self-Directed Learning Contract' system where students set their own weekly goals, select their resources, and self-assess using rubrics.",
+                        deltas: { FRTS: 8, ST: 9, M: 8, UTM: 6 }
+                    },
+                    {
+                        text: "Gradually withdraw direct answers, adopting a 'Three Before Me' rule where students must consult their notes, a classmate, and a digital resource before asking the teacher.",
+                        deltas: { ST: 7, M: 6, IW: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "You are asked to redesign a chapter using technology, collaboration, and creativity rather than lectures.",
+                options: [
+                    {
+                        text: "Construct a gamified, quest-based learning unit where student squads solve virtual challenges, create digital media products, and participate in peer-assessment.",
+                        deltas: { FRTS: 9, UTM: 9, IW: 8, ST: 7 }
+                    },
+                    {
+                        text: "Flip the classroom: assign introductory videos to watch at home, and use class time for collaborative group mind-mapping and student presentations.",
+                        deltas: { UTM: 7, IW: 6, MP: 5 }
+                    },
+                    {
+                        text: "Create a comprehensive PowerPoint deck with text-based summaries and show it to the class while they take notes.",
+                        deltas: { UTM: 3, IW: -2 }
+                    },
+                    {
+                        text: "Decline the change, stating that traditional lectures are the most efficient way to cover the vast syllabus in the allotted time.",
+                        deltas: { UTM: -7, FRTS: -8 }
+                    }
+                ]
+            },
+            {
+                scenario: "Many students who transitioned from vernacular medium schools are struggling with English-medium science terms.",
+                options: [
+                    {
+                        text: "Insist that students speak only English in class and write terms repeatedly to force adaptation.",
+                        deltas: { ST: -4, MP: -3 }
+                    },
+                    {
+                        text: "Advise them to move to a school that teaches in their native language to avoid failing their exams.",
+                        deltas: { ST: -8, PT: -7 }
+                    },
+                    {
+                        text: "Provide bilingual study aids and peer-pairing where students comfortable with English support those who are struggling.",
+                        deltas: { M: 7, MP: 6, ST: 5 }
+                    },
+                    {
+                        text: "Create a multilingual visual glossary using student drawings and QR codes linked to audio explanations in both languages, encouraging conceptual expression in any language first.",
+                        deltas: { FRTS: 8, ST: 8, M: 8, IW: 7 }
+                    }
+                ]
+            },
+            {
+                scenario: "You want to assign an interactive digital research project, but 30% of your students do not have internet access at home.",
+                options: [
+                    {
+                        text: "Go ahead with the online project anyway and tell students without internet to visit public cyber cafes or library centers.",
+                        deltas: { PT: -5, MP: -4 }
+                    },
+                    {
+                        text: "Redesign the project into collaborative 'Lab Squads' where digital tasks are completed using school devices during dedicated class hours, and off-grid tasks are valued equally.",
+                        deltas: { FRTS: 8, MP: 8, ST: 8, IW: 7 }
+                    },
+                    {
+                        text: "Set up a peer-buddy system where students with internet work alongside those without, ensuring clear non-digital research roles for the offline students.",
+                        deltas: { ST: 6, M: 6, MP: 5 }
+                    },
+                    {
+                        text: "Cancel the project entirely and replace it with a standard textbook reading and question-answering session.",
+                        deltas: { UTM: -6, IW: -6 }
+                    }
+                ]
+            },
+            {
+                scenario: "The school management pressures you to conduct repetitive rote-memorization drills for the upcoming board exams, but you want to maintain deep conceptual understanding.",
+                options: [
+                    {
+                        text: "Submit fully to the drills, dedicating all class periods to reading out questions and making students memorize the answers.",
+                        deltas: { UTM: -6, ST: -4, PT: 3 }
+                    },
+                    {
+                        text: "Openly complain to the students and parents about the management's backward policies while doing nothing to resolve the conflict.",
+                        deltas: { M: -6, PT: -5 }
+                    },
+                    {
+                        text: "Integrate board exam question types into active concept-mapping games, student-led error analyses, and peer-designed quizzes, proving that conceptual depth leads to better scores.",
+                        deltas: { FRTS: 9, UTM: 9, PT: 6, ST: 6 }
+                    },
+                    {
+                        text: "Allocate 75% of class time to conceptual, interactive learning and 25% to exam-answering techniques and mock test tracking.",
+                        deltas: { MP: 7, UTM: 6, PT: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "During a collaborative group activity, you notice that in most groups, one student is doing all the work while others are disengaged.",
+                options: [
+                    {
+                        text: "Introduce defined role play roles (e.g., Researcher, Editor, Designer, Facilitator) and implement a multi-source grading rubric combining group output, peer evaluations, and individual reflections.",
+                        deltas: { FRTS: 8, ST: 8, M: 8, IW: 7 }
+                    },
+                    {
+                        text: "Pause the activity to teach a mini-lesson on teamwork dynamics, and have groups complete a quick check-in to reallocate tasks fairly.",
+                        deltas: { M: 7, MP: 6, ST: 5 }
+                    },
+                    {
+                        text: "Tell the working students to deal with it, as working with difficult people is a part of life they must learn.",
+                        deltas: { ST: -5, M: -5 }
+                    },
+                    {
+                        text: "Dissolve the groups and convert the task into an individual written worksheet to ensure everyone works.",
+                        deltas: { IW: -5, UTM: -6 }
+                    }
+                ]
+            },
+            {
+                scenario: "A student who is brilliant in class discussions freezes during written tests, resulting in very poor grades.",
+                options: [
+                    {
+                        text: "Tell the student that exams are crucial for life and they just need to build a stronger mental attitude and study harder.",
+                        deltas: { ST: -4, M: -4 }
+                    },
+                    {
+                        text: "Advise the parents to consult a psychiatrist for medication, as the student is too weak for standard school pressure.",
+                        deltas: { ST: -7, PT: -6 }
+                    },
+                    {
+                        text: "Give the student extra practice papers to solve in a simulated, timed exam environment with you to desensitize them to the pressure.",
+                        deltas: { MP: 6, ST: 6, PT: 5 }
+                    },
+                    {
+                        text: "Offer alternative assessment pathways (e.g., viva voce, video explanations, or portfolio presentations) and teach mindfulness/pacing strategies to lower testing stress.",
+                        deltas: { FRTS: 8, MP: 9, ST: 9, M: 7 }
+                    }
+                ]
+            },
+            {
+                scenario: "An angry parent accuses you during a PTM of grading their child unfairly because you marked down an essay that lacked original thought.",
+                options: [
+                    {
+                        text: "Defend your grading aggressively, stating that you have years of experience and your judgment is final.",
+                        deltas: { PT: -6, ST: -3 }
+                    },
+                    {
+                        text: "Explain your feedback gently, highlight the student's creative potential, and offer the student an opportunity to revise the essay using a guide.",
+                        deltas: { PT: 7, ST: 6, M: 6 }
+                    },
+                    {
+                        text: "Apologize immediately and change the grade to avoid conflict with the parent and school authorities.",
+                        deltas: { PT: -4, FRTS: -7 }
+                    },
+                    {
+                        text: "Share the objective evaluation rubric and show samples of work across different grades (anonymously), then transition the discussion to how you can support their child in developing independent arguments.",
+                        deltas: { FRTS: 8, PT: 8, M: 7, ST: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "During a science class, a student asks a complex question about quantum mechanics that is far beyond the syllabus and your immediate knowledge.",
+                options: [
+                    {
+                        text: "Tell the student that the question is irrelevant for the upcoming exams and they should stick to the textbook chapter.",
+                        deltas: { ST: -5, M: -6 }
+                    },
+                    {
+                        text: "Give a vague, incorrect answer to save face and avoid showing that you do not know the concept.",
+                        deltas: { ST: -6, FRTS: -7 }
+                    },
+                    {
+                        text: "Acknowledge that you don't know the full answer, invite the student to research it together, and dedicate 5 minutes of the next class for them to share their findings with everyone.",
+                        deltas: { FRTS: 8, ST: 9, M: 9, UTM: 6 }
+                    },
+                    {
+                        text: "Praise the question, promise to look it up, and bring back a simplified explanation for the student during the next lunch break.",
+                        deltas: { M: 7, ST: 7, PT: 4 }
+                    }
+                ]
+            },
+            {
+                scenario: "You have successfully piloted an interactive classroom tool, but other teachers in your subject department refuse to adopt it, claiming it is too complicated.",
+                options: [
+                    {
+                        text: "Offer to co-teach a class using the tool with a colleague, sharing ready-made templates that reduce their prep time, and present data on student engagement to the principal.",
+                        deltas: { FRTS: 9, UTM: 9, M: 8, PT: 5 }
+                    },
+                    {
+                        text: "Run a voluntary, hands-on lunch-hour workshop for the teachers, creating a simple quick-start cheat sheet for them.",
+                        deltas: { UTM: 7, M: 6 }
+                    },
+                    {
+                        text: "Keep using it in your class alone and ignore your colleagues' practices, feeling superior to them.",
+                        deltas: { M: -4, UTM: 2 }
+                    },
+                    {
+                        text: "Stop using the tool yourself to maintain peace and conformity in the staff room.",
+                        deltas: { UTM: -7, FRTS: -8 }
+                    }
+                ]
+            },
+            {
+                scenario: "You find that more than half of the class has copied their history project reports word-for-word from Wikipedia and AI summaries.",
+                options: [
+                    {
+                        text: "Fail all students who copied, report them to the principal, and make them write a traditional test instead.",
+                        deltas: { ST: -4, PT: 2 }
+                    },
+                    {
+                        text: "Grade the projects normally, ignoring the plagiarism since it would take too much time to deal with it.",
+                        deltas: { UTM: -7, FRTS: -8 }
+                    },
+                    {
+                        text: "Return the projects without grading and provide a clear template showing how to paraphrase, cite sources, and express personal opinions.",
+                        deltas: { IW: 7, MP: 5, ST: 5 }
+                    },
+                    {
+                        text: "Turn this into a lesson on media literacy: have students analyze their own plagiarized texts for bias and errors, and redesign the project to require local interviews or personal reflections.",
+                        deltas: { FRTS: 9, UTM: 9, IW: 8, M: 6 }
+                    }
+                ]
+            },
+            {
+                scenario: "You suspect a student has learning difficulties (like dyslexia) affecting their reading, but their parents react defensively and deny the possibility.",
+                options: [
+                    {
+                        text: "Force the student to read aloud in class to show the parents their public struggle, hoping they will realize the need for assessment.",
+                        deltas: { ST: -8, PT: -6 }
+                    },
+                    {
+                        text: "Adapt your worksheets for this student quietly without labeling, and offer them extra reading help during school remedial hours.",
+                        deltas: { M: 7, MP: 7, ST: 6 }
+                    },
+                    {
+                        text: "Drop the issue to avoid parent anger and let the student continue failing, blaming it on their intelligence.",
+                        deltas: { PT: -5, M: -7 }
+                    },
+                    {
+                        text: "Frame the discussion around the student’s specific learning style and strengths, share positive strategies that benefit all learners (like audio-books and visual worksheets), and gently suggest a developmental check-in.",
+                        deltas: { FRTS: 8, PT: 9, M: 8, MP: 7 }
+                    }
+                ]
+            },
+            {
+                scenario: "You create a worksheet requiring critical analysis, but students complain it is too hard and demand that you write the answers on the board.",
+                options: [
+                    {
+                        text: "Give in to their demands and write all the answers on the board, asking them to copy them down.",
+                        deltas: { IW: -6, UTM: -6 }
+                    },
+                    {
+                        text: "Tell them they are lazy, refuse to help, and make the worksheet a graded test to force compliance.",
+                        deltas: { ST: -6, MP: -5 }
+                    },
+                    {
+                        text: "Scaffold the activity: break students into teams, provide a 'hint card' system, and run a live reflection game that rewards the process of problem-solving rather than just the correct answer.",
+                        deltas: { FRTS: 8, IW: 9, ST: 7, UTM: 7 }
+                    },
+                    {
+                        text: "Solve the first question step-by-step on the board to model the analytical process, then have them try the next one in pairs.",
+                        deltas: { IW: 7, MP: 6, ST: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "The school is celebrating its annual sports meet, and students are missing classes for rehearsals, leaving you behind on the board-prescribed syllabus.",
+                options: [
+                    {
+                        text: "Convert the core concepts of the missed classes into short, interactive podcasts or collaborative micro-lessons that students can complete flexibly in small study circles.",
+                        deltas: { FRTS: 8, MP: 9, UTM: 7, ST: 6 }
+                    },
+                    {
+                        text: "Compress the remaining lectures by focusing only on core concepts and sending reading summaries to the class.",
+                        deltas: { MP: 6, UTM: 4 }
+                    },
+                    {
+                        text: "Request the principal to exempt your students from sports rehearsals so they can attend extra lecture periods.",
+                        deltas: { ST: -4, MP: -3 }
+                    },
+                    {
+                        text: "Rush through the textbook chapters at double speed when students return, lecturing without stopping for questions.",
+                        deltas: { MP: -6, UTM: -5 }
+                    }
+                ]
+            },
+            {
+                scenario: "An anonymous feedback form reveals that students find your history or social science lessons dry and uninteresting.",
+                options: [
+                    {
+                        text: "Tell the students that history is factual and boring by nature, but they must study it to pass the board exams.",
+                        deltas: { ST: -5, UTM: -5 }
+                    },
+                    {
+                        text: "Stop taking feedback entirely, as it undermines the teacher's authority and lowers classroom morale.",
+                        deltas: { ST: -7, FRTS: -8 }
+                    },
+                    {
+                        text: "Introduce interesting multimedia clips, storytelling elements, and short interactive trivia games at the beginning of each lecture.",
+                        deltas: { UTM: 7, IW: 6, ST: 6 }
+                    },
+                    {
+                        text: "Involve students in redesigning the unit: introduce role-play debates, historical trial simulations, and gamified quiz leagues, giving them a voice in how they are assessed.",
+                        deltas: { FRTS: 9, ST: 9, UTM: 8, IW: 7 }
+                    }
+                ]
+            },
+            {
+                scenario: "A senior colleague wants to make their classroom more active but is intimidated by digital tools and feels insecure.",
+                options: [
+                    {
+                        text: "Tell them that tech is mandatory in the 21st century and they must catch up or risk becoming obsolete.",
+                        deltas: { M: -5, UTM: -4 }
+                    },
+                    {
+                        text: "Suggest low-tech active learning structures first (like Think-Pair-Share or physical card sorts), and introduce just one simple, high-impact digital tool once they feel confident.",
+                        deltas: { FRTS: 8, M: 9, UTM: 6, MP: 6 }
+                    },
+                    {
+                        text: "Create a customized, highly visual step-by-step setup guide for them and help them set up their first digital classroom board after school.",
+                        deltas: { M: 8, UTM: 5 }
+                    },
+                    {
+                        text: "Advise them to stick to their traditional ways since they are close to retirement anyway.",
+                        deltas: { M: -7, FRTS: -6 }
+                    }
+                ]
+            },
+            {
+                scenario: "In your robotics and coding lab sessions, you notice that male students dominate the keyboards and building kits, while female students take passive roles like note-taking.",
+                options: [
+                    {
+                        text: "Ignore the situation, assuming that students naturally select roles based on their interests and abilities.",
+                        deltas: { ST: -5, M: -5 }
+                    },
+                    {
+                        text: "Separate notes and building permanently, validating note-taking as the more suitable role for girls.",
+                        deltas: { ST: -9, FRTS: -9 }
+                    },
+                    {
+                        text: "Structure the lab sessions with rotating roles (e.g., Coder, Builder, Presenter, Tester) ensuring every student performs each role, and invite local female tech leaders to share their journeys.",
+                        deltas: { FRTS: 9, ST: 9, M: 8, UTM: 7 }
+                    },
+                    {
+                        text: "Create all-girl teams and all-boy teams for the next project to give girls direct, uninterrupted access to the equipment.",
+                        deltas: { ST: 7, MP: 5, M: 5 }
+                    }
+                ]
+            },
+            {
+                scenario: "You change your classroom seating from rows to collaborative clusters. The lessons become highly active, but the increased noise level causes the principal to express concern about lack of control.",
+                options: [
+                    {
+                        text: "Invite the principal to observe a session to see the structured collaboration, present student-designed 'Noise level guidelines,' and share the positive impact on assessment scores.",
+                        deltas: { FRTS: 9, PT: 7, UTM: 8, ST: 6 }
+                    },
+                    {
+                        text: "Establish a non-verbal callback signal (like a chime or hand gesture) to quickly transition students between active talk and quiet focus.",
+                        deltas: { MP: 8, ST: 6, UTM: 5 }
+                    },
+                    {
+                        text: "Revert the seating back to traditional forward-facing rows immediately to avoid any administrative trouble.",
+                        deltas: { UTM: -6, FRTS: -7 }
+                    },
+                    {
+                        text: "Tell the principal that modern teaching is noisy and they should stay out of your classroom management affairs.",
+                        deltas: { PT: -6, FRTS: -5 }
+                    }
+                ]
+            },
+            {
+                scenario: "You want to teach waste management, but students see it as just another textbook topic to memorize for marks.",
+                options: [
+                    {
+                        text: "Have students copy the definitions of biodegradable and non-biodegradable waste from the board and draw the recycling symbol.",
+                        deltas: { IW: -4, UTM: -5 }
+                    },
+                    {
+                        text: "Skip the hands-on aspect and give them a list of past board exam questions about waste management to memorize.",
+                        deltas: { UTM: -6, FRTS: -7 }
+                    },
+                    {
+                        text: "Bring actual waste samples to class for sorting, watch a documentary on landfills, and have students write an essay on domestic waste reduction.",
+                        deltas: { IW: 7, UTM: 5, ST: 4 }
+                    },
+                    {
+                        text: "Task students with analyzing the school’s waste footprint, designing a real recycling campaign, and pitching their waste reduction system to the school management and local municipal officers.",
+                        deltas: { FRTS: 9, UTM: 9, IW: 8, ST: 7 }
+                    }
+                ]
+            },
+            {
+                scenario: "You introduce peer-assessment for a project, but students either give all their friends full marks or grade others harshly out of personal rivalry.",
+                options: [
+                    {
+                        text: "Scrap peer-assessment immediately and declare that only the teacher's grading is accurate and final.",
+                        deltas: { UTM: -5, ST: -4 }
+                    },
+                    {
+                        text: "Co-create concrete rubric descriptors with the class, run an anonymous 'practice grading session' on sample projects, and have students write a brief evidence-based justification for each mark they award.",
+                        deltas: { FRTS: 9, ST: 8, M: 8, UTM: 7 }
+                    },
+                    {
+                        text: "Standardize the grading by making peer evaluations count for only 10% of the grade, with you reviewing all scores that show huge differences.",
+                        deltas: { MP: 7, ST: 5, M: 5 }
+                    },
+                    {
+                        text: "Do nothing, letting the unfair scores stand, and tell the students it is their problem if their grades are ruined by friends.",
+                        deltas: { ST: -7, M: -7 }
+                    }
+                ]
+            }
+        ];
+
+        // Scoring Categories Metadata
+        const categories = {
+            PT: { name: "Parent Trust", key: "parentTrust", color: "#00f0ff" },
+            ST: { name: "Student Trust", key: "studentTrust", color: "#bc34fa" },
+            UTM: { name: "Updated Teaching Methodologies", key: "updatedMethodologies", color: "#39ff14" },
+            IW: { name: "Interesting Worksheets & Learning Experiences", key: "interestingWorksheets", color: "#ff007f" },
+            M: { name: "Mentorship Mindset", key: "mentorship", color: "#ffd700" },
+            MP: { name: "Mindful Pacing", key: "mindfulPacing", color: "#00fa9a" },
+            FRTS: { name: "Future Ready Teacher Simulation", key: "simulationScore", color: "#ff4500" }
+        };
+
+        // Application State
+        let state = {
+            teacherName: "",
+            schoolName: "",
+            gradeHandling: "",
+            subjectHandling: "",
+            currentQuestionIndex: 0,
+            answers: [],
+            scores: {
+                parentTrust: 0,
+                studentTrust: 0,
+                updatedMethodologies: 0,
+                interestingWorksheets: 0,
+                mentorship: 0,
+                mindfulPacing: 0,
+                simulationScore: 0
+            },
+            maxScores: {
+                PT: 0, ST: 0, UTM: 0, IW: 0, M: 0, MP: 0, FRTS: 0
+            }
+        };
+
+        // Precalculate Max Possible Positive Scores dynamically
+        function precalculateMaxScores() {
+            questions.forEach(q => {
+                let catMax = { PT: 0, ST: 0, UTM: 0, IW: 0, M: 0, MP: 0, FRTS: 0 };
+                q.options.forEach(opt => {
+                    for (let cat in opt.deltas) {
+                        if (opt.deltas[cat] > catMax[cat]) {
+                            catMax[cat] = opt.deltas[cat];
+                        }
+                    }
+                });
+                state.maxScores.PT += catMax.PT;
+                state.maxScores.ST += catMax.ST;
+                state.maxScores.UTM += catMax.UTM;
+                state.maxScores.IW += catMax.IW;
+                state.maxScores.M += catMax.M;
+                state.maxScores.MP += catMax.MP;
+                state.maxScores.FRTS += catMax.FRTS;
+            });
+        }
+
+        // Particle System Physics Background
+        function initParticles() {
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            let pArray = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.45;
+                    this.vy = (Math.random() - 0.5) * 0.45;
+                    this.size = Math.random() * 2 + 0.8;
+                    this.color = Math.random() > 0.55 ? 'rgba(0, 240, 255, 0.22)' : 'rgba(188, 52, 250, 0.22)';
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 60; i++) {
+                pArray.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pArray.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                for (let i = 0; i < pArray.length; i++) {
+                    for (let j = i + 1; j < pArray.length; j++) {
+                        let d = Math.hypot(pArray[i].x - pArray[j].x, pArray[i].y - pArray[j].y);
+                        if (d < 110) {
+                            ctx.beginPath();
+                            ctx.moveTo(pArray[i].x, pArray[i].y);
+                            ctx.lineTo(pArray[j].x, pArray[j].y);
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${0.07 * (1 - d / 110)})`;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Screen transition manager
+        function switchScreen(fromId, toId) {
+            const from = document.getElementById(fromId);
+            const to = document.getElementById(toId);
+            
+            from.classList.add('opacity-0');
+            setTimeout(() => {
+                from.classList.add('hidden');
+                to.classList.remove('hidden');
+                // trigger reflow
+                to.offsetHeight;
+                to.classList.remove('opacity-0');
+                to.classList.add('opacity-100');
+            }, 400);
+        }
+
+        // Action: Start Simulation
+        function handleStartSimulation(e) {
+            e.preventDefault();
+            
+            state.teacherName = document.getElementById('teacher-name').value.trim();
+            state.schoolName = document.getElementById('school-name').value.trim();
+            state.gradeHandling = document.getElementById('grade-handling').value.trim();
+            state.subjectHandling = document.getElementById('subject-handling').value.trim();
+
+            // Populate active sidebar stats
+            document.getElementById('stat-name').innerText = state.teacherName;
+            document.getElementById('stat-school').innerText = state.schoolName;
+            document.getElementById('stat-subject').innerText = `${state.subjectHandling} (${state.gradeHandling})`;
+
+            document.getElementById('live-indicator').classList.remove('hidden');
+            
+            // Switch screen
+            switchScreen('welcome-screen', 'quiz-screen');
+            
+            // Load first question
+            loadQuestion();
+        }
+
+        // Render current question in quiz screen
+        function loadQuestion() {
+            const qIndex = state.currentQuestionIndex;
+            const qData = questions[qIndex];
+            
+            // Update progress indicators
+            const progressPct = Math.round((qIndex / questions.length) * 100);
+            document.getElementById('progress-text').innerText = `Scenario ${qIndex + 1} of ${questions.length}`;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+
+            // Set question text
+            document.getElementById('question-text').innerText = qData.scenario;
+
+            // Generate options HTML
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            // Neon border rotations
+            const borders = ['glow-border-blue', 'glow-border-purple', 'glow-border-blue', 'glow-border-purple'];
+            
+            qData.options.forEach((opt, idx) => {
+                const optLetter = String.fromCharCode(65 + idx); // A, B, C, D
+                const optButton = document.createElement('button');
+                optButton.className = `w-full text-left p-4 rounded-xl bg-slate-900/60 border border-slate-800 transition-all duration-300 flex items-start gap-4 hover:bg-slate-800/40 hover:-translate-y-0.5 ${borders[idx]}`;
+                optButton.onclick = () => selectOption(idx);
+                optButton.innerHTML = `
+                    <span class="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 font-bold cyber-font text-sm text-slate-300 group-hover:border-cyber-blue transition-all duration-300">${optLetter}</span>
+                    <span class="text-slate-300 text-sm leading-relaxed">${opt.text}</span>
+                `;
+                container.appendChild(optButton);
+            });
+
+            // Render live future readiness meter updates
+            updateLiveMeter();
+        }
+
+        // Dynamic assessment level algorithm (No score outputs shown to user)
+        function calculateLiveStats() {
+            let maxSoFar = { PT: 0, ST: 0, UTM: 0, IW: 0, M: 0, MP: 0, FRTS: 0 };
+            let earnedSoFar = { PT: 0, ST: 0, UTM: 0, IW: 0, M: 0, MP: 0, FRTS: 0 };
+
+            // Scan questions up to current index
+            for (let i = 0; i < state.currentQuestionIndex; i++) {
+                const q = questions[i];
+                const selectedIdx = state.answers[i];
+                const selectedOpt = q.options[selectedIdx];
+
+                // Calculate max available so far
+                let tempMax = { PT: 0, ST: 0, UTM: 0, IW: 0, M: 0, MP: 0, FRTS: 0 };
+                q.options.forEach(opt => {
+                    for (let cat in opt.deltas) {
+                        if (opt.deltas[cat] > tempMax[cat]) {
+                            tempMax[cat] = opt.deltas[cat];
+                        }
+                    }
+                });
+
+                maxSoFar.PT += tempMax.PT;
+                maxSoFar.ST += tempMax.ST;
+                maxSoFar.UTM += tempMax.UTM;
+                maxSoFar.IW += tempMax.IW;
+                maxSoFar.M += tempMax.M;
+                maxSoFar.MP += tempMax.MP;
+                maxSoFar.FRTS += tempMax.FRTS;
+
+                // Add chosen option deltas
+                for (let cat in selectedOpt.deltas) {
+                    earnedSoFar[cat] += selectedOpt.deltas[cat];
+                }
+            }
+
+            // Sum and compare
+            let totalMaxPoints = Object.values(maxSoFar).reduce((a, b) => a + b, 0);
+            let totalEarnedPoints = Object.values(earnedSoFar).reduce((a, b) => a + b, 0);
+
+            let pct = totalMaxPoints > 0 ? Math.round((totalEarnedPoints / totalMaxPoints) * 100) : 0;
+            if (pct < 0) pct = 0;
+
+            // Classify
+            let title = "Beginner Educator";
+            let colorClass = "text-slate-400";
+            let stageId = "stage-beginner";
+
+            if (pct >= 91) {
+                title = "Future Ready Educator";
+                colorClass = "text-cyber-green neon-text-green";
+                stageId = "stage-futureready";
+            } else if (pct >= 76) {
+                title = "Innovative Educator";
+                colorClass = "text-cyber-blue neon-text-blue";
+                stageId = "stage-innovative";
+            } else if (pct >= 56) {
+                title = "Adaptive Educator";
+                colorClass = "text-cyber-purple neon-text-purple";
+                stageId = "stage-adaptive";
+            } else if (pct >= 36) {
+                title = "Developing Educator";
+                colorClass = "text-cyber-pink";
+                stageId = "stage-developing";
+            }
+
+            return { pct, title, colorClass, stageId };
+        }
+
+        function updateLiveMeter() {
+            const stats = calculateLiveStats();
+            
+            const titleEl = document.getElementById('live-meter-title');
+            const visualProgress = document.getElementById('live-meter-visual-progress');
+            
+            titleEl.className = `cyber-font text-sm font-bold tracking-wide uppercase transition-all duration-300 ${stats.colorClass}`;
+            titleEl.innerText = stats.title;
+            visualProgress.style.width = `${stats.pct}%`;
+
+            // Reset list styles
+            const stages = ["stage-beginner", "stage-developing", "stage-adaptive", "stage-innovative", "stage-futureready"];
+            stages.forEach(id => {
+                const el = document.getElementById(id);
+                el.className = "flex justify-between items-center text-xs text-slate-500 py-1.5 px-2.5 rounded transition-all duration-300";
+            });
+
+            // Highlight active stage
+            const activeEl = document.getElementById(stats.stageId);
+            if (stats.stageId === "stage-futureready") {
+                activeEl.className = "flex justify-between items-center text-xs font-bold text-cyber-green bg-cyber-green/10 border border-cyber-green/30 py-1.5 px-2.5 rounded shadow-neon-green";
+            } else if (stats.stageId === "stage-innovative") {
+                activeEl.className = "flex justify-between items-center text-xs font-bold text-cyber-blue bg-cyber-blue/10 border border-cyber-blue/30 py-1.5 px-2.5 rounded shadow-neon-blue";
+            } else if (stats.stageId === "stage-adaptive") {
+                activeEl.className = "flex justify-between items-center text-xs font-bold text-cyber-purple bg-cyber-purple/10 border border-cyber-purple/30 py-1.5 px-2.5 rounded shadow-neon-purple";
+            } else if (stats.stageId === "stage-developing") {
+                activeEl.className = "flex justify-between items-center text-xs font-bold text-cyber-pink bg-cyber-pink/10 border border-cyber-pink/30 py-1.5 px-2.5 rounded";
+            } else {
+                activeEl.className = "flex justify-between items-center text-xs font-bold text-slate-300 bg-slate-800/80 border border-slate-700/80 py-1.5 px-2.5 rounded";
+            }
+        }
+
+        // Action: Selection of Option
+        function selectOption(index) {
+            state.answers.push(index);
+            
+            // Add deltas to real values
+            const deltas = questions[state.currentQuestionIndex].options[index].deltas;
+            for (let cat in deltas) {
+                const key = categories[cat].key;
+                state.scores[key] += deltas[cat];
+            }
+
+            state.currentQuestionIndex++;
+            
+            if (state.currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                finishSimulation();
+            }
+        }
+
+        // Action: Compile result dashboard and transition
+        function finishSimulation() {
+            // Fill final layout metadata
+            document.getElementById('res-name').innerText = state.teacherName;
+            document.getElementById('res-school').innerText = state.schoolName;
+            document.getElementById('res-grade').innerText = `Grade Focus: ${state.gradeHandling}`;
+            document.getElementById('res-subject').innerText = state.subjectHandling;
+
+            // Normalize category percentages to 100%
+            let pctScores = {};
+            for (let cat in categories) {
+                const key = categories[cat].key;
+                let pct = Math.round((state.scores[key] / state.maxScores[cat]) * 100);
+                if (pct < 0) pct = 0;
+                if (pct > 100) pct = 100;
+                pctScores[cat] = pct;
+            }
+
+            // Calculate overall percentage average
+            const overallScore = Math.round(Object.values(pctScores).reduce((a, b) => a + b, 0) / 7);
+            document.getElementById('res-overall-score').innerText = `${overallScore}%`;
+
+            // Assign Classification & Archetype
+            let sortedCats = Object.keys(categories).map(cat => ({
+                cat: cat,
+                name: categories[cat].name,
+                score: pctScores[cat]
+            })).sort((a, b) => b.score - a.score);
+
+            const topCat1 = sortedCats[0].cat;
+            const topCat2 = sortedCats[1].cat;
+
+            // Calculate score standard deviation to verify if it is highly balanced
+            const scoresArray = Object.values(pctScores);
+            const mean = scoresArray.reduce((a, b) => a + b, 0) / scoresArray.length;
+            const variance = scoresArray.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / scoresArray.length;
+            const stdDev = Math.sqrt(variance);
+
+            let archetype = "Transformational Educator";
+            let archetypeDesc = "Balanced, empathetic, and innovative across all facets of school engagement.";
+
+            if (stdDev > 7.5) { // Distinct high-profile strengths
+                if ((topCat1 === 'ST' && topCat2 === 'PT') || (topCat1 === 'PT' && topCat2 === 'ST')) {
+                    archetype = "Relationship Builder";
+                    archetypeDesc = "Master of stakeholder alignment. Excels at linking classroom activities with parental expectations and student emotional trust.";
+                } else if ((topCat1 === 'ST' && topCat2 === 'M') || (topCat1 === 'M' && topCat2 === 'ST')) {
+                    archetype = "Student Advocate";
+                    archetypeDesc = "Champion of student voice. Prioritizes building agency, providing pastoral support, and placing the learner at the absolute center of decisions.";
+                } else if ((topCat1 === 'M' && topCat2 === 'MP') || (topCat1 === 'MP' && topCat2 === 'M')) {
+                    archetype = "Reflective Mentor";
+                    archetypeDesc = "Empathetic classroom facilitator. Balances active listening, peer collaboration, and structured pacing to avoid cognitive burnout.";
+                } else if ((topCat1 === 'IW' && topCat2 === 'UTM') || (topCat1 === 'UTM' && topCat2 === 'IW')) {
+                    archetype = "Learning Designer";
+                    archetypeDesc = "Curriculum innovator. Transforms standard board materials into immersive quests, visual toolsets, and project-based units.";
+                } else if ((topCat1 === 'UTM' && topCat2 === 'FRTS') || (topCat1 === 'FRTS' && topCat2 === 'UTM')) {
+                    archetype = "Future Skills Facilitator";
+                    archetypeDesc = "Digital pioneer. Drives the integration of collaborative frameworks, responsible AI explorations, and futuristic inquiry maps.";
+                } else if ((topCat1 === 'FRTS' && topCat2 === 'IW') || (topCat1 === 'IW' && topCat2 === 'FRTS')) {
+                    archetype = "Innovative Experimenter";
+                    archetypeDesc = "Action-oriented designer. Tests new activities, embraces the noise of creative spaces, and aligns classroom tasks with community challenges.";
+                } else if ((topCat1 === 'MP' && topCat2 === 'PT') || (topCat1 === 'PT' && topCat2 === 'MP')) {
+                    archetype = "Structured Instructor";
+                    archetypeDesc = "Execution expert. Combines clear syllabus milestones with scaffolded reviews and parent communication loops to build stable growth.";
+                }
+            }
+
+            document.getElementById('res-archetype').innerText = archetype;
+            document.getElementById('res-classification').innerText = archetypeDesc;
+
+            // Generate progress bars in results panel
+            const metricsContainer = document.getElementById('category-metrics-container');
+            metricsContainer.innerHTML = '';
+            for (let cat in categories) {
+                const catData = categories[cat];
+                const pct = pctScores[cat];
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <div class="flex justify-between items-center text-xs mb-1">
+                        <span class="text-slate-300 font-medium">${catData.name}</span>
+                        <span class="cyber-font font-bold" style="color: ${catData.color}">${pct}%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                        <div class="h-full rounded-full transition-all duration-1000" style="width: ${pct}%; background-color: ${catData.color}"></div>
+                    </div>
+                `;
+                metricsContainer.appendChild(item);
+            }
+
+            // Create customized diagnostics narrative
+            generateAIDiagnostics(pctScores, overallScore, archetype);
+
+            // Generate recommendations blueprint
+            generateBlueprint(pctScores);
+
+            // Hide simulation indicator
+            document.getElementById('live-indicator').classList.add('hidden');
+
+            // Switch Screen
+            switchScreen('quiz-screen', 'result-screen');
+
+            // Render interactive Charts using Plotly.js
+            setTimeout(() => {
+                renderRadarChart(pctScores);
+                renderSurfaceChart(pctScores);
+                renderGaugeChart(overallScore);
+            }, 500);
+        }
+
+        // Personalized Narrative Algorithm
+        function generateAIDiagnostics(pctScores, overall, archetype) {
+            let sorted = Object.keys(categories).map(cat => ({
+                cat: cat,
+                name: categories[cat].name,
+                score: pctScores[cat]
+            })).sort((a, b) => b.score - a.score);
+
+            const topStrength = sorted[0];
+            const secStrength = sorted[1];
+            const topOpportunity = sorted[sorted.length - 1];
+            const secOpportunity = sorted[sorted.length - 2];
+
+            // Set text narratives
+            document.getElementById('ai-strengths').innerText = 
+                `Your strongest vectors are ${topStrength.name} (${topStrength.score}%) and ${secStrength.name} (${secStrength.score}%). You show exceptional aptitude in integrating these values into your daily pedagogical workflow.`;
+
+            document.getElementById('ai-opportunities').innerText = 
+                `Your immediate growth opportunities lie in scaling ${topOpportunity.name} (${topOpportunity.score}%) and ${secOpportunity.name} (${secOpportunity.score}%). Developing targeted protocols in these fields will amplify your classroom dynamics.`;
+
+            // Innovation Potential narrative
+            let innoText = "";
+            const innoScore = Math.round((pctScores.UTM + pctScores.FRTS) / 2);
+            if (innoScore >= 80) {
+                innoText = "Exceptional. You possess an elite capacity to prototype new digital tools, design custom active classroom projects, and guide peer educators in modern workflows.";
+            } else if (innoScore >= 60) {
+                innoText = "Adaptive. You are highly receptive to technologies and collaborative experiments, showing consistent initiative in adapting textbook materials into creative structures.";
+            } else {
+                innoText = "Developing. Focus on transitioning from digital consumption (slides/video playing) to active digital co-creation and student-led investigations.";
+            }
+            document.getElementById('ai-innovation').innerText = innoText;
+
+            // Student Impact Forecast
+            let impactText = "";
+            const studScore = Math.round((pctScores.ST + pctScores.M) / 2);
+            if (studScore >= 80) {
+                impactText = "High Trust Profile. Your students are highly likely to develop strong self-regulation, academic risk-taking, and peer mentorship skills, showing resilience under exam pressure.";
+            } else if (studScore >= 60) {
+                impactText = "Empathetic Connection. Your students feel supported and involved in teamwork, but still require active scaffolds to make the leap into independent, self-directed goals.";
+            } else {
+                impactText = "Teacher-Led Focus. Students currently look to you for all answers and directions. Introducing small choice-based boards can gradually increase active agency.";
+            }
+            document.getElementById('ai-impact').innerText = impactText;
+
+            // Parent Confidence Forecast
+            let parentText = "";
+            const parScore = Math.round((pctScores.PT + pctScores.MP) / 2);
+            if (parScore >= 80) {
+                parentText = "Strong Partnership. Parents trust your methodologies because you communicate transparent objective rubrics and connect syllabus goals to authentic visible project outcomes.";
+            } else if (parScore >= 60) {
+                parentText = "Moderate Alignment. Parents appreciate your active lessons but sometimes show concern about syllabus progression. Increase continuous visibility of student reflections.";
+            } else {
+                parentText = "High Anxiety Loop. Parents may feel anxious that activities are distracting from board-exam drills. Emphasize how projects strengthen concept comprehension.";
+            }
+            document.getElementById('ai-confidence').innerText = parentText;
+
+            // Future Classroom Readiness
+            let readText = "";
+            if (overall >= 85) {
+                readText = "Fully Prepared. You are ready to champion modular classrooms, blended self-paced pathways, AI-collaborative learning blueprints, and student-driven portfolios.";
+            } else if (overall >= 60) {
+                readText = "Transitioning. You have built a solid foundation of collaborative structures. Your next phase is integrating flexible pacing strategies and student co-designed rubrics.";
+            } else {
+                readText = "Foundation Building. Prioritize scaffolded critical worksheets and structured peer feedback to move away from continuous teacher-centric lecturing.";
+            }
+            document.getElementById('ai-readiness').innerText = readText;
+        }
+
+        // Generate Classroom Blueprint Recommendations
+        function generateBlueprint(pctScores) {
+            const blueprintContainer = document.getElementById('blueprint-container');
+            blueprintContainer.innerHTML = '';
+
+            // Recommendations pool by category
+            const recPool = {
+                PT: [
+                    { title: "Parent Insight Portal", text: "Establish a monthly 'Exhibition of Learning' or digital portal sharing photos of student projects mapped to syllabus standards." },
+                    { title: "Co-Design Workshops", text: "Run short parent-student sessions demonstrating how homework challenges apply class concepts to real household problems." }
+                ],
+                ST: [
+                    { title: "Agency Choice Boards", text: "Allow students to choose between three distinct formats (essay, mind map, or oral pitch) to demonstrate chapter mastery." },
+                    { title: "Three Before Me Rule", text: "Train students to consult notes, peer squads, and digital guides before asking you directly for answers." }
+                ],
+                UTM: [
+                    { title: "Flipped Classroom Pilot", text: "Record one 5-minute video lecture for home viewing per unit, utilizing the entire class hour for active teamwork." },
+                    { title: "AI-Co-Creation", text: "Involve students in using AI tools to brainstorm counter-arguments to controversial topics inside your syllabus." }
+                ],
+                IW: [
+                    { title: "Quest Worksheets", text: "Re-engineer standard drills into interactive challenge packets containing scaffolded levels: Foundation, Explorer, and Architect." },
+                    { title: "Visual Multilingual Glossary", text: "Have students draw conceptual definitions and link QR codes to verbal translations in local vernaculars." }
+                ],
+                M: [
+                    { title: "Peer Squad Rotations", text: "Establish defined roles (Facilitator, Quality Auditor, Designer, Presenter) inside project squads, rotating them weekly." },
+                    { title: "Student-Led Extension Quests", text: "Have advanced learners design 'extension quests' and diagnostic review cards for peers who are struggling." }
+                ],
+                MP: [
+                    { title: "Digital Playlists", text: "Implement a digital learning playlist allowing students to cover core readings and quizzes at their own pacing speed." },
+                    { title: "Structured Reflection Gaps", text: "Embed a 3-minute silent reflection or peer-summary conversation for every 20 minutes of lectures." }
+                ],
+                FRTS: [
+                    { title: "Community PBL Task", text: "Task your students to investigate a local community issue (waste, energy, traffic) and pitch a solution to local authorities." },
+                    { title: "Objective Feedback Rubrics", text: "Co-create rubrics with students before projects begin, and run mock grading sessions on anonymous samples to align criteria." }
+                ]
+            };
+
+            // Select 5 recommendation cards prioritizing lowest scores
+            let sortedCats = Object.keys(categories).map(cat => ({
+                cat: cat,
+                score: pctScores[cat]
+            })).sort((a, b) => a.score - b.score);
+
+            // Pull 5 recommendations (from the lowest scoring categories)
+            let selectedRecs = [];
+            let catIndex = 0;
+            
+            while (selectedRecs.length < 5) {
+                const currentCat = sortedCats[catIndex % sortedCats.length].cat;
+                const pool = recPool[currentCat];
+                
+                // Select a recommendation that hasn't been used yet
+                const unusedRec = pool.find(r => !selectedRecs.some(s => s.title === r.title));
+                if (unusedRec) {
+                    selectedRecs.push({
+                        ...unusedRec,
+                        catName: categories[currentCat].name,
+                        color: categories[currentCat].color
+                    });
+                }
+                catIndex++;
+            }
+
+            // Render Recommendation Cards
+            selectedRecs.forEach((rec, idx) => {
+                const card = document.createElement('div');
+                card.className = "glassmorphism rounded-xl p-5 border-t-4 shadow-xl flex flex-col justify-between hover:scale-[1.02] transition-all duration-300";
+                card.style.borderTopColor = rec.color;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[9px] font-bold uppercase tracking-wider cyber-font px-2 py-0.5 rounded-full bg-slate-900" style="color: ${rec.color}">
+                                Recommendation ${idx + 1}
+                            </span>
+                            <span class="text-[10px] text-slate-500 font-semibold truncate max-w-[120px]">${rec.catName}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 cyber-font">${rec.title}</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">${rec.text}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/60 flex justify-end">
+                        <i class="fa-solid fa-circle-arrow-right text-xs" style="color: ${rec.color}"></i>
+                    </div>
+                `;
+                blueprintContainer.appendChild(card);
+            });
+        }
+
+        // ----------------- PLOTLY CHARTS GENERATION -----------------
+
+        function renderRadarChart(pctScores) {
+            const keys = Object.keys(categories);
+            const rValues = keys.map(k => pctScores[k]);
+            const thetaValues = keys.map(k => categories[k].name.split('&')[0].trim()); // short names
+
+            const data = [{
+                type: 'scatterpolar',
+                r: [...rValues, rValues[0]], // close the loop
+                theta: [...thetaValues, thetaValues[0]],
+                fill: 'toself',
+                fillcolor: 'rgba(188, 52, 250, 0.22)',
+                line: {
+                    color: '#bc34fa',
+                    width: 2.5
+                },
+                marker: {
+                    color: '#00f0ff',
+                    size: 6
+                }
+            }];
+
+            const layout = {
+                polar: {
+                    bgcolor: 'rgba(15, 23, 42, 0.45)',
+                    radialaxis: {
+                        visible: true,
+                        range: [0, 100],
+                        color: '#94a3b8',
+                        gridcolor: 'rgba(255, 255, 255, 0.08)',
+                        tickfont: { size: 9, family: 'Orbitron' },
+                    },
+                    angularaxis: {
+                        color: '#f8fafc',
+                        gridcolor: 'rgba(255, 255, 255, 0.08)',
+                        tickfont: { size: 9, family: 'Inter' }
+                    }
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 30, b: 30, l: 45, r: 45 },
+                showlegend: false
+            };
+
+            Plotly.newPlot('radar-chart', data, layout, {responsive: true, displayModeBar: false});
+        }
+
+        function renderGaugeChart(overallScore) {
+            const data = [
+                {
+                    type: "indicator",
+                    mode: "gauge+number",
+                    value: overallScore,
+                    number: { 
+                        suffix: "%", 
+                        font: { size: 36, family: "Orbitron", color: "#f8fafc" }
+                    },
+                    gauge: {
+                        axis: { range: [null, 100], tickwidth: 1, tickcolor: "#94a3b8", tickfont: { family: "Orbitron", size: 10 } },
+                        bar: { color: "#00f0ff" },
+                        bgcolor: "rgba(15, 23, 42, 0.6)",
+                        borderwidth: 1,
+                        bordercolor: "rgba(255, 255, 255, 0.15)",
+                        steps: [
+                            { range: [0, 35], color: "rgba(255, 99, 132, 0.15)" },
+                            { range: [35, 55], color: "rgba(255, 206, 86, 0.15)" },
+                            { range: [55, 75], color: "rgba(75, 192, 192, 0.15)" },
+                            { range: [75, 90], color: "rgba(54, 162, 235, 0.15)" },
+                            { range: [90, 100], color: "rgba(188, 52, 250, 0.25)" }
+                        ],
+                        threshold: {
+                            line: { color: "#39ff14", width: 3 },
+                            thickness: 0.75,
+                            value: overallScore
+                        }
+                    }
+                }
+            ];
+
+            const layout = {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 40, b: 20, l: 30, r: 30 },
+                showlegend: false
+            };
+
+            Plotly.newPlot('gauge-chart', data, layout, {responsive: true, displayModeBar: false});
+        }
+
+        function renderSurfaceChart(pctScores) {
+            const keys = Object.keys(categories);
+            const scores = keys.map(k => pctScores[k]);
+
+            let zData = [];
+            for (let i = 0; i < 7; i++) {
+                let row = [];
+                for (let j = 0; j < 7; j++) {
+                    let base = (scores[i] + scores[j]) / 2;
+                    let sine = 8 * Math.sin((i * j) / 2);
+                    let val = Math.round(base + sine);
+                    if (val < 0) val = 0;
+                    if (val > 100) val = 100;
+                    row.push(val);
+                }
+                zData.push(row);
+            }
+
+            const xLabels = keys.map(k => categories[k].name.split(' ')[0]);
+            const yLabels = [...xLabels];
+
+            const data = [{
+                z: zData,
+                x: xLabels,
+                y: yLabels,
+                type: 'surface',
+                colorscale: [
+                    [0, '#bc34fa'],    // Purple
+                    [0.5, '#00f0ff'],  // Cyan
+                    [1, '#39ff14']     // Green
+                ],
+                showscale: false,
+                contours: {
+                    z: {
+                        show: true,
+                        usecolormap: true,
+                        highlightcolor: "#ffffff",
+                        project: {z: true}
+                    }
+                }
+            }];
+
+            const layout = {
+                scene: {
+                    xaxis: {
+                        title: { text: 'Category', font: { size: 9, family: 'Orbitron', color: '#94a3b8' } },
+                        tickfont: { size: 8, family: 'Inter', color: '#64748b' },
+                        gridcolor: 'rgba(255,255,255,0.06)'
+                    },
+                    yaxis: {
+                        title: { text: 'Category', font: { size: 9, family: 'Orbitron', color: '#94a3b8' } },
+                        tickfont: { size: 8, family: 'Inter', color: '#64748b' },
+                        gridcolor: 'rgba(255,255,255,0.06)'
+                    },
+                    zaxis: {
+                        title: { text: 'Index %', font: { size: 9, family: 'Orbitron', color: '#94a3b8' } },
+                        tickfont: { size: 8, family: 'Orbitron', color: '#64748b' },
+                        range: [0, 100],
+                        gridcolor: 'rgba(255,255,255,0.06)'
+                    },
+                    camera: {
+                        eye: { x: 1.3, y: 1.3, z: 1.1 }
+                    },
+                    bgcolor: 'rgba(15, 23, 42, 0.3)'
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 10, b: 10, l: 10, r: 10 }
+            };
+
+            Plotly.newPlot('surface-chart', data, layout, {responsive: true, displayModeBar: false});
+        }
+
+        // ----------------- PDF REPORT GENERATION -----------------
+
+        async function generatePDFReport() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // Extract Chart static image base64 URLs from Plotly
+            const radarImg = await Plotly.toImage(document.getElementById('radar-chart'), { format: 'png', width: 500, height: 400 });
+            const gaugeImg = await Plotly.toImage(document.getElementById('gauge-chart'), { format: 'png', width: 500, height: 350 });
+            const surfaceImg = await Plotly.toImage(document.getElementById('surface-chart'), { format: 'png', width: 500, height: 400 });
+
+            // Normalize category percentages
+            let pctScores = {};
+            for (let cat in categories) {
+                const key = categories[cat].key;
+                let pct = Math.round((state.scores[key] / state.maxScores[cat]) * 100);
+                if (pct < 0) pct = 0;
+                if (pct > 100) pct = 100;
+                pctScores[cat] = pct;
+            }
+            const overallScore = Math.round(Object.values(pctScores).reduce((a, b) => a + b, 0) / 7);
+            const archetype = document.getElementById('res-archetype').innerText;
+            const archetypeDesc = document.getElementById('res-classification').innerText;
+
+            // PAGE 1: Cover and Summary Dashboard
+            drawPDFPageHeader(pdf, 1);
+            
+            // Welcome Title Banner
+            pdf.setFillColor(15, 23, 42); // Dark slate
+            pdf.rect(15, 45, 180, 28, 'F');
+            pdf.setDrawColor(0, 240, 255); // Cyan border
+            pdf.setLineWidth(0.5);
+            pdf.rect(15, 45, 180, 28, 'S');
+
+            pdf.setFont('Courier', 'bold');
+            pdf.setFontSize(15);
+            pdf.setTextColor(0, 240, 255);
+            pdf.text("FUTURE READY TEACHER INDEX", 20, 53);
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setFontSize(10);
+            pdf.setTextColor(188, 52, 250); // Purple
+            pdf.text("Teaching Beyond the Textbook - Comprehensive Reflection Report", 20, 58);
+            pdf.setFontSize(9);
+            pdf.setTextColor(148, 163, 184); // Slate-400
+            pdf.text(`Report Generation Date: ${new Date().toLocaleDateString()}`, 20, 64);
+
+            // Coordinates Box
+            pdf.setFillColor(30, 41, 59);
+            pdf.rect(15, 80, 180, 36, 'F');
+            pdf.setDrawColor(255, 255, 255, 0.1);
+            pdf.rect(15, 80, 180, 36, 'S');
+
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(10);
+            pdf.setTextColor(248, 250, 252);
+            pdf.text("CLASSROOM COORDINATES", 20, 88);
+
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setFontSize(9);
+            pdf.setTextColor(148, 163, 184);
+            pdf.text("Educator Name:", 20, 95);
+            pdf.text("Institution:", 20, 101);
+            pdf.text("Grade Focus:", 20, 107);
+            
+            pdf.setTextColor(255, 255, 255);
+            pdf.text(state.teacherName, 55, 95);
+            pdf.text(state.schoolName, 55, 101);
+            pdf.text(`${state.gradeHandling} | ${state.subjectHandling}`, 55, 107);
+
+            // Final Standing Badges
+            pdf.setFillColor(15, 23, 42);
+            pdf.rect(15, 123, 85, 45, 'F');
+            pdf.rect(110, 123, 85, 45, 'F');
+            pdf.setDrawColor(0, 240, 255);
+            pdf.rect(15, 123, 85, 45, 'S');
+            pdf.setDrawColor(188, 52, 250);
+            pdf.rect(110, 123, 85, 45, 'S');
+
+            // Overall Score box
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(9);
+            pdf.setTextColor(148, 163, 184);
+            pdf.text("OVERALL INDEX SCORE", 20, 131);
+            pdf.setFont('Courier', 'bold');
+            pdf.setFontSize(28);
+            pdf.setTextColor(0, 240, 255);
+            pdf.text(`${overallScore}%`, 20, 148);
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setFontSize(8);
+            pdf.setTextColor(148, 163, 184);
+            pdf.text("Cumulative average across 7 categories.", 20, 156);
+
+            // Archetype box
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(9);
+            pdf.setTextColor(148, 163, 184);
+            pdf.text("DOMINANT ARCHETYPE", 115, 131);
+            pdf.setFont('Courier', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(188, 52, 250);
+            pdf.text(archetype, 115, 142);
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setFontSize(8);
+            pdf.setTextColor(148, 163, 184);
+            const wrappedProfile = pdf.splitTextToSize(archetypeDesc, 75);
+            pdf.text(wrappedProfile, 115, 149);
+
+            // Category Table
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(10);
+            pdf.setTextColor(248, 250, 252);
+            pdf.text("METRIC MATRIX BREAKDOWN", 15, 182);
+
+            let tableY = 190;
+            pdf.setFillColor(30, 41, 59);
+            pdf.rect(15, tableY, 180, 8, 'F');
+            pdf.setFontSize(8);
+            pdf.setTextColor(255, 255, 255);
+            pdf.text("Index Core Category", 20, tableY + 5.5);
+            pdf.text("Normalized Score %", 155, tableY + 5.5);
+
+            tableY += 8;
+            for (let cat in categories) {
+                pdf.setFillColor(15, 23, 42);
+                pdf.rect(15, tableY, 180, 8, 'F');
+                pdf.setDrawColor(255, 255, 255, 0.05);
+                pdf.line(15, tableY + 8, 195, tableY + 8);
+                
+                pdf.setFont('Helvetica', 'normal');
+                pdf.setTextColor(203, 213, 225);
+                pdf.text(categories[cat].name, 20, tableY + 5.5);
+                pdf.setFont('Courier', 'bold');
+                pdf.setTextColor(0, 240, 255);
+                pdf.text(`${pctScores[cat]}%`, 165, tableY + 5.5);
+                
+                tableY += 8;
+            }
+
+            drawPDFPageFooter(pdf, 1, 3);
+
+            // PAGE 2: Radar, Surface, Gauge Visualizations
+            pdf.addPage();
+            drawPDFPageHeader(pdf, 2);
+
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(248, 250, 252);
+            pdf.text("VISUAL DIAGNOSTICS & COGNITIVE TOPOLOGY", 15, 45);
+
+            // Left Plotly Radar Chart Image
+            pdf.setFillColor(15, 23, 42);
+            pdf.rect(15, 52, 85, 75, 'F');
+            pdf.setDrawColor(255, 255, 255, 0.1);
+            pdf.rect(15, 52, 85, 75, 'S');
+            pdf.addImage(radarImg, 'PNG', 18, 55, 79, 69);
+            pdf.setFontSize(8);
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setTextColor(188, 52, 250);
+            pdf.text("Radar profile grid", 20, 122);
+
+            // Right Plotly Gauge indicator
+            pdf.setFillColor(15, 23, 42);
+            pdf.rect(110, 52, 85, 75, 'F');
+            pdf.rect(110, 52, 85, 75, 'S');
+            pdf.addImage(gaugeImg, 'PNG', 113, 56, 79, 62);
+            pdf.setTextColor(0, 240, 255);
+            pdf.text("Growth headroom indicator", 115, 122);
+
+            // Surface Mesh visualization
+            pdf.setFillColor(15, 23, 42);
+            pdf.rect(15, 137, 180, 125, 'F');
+            pdf.setDrawColor(255, 255, 255, 0.1);
+            pdf.rect(15, 137, 180, 125, 'S');
+            pdf.addImage(surfaceImg, 'PNG', 20, 140, 170, 115);
+            pdf.setTextColor(57, 255, 20); // Green
+            pdf.text("3D Classroom Topology Surface Mesh Map", 20, 256);
+
+            drawPDFPageFooter(pdf, 2, 3);
+
+            // PAGE 3: AI Diagnostics Narrative and Recommendation Blueprint
+            pdf.addPage();
+            drawPDFPageHeader(pdf, 3);
+
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(248, 250, 252);
+            pdf.text("AI AUTOMATED NARRATIVE DIAGNOSTICS", 15, 45);
+
+            let textY = 53;
+            const items = [
+                { title: "Primary Strength Vector", text: document.getElementById('ai-strengths').innerText, color: [57, 255, 20] },
+                { title: "Primary Growth Opportunities", text: document.getElementById('ai-opportunities').innerText, color: [255, 0, 127] },
+                { title: "Innovation Capability Rating", text: document.getElementById('ai-innovation').innerText, color: [188, 52, 250] },
+                { title: "Student Impact Forecast", text: document.getElementById('ai-impact').innerText, color: [0, 240, 255] },
+                { title: "Parent Confidence Index Forecast", text: document.getElementById('ai-confidence').innerText, color: [255, 215, 0] },
+                { title: "Future Classroom Readiness", text: document.getElementById('ai-readiness').innerText, color: [255, 255, 255] }
+            ];
+
+            items.forEach((item, idx) => {
+                pdf.setFillColor(15, 23, 42);
+                pdf.rect(15, textY, 180, 20, 'F');
+                pdf.setDrawColor(255, 255, 255, 0.05);
+                pdf.rect(15, textY, 180, 20, 'S');
+                
+                pdf.setFillColor(item.color[0], item.color[1], item.color[2]);
+                pdf.rect(15, textY, 1.5, 20, 'F');
+
+                pdf.setFont('Helvetica', 'bold');
+                pdf.setFontSize(8.5);
+                pdf.setTextColor(item.color[0], item.color[1], item.color[2]);
+                pdf.text(item.title, 19, textY + 5);
+
+                pdf.setFont('Helvetica', 'normal');
+                pdf.setFontSize(8);
+                pdf.setTextColor(203, 213, 225);
+                const lines = pdf.splitTextToSize(item.text, 170);
+                pdf.text(lines, 19, textY + 10.5);
+
+                textY += 23;
+            });
+
+            // Blueprint Recommendations
+            pdf.setFont('Helvetica', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(248, 250, 252);
+            pdf.text("YOUR FUTURE CLASSROOM BLUEPRINT - CORE ACTIONS", 15, 202);
+
+            let recY = 208;
+            const recCards = document.getElementById('blueprint-container').children;
+            
+            for (let i = 0; i < recCards.length; i++) {
+                const title = recCards[i].querySelector('h4').innerText;
+                const body = recCards[i].querySelector('p').innerText;
+                
+                pdf.setFillColor(15, 23, 42);
+                pdf.rect(15, recY, 180, 11, 'F');
+                pdf.setDrawColor(255, 255, 255, 0.04);
+                pdf.line(15, recY + 11, 195, recY + 11);
+                
+                pdf.setFont('Helvetica', 'bold');
+                pdf.setFontSize(8);
+                pdf.setTextColor(0, 240, 255);
+                pdf.text(`${i+1}. ${title}:`, 20, recY + 7);
+                pdf.setFont('Helvetica', 'normal');
+                pdf.setTextColor(203, 213, 225);
+                pdf.text(body, 65, recY + 7);
+
+                recY += 11.5;
+            }
+
+            drawPDFPageFooter(pdf, 3, 3);
+            pdf.save(`Future_Ready_Teacher_Index_${state.teacherName.replace(/\s+/g, '_')}_Report.pdf`);
+        }
+
+        // PDF Helper utilities
+        function drawPDFPageHeader(pdf, pageNum) {
+            pdf.setFillColor(2, 6, 23);
+            pdf.rect(0, 0, 210, 297, 'F');
+
+            pdf.setDrawColor(0, 240, 255, 0.35);
+            pdf.setLineWidth(0.3);
+            pdf.rect(8, 8, 194, 281, 'S');
+
+            pdf.setFillColor(15, 23, 42);
+            pdf.rect(8, 8, 194, 20, 'F');
+            pdf.setDrawColor(255, 255, 255, 0.08);
+            pdf.line(8, 28, 202, 28);
+
+            pdf.setFont('Courier', 'bold');
+            pdf.setFontSize(11);
+            pdf.setTextColor(0, 240, 255);
+            pdf.text("FUTURE READY TEACHER INDEX", 15, 17.5);
+            pdf.setFontSize(7);
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setTextColor(148, 163, 184);
+            pdf.text("PROFESSIONAL DEVELOPMENT INDEX ENGINE", 15, 22.5);
+
+            pdf.setFontSize(7);
+            pdf.setFont('Courier', 'bold');
+            pdf.setTextColor(188, 52, 250);
+            pdf.text("SYSTEM STATUS: SECURE", 162, 20);
+        }
+
+        function drawPDFPageFooter(pdf, pageNum, totalPages) {
+            pdf.setFont('Helvetica', 'normal');
+            pdf.setFontSize(7);
+            pdf.setTextColor(100, 116, 139);
+            pdf.text("Confidential reflection report. Generated autonomously by the Future Ready Teacher Index simulation.", 15, 285);
+            pdf.setFont('Courier', 'bold');
+            pdf.setTextColor(148, 163, 184);
+            pdf.text(`PAGE ${pageNum} OF ${totalPages}`, 180, 285);
+        }
+
+        // Reset state
+        function resetSimulation() {
+            state.currentQuestionIndex = 0;
+            state.answers = [];
+            state.scores = {
+                parentTrust: 0,
+                studentTrust: 0,
+                updatedMethodologies: 0,
+                interestingWorksheets: 0,
+                mentorship: 0,
+                mindfulPacing: 0,
+                simulationScore: 0
+            };
+            
+            // clear form
+            document.getElementById('welcome-form').reset();
+            
+            // Transition back to screen 1
+            switchScreen('result-screen', 'welcome-screen');
+        }
+
+        // Initialize script runs
+        window.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            precalculateMaxScores();
+        });
+    </script>
+</body>
+</html>

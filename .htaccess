@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# 1. External Redirect: Redirect direct requests for page.html to /page
+RewriteCond %{THE_REQUEST} \s/+(.*?)\.html\s [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2. Internal Rewrite: Route /page to /page.html internally
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.*?)/?$ $1.html [L]

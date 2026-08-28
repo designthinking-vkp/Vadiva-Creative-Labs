@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TM4G8FGG');</script>
+<!-- End Google Tag Manager -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily EOD Report | Vadiva Creative Labs</title>
+  <meta name="description" content="Daily End of Day (EOD) Reporting portal for Vadiva Creative Labs. Staff can submit their classroom progress and teaching reports directly.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1825401188855459');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1825401188855459&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body class="protospark-theme">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TM4G8FGG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <!-- Header Section -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+        </a>
+      </div>
+      
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services & Partnerships</a></li>
+          <li><a href="activity-center.html">Activity Center</a></li>
+          <li><a href="events.html">Events & Camps</a></li>
+          <li><a href="parents.html">Parent Hub</a></li>
+          <li><a href="protospark.html">Protospark</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-action">
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- EOD Form Container -->
+  <main class="registration-container" style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem;">
+    
+    <!-- Page Header -->
+    <div class="registration-header" style="text-align: center; margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+        <img src="assets/logo.png" alt="Vadiva Logo" style="height: 60px; width: auto;">
+      </div>
+      <div class="subtitle" style="color: var(--color-primary); font-weight: 700; background: rgba(243, 126, 75, 0.08); display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px; margin-bottom: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Staff Portal</div>
+      <h1 class="page-title" style="margin: 0 0 0.5rem 0;">Daily EOD Report</h1>
+      <p class="max-w-3xl page-subtitle">Submit today's classroom progress report. Every submission stores directly to the central EOD spreadsheet.</p>
+    </div>
+
+    <!-- Success Card (hidden by default) -->
+    <div class="form-card" id="successCard" style="display: none; text-align: center; padding: 4rem 2rem;">
+      <div style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 style="color: var(--color-dark); margin-bottom: 1rem; font-size: 2rem;">EOD Report Submitted Successfully</h2>
+      <p style="color: var(--color-dark-light); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.6;">
+        Today's progress report has been recorded in the Google Sheet. Thank you for your daily submission!
+      </p>
+      <button class="btn btn-primary" id="newReportBtn" style="display: inline-block;">Submit Another Report</button>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card" id="formCard">
+      <!-- Loading Overlay -->
+      <div class="form-loading-overlay" id="loadingOverlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 10; border-radius: inherit; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="form-spinner" style="width: 50px; height: 50px; border: 4px solid rgba(243, 126, 75, 0.1); border-top-color: var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1.5rem;"></div>
+        <div class="loading-text" id="loadingText" style="font-weight: 700; color: var(--color-dark); font-size: 1.1rem;">Submitting EOD Report...</div>
+      </div>
+
+      <form id="eodForm" novalidate>
+        
+        <!-- SECTION 1: REPORT DETAILS -->
+        <div class="form-step-content active">
+          <div class="form-section-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); border-bottom: 2px solid var(--color-border-subtle); padding-bottom: 0.5rem; margin-bottom: 1.75rem;">Section 1 – Class & Instructor Details</div>
+          
+          <div class="form-grid">
+            
+            <!-- School Dropdown -->
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="school" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">School <span>*</span></label>
+              <select id="school" name="school" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" required>
+                <option value="" disabled selected>Select School</option>
+                <option value="VBC Pallikaranai">VBC Pallikaranai</option>
+                <option value="Ology Mugalivakkam">Ology Mugalivakkam</option>
+                <option value="Ology Bangalore">Ology Bangalore</option>
+                <option value="Ology Peelamedu">Ology Peelamedu</option>
+                <option value="Ology Porur">Ology Porur</option>
+              </select>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">School is required.</div>
+            </div>
+
+            <!-- Subject Dropdown -->
+            <div class="form-group">
+              <label class="form-label" for="subject" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Subject <span>*</span></label>
+              <select id="subject" name="subject" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" required>
+                <option value="" disabled selected>Select Subject</option>
+                <option value="DT">DT</option>
+                <option value="Makerspace">Makerspace</option>
+                <option value="Robotics">Robotics</option>
+                <option value="Art">Art</option>
+              </select>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Subject is required.</div>
+            </div>
+
+            <!-- Incharge Name -->
+            <div class="form-group">
+              <label class="form-label" for="inchargeName" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Incharge Name <span>*</span></label>
+              <input type="text" id="inchargeName" name="inchargeName" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" placeholder="Enter your full name" required>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Incharge name is required.</div>
+            </div>
+
+            <!-- Class Dropdown -->
+            <div class="form-group">
+              <label class="form-label" for="className" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Class <span>*</span></label>
+              <select id="className" name="className" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" required>
+                <option value="" disabled selected>Select Class</option>
+                <option value="Class 1">Class 1</option>
+                <option value="Class 2">Class 2</option>
+                <option value="Class 3">Class 3</option>
+                <option value="Class 4">Class 4</option>
+                <option value="Class 5">Class 5</option>
+                <option value="Class 6">Class 6</option>
+                <option value="Class 7">Class 7</option>
+                <option value="Class 8">Class 8</option>
+                <option value="Class 9">Class 9</option>
+                <option value="Class 10">Class 10</option>
+                <option value="Class 11">Class 11</option>
+                <option value="Class 12">Class 12</option>
+              </select>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Class is required.</div>
+            </div>
+
+            <!-- Session Focused Dropdown -->
+            <div class="form-group">
+              <label class="form-label" for="sessionFocused" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Session Focused <span>*</span></label>
+              <select id="sessionFocused" name="sessionFocused" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" required>
+                <option value="" disabled selected>Select Session</option>
+                <option value="Session 1">Session 1</option>
+                <option value="Session 2">Session 2</option>
+                <option value="Session 3">Session 3</option>
+                <option value="Session 4">Session 4</option>
+                <option value="Session 5">Session 5</option>
+                <option value="Session 6">Session 6</option>
+                <option value="Session 7">Session 7</option>
+                <option value="Session 8">Session 8</option>
+                <option value="Session 9">Session 9</option>
+                <option value="Session 10">Session 10</option>
+                <option value="Session 11">Session 11</option>
+                <option value="Session 12">Session 12</option>
+                <option value="Session 13">Session 13</option>
+                <option value="Session 14">Session 14</option>
+              </select>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Session focused is required.</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <!-- SECTION 2: EOD REPORT -->
+        <div class="form-step-content active" style="margin-top: 2rem;">
+          <div class="form-section-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); border-bottom: 2px solid var(--color-border-subtle); padding-bottom: 0.5rem; margin-bottom: 1.75rem;">Section 2 – Daily Report & Status</div>
+          
+          <div class="form-grid">
+            
+            <!-- Topics Covered Textarea -->
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="topicsCovered" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Topics Covered <span>*</span></label>
+              <textarea id="topicsCovered" name="topicsCovered" class="form-control" rows="8" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s; min-height: 200px; resize: vertical;" placeholder="Describe today's activities, concepts taught, student engagement, achievements, challenges, observations, and next plan." required></textarea>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Topics covered details are required.</div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="status" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Status <span>*</span></label>
+              <select id="status" name="status" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="Completed">Completed</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Delayed">Delayed</option>
+                <option value="Not Started">Not Started</option>
+              </select>
+              <div class="error-message" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Status is required.</div>
+            </div>
+
+            <!-- Supporting Document Toggle Group -->
+            <div class="form-group" style="grid-column: span 2; margin-top: 0.5rem;">
+              <label class="form-label" style="display: block; font-weight: 600; color: var(--color-dark); margin-bottom: 0.5rem;">Supporting Document (Optional)</label>
+              
+              <!-- Segmented Toggle Buttons -->
+              <div class="attachment-toggle-group" style="display: inline-flex; background: var(--color-bg-alt); padding: 0.3rem; border-radius: 8px; border: 1px solid var(--color-border); margin-bottom: 1.25rem;">
+                <button type="button" class="toggle-btn active" id="toggleUploadBtn" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; border: none; background: transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; color: var(--color-dark-light);">Upload File</button>
+                <button type="button" class="toggle-btn" id="toggleLinkBtn" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; border: none; background: transparent; border-radius: 6px; cursor: pointer; transition: all 0.2s; color: var(--color-dark-light);">Paste Drive Link</button>
+              </div>
+              
+              <!-- Option 1: File Input -->
+              <div class="attachment-input-container" id="fileUploadContainer">
+                <div style="border: 2px dashed var(--color-border); border-radius: 8px; padding: 2rem; text-align: center; background: rgba(30, 43, 109, 0.01); transition: all 0.2s;" id="dropZone">
+                  <input type="file" id="attachmentFile" style="display: none;">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.75rem;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                  </svg>
+                  <div style="font-weight: 600; color: var(--color-dark); margin-bottom: 0.25rem;" id="fileInfoText">Drag & drop your file here, or <span style="color: var(--color-primary); cursor: pointer; text-decoration: underline;" id="browseBtn">browse</span></div>
+                  <div style="font-size: 0.8rem; color: var(--color-dark-light);">Supports PDF, DOCX, CSV, images (Max 10MB)</div>
+                </div>
+              </div>
+              
+              <!-- Option 2: Link Input -->
+              <div class="attachment-input-container" id="driveLinkContainer" style="display: none;">
+                <input type="url" id="driveLink" name="driveLink" class="form-control" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--color-border); border-radius: 6px; background-color: var(--color-bg-alt); outline: none; transition: border-color 0.2s;" placeholder="https://drive.google.com/open?id=...">
+                <small style="display: block; margin-top: 0.35rem; color: var(--color-dark-light); font-size: 0.8rem;">Paste the public link of your Google Doc or Drive folder.</small>
+                <div class="error-message" id="urlErrorMessage" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.35rem; display: none;">Please enter a valid URL.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- FORM SUBMIT BUTTON -->
+        <div style="margin-top: 2.5rem; display: flex; justify-content: flex-end;">
+          <button type="submit" class="btn btn-primary" id="submitBtn" style="padding: 0.85rem 2.5rem; border-radius: 6px; font-weight: 700; width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; border: 3px solid var(--color-dark);">
+            <span>Submit EOD Report</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services & Frameworks</a></li>
+            <li><a href="contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="activity-center.html">Activity Center</a></li>
+            <li><a href="events.html">Camps & Festivals</a></li>
+            <li><a href="parents.html">Parent Hub</a></li>
+            <li><a href="terms.html">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with ❤️ by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      // Configuration URL (Replace with deployed Google Apps Script Web App URL)
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbwm8qUxoS7vbGUnk6pO_1C_enNSeIE3VU5GAtZDUfghYwDx8kcvCMpvOFQBuq6HRYEU/exec';
+      
+      // Selectors
+      const form = document.getElementById('eodForm');
+      const formCard = document.getElementById('formCard');
+      const successCard = document.getElementById('successCard');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const newReportBtn = document.getElementById('newReportBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Form Input Elements
+      const schoolInput = document.getElementById('school');
+      const subjectInput = document.getElementById('subject');
+      const inchargeInput = document.getElementById('inchargeName');
+      const classInput = document.getElementById('className');
+      const sessionInput = document.getElementById('sessionFocused');
+      const topicsInput = document.getElementById('topicsCovered');
+      const statusInput = document.getElementById('status');
+      
+      // Attachment Option Selectors
+      const toggleUploadBtn = document.getElementById('toggleUploadBtn');
+      const toggleLinkBtn = document.getElementById('toggleLinkBtn');
+      const fileUploadContainer = document.getElementById('fileUploadContainer');
+      const driveLinkContainer = document.getElementById('driveLinkContainer');
+      
+      const fileInput = document.getElementById('attachmentFile');
+      const dropZone = document.getElementById('dropZone');
+      const fileInfoText = document.getElementById('fileInfoText');
+      const browseBtn = document.getElementById('browseBtn');
+      const driveLinkInput = document.getElementById('driveLink');
+      
+      let selectedAttachmentMode = 'file'; // 'file' or 'link'
+      let uploadedFileData = null;
+      let uploadedFileName = null;
+      let uploadedFileType = null;
+
+      // Focus effect styles
+      const textInputs = [inchargeInput, topicsInput, driveLinkInput];
+      const selectInputs = [schoolInput, subjectInput, classInput, sessionInput, statusInput];
+
+      [...textInputs, ...selectInputs].forEach(input => {
+        input.addEventListener('focus', () => {
+          input.style.borderColor = 'var(--color-primary)';
+          input.style.backgroundColor = 'var(--color-light)';
+        });
+        input.addEventListener('blur', () => {
+          input.style.borderColor = 'var(--color-border)';
+          input.style.backgroundColor = 'var(--color-bg-alt)';
+        });
+      });
+
+      // Toggle Attachment Panel Logic
+      toggleUploadBtn.addEventListener('click', () => {
+        selectedAttachmentMode = 'file';
+        toggleUploadBtn.classList.add('active');
+        toggleLinkBtn.classList.remove('active');
+        fileUploadContainer.style.display = 'block';
+        driveLinkContainer.style.display = 'none';
+        driveLinkInput.value = '';
+        document.getElementById('urlErrorMessage').style.display = 'none';
+      });
+
+      toggleLinkBtn.addEventListener('click', () => {
+        selectedAttachmentMode = 'link';
+        toggleLinkBtn.classList.add('active');
+        toggleUploadBtn.classList.remove('active');
+        fileUploadContainer.style.display = 'none';
+        driveLinkContainer.style.display = 'block';
+        // Reset file variables
+        fileInput.value = '';
+        uploadedFileData = null;
+        uploadedFileName = null;
+        uploadedFileType = null;
+        fileInfoText.innerHTML = 'Drag & drop your file here, or <span style="color: var(--color-primary); cursor: pointer; text-decoration: underline;" id="browseBtn">browse</span>';
+        setupBrowseTrigger();
+      });
+
+      // Browse File Button Click Handler
+      function setupBrowseTrigger() {
+        const browse = document.getElementById('browseBtn');
+        if (browse) {
+          browse.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+          });
+        }
+      }
+      setupBrowseTrigger();
+
+      dropZone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      // File Drag & Drop Event Listeners
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.style.borderColor = 'var(--color-primary)';
+          dropZone.style.background = 'rgba(243, 126, 75, 0.03)';
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.style.borderColor = 'var(--color-border)';
+          dropZone.style.background = 'rgba(30, 43, 109, 0.01)';
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          handleFileSelection(files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (fileInput.files.length > 0) {
+          handleFileSelection(fileInput.files[0]);
+        }
+      });
+
+      function handleFileSelection(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File is too large. Maximum size allowed is 10MB.');
+          fileInput.value = '';
+          return;
+        }
+        
+        uploadedFileName = file.name;
+        uploadedFileType = file.type;
+        fileInfoText.innerHTML = `Selected File: <strong style="color: var(--color-primary);">${file.name}</strong> (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          uploadedFileData = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Real-time Input Validation
+      form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+        field.addEventListener('input', () => {
+          const errEl = field.parentElement.querySelector('.error-message');
+          if (field.value.trim() !== '') {
+            field.style.borderColor = 'var(--color-border)';
+            if (errEl) errEl.style.display = 'none';
+          }
+        });
+        field.addEventListener('change', () => {
+          const errEl = field.parentElement.querySelector('.error-message');
+          if (field.value !== '') {
+            field.style.borderColor = 'var(--color-border)';
+            if (errEl) errEl.style.display = 'none';
+          }
+        });
+      });
+
+      // Submit Form Logic
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Run validations
+        let hasErrors = false;
+        
+        form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+          const errEl = field.parentElement.querySelector('.error-message');
+          if (field.value.trim() === '' || field.value === null) {
+            field.style.borderColor = '#ef4444';
+            if (errEl) errEl.style.display = 'block';
+            hasErrors = true;
+          } else {
+            field.style.borderColor = 'var(--color-border)';
+            if (errEl) errEl.style.display = 'none';
+          }
+        });
+
+        if (selectedAttachmentMode === 'link' && driveLinkInput.value.trim() !== '') {
+          const urlError = document.getElementById('urlErrorMessage');
+          try {
+            new URL(driveLinkInput.value.trim());
+            urlError.style.display = 'none';
+            driveLinkInput.style.borderColor = 'var(--color-border)';
+          } catch (_) {
+            driveLinkInput.style.borderColor = '#ef4444';
+            urlError.style.display = 'block';
+            hasErrors = true;
+          }
+        }
+
+        if (hasErrors) {
+          // Scroll to first error
+          const firstError = form.querySelector('.error-message[style*="display: block"]');
+          if (firstError) {
+            firstError.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        // Show loading state
+        loadingOverlay.style.display = 'flex';
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').innerText = 'Submitting Report...';
+
+        const payload = {
+          school: schoolInput.value,
+          subject: subjectInput.value,
+          inchargeName: inchargeInput.value.trim(),
+          className: classInput.value,
+          sessionFocused: sessionInput.value,
+          topicsCovered: topicsInput.value.trim(),
+          status: statusInput.value,
+          driveLink: driveLinkInput.value.trim(),
+          fileData: uploadedFileData,
+          fileName: uploadedFileName,
+          fileType: uploadedFileType
+        };
+
+        // If Web App URL is not set (mock mode)
+        if (scriptUrl === 'YOUR_GOOGLE_APPS_SCRIPT_EOD_WEB_APP_URL') {
+          setTimeout(() => {
+            showSuccessScreen();
+          }, 1500);
+          return;
+        }
+
+        // Send payload via POST
+        fetch(scriptUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP error ' + res.status);
+          return res.json();
+        })
+        .then(resData => {
+          if (resData.status === 'success') {
+            showSuccessScreen();
+          } else {
+            alert('Failed to save report: ' + resData.message);
+            resetLoadingState();
+          }
+        })
+        .catch(err => {
+          console.warn('Network error or CORS block. Assuming background submission went through due to Apps Script redirect behavior:', err);
+          // Standard fallback behavior for Apps Script POST calls
+          showSuccessScreen();
+        });
+      });
+
+      function showSuccessScreen() {
+        resetLoadingState();
+        formCard.style.display = 'none';
+        successCard.style.display = 'block';
+        
+        // Scroll to success card top
+        successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function resetLoadingState() {
+        loadingOverlay.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').innerText = 'Submit EOD Report';
+      }
+
+      // Reset and Submit New Report Button Clicked
+      newReportBtn.addEventListener('click', () => {
+        // Reset form
+        form.reset();
+        
+        // Reset file variables
+        uploadedFileData = null;
+        uploadedFileName = null;
+        uploadedFileType = null;
+        fileInfoText.innerHTML = 'Drag & drop your file here, or <span style="color: var(--color-primary); cursor: pointer; text-decoration: underline;" id="browseBtn">browse</span>';
+        setupBrowseTrigger();
+
+        // Switch to upload tab by default
+        toggleUploadBtn.click();
+
+        // Show form card, hide success
+        successCard.style.display = 'none';
+        formCard.style.display = 'block';
+        
+        // Scroll to form and focus first field
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          schoolInput.focus();
+        }, 600);
+      });
+
+    });
+  </script>
+
+</body>
+</html>

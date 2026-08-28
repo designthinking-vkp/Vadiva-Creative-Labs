@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cubs & Bulbuls — Implementation Flow & Advancement Model</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4f8;--card:#fff;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;
+  --g1:#4f46e5;--g2:#059669;--g3:#d97706;--g4:#7c3aed;--g5:#dc2626;
+  --cubs:#1d4ed8;--cubsl:#dbeafe;--cubsb:#93c5fd;
+  --skill:#92400e;--skilll:#fef3c7;--skillb:#fcd34d;
+  --pravesh:#4f46e5;--pratham:#059669;--dwitiya:#d97706;--tritiya:#7c3aed;--chaturth:#dc2626;--golden:#b45309;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* Top nav */
+.topnav{background:#0f172a;padding:0 24px;display:flex;align-items:center;height:56px;gap:0;position:sticky;top:0;z-index:100}
+.topnav-logo{font-size:13px;font-weight:700;color:#fff;margin-right:28px;white-space:nowrap}
+.topnav-logo span{color:#a5b4fc}
+.tabnav{display:flex;gap:2px;flex:1;overflow-x:auto}
+.tabnav button{padding:8px 16px;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:13px;cursor:pointer;border-radius:6px 6px 0 0;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+.tabnav button.active{color:#fff;border-bottom-color:#a5b4fc;background:rgba(255,255,255,.07)}
+.tabnav button:hover:not(.active){color:#fff;background:rgba(255,255,255,.04)}
+
+/* Layout */
+.page{display:none;padding:24px;max-width:1160px;margin:0 auto}
+.page.active{display:block}
+
+/* Section titles */
+.stitle{font-size:22px;font-weight:700;margin-bottom:4px}
+.ssub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.stitle span{display:inline-block;padding:2px 10px;border-radius:6px;font-size:13px;font-weight:600;margin-left:8px;vertical-align:middle}
+
+/* Cards */
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:18px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title .pill{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+
+/* Two column */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.cols5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+
+/* Alert banner */
+.alert{border-radius:10px;padding:13px 16px;margin-bottom:18px;font-size:13px;display:flex;gap:10px;align-items:flex-start}
+.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+.alert-info{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}
+.alert-success{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.alert svg{flex-shrink:0;margin-top:1px}
+
+/* Grade pathway cards */
+.gpath{display:flex;flex-direction:column;gap:0}
+.gpath-item{display:flex;align-items:stretch;gap:0}
+.gpath-left{display:flex;flex-direction:column;align-items:center;width:48px;flex-shrink:0}
+.gpath-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;border:3px solid rgba(0,0,0,.1)}
+.gpath-line{flex:1;width:3px;background:var(--border);margin:2px 0}
+.gpath-content{flex:1;padding:0 0 18px 12px;padding-top:6px}
+.gpath-content h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.gpath-content p{font-size:12px;color:var(--muted);margin-bottom:6px}
+
+/* Badge chips */
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;border:1px solid transparent}
+.b-cubs{background:var(--cubsl);color:var(--cubs);border-color:var(--cubsb)}
+.b-skill{background:var(--skilll);color:var(--skill);border-color:var(--skillb)}
+.b-pravesh{background:#eef2ff;color:#4f46e5;border-color:#c7d2fe}
+.b-pratham{background:#ecfdf5;color:#059669;border-color:#a7f3d0}
+.b-dwitiya{background:#fffbeb;color:#d97706;border-color:#fcd34d}
+.b-tritiya{background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe}
+.b-chaturth{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.b-golden{background:#fef9ee;color:#92400e;border-color:#fbbf24}
+.b-gray{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+
+/* Timeline strip (horizontal) */
+.htl{display:flex;align-items:center;gap:0;overflow-x:auto;padding:4px 0 8px}
+.htl-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px}
+.htl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;border:3px solid rgba(0,0,0,.1);transition:transform .2s;cursor:default}
+.htl-dot:hover{transform:scale(1.1)}
+.htl-label{font-size:10px;text-align:center;color:var(--muted);line-height:1.3;max-width:76px}
+.htl-conn{flex:1;height:3px;background:var(--border);min-width:12px}
+.htl-arrow{display:flex;align-items:center;color:var(--muted);font-size:18px;margin:0 2px;padding-bottom:18px}
+
+/* Progress bars */
+.pbar-wrap{margin-bottom:10px}
+.pbar-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pbar-row span{font-size:12px;color:var(--text)}
+.pbar-row small{font-size:11px;color:var(--muted)}
+.pbar{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden}
+.pfill{height:100%;border-radius:4px;transition:width 1s ease}
+
+/* Stat cards */
+.statg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:11px;margin-bottom:18px}
+.stat{background:var(--card);border-radius:10px;padding:14px 15px;border:1px solid var(--border);text-align:center}
+.stat .sv{font-size:26px;font-weight:700;line-height:1}
+.stat .sl{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:2px solid var(--border)}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#fafbfc}
+
+/* Skill tag grid */
+.skill-tags{display:flex;flex-wrap:wrap;gap:5px}
+.stag{padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid transparent}
+
+/* Animated journey */
+.journey{display:flex;flex-direction:column;gap:0;position:relative}
+.jyear{display:flex;align-items:flex-start;gap:16px;position:relative}
+.jyear::before{content:'';position:absolute;left:19px;top:40px;width:3px;height:calc(100% - 8px);background:linear-gradient(to bottom,#c7d2fe,#a7f3d0,#fcd34d,#ddd6fe,#fecaca);z-index:0}
+.jyear:last-child::before{display:none}
+.jdot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;z-index:1;border:3px solid rgba(0,0,0,.1)}
+.jcontent{flex:1;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.jcontent h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.jcontent p{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+/* Badge grid */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.badge-card{border-radius:12px;padding:14px 12px;text-align:center;border:2px solid transparent}
+.badge-card .bi{font-size:28px;margin-bottom:6px}
+.badge-card h5{font-size:12px;font-weight:700;margin-bottom:2px}
+.badge-card p{font-size:10px;color:var(--muted)}
+
+/* Skill wheel */
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:18px}
+.skill-card{background:var(--card);border-radius:10px;padding:12px 14px;border:1px solid var(--border);border-left:4px solid transparent}
+.skill-card h5{font-size:12px;font-weight:700;margin-bottom:6px}
+
+/* Toggle switch */
+.toggle-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.tgl{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s}
+.tgl.on{background:#0f172a;color:#fff;border-color:#0f172a}
+
+/* Responsive */
+@media(max-width:768px){.cols2,.cols3{grid-template-columns:1fr}.cols5{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.cols5{grid-template-columns:1fr}.statg{grid-template-columns:1fr 1fr}}
+
+/* Animate in */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .4s ease both}
+.anim1{animation-delay:.05s}.anim2{animation-delay:.1s}.anim3{animation-delay:.15s}.anim4{animation-delay:.2s}.anim5{animation-delay:.25s}
+
+.home-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#e0e7ff;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0;letter-spacing:.01em}
+.home-btn:hover{background:rgba(165,180,252,.2);border-color:rgba(165,180,252,.5);color:#c7d2fe;transform:translateY(-1px)}
+.home-btn svg{flex-shrink:0}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-logo">⚜ Cubs &amp; Bulbuls <span>Implementation Portal</span></div>
+  <div class="tabnav">
+    <button class="active" onclick="tab('y1')">🚀 Year 1 Launch Model</button>
+    <button onclick="tab('y2')">📅 Year 2+ Stable Model</button>
+    <button onclick="tab('journey')">🗺 Student Journey</button>
+    <button onclick="tab('admin')">🛠 Admin Dashboard</button>
+    <button onclick="tab('balance')">⚖ Curriculum Balance</button>
+    <button onclick="tab('inspired')">🌱 Inspired Living</button>
+  </div>
+  <a class="home-btn" href="cubs_curriculum_portal.html" target="_blank" title="Curriculum Portal" style="margin-left:auto;background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.4);color:#c7d2fe">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    Curriculum
+  </a>
+  <a class="home-btn" href="cubs_home.html" title="Back to Home" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#e0e7ff">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+    Home
+  </a>
+</nav>
+
+<!-- ══════════════ YEAR 1 ══════════════ -->
+<div class="page active" id="pg-y1">
+  <div class="stitle anim">Year 1 — Launch Implementation Model <span style="background:#fef3c7;color:#92400e">Transition Year</span></div>
+  <div class="ssub anim">First-time launch for all students. Accelerated advancement for older grades to ensure meaningful progression before year end.</div>
+
+  <div class="alert alert-warn anim">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div><strong>Launch Year Notice:</strong> All students join as new members simultaneously. Lesson durations are adjusted per grade to allow older students to complete accelerated advancement before transitioning to the Year 2 stable model.</div>
+  </div>
+
+  <!-- Progression table -->
+  <div class="card anim1">
+    <div class="card-title">📊 Year 1 Grade-wise Progression Table</div>
+    <table class="tbl">
+      <thead><tr><th>Grade</th><th>Duration</th><th>Achievement</th><th>Advancement Pathway</th><th>Lesson Structure</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#4f46e5">Grade 1</strong></td>
+          <td><span class="badge b-gray">15 Weeks</span></td>
+          <td><span class="badge b-pravesh">⭐ Pravesh</span></td>
+          <td><span class="badge b-pravesh">Pravesh</span></td>
+          <td>Foundational 🟦 Cubs + 🟨 Skills (90 min/week)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#059669">Grade 2</strong></td>
+          <td><span class="badge b-gray">15 Weeks</span></td>
+          <td><span class="badge b-pravesh">⭐ Pravesh</span></td>
+          <td><span class="badge b-pravesh">Pravesh</span></td>
+          <td>Reinforced Pravesh + Skill Extension (90 min/week)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#d97706">Grade 3</strong></td>
+          <td><span class="badge b-gray">10 Weeks</span></td>
+          <td><span class="badge b-pravesh">⭐ Pravesh</span> + <span class="badge b-pratham">🏅 Pratham Charan</span></td>
+          <td><span class="badge b-pravesh">Pravesh</span> → <span class="badge b-pratham">Pratham</span></td>
+          <td>Accelerated dual-badge track (90 min/week)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#7c3aed">Grade 4</strong></td>
+          <td><span class="badge b-gray">10 Weeks</span></td>
+          <td><span class="badge b-pravesh">⭐ Pravesh</span> + <span class="badge b-pratham">🏅 Pratham Charan</span></td>
+          <td><span class="badge b-pravesh">Pravesh</span> → <span class="badge b-pratham">Pratham</span></td>
+          <td>Accelerated dual-badge track (90 min/week)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#dc2626">Grade 5</strong></td>
+          <td><span class="badge b-gray">20 Weeks</span></td>
+          <td><span class="badge b-pravesh">⭐ Pravesh</span> + <span class="badge b-pratham">🏅 Pratham</span> + <span class="badge b-dwitiya">🥇 Dwitiya</span></td>
+          <td><span class="badge b-pravesh">Pravesh</span> → <span class="badge b-pratham">Pratham</span> → <span class="badge b-dwitiya">Dwitiya</span></td>
+          <td>Full triple-badge senior track (90 min/week)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Visual pathway -->
+  <div class="cols2 anim2">
+    <div class="card">
+      <div class="card-title">🗺 Grade-wise Advancement Pathway</div>
+      <div class="gpath">
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#4f46e5">1</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 1 — 15 Weeks</h4>
+            <p>All new members, foundational learning</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#059669">2</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 2 — 15 Weeks</h4>
+            <p>Reinforcement + skill extension</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#d97706">3</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 3 — 10 Weeks (Accelerated)</h4>
+            <p>Rapid dual-badge advancement track</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span><span style="color:#d97706;font-weight:700;font-size:13px">→</span><span class="badge b-pratham">🏅 Pratham Charan</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#7c3aed">4</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 4 — 10 Weeks (Accelerated)</h4>
+            <p>Leadership-focused dual-badge track</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span><span style="color:#7c3aed;font-weight:700;font-size:13px">→</span><span class="badge b-pratham">🏅 Pratham Charan</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#dc2626">5</div>
+            <div class="gpath-line" style="opacity:0"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 5 — 20 Weeks (Full Track)</h4>
+            <p>Complete senior triple-badge journey</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span><span style="color:#dc2626;font-weight:700;font-size:13px">→</span><span class="badge b-pratham">🏅 Pratham</span><span style="color:#dc2626;font-weight:700;font-size:13px">→</span><span class="badge b-dwitiya">🥇 Dwitiya</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card anim2">
+        <div class="card-title">📅 Weekly Schedule by Grade (Year 1)</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:80px;font-size:11px;font-weight:700;color:#4f46e5">GRADE 1</div>
+            <div style="flex:1"><div class="pbar"><div class="pfill" style="width:75%;background:#4f46e5"></div></div></div>
+            <div style="font-size:11px;color:var(--muted);width:52px">15 wks</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:80px;font-size:11px;font-weight:700;color:#059669">GRADE 2</div>
+            <div style="flex:1"><div class="pbar"><div class="pfill" style="width:75%;background:#059669"></div></div></div>
+            <div style="font-size:11px;color:var(--muted);width:52px">15 wks</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:80px;font-size:11px;font-weight:700;color:#d97706">GRADE 3</div>
+            <div style="flex:1"><div class="pbar"><div class="pfill" style="width:50%;background:#d97706"></div></div></div>
+            <div style="font-size:11px;color:var(--muted);width:52px">10 wks</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:80px;font-size:11px;font-weight:700;color:#7c3aed">GRADE 4</div>
+            <div style="flex:1"><div class="pbar"><div class="pfill" style="width:50%;background:#7c3aed"></div></div></div>
+            <div style="font-size:11px;color:var(--muted);width:52px">10 wks</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:80px;font-size:11px;font-weight:700;color:#dc2626">GRADE 5</div>
+            <div style="flex:1"><div class="pbar"><div class="pfill" style="width:100%;background:#dc2626"></div></div></div>
+            <div style="font-size:11px;color:var(--muted);width:52px">20 wks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim3">
+        <div class="card-title">🎯 Year 1 Curriculum Design Rules</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:8px;background:#dbeafe33;border-radius:8px;border:1px solid var(--cubsb)">
+            <span style="font-size:16px">🟦</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--cubs)">Cubs/Bulbuls Learning</div><div style="font-size:11px;color:var(--muted)">Every session includes formal Scouts advancement content</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:8px;background:#fef3c733;border-radius:8px;border:1px solid var(--skillb)">
+            <span style="font-size:16px">🟨</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--skill)">Skill Development Learning</div><div style="font-size:11px;color:var(--muted)">Every session integrates a skill strand (communication, logic, heritage, etc.)</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);padding:6px 0 2px;font-weight:600">Delivery Methods Used:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <span class="badge b-gray">🎮 Games</span><span class="badge b-gray">🏆 Challenges</span><span class="badge b-gray">📖 Stories</span><span class="badge b-gray">🔍 Investigations</span><span class="badge b-gray">🎭 Role Play</span><span class="badge b-gray">🤝 Team Missions</span><span class="badge b-gray">🌿 Nature Exploration</span><span class="badge b-gray">🤲 Service Activities</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advancement badges for year 1 -->
+  <div class="card anim4">
+    <div class="card-title">🏅 Badges Awarded in Year 1</div>
+    <div class="badge-grid">
+      <div class="badge-card" style="background:#eef2ff;border-color:#c7d2fe">
+        <div class="bi">⭐</div>
+        <h5 style="color:#4f46e5">Pravesh</h5>
+        <p>Grades 1, 2, 3, 4, 5</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">5 grades</span></div>
+      </div>
+      <div class="badge-card" style="background:#ecfdf5;border-color:#a7f3d0">
+        <div class="bi">🏅</div>
+        <h5 style="color:#059669">Pratham Charan</h5>
+        <p>Grades 3, 4, 5</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">3 grades</span></div>
+      </div>
+      <div class="badge-card" style="background:#fffbeb;border-color:#fcd34d">
+        <div class="bi">🥇</div>
+        <h5 style="color:#d97706">Dwitiya Charan</h5>
+        <p>Grade 5 only</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">1 grade</span></div>
+      </div>
+      <div class="badge-card" style="background:#f1f5f9;border-color:#cbd5e1;opacity:.5">
+        <div class="bi">🏆</div>
+        <h5 style="color:#475569">Tritiya Charan</h5>
+        <p>Year 2+ only</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">Not in Yr 1</span></div>
+      </div>
+      <div class="badge-card" style="background:#f1f5f9;border-color:#cbd5e1;opacity:.5">
+        <div class="bi">🌟</div>
+        <h5 style="color:#475569">Chaturth Charan</h5>
+        <p>Year 2+ only</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">Not in Yr 1</span></div>
+      </div>
+      <div class="badge-card" style="background:#f1f5f9;border-color:#cbd5e1;opacity:.5">
+        <div class="bi">🏹</div>
+        <h5 style="color:#475569">Golden Arrow</h5>
+        <p>Year 5+ only</p>
+        <div class="badges" style="justify-content:center;margin-top:4px"><span class="badge b-gray">Not in Yr 1</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ YEAR 2+ ══════════════ -->
+<div class="page" id="pg-y2">
+  <div class="stitle anim">Year 2+ — Stable Progression Model <span style="background:#dcfce7;color:#166534">Ongoing</span></div>
+  <div class="ssub anim">From Year 2, the school follows the standard Bharat Scouts & Guides annual progression. Each grade advances one level per year.</div>
+
+  <div class="alert alert-success anim">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <div><strong>Stable Model Active:</strong> New Grade 1 students begin Pravesh each year. Existing students advance one badge level per year. Grade 5 students work toward Chaturth Charan and Golden Arrow preparation.</div>
+  </div>
+
+  <div class="cols2 anim1">
+    <div class="card">
+      <div class="card-title">📊 Year 2+ Grade-wise Progression Chart</div>
+      <div class="gpath">
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#4f46e5">1</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 1 — Pravesh</h4>
+            <p>Foundation: Scout identity, promise, law, good turn, national symbols</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span><span class="badge b-cubs">🟦 Cubs/Bulbuls</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#059669">2</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 2 — Pratham Charan</h4>
+            <p>Nature study, knotting, basic first aid, service, Jungle Book characters</p>
+            <div class="badges"><span class="badge b-pratham">🏅 Pratham Charan</span><span class="badge b-cubs">🟦 Cubs</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#d97706">3</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 3 — Dwitiya Charan</h4>
+            <p>Mapping, advanced first aid, community service project, outdoor skills</p>
+            <div class="badges"><span class="badge b-dwitiya">🥇 Dwitiya Charan</span><span class="badge b-cubs">🟦 Cubs</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#7c3aed">4</div>
+            <div class="gpath-line"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 4 — Tritiya Charan</h4>
+            <p>Advanced leadership, conservation project, team management, orienteering</p>
+            <div class="badges"><span class="badge b-tritiya">🏆 Tritiya Charan</span><span class="badge b-cubs">🟦 Cubs</span></div>
+          </div>
+        </div>
+        <div class="gpath-item">
+          <div class="gpath-left">
+            <div class="gpath-dot" style="background:#dc2626">5</div>
+            <div class="gpath-line" style="opacity:0"></div>
+          </div>
+          <div class="gpath-content">
+            <h4>Grade 5 — Chaturth Charan + Golden Arrow Prep</h4>
+            <p>Entrepreneurship, advanced service leadership, legacy project, Golden Arrow readiness</p>
+            <div class="badges"><span class="badge b-chaturth">🌟 Chaturth Charan</span><span class="badge b-golden">🏹 Golden Arrow Prep</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card anim2">
+        <div class="card-title">📈 Annual Intake Model</div>
+        <div class="alert alert-info" style="margin-bottom:12px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div style="font-size:12px">Each academic year, new Grade 1 students begin Pravesh. All other grades advance one level automatically.</div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Year</th><th>Gr 1</th><th>Gr 2</th><th>Gr 3</th><th>Gr 4</th><th>Gr 5</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--muted);font-size:12px">Year 1</td><td><span class="badge b-pravesh" style="font-size:10px">Pravesh</span></td><td><span class="badge b-pravesh" style="font-size:10px">Pravesh</span></td><td><span class="badge b-pratham" style="font-size:10px">Pratham</span></td><td><span class="badge b-pratham" style="font-size:10px">Pratham</span></td><td><span class="badge b-dwitiya" style="font-size:10px">Dwitiya</span></td></tr>
+            <tr><td style="color:var(--muted);font-size:12px">Year 2</td><td><span class="badge b-pravesh" style="font-size:10px">Pravesh</span></td><td><span class="badge b-pratham" style="font-size:10px">Pratham</span></td><td><span class="badge b-dwitiya" style="font-size:10px">Dwitiya</span></td><td><span class="badge b-tritiya" style="font-size:10px">Tritiya</span></td><td><span class="badge b-chaturth" style="font-size:10px">Chaturth</span></td></tr>
+            <tr><td style="color:var(--muted);font-size:12px">Year 3+</td><td><span class="badge b-pravesh" style="font-size:10px">Pravesh</span></td><td><span class="badge b-pratham" style="font-size:10px">Pratham</span></td><td><span class="badge b-dwitiya" style="font-size:10px">Dwitiya</span></td><td><span class="badge b-tritiya" style="font-size:10px">Tritiya</span></td><td><span class="badge b-golden" style="font-size:10px">Golden →</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card anim3">
+        <div class="card-title">🏅 Full Advancement Ladder</div>
+        <div style="display:flex;align-items:center;gap:0;overflow-x:auto;padding:4px 0">
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#4f46e5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">⭐</div><div style="font-size:10px;color:#4f46e5;font-weight:700">Pravesh</div><div style="font-size:9px;color:var(--muted)">Grade 1</div></div>
+          <div style="flex:1;height:3px;background:#c7d2fe;min-width:10px"></div>
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">🏅</div><div style="font-size:10px;color:#059669;font-weight:700">Pratham</div><div style="font-size:9px;color:var(--muted)">Grade 2</div></div>
+          <div style="flex:1;height:3px;background:#a7f3d0;min-width:10px"></div>
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">🥇</div><div style="font-size:10px;color:#d97706;font-weight:700">Dwitiya</div><div style="font-size:9px;color:var(--muted)">Grade 3</div></div>
+          <div style="flex:1;height:3px;background:#fcd34d;min-width:10px"></div>
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">🏆</div><div style="font-size:10px;color:#7c3aed;font-weight:700">Tritiya</div><div style="font-size:9px;color:var(--muted)">Grade 4</div></div>
+          <div style="flex:1;height:3px;background:#ddd6fe;min-width:10px"></div>
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">🌟</div><div style="font-size:10px;color:#dc2626;font-weight:700">Chaturth</div><div style="font-size:9px;color:var(--muted)">Grade 5</div></div>
+          <div style="flex:1;height:3px;background:#fecaca;min-width:10px"></div>
+          <div style="text-align:center;min-width:80px"><div style="width:36px;height:36px;border-radius:50%;background:#b45309;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto 4px">🏹</div><div style="font-size:10px;color:#b45309;font-weight:700">Golden Arrow</div><div style="font-size:9px;color:var(--muted)">Gr 5 End</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ JOURNEY ══════════════ -->
+<div class="page" id="pg-journey">
+  <div class="stitle anim">Longitudinal Student Journey <span style="background:#eff6ff;color:#1e40af">5-Year View</span></div>
+  <div class="ssub anim">A child joining in Grade 1, Year 1 — their complete 5-year Cubs & Bulbuls advancement journey.</div>
+
+  <div class="cols2 anim">
+    <div class="card">
+      <div class="card-title">🗺 Complete 5-Year Journey Map</div>
+      <div class="journey">
+        <div class="jyear">
+          <div class="jdot" style="background:#4f46e5">Y1</div>
+          <div class="jcontent">
+            <h4>Year 1 (Grade 1) — Foundation</h4>
+            <p>15 weeks · First-ever session</p>
+            <div class="badges"><span class="badge b-pravesh">⭐ Pravesh</span><span class="badge b-skill">🟨 Communication</span><span class="badge b-skill">🟨 Heritage</span><span class="badge b-skill">🟨 Wellbeing</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Promise · Law · Sign · Salute · Handshake · Good Turn · National Flag · Personal Hygiene</div>
+          </div>
+        </div>
+        <div class="jyear">
+          <div class="jdot" style="background:#059669">Y2</div>
+          <div class="jcontent">
+            <h4>Year 2 (Grade 2) — Pratham Charan</h4>
+            <p>20 weeks · First full stable year</p>
+            <div class="badges"><span class="badge b-pratham">🏅 Pratham Charan</span><span class="badge b-skill">🟨 Nature</span><span class="badge b-skill">🟨 Leadership</span><span class="badge b-skill">🟨 Logic</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Jungle Book · Nature Study · Knotting · First Aid · Community Service · Observation</div>
+          </div>
+        </div>
+        <div class="jyear">
+          <div class="jdot" style="background:#d97706">Y3</div>
+          <div class="jcontent">
+            <h4>Year 3 (Grade 3) — Dwitiya Charan</h4>
+            <p>20 weeks · Skills depth year</p>
+            <div class="badges"><span class="badge b-dwitiya">🥇 Dwitiya Charan</span><span class="badge b-skill">🟨 Astronomy</span><span class="badge b-skill">🟨 Service</span><span class="badge b-skill">🟨 Creativity</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Mapping · Advanced First Aid · Conservation · Outdoor Skills · Scientific Inquiry · Entrepreneurship</div>
+          </div>
+        </div>
+        <div class="jyear">
+          <div class="jdot" style="background:#7c3aed">Y4</div>
+          <div class="jcontent">
+            <h4>Year 4 (Grade 4) — Tritiya Charan</h4>
+            <p>20 weeks · Leadership year</p>
+            <div class="badges"><span class="badge b-tritiya">🏆 Tritiya Charan</span><span class="badge b-skill">🟨 Leadership</span><span class="badge b-skill">🟨 Heritage</span><span class="badge b-skill">🟨 Problem Solving</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Team management · Orienteering · Conservation project · Advanced astronomy · Debate · Conflict resolution</div>
+          </div>
+        </div>
+        <div class="jyear">
+          <div class="jdot" style="background:#dc2626">Y5</div>
+          <div class="jcontent">
+            <h4>Year 5 (Grade 5) — Chaturth Charan</h4>
+            <p>20 weeks · Summit year</p>
+            <div class="badges"><span class="badge b-chaturth">🌟 Chaturth Charan</span><span class="badge b-skill">🟨 Entrepreneurship</span><span class="badge b-skill">🟨 Legacy</span></div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Legacy project · Mentoring younger Cubs · Advanced mapping · Social enterprise · Community impact</div>
+          </div>
+        </div>
+        <div class="jyear">
+          <div class="jdot" style="background:#b45309">🏹</div>
+          <div class="jcontent" style="border-color:#fbbf24;background:#fffbeb">
+            <h4>Year 5 Completion — Golden Arrow</h4>
+            <p>Highest honour · Programme summit</p>
+            <div class="badges"><span class="badge b-golden">🏹 Golden Arrow Award</span></div>
+            <div style="margin-top:8px;font-size:12px;color:#92400e">All Charan badges completed · Service log verified · Leadership demonstrated · Community impact evidenced</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card anim1">
+        <div class="card-title">📊 Skills Accumulated Over 5 Years</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🟦 Cubs/Bulbuls Advancement</span><small>50%</small></div>
+            <div class="pbar"><div class="pfill" style="width:50%;background:#1d4ed8"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🗣 Communication Skills</span><small>Yr 1–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:88%;background:#4f46e5"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🏅 Leadership & Service</span><small>Yr 1–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:92%;background:#059669"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🏛 Heritage & Citizenship</span><small>Yr 1–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:80%;background:#d97706"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🔭 Scientific Inquiry</span><small>Yr 2–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:75%;background:#7c3aed"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>🔭 Astronomy</span><small>Yr 2–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:70%;background:#0891b2"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>💡 Innovation & Entrepreneurship</span><small>Yr 3–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:65%;background:#dc2626"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span>💚 Wellbeing</span><small>Yr 1–5</small></div>
+            <div class="pbar"><div class="pfill" style="width:85%;background:#db2777"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim2">
+        <div class="card-title">🏆 5-Year Achievement Summary</div>
+        <div class="statg" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+          <div class="stat"><div class="sv" style="color:#4f46e5">6</div><div class="sl">Badges Earned</div></div>
+          <div class="stat"><div class="sv" style="color:#059669">95+</div><div class="sl">Lesson Sessions</div></div>
+          <div class="stat"><div class="sv" style="color:#d97706">11</div><div class="sl">Skill Strands</div></div>
+          <div class="stat"><div class="sv" style="color:#b45309">🏹</div><div class="sl">Golden Arrow</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN ══════════════ -->
+<div class="page" id="pg-admin">
+  <div class="stitle anim">Admin Dashboard <span style="background:#f1f5f9;color:#475569">School Leader View</span></div>
+  <div class="ssub anim">Complete program overview for curriculum coordinators and school administrators.</div>
+
+  <div class="toggle-row anim">
+    <button class="tgl on" id="tgl-y1" onclick="adminView('y1')">Year 1 Launch Model</button>
+    <button class="tgl" id="tgl-y2" onclick="adminView('y2')">Year 2+ Stable Model</button>
+  </div>
+
+  <!-- Year 1 admin -->
+  <div id="adm-y1">
+    <div class="statg anim">
+      <div class="stat"><div class="sv" style="color:#4f46e5">5</div><div class="sl">Grades in Program</div></div>
+      <div class="stat"><div class="sv" style="color:#059669">70</div><div class="sl">Total Weeks (Yr 1)</div></div>
+      <div class="stat"><div class="sv" style="color:#d97706">3</div><div class="sl">Badges Awarded</div></div>
+      <div class="stat"><div class="sv" style="color:#7c3aed">11</div><div class="sl">Skill Strands</div></div>
+      <div class="stat"><div class="sv" style="color:#dc2626">50%</div><div class="sl">Cubs Content</div></div>
+      <div class="stat"><div class="sv" style="color:#059669">50%</div><div class="sl">Skill Content</div></div>
+      <div class="stat"><div class="sv" style="color:#065f46">🌱</div><div class="sl">Inspired Living</div></div>
+    </div>
+
+    <div class="card anim1">
+      <div class="card-title">📋 Grade-wise Advancement Status — Year 1</div>
+      <table class="tbl">
+        <thead><tr><th>Grade</th><th>Weeks</th><th>Cubs Requirements</th><th>Skills Covered</th><th>Badge Status</th><th>Readiness</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#4f46e5">Grade 1</strong></td>
+            <td>15</td>
+            <td>Promise, Law, Sign, Salute, Handshake, Good Turn, Flag, Hygiene, Discipline, Investiture</td>
+            <td><span class="badge b-skill" style="font-size:10px">Communication</span> <span class="badge b-skill" style="font-size:10px">Heritage</span> <span class="badge b-skill" style="font-size:10px">Wellbeing</span></td>
+            <td><span class="badge b-pravesh">⭐ Pravesh</span></td>
+            <td><span class="badge" style="background:#dcfce7;color:#166534;border-color:#86efac">✓ Ready</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#059669">Grade 2</strong></td>
+            <td>15</td>
+            <td>Promise reinforcement, National Symbols, Service, Pack Activities, Good Turn, Discipline</td>
+            <td><span class="badge b-skill" style="font-size:10px">Logic</span> <span class="badge b-skill" style="font-size:10px">Astronomy</span> <span class="badge b-skill" style="font-size:10px">EQ</span></td>
+            <td><span class="badge b-pravesh">⭐ Pravesh</span></td>
+            <td><span class="badge" style="background:#dcfce7;color:#166534;border-color:#86efac">✓ Ready</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#d97706">Grade 3</strong></td>
+            <td>10</td>
+            <td>Jungle Book, Nature Study, Knotting, First Aid, Community Awareness, Service</td>
+            <td><span class="badge b-skill" style="font-size:10px">Leadership</span> <span class="badge b-skill" style="font-size:10px">Science</span> <span class="badge b-skill" style="font-size:10px">Heritage</span></td>
+            <td><span class="badge b-pravesh">⭐</span> + <span class="badge b-pratham">🏅 Pratham</span></td>
+            <td><span class="badge" style="background:#fef9c3;color:#854d0e;border-color:#fde047">⚡ Accelerated</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#7c3aed">Grade 4</strong></td>
+            <td>10</td>
+            <td>Advanced Nature, Citizenship, Knotting, First Aid Advanced, Service, Team Leadership</td>
+            <td><span class="badge b-skill" style="font-size:10px">Astronomy</span> <span class="badge b-skill" style="font-size:10px">Leadership</span> <span class="badge b-skill" style="font-size:10px">Public Speaking</span></td>
+            <td><span class="badge b-pravesh">⭐</span> + <span class="badge b-pratham">🏅 Pratham</span></td>
+            <td><span class="badge" style="background:#fef9c3;color:#854d0e;border-color:#fde047">⚡ Accelerated</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#dc2626">Grade 5</strong></td>
+            <td>20</td>
+            <td>Mapping, Community Service, Environmental Conservation, Advanced First Aid, Leadership, Team Management, Outdoor Skills</td>
+            <td><span class="badge b-skill" style="font-size:10px">Leadership</span> <span class="badge b-skill" style="font-size:10px">Debate</span> <span class="badge b-skill" style="font-size:10px">Entrepreneurship</span></td>
+            <td><span class="badge b-pravesh">⭐</span> + <span class="badge b-pratham">🏅</span> + <span class="badge b-dwitiya">🥇 Dwitiya</span></td>
+            <td><span class="badge" style="background:#dcfce7;color:#166534;border-color:#86efac">✓ Full Track</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cols2 anim2">
+      <div class="card">
+        <div class="card-title">⚖ Curriculum Balance Check — Year 1</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span style="font-weight:600">🟦 Cubs/Bulbuls Content</span><small style="font-weight:700;color:#1d4ed8">50%</small></div>
+            <div class="pbar" style="height:12px"><div class="pfill" style="width:50%;background:#1d4ed8"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-row"><span style="font-weight:600">🟨 Skill Development Content</span><small style="font-weight:700;color:#92400e">50%</small></div>
+            <div class="pbar" style="height:12px"><div class="pfill" style="width:50%;background:#d97706"></div></div>
+          </div>
+        </div>
+        <div class="alert alert-success" style="margin-top:12px;margin-bottom:0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div style="font-size:12px">Balance rule met: Every lesson contains both 🟦 Cubs and 🟨 Skill content at exactly 50/50.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏹 Golden Arrow Readiness</div>
+        <div class="alert alert-warn" style="margin-bottom:10px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div style="font-size:12px"><strong>Year 1 Note:</strong> Golden Arrow is not achievable in Year 1. Grade 5 achieves Dwitiya Charan as the highest badge.</div>
+        </div>
+        <div class="pbar-wrap">
+          <div class="pbar-row"><span style="font-size:12px">Golden Arrow Readiness (School Program)</span><small>Year 5</small></div>
+          <div class="pbar"><div class="pfill" style="width:20%;background:#b45309"></div></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Golden Arrow available when the school program reaches Year 5 of operation and a student cohort completes all 5 charan levels.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Year 2+ admin (hidden by default) -->
+  <div id="adm-y2" style="display:none">
+    <div class="statg anim">
+      <div class="stat"><div class="sv" style="color:#4f46e5">5</div><div class="sl">Grades in Program</div></div>
+      <div class="stat"><div class="sv" style="color:#059669">100</div><div class="sl">Weeks Per Cycle</div></div>
+      <div class="stat"><div class="sv" style="color:#d97706">6</div><div class="sl">Badges in Ladder</div></div>
+      <div class="stat"><div class="sv" style="color:#7c3aed">11</div><div class="sl">Skill Strands</div></div>
+      <div class="stat"><div class="sv" style="color:#dc2626">Gr 5</div><div class="sl">Golden Arrow</div></div>
+      <div class="stat"><div class="sv" style="color:#b45309">50%</div><div class="sl">Cubs Balance</div></div>
+    </div>
+    <div class="card anim1">
+      <div class="card-title">📋 Stable Model — Grade Advancement Status</div>
+      <table class="tbl">
+        <thead><tr><th>Grade</th><th>Charan Level</th><th>Focus Areas</th><th>Skills Primary</th><th>Golden Arrow</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#4f46e5">Grade 1</strong></td><td><span class="badge b-pravesh">⭐ Pravesh</span></td><td>Foundation: identity, promise, law, symbols</td><td>Communication, Heritage, Wellbeing</td><td>—</td></tr>
+          <tr><td><strong style="color:#059669">Grade 2</strong></td><td><span class="badge b-pratham">🏅 Pratham Charan</span></td><td>Nature, knotting, first aid, service, Jungle Book</td><td>Nature, Logic, Leadership</td><td>—</td></tr>
+          <tr><td><strong style="color:#d97706">Grade 3</strong></td><td><span class="badge b-dwitiya">🥇 Dwitiya Charan</span></td><td>Mapping, conservation, outdoor skills, advanced first aid</td><td>Astronomy, Science, Creativity</td><td>—</td></tr>
+          <tr><td><strong style="color:#7c3aed">Grade 4</strong></td><td><span class="badge b-tritiya">🏆 Tritiya Charan</span></td><td>Leadership, orienteering, advanced conservation</td><td>Leadership, Heritage, Problem Solving</td><td>—</td></tr>
+          <tr><td><strong style="color:#dc2626">Grade 5</strong></td><td><span class="badge b-chaturth">🌟 Chaturth</span> + <span class="badge b-golden">🏹 Golden Prep</span></td><td>Legacy, enterprise, mentoring, community impact</td><td>Entrepreneurship, Service, Legacy</td><td><span class="badge" style="background:#fef9c3;color:#854d0e;border-color:#fde047">In Progress</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BALANCE ══════════════ -->
+<div class="page" id="pg-balance">
+  <div class="stitle anim">Curriculum Balance Framework <span style="background:#eff6ff;color:#1e40af">50 / 50 Rule</span></div>
+  <div class="ssub anim">Every lesson maintains a 50% Cubs/Bulbuls advancement content and 50% skill development content ratio.</div>
+
+  <div class="cols2 anim">
+    <div class="card">
+      <div class="card-title">⚖ The 50/50 Curriculum Rule</div>
+      <div style="display:flex;gap:12px;margin-bottom:14px">
+        <div style="flex:1;background:var(--cubsl);border:1px solid var(--cubsb);border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;margin-bottom:4px">🟦</div>
+          <div style="font-size:22px;font-weight:700;color:var(--cubs)">50%</div>
+          <div style="font-size:12px;font-weight:600;color:var(--cubs)">Cubs/Bulbuls Content</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Formal advancement requirements, ceremonies, badge work</div>
+        </div>
+        <div style="flex:1;background:var(--skilll);border:1px solid var(--skillb);border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;margin-bottom:4px">🟨</div>
+          <div style="font-size:22px;font-weight:700;color:var(--skill)">50%</div>
+          <div style="font-size:12px;font-weight:600;color:var(--skill)">Skill Development Content</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Communication, leadership, heritage, science, wellbeing, etc.</div>
+        </div>
+      </div>
+      <div class="pbar" style="height:14px;border-radius:7px">
+        <div style="height:100%;width:50%;background:var(--cubs);border-radius:7px 0 0 7px;display:inline-block"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px"><span>🟦 Cubs 50%</span><span>🟨 Skills 50%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏷 Automatic Lesson Tagging System</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Every lesson is automatically tagged with its Cubs and Skill content categories:</div>
+      <div class="skill-tags">
+        <span class="stag" style="background:var(--cubsl);color:var(--cubs);border-color:var(--cubsb)">🟦 Cubs/Bulbuls</span>
+        <span class="stag" style="background:#eff6ff;color:#1d4ed8;border-color:#93c5fd">🟨 Communication</span>
+        <span class="stag" style="background:#f0fdf4;color:#166534;border-color:#86efac">🟨 Leadership</span>
+        <span class="stag" style="background:#fffbeb;color:#92400e;border-color:#fcd34d">🟨 Heritage</span>
+        <span class="stag" style="background:#f0f9ff;color:#0369a1;border-color:#7dd3fc">🟨 Astronomy</span>
+        <span class="stag" style="background:#f5f3ff;color:#6d28d9;border-color:#c4b5fd">🟨 Logic</span>
+        <span class="stag" style="background:#fdf4ff;color:#86198f;border-color:#f0abfc">🟨 Creativity</span>
+        <span class="stag" style="background:#fff1f2;color:#be123c;border-color:#fda4af">🟨 Service</span>
+        <span class="stag" style="background:#f0fdf4;color:#14532d;border-color:#86efac">🟨 Nature</span>
+        <span class="stag" style="background:#fdf2f8;color:#9d174d;border-color:#f9a8d4">🟨 Wellbeing</span>
+        <span class="stag" style="background:#fff7ed;color:#9a3412;border-color:#fdba74">🟨 Problem Solving</span>
+        <span class="stag" style="background:#ecfdf5;color:#065f46;border-color:#6ee7b7">🟨 Scientific Inquiry</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card anim1">
+    <div class="card-title">📊 Skill Distribution Across All 5 Grades</div>
+    <div class="skill-grid">
+      <div class="skill-card" style="border-left-color:#4f46e5"><h5>🗣 Communication</h5><div class="pbar"><div class="pfill" style="width:95%;background:#4f46e5"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">All 5 grades · Weekly integration</div></div>
+      <div class="skill-card" style="border-left-color:#0891b2"><h5>🔢 Logical Thinking</h5><div class="pbar"><div class="pfill" style="width:88%;background:#0891b2"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 2–5 · Progressively deeper</div></div>
+      <div class="skill-card" style="border-left-color:#059669"><h5>🏅 Leadership & Service</h5><div class="pbar"><div class="pfill" style="width:92%;background:#059669"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">All 5 grades · Core strand</div></div>
+      <div class="skill-card" style="border-left-color:#d97706"><h5>🏛 Heritage & Citizenship</h5><div class="pbar"><div class="pfill" style="width:85%;background:#d97706"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">All 5 grades · Cultural depth</div></div>
+      <div class="skill-card" style="border-left-color:#0369a1"><h5>🔭 Astronomy</h5><div class="pbar"><div class="pfill" style="width:70%;background:#0369a1"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 2–5 · ISRO connection</div></div>
+      <div class="skill-card" style="border-left-color:#7c3aed"><h5>🔬 Scientific Inquiry</h5><div class="pbar"><div class="pfill" style="width:75%;background:#7c3aed"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 2–5 · Experiments & field</div></div>
+      <div class="skill-card" style="border-left-color:#14532d"><h5>🌿 Nature Education</h5><div class="pbar"><div class="pfill" style="width:82%;background:#14532d"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">All 5 grades · Outdoor learning</div></div>
+      <div class="skill-card" style="border-left-color:#db2777"><h5>💚 Wellbeing</h5><div class="pbar"><div class="pfill" style="width:90%;background:#db2777"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">All 5 grades · Emotional awareness</div></div>
+      <div class="skill-card" style="border-left-color:#9a3412"><h5>💡 Creativity</h5><div class="pbar"><div class="pfill" style="width:78%;background:#9a3412"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 1–5 · Arts, innovation</div></div>
+      <div class="skill-card" style="border-left-color:#6d28d9"><h5>🧩 Problem Solving</h5><div class="pbar"><div class="pfill" style="width:85%;background:#6d28d9"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 2–5 · Puzzles, design</div></div>
+      <div class="skill-card" style="border-left-color:#dc2626"><h5>🚀 Entrepreneurship</h5><div class="pbar"><div class="pfill" style="width:55%;background:#dc2626"></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">Grades 4–5 · Innovation strand</div></div>
+    </div>
+  </div>
+
+  <div class="card anim2">
+    <div class="card-title">🎯 Delivery Methods — Making It Feel Modern</div>
+    <div class="cols3" style="margin-bottom:0">
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">🎮</div><h5 style="font-size:13px;margin-bottom:3px">Games & Challenges</h5>
+        <p style="font-size:11px;color:var(--muted)">Competitive and cooperative games that embed learning without feeling like a test</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">📖</div><h5 style="font-size:13px;margin-bottom:3px">Stories & Narratives</h5>
+        <p style="font-size:11px;color:var(--muted)">Jungle Book, Indian heritage tales, real-world stories of courage and service</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">🔍</div><h5 style="font-size:13px;margin-bottom:3px">Investigations</h5>
+        <p style="font-size:11px;color:var(--muted)">Scientific experiments, mystery challenges, and detective-style inquiry activities</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">🎭</div><h5 style="font-size:13px;margin-bottom:3px">Role Play & Simulations</h5>
+        <p style="font-size:11px;color:var(--muted)">Emergency first aid scenarios, community leader role-plays, historical re-enactments</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">🤝</div><h5 style="font-size:13px;margin-bottom:3px">Team Missions</h5>
+        <p style="font-size:11px;color:var(--muted)">Structured cooperative tasks where each team member has a role and responsibility</p>
+      </div>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:20px;margin-bottom:6px">🌿</div><h5 style="font-size:13px;margin-bottom:3px">Nature & Service</h5>
+        <p style="font-size:11px;color:var(--muted)">Outdoor observation walks, conservation projects, and real community service activities</p>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-success anim4" style="margin-top:6px">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <div>The &#127807; <strong>Inspired Living</strong> programme runs alongside every lesson, adding monthly practical life-skills that reinforce Scout values of self-reliance, service, and care. <button onclick="tab('inspired')" style="margin-left:8px;padding:3px 10px;border-radius:6px;border:1px solid #86efac;background:#ecfdf5;color:#166534;font-size:12px;font-weight:700;cursor:pointer">View Inspired Living &#8594;</button></div>
+  </div>
+</div>
+
+<script>
+function tab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabnav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  const btns=document.querySelectorAll('.tabnav button');
+  const map={y1:0,y2:1,journey:2,admin:3,balance:4,inspired:5};
+  btns[map[id]].classList.add('active');
+}
+
+function adminView(v){
+  document.getElementById('adm-y1').style.display=v==='y1'?'block':'none';
+  document.getElementById('adm-y2').style.display=v==='y2'?'block':'none';
+  document.getElementById('tgl-y1').classList.toggle('on',v==='y1');
+  document.getElementById('tgl-y2').classList.toggle('on',v==='y2');
+}
+</script>
+
+<!-- ══════════════ INSPIRED LIVING ══════════════ -->
+<div class="page" id="pg-inspired">
+  <div class="stitle anim">Inspired Living — Life Skills Programme <span style="background:#ecfdf5;color:#065f46">Grades 1–5</span></div>
+  <div class="ssub anim">Practical life-skills curriculum integrated monthly across all grades — cooking, gardening, household management, repairs, and cultural heritage.</div>
+
+  <div class="alert alert-info anim">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div><strong>Integration Note:</strong> Inspired Living runs alongside the Cubs &amp; Bulbuls programme. Every month, students develop a practical life skill that complements their Scout values — self-reliance, service, and care for living things.</div>
+  </div>
+
+  <!-- Domain cards -->
+  <div class="sec-head anim1"><h2>Life Skill Domains</h2></div>
+  <div class="grade-grid anim1" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));margin-bottom:20px">
+    <div class="gcard" style="cursor:default;border-color:#fdba7444"><div style="font-size:26px;margin-bottom:8px">🍽</div><h3 style="color:#9a3412">Culinary Arts</h3><p>Food prep, cooking, baking — progressively advanced</p></div>
+    <div class="gcard" style="cursor:default;border-color:#86efac44"><div style="font-size:26px;margin-bottom:8px">🏠</div><h3 style="color:#166534">Household Skills</h3><p>Chores, cleaning, organising — building independence</p></div>
+    <div class="gcard" style="cursor:default;border-color:#d8b4fe44"><div style="font-size:26px;margin-bottom:8px">🧹</div><h3 style="color:#6b21a8">Cleaning & Organisation</h3><p>From toy tidying to advanced cleaning techniques</p></div>
+    <div class="gcard" style="cursor:default;border-color:#fde04744"><div style="font-size:26px;margin-bottom:8px">🔧</div><h3 style="color:#854d0e">Home Maintenance</h3><p>Screws, bulbs, sewing, plumbing — practical repair</p></div>
+    <div class="gcard" style="cursor:default;border-color:#6ee7b744"><div style="font-size:26px;margin-bottom:8px">🌱</div><h3 style="color:#065f46">Gardening & Growing</h3><p>Seed to harvest — daily habit, care and sustainability</p></div>
+    <div class="gcard" style="cursor:default;border-color:#e879f944"><div style="font-size:26px;margin-bottom:8px">🎉</div><h3 style="color:#86198f">Thematic & Cultural</h3><p>Pongal, Navaratri, Diwali, Christmas — living heritage</p></div>
+    <div class="gcard" style="cursor:default;border-color:#7dd3fc44"><div style="font-size:26px;margin-bottom:8px">👕</div><h3 style="color:#0369a1">Laundry Skills</h3><p>Sorting, washing, folding — clothing independence</p></div>
+  </div>
+
+  <!-- Grade progression table -->
+  <div class="card anim2">
+    <div class="card-title">📊 Grade-wise Skill Progression Overview</div>
+    <table class="tbl">
+      <thead><tr><th>Grade</th><th>Primary Domains</th><th>Key Skills This Year</th><th>Gardening</th><th>Thematic Focus</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#4f46e5">Grade 1</strong></td>
+          <td><span class="badge b-pravesh" style="font-size:10px">Hygiene</span> <span class="badge b-gray" style="font-size:10px">Simple Chores</span> <span class="badge b-gray" style="font-size:10px">Food Prep</span></td>
+          <td>Brushing teeth, washing hands, tidying toys, setting the table, washing fruits, spreading butter</td>
+          <td>Planting seeds, daily watering habit</td>
+          <td>Navaratri decorations, Diwali crafts, Christmas biscuits, Pongal stories</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#059669">Grade 2</strong></td>
+          <td><span class="badge b-pratham" style="font-size:10px">Hygiene+</span> <span class="badge b-gray" style="font-size:10px">Chores+</span> <span class="badge b-gray" style="font-size:10px">Food Prep+</span></td>
+          <td>Bathing independently, making the bed, sorting toys, peeling fruits, cheese sandwiches</td>
+          <td>Watering habit continues, seed planting reinforced</td>
+          <td>Navaratri, Diwali, Christmas, Pongal rituals</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#d97706">Grade 3</strong></td>
+          <td><span class="badge b-dwitiya" style="font-size:10px">Cleaning</span> <span class="badge b-gray" style="font-size:10px">Simple Cooking</span> <span class="badge b-gray" style="font-size:10px">Gardening+</span></td>
+          <td>Sweeping, dusting, organising shelves, peeling pomegranate, salads, snacks, kitchen safety</td>
+          <td>Adds weeding to daily routine</td>
+          <td>Navaratri Golu, Christmas, Pongal dishes</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#7c3aed">Grade 4</strong></td>
+          <td><span class="badge b-tritiya" style="font-size:10px">Advanced Cleaning</span> <span class="badge b-gray" style="font-size:10px">Cooking+</span></td>
+          <td>Vacuuming, mopping, window cleaning, scrambled eggs, simple meals, kitchen appliances</td>
+          <td>Identifies plants, cares for garden plot</td>
+          <td>Traditional recipes for Navaratri, Pongal</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#dc2626">Grade 5</strong></td>
+          <td><span class="badge b-chaturth" style="font-size:10px">Cooking Skills</span> <span class="badge b-gray" style="font-size:10px">Laundry</span> <span class="badge b-golden" style="font-size:10px">Home Maintenance</span></td>
+          <td>Baking, pasta, sorting/washing/folding clothes, fixing screws, replacing bulbs, sewing, basic plumbing</td>
+          <td>Independent garden management</td>
+          <td>Navaratri recipes, Pongal activities</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cubs integration -->
+  <div class="cols2 anim3">
+    <div class="card">
+      <div class="card-title">🔗 How Inspired Living Connects to Cubs Values</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;padding:9px 11px;background:#ecfdf5;border-radius:8px;border:1px solid #a7f3d0">
+          <span style="font-size:18px">🌱</span>
+          <div><div style="font-size:12px;font-weight:700;color:#065f46">Gardening → Care for Living Things</div><div style="font-size:11px;color:#374151">Daily watering builds the Scout habit of regular Good Turns and responsibility for something beyond oneself.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:9px 11px;background:#fff7ed;border-radius:8px;border:1px solid #fdba74">
+          <span style="font-size:18px">🍽</span>
+          <div><div style="font-size:12px;font-weight:700;color:#9a3412">Cooking → Service & Teamwork</div><div style="font-size:11px;color:#374151">Preparing food for others is a form of service — directly aligned to the Scout value of the Good Turn.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:9px 11px;background:#faf5ff;border-radius:8px;border:1px solid #d8b4fe">
+          <span style="font-size:18px">🏠</span>
+          <div><div style="font-size:12px;font-weight:700;color:#6b21a8">Household Chores → Discipline & Responsibility</div><div style="font-size:11px;color:#374151">Consistent chores build the self-discipline that the Cub Law requires: clean in thought, word, and deed.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:9px 11px;background:#fdf4ff;border-radius:8px;border:1px solid #e879f9">
+          <span style="font-size:18px">🎉</span>
+          <div><div style="font-size:12px;font-weight:700;color:#86198f">Thematic Activities → Heritage & Citizenship</div><div style="font-size:11px;color:#374151">Pongal, Navaratri, Diwali activities fulfil the Scout duty to country and cultivate cultural pride.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:9px 11px;background:#fef9c3;border-radius:8px;border:1px solid #fde047">
+          <span style="font-size:18px">🔧</span>
+          <div><div style="font-size:12px;font-weight:700;color:#854d0e">Home Maintenance → Be Prepared</div><div style="font-size:11px;color:#374151">Knowing how to fix, repair, and maintain things is the physical expression of the Scout motto: Be Prepared.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Monthly Integration Pattern</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--border)"><span>Month</span><span>Primary Focus</span><span>Gardening</span></div>
+        ${[['June','Personal Hygiene / Cooking','Planting'],['July','Hygiene / Chores','Watering'],['August','Chores / Cleaning / Laundry','Habit'],['September','Chores / Food Prep + Navaratri','Weeding'],['October','Cooking / Laundry + Diwali','Habit'],['November','Food Prep / Cooking / Maintenance','Habit'],['December','Cooking / Maintenance + Christmas','Planting'],['January','Gardening / Cooking + Pongal','Habit'],['February','Cooking / Maintenance','Habit'],['March','Cleaning / Maintenance + Spring','Habit']].map(([m,f,g])=>`
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px">
+          <span style="font-weight:600;color:var(--text);width:80px">${m}</span>
+          <span style="color:var(--muted);flex:1">${f}</span>
+          <span style="color:#059669;font-weight:600;width:60px;text-align:right">${g}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-success anim4" style="margin-top:4px">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <div><strong>Full Detail Available:</strong> Open the <a href="cubs_curriculum_portal.html" target="_blank" style="color:#166534;font-weight:700">Curriculum Portal</a> and click <strong>Inspired Living</strong> in the sidebar to see the complete month-by-month skill map for every grade.</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,2295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>" />
+    
+    <title>Velammal Strategic Leadership Assessment</title>
+    <meta name="description" content="An interactive strategic leadership intelligence dashboard for school administrators. Measure parent trust, reputation, compliance, and institutional balance with a 3D Surface Radar analysis." />
+    
+    <!-- Load Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Plotly.js for WebGL 3D rendering -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+    
+    <!-- Load html2canvas & jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Configure Tailwind theme custom values -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cyber: {
+                bg: '#06060c',
+                card: 'rgba(15, 15, 28, 0.7)',
+                cyan: '#00f2fe',
+                purple: '#7f00ff',
+                pink: '#ff007f',
+                glow: '#00d2ff',
+                accent: '#181824',
+                text: '#e2e8f0',
+              }
+            },
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap');
+
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        background-color: #06060c;
+        background-image: linear-gradient(135deg, #06060c 0%, #0e0e22 50%, #15092a 100%);
+        background-attachment: fixed;
+        color: #e2e8f0;
+        overflow-x: hidden;
+      }
+
+      .glass-panel-neon {
+        background: rgba(10, 10, 22, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.05);
+      }
+
+      .glass-panel {
+        background: rgba(15, 15, 28, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .tech-font {
+        font-family: 'Share Tech Mono', monospace;
+      }
+
+      /* Custom scrollbars */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(6, 6, 12, 0.8);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(127, 0, 255, 0.5);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 242, 254, 0.8);
+      }
+
+      @keyframes pulseGlow {
+        0%, 100% { opacity: 0.15; transform: scale(1); }
+        50% { opacity: 0.35; transform: scale(1.05); }
+      }
+
+      .bg-glow-bubble {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+        animation: pulseGlow 8s ease-in-out infinite;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col relative bg-cyber-bg text-cyber-text selection:bg-cyber-cyan selection:text-black">
+    
+    <!-- Floating Background Orbs -->
+    <div class="bg-glow-bubble w-[350px] h-[350px] bg-[#00f2fe]/10 top-[10%] left-[5%]"></div>
+    <div class="bg-glow-bubble w-[450px] h-[450px] bg-[#7f00ff]/10 bottom-[10%] right-[5%]"></div>
+    <div class="bg-glow-bubble w-[300px] h-[300px] bg-[#ff007f]/5 top-[40%] left-[45%]"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-6 z-10 w-full">
+
+      <!-- ================= SCREEN 1: WELCOME ================= -->
+      <div id="screen-welcome" class="w-full max-w-md glass-panel-neon rounded-2xl p-8 text-center border-t-4 border-t-cyber-cyan relative overflow-hidden transition-all duration-300">
+        <div class="mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-pink p-0.5 mb-4 shadow-[0_0_15px_rgba(0,242,254,0.4)]">
+            <div class="w-full h-full bg-[#0d0d1e] rounded-[10px] flex items-center justify-center">
+              <span class="text-3xl">🚀</span>
+            </div>
+          </div>
+          <h1 class="text-3xl font-extrabold tracking-tight text-white">VELAMMAL</h1>
+          <p class="text-xs uppercase font-mono tracking-widest text-cyber-cyan mt-1">Strategic Leadership Assessment</p>
+        </div>
+
+        <form id="welcome-form" class="space-y-5 text-left">
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-2">Principal Name</label>
+            <input
+              type="text"
+              id="input-principal"
+              required
+              placeholder="Enter administrator name"
+              class="w-full bg-gray-950/80 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition-all duration-300 text-white placeholder-gray-600"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-2">School Name</label>
+            <input
+              type="text"
+              id="input-school"
+              required
+              placeholder="Enter educational institution"
+              class="w-full bg-gray-950/80 border border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition-all duration-300 text-white placeholder-gray-600"
+            />
+          </div>
+
+          <div id="welcome-error" class="hidden text-xs text-cyber-pink bg-cyber-pink/10 border border-cyber-pink/20 rounded-lg p-3 font-medium">
+            ⚠️ Please input both Principal and School names to boot.
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-4 px-6 rounded-xl font-bold tracking-widest uppercase text-white bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-pink hover:brightness-110 shadow-[0_0_15px_rgba(0,242,254,0.4)] transition-all duration-300 transform active:scale-[0.98] mt-6 flex items-center justify-center gap-2"
+          >
+            <span>Boot Diagnostic</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </form>
+
+        <div class="mt-8 border-t border-gray-900 pt-4 text-center">
+          <span class="text-[10px] font-mono text-gray-600 uppercase tracking-widest">System Status: Ready. Ver 3.5.0</span>
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 2: QUESTIONS ================= -->
+      <div id="screen-questions" class="hidden w-full max-w-5xl transition-all duration-300">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Left Column (lg:col-span-9): Question Card -->
+          <div class="lg:col-span-9 glass-panel-neon rounded-2xl p-6 md:p-8 border-l-4 border-l-cyber-purple relative flex flex-col justify-between">
+            
+            <div>
+              <!-- Header -->
+              <div class="flex justify-between items-center mb-6">
+                <div>
+                  <span class="text-xs font-mono text-cyber-cyan uppercase tracking-widest">Diagnostic Module</span>
+                  <h2 id="question-theme" class="text-sm font-bold text-gray-400 mt-1 uppercase tracking-wider"></h2>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-mono text-gray-500">SEQUENCE</span>
+                  <div class="text-lg font-bold text-cyber-purple tech-font">
+                    <span id="question-index-label">1</span> <span class="text-xs text-gray-600 font-normal">/ 28</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Progress Timeline Grid -->
+              <div id="progress-timeline" class="flex gap-1.5 w-full items-center mb-8 flex-wrap">
+                <!-- Tiny glowing timeline blocks populate here -->
+              </div>
+
+              <!-- Scenario Card Briefing -->
+              <div class="mb-8 p-5 bg-gray-950/60 border border-gray-800 rounded-xl">
+                <span class="text-[10px] font-mono text-cyber-cyan uppercase tracking-widest font-extrabold block mb-2">SITUATION BRIEFING:</span>
+                <p id="question-text" class="text-base md:text-lg font-semibold text-gray-100 leading-relaxed"></p>
+              </div>
+
+              <!-- Option Buttons (Large Actions) -->
+              <div id="choices-container" class="space-y-4">
+                <!-- Programmatically populated choices -->
+              </div>
+            </div>
+
+            <!-- Prev navigation -->
+            <div class="flex justify-between items-center mt-10 border-t border-gray-900 pt-6">
+              <button id="btn-prev" onclick="prevQuestion()" class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-gray-400 hover:text-cyber-cyan transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span>Back</span>
+              </button>
+              <span class="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Data Stream Encrypted</span>
+            </div>
+
+          </div>
+
+          <!-- Right Column (lg:col-span-3): Stress Profile -->
+          <div class="lg:col-span-3 glass-panel rounded-2xl p-6 flex flex-col justify-between items-center border-t-2 border-t-cyber-pink text-center min-h-[300px] lg:min-h-auto">
+            
+            <div class="w-full">
+              <span class="text-xs font-mono uppercase tracking-widest text-gray-400 block mb-1">STRESS MONITOR</span>
+              <h3 class="text-xs uppercase font-extrabold text-cyber-pink tracking-wider">Institutional Strain</h3>
+            </div>
+
+            <!-- Vertical Stress Bar -->
+            <div class="w-16 h-48 bg-gray-950 border border-gray-900 rounded-2xl relative overflow-hidden flex flex-col justify-end p-0.5 shadow-inner">
+              <div id="stress-meter-bar" class="w-full rounded-b-xl transition-all duration-500" style="height: 40%;"></div>
+              
+              <!-- Floating label -->
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span id="stress-meter-label" class="text-base font-extrabold font-mono text-white tracking-widest shadow-text">40%</span>
+              </div>
+            </div>
+
+            <!-- Stress description -->
+            <div class="w-full">
+              <p id="stress-meter-desc" class="text-xs font-mono text-emerald-400 mt-2 uppercase font-semibold leading-relaxed">
+                STRESS PROFILE: NOMINAL. Stakeholder trust and systems are operating efficiently.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ================= SCREEN 3: RESULTS DASHBOARD ================= -->
+      <div id="screen-dashboard" class="hidden w-full max-w-7xl mx-auto space-y-6 transition-all duration-300">
+        
+        <!-- Header Console -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-950/60 border border-gray-900 rounded-2xl p-6">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">📊</span>
+            <div>
+              <span class="text-xs uppercase font-mono tracking-widest text-cyber-cyan">Diagnostic Report</span>
+              <h1 class="text-2xl font-black text-white tracking-tight mt-0.5">Strategic Balance Console</h1>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 bg-gray-900/60 px-5 py-3 rounded-xl border border-gray-800">
+            <div id="profile-avatar" class="w-10 h-10 rounded-lg bg-cyber-purple/20 flex items-center justify-center font-bold text-cyber-cyan border border-cyber-cyan/30 text-lg uppercase shadow-[0_0_15px_rgba(0,242,254,0.3)] font-mono"></div>
+            <div>
+              <div id="profile-school" class="text-sm font-extrabold text-gray-200">School Name</div>
+              <div id="profile-principal" class="text-xs text-gray-400 font-medium">Principal: Name</div>
+            </div>
+          </div>
+
+          <button onclick="resetApp()" class="px-4 py-2 border border-gray-800 hover:border-cyber-pink hover:text-cyber-pink text-gray-400 rounded-xl text-xs font-mono uppercase tracking-wider transition-all duration-300">
+            Reset Session
+          </button>
+        </div>
+
+        <!-- 3D Surface & AI Decision Engine Output -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Chart -->
+          <div class="lg:col-span-7 flex flex-col glass-panel-neon rounded-2xl p-6 border-t-2 border-t-cyber-cyan min-h-[480px]">
+            <div class="flex justify-between items-center border-b border-gray-900 pb-3 mb-4">
+              <div>
+                <h2 class="text-lg font-bold text-white tracking-wide">3D Institutional Balance Surface</h2>
+                <p class="text-xs text-gray-500 font-mono">Rotatable, interactive polar gradient simulation mesh</p>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-cyber-cyan/15 text-[10px] font-mono text-cyber-cyan border border-cyber-cyan/20 uppercase tracking-widest">WebGL 3D</span>
+            </div>
+            
+            <div class="flex-1 min-h-[350px] relative">
+              <div id="plotly-surface-chart" class="w-full h-full select-none min-h-[380px]"></div>
+            </div>
+          </div>
+
+          <!-- Decision Output -->
+          <div class="lg:col-span-5 flex flex-col glass-panel rounded-2xl p-6 border-t-2 border-t-cyber-pink justify-between">
+            <div>
+              <div class="flex justify-between items-center border-b border-gray-900 pb-3 mb-5">
+                <h2 class="text-lg font-bold text-white tracking-wide">Decision Engine Output</h2>
+                <span class="px-2 py-0.5 rounded bg-cyber-pink/15 text-[10px] font-mono text-cyber-pink border border-cyber-pink/20 uppercase tracking-widest">AI Summary</span>
+              </div>
+
+              <!-- Classification Tag -->
+              <div id="badge-classification" class="inline-block px-4 py-2 rounded-xl text-sm font-extrabold uppercase tracking-widest border mb-4 shadow-xl"></div>
+
+              <p id="classification-desc" class="text-gray-300 text-sm leading-relaxed mb-6"></p>
+
+              <!-- Strategic checklist -->
+              <div class="space-y-3">
+                <h3 class="text-xs font-mono uppercase tracking-wider text-gray-400 mb-2">Recommended Strategic Directives:</h3>
+                <div id="recommendations-container" class="space-y-3"></div>
+              </div>
+            </div>
+
+            <!-- PDF Download -->
+            <div class="mt-8 border-t border-gray-900 pt-6">
+              <button id="btn-download-pdf" onclick="downloadPDFReport()" class="w-full py-4 px-6 rounded-xl font-bold tracking-wider uppercase bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-pink text-white shadow-[0_0_15px_rgba(0,242,254,0.4)] hover:brightness-110 transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span>Download Intelligence PDF</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==================== NEW: INSTITUTIONAL METRICS MATRIX ==================== -->
+        <div class="glass-panel rounded-2xl p-6 border-t-2 border-t-cyber-cyan">
+          <div class="border-b border-gray-900 pb-3 mb-5">
+            <h2 class="text-lg font-bold text-white tracking-wide">Institutional Intelligence Matrix</h2>
+            <p class="text-xs text-gray-500 font-mono">Calculated risk, stability, and growth indices based on leadership decisions</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Leadership Stability -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Leadership Stability</span>
+                <span id="metric-stability-score" class="text-sm font-extrabold font-mono text-cyber-cyan">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-stability-bar" class="h-full rounded-full bg-cyber-cyan shadow-[0_0_10px_#00f2fe]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Trust Index -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Trust Index</span>
+                <span id="metric-trust-score" class="text-sm font-extrabold font-mono text-emerald-400">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-trust-bar" class="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Academic Sustainability -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Academic Sustainability</span>
+                <span id="metric-academic-score" class="text-sm font-extrabold font-mono text-cyber-purple">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-academic-bar" class="h-full rounded-full bg-cyber-purple shadow-[0_0_10px_#7f00ff]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Operational Stability -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Operational Stability</span>
+                <span id="metric-ops-score" class="text-sm font-extrabold font-mono text-cyber-cyan">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-ops-bar" class="h-full rounded-full bg-cyber-cyan shadow-[0_0_10px_#00f2fe]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Staff Retention Risk -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Staff Attrition Risk</span>
+                <span id="metric-retention-score" class="text-sm font-extrabold font-mono text-cyber-pink">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-retention-bar" class="h-full rounded-full bg-cyber-pink shadow-[0_0_10px_#ff007f]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Admission Growth Probability -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono">Admission Growth Prob</span>
+                <span id="metric-admission-score" class="text-sm font-extrabold font-mono text-emerald-400">0%</span>
+              </div>
+              <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+                <div id="metric-admission-bar" class="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Institutional Risk Level -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono mb-2 block">Institutional Risk Level</span>
+              <div class="flex items-center gap-2">
+                <span id="badge-risk-level" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono tracking-widest border uppercase">LOW</span>
+              </div>
+            </div>
+
+            <!-- Reputation Forecast -->
+            <div class="bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300">
+              <span class="text-xs font-bold text-gray-400 tracking-wide uppercase font-mono mb-2 block">Reputation Forecast</span>
+              <div class="flex items-center gap-2">
+                <span id="badge-reputation-forecast" class="px-3 py-1.5 rounded-lg text-xs font-bold font-mono tracking-widest border uppercase">STABLE</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Mapped Category Details -->
+        <div class="glass-panel rounded-2xl p-6 border-t-2 border-t-cyber-purple">
+          <div class="border-b border-gray-900 pb-3 mb-5">
+            <h2 class="text-lg font-bold text-white tracking-wide">Detailed Diagnostic Matrix</h2>
+            <p class="text-xs text-gray-500 font-mono">13 category percentage scores mapping specific school variables</p>
+          </div>
+
+          <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Dynamically populated categories -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 text-center border-t border-gray-950 z-10 mt-auto">
+      <span class="text-[10px] font-mono text-gray-600 tracking-widest uppercase">
+        Velammal Tactical Diagnostics Suite © 2026
+      </span>
+    </footer>
+
+    <!-- ==================== OFF-SCREEN REPORT PRINT PAGES ==================== -->
+    <div class="absolute top-0 left-[-9999px] w-[794px] flex flex-col gap-0 text-white font-sans">
+      
+      <!-- PAGE 1 -->
+      <div id="pdf-page-1" class="w-[794px] h-[1123px] bg-cyber-bg p-12 flex flex-col justify-between relative" style="box-sizing: border-box;">
+        <div class="absolute top-0 right-0 w-80 h-80 bg-purple-900/10 filter blur-[80px] pointer-events-none rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-cyan-900/10 filter blur-[80px] pointer-events-none rounded-full"></div>
+
+        <div>
+          <div class="flex justify-between items-center border-b border-gray-800 pb-6 mb-8">
+            <div>
+              <span class="text-xs uppercase font-semibold tracking-widest text-cyber-cyan">Strategic Diagnostics</span>
+              <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-pink">
+                VELAMMAL LEADERSHIP ANALYTICS
+              </h1>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-mono text-gray-500 uppercase">System Verification</div>
+              <div class="text-sm font-semibold text-cyber-pink">VER. 3.5.0-ALPHA</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-8 bg-gray-950/60 border border-gray-800/80 rounded-xl p-6">
+            <div>
+              <div class="text-xs uppercase font-mono tracking-wider text-gray-500">Institution Name</div>
+              <div id="pdf-school-name" class="text-lg font-bold text-cyber-text mt-1">Global High</div>
+            </div>
+            <div>
+              <div class="text-xs uppercase font-mono tracking-wider text-gray-500">Principal Administrator</div>
+              <div id="pdf-principal-name" class="text-lg font-bold text-cyber-text mt-1">User Name</div>
+            </div>
+            <div class="mt-2">
+              <div class="text-xs uppercase font-mono tracking-wider text-gray-500">Assessment Date</div>
+              <div id="pdf-date" class="text-sm font-semibold text-gray-400 mt-1">May 27, 2026</div>
+            </div>
+            <div class="mt-2">
+              <div class="text-xs uppercase font-mono tracking-wider text-gray-500">Diagnostic Status</div>
+              <div class="text-sm font-semibold text-emerald-400 mt-1 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Completed & Verified
+              </div>
+            </div>
+          </div>
+
+          <div id="pdf-class-container" class="mb-6 border-l-4 p-5 rounded-r-xl bg-gray-950/30 border-cyber-cyan">
+            <div class="text-xs uppercase font-mono tracking-widest text-gray-400">Institutional Classification</div>
+            <div id="pdf-class-type" class="text-2xl font-extrabold mt-1 text-cyber-cyan">Growth Ready</div>
+            <p id="pdf-class-desc" class="text-sm text-gray-300 mt-2 leading-relaxed">Description goes here...</p>
+          </div>
+
+          <div class="flex flex-col items-center justify-center bg-gray-950/40 border border-gray-900 rounded-xl p-4 mt-6">
+            <div class="text-xs uppercase font-mono tracking-wider text-gray-500 mb-2">3D Surface Alignment Radar</div>
+            <img id="pdf-chart-image" alt="3D Leadership Balance Plot" class="w-[600px] h-[400px] object-contain rounded-lg border border-gray-900 bg-black/30" />
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-gray-600 border-t border-gray-900 pt-4">
+          <div>VELAMMAL SYSTEM DECISION ENGINE © 2026</div>
+          <div class="font-mono">PAGE 1 OF 2</div>
+        </div>
+      </div>
+
+      <!-- PAGE 2 -->
+      <div id="pdf-page-2" class="w-[794px] h-[1123px] bg-cyber-bg p-12 flex flex-col justify-between relative" style="box-sizing: border-box;">
+        <div class="absolute top-0 left-0 w-80 h-80 bg-purple-900/10 filter blur-[80px] pointer-events-none rounded-full"></div>
+
+        <div>
+          <div class="flex justify-between items-center border-b border-gray-800 pb-6 mb-8">
+            <div>
+              <span class="text-xs uppercase font-semibold tracking-widest text-cyber-cyan">Detailed Diagnostics</span>
+              <h2 class="text-2xl font-bold mt-1 text-gray-100">METRIC MATRIX & STRATEGIC PATHWAY</h2>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono text-gray-500 uppercase">Assessment Suite</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-8 mb-8">
+            
+            <!-- Left Column: Axes and Health Metrics -->
+            <div class="bg-gray-950/40 border border-gray-900 rounded-xl p-6 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-cyber-cyan border-b border-gray-800 pb-2 mb-4">
+                  Main Balance Dimensions (Axes)
+                </h3>
+                <div id="pdf-axes-container" class="space-y-3.5">
+                  <!-- Programmatically populated axes bars -->
+                </div>
+              </div>
+              
+              <div class="mt-6 border-t border-gray-800 pt-4">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 border-b border-gray-800 pb-2 mb-4">
+                  Institutional Health Indices
+                </h3>
+                <div id="pdf-metrics-container" class="space-y-3">
+                  <!-- Programmatically populated health indices -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: 13 Subcategories -->
+            <div class="bg-gray-950/40 border border-gray-900 rounded-xl p-6">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-cyber-pink border-b border-gray-800 pb-2 mb-4">
+                Sub-Category Percentages
+              </h3>
+              <div id="pdf-categories-container" class="grid grid-cols-1 gap-2.5">
+                <!-- Programmatically populated categories list -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations -->
+          <div class="bg-gray-950/60 border border-gray-800 rounded-xl p-6 mt-4">
+            <h3 class="text-base font-bold uppercase tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-pink mb-4 flex items-center gap-2">
+              <span class="text-cyber-cyan">⚡</span> Engine-Generated Strategic Directive
+            </h3>
+            <div id="pdf-recommendations-list" class="space-y-4">
+              <!-- Programmatically populated recs -->
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-gray-600 border-t border-gray-900 pt-4">
+          <div>VELAMMAL SYSTEM DECISION ENGINE © 2026</div>
+          <div class="font-mono">PAGE 2 OF 2</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==============================================
+         JAVASCRIPT APPLICATION LOGIC
+         ============================================== -->
+    <script>
+      // 1. Data Definitions (13 core categories)
+      const CATEGORIES = {
+        parentTrust: "Parent Trust",
+        reputation: "Reputation",
+        budget: "Budget",
+        teachersTrust: "Teachers Trust",
+        compliance: "Compliance",
+        integrity: "Integrity",
+        academicTime: "Academic Time",
+        studentProgress: "Student Progress",
+        whatsappHeat: "WhatsApp Heat",
+        managementTrust: "Management Trust",
+        auditScores: "Audit Scores",
+        admissions: "Admissions",
+        results: "Results"
+      };
+
+      // 28 scenario questions with mapped choices A, B, C, D
+      const QUESTIONS = [
+        {
+          id: 1,
+          theme: "Admissions & Retention",
+          text: "Your senior CBSE Physics teacher, known for producing top board exam results, has received a much higher salary offer from a nearby NEET/JEE coaching centre and may leave before the board preparation period.",
+          options: [
+            {
+              key: 'A',
+              text: "Arrange an urgent counter-offer combining performance-linked incentives and role expansion, while initiating a backup recruitment drive through school alumni networks.",
+              effects: { teachersTrust: 8, reputation: 6, managementTrust: 5, results: 6, budget: -4 }
+            },
+            {
+              key: 'B',
+              text: "Hold a meeting to remind the teacher of their contract notice period and offer a moderate increment in the upcoming appraisal cycle.",
+              effects: { teachersTrust: 4, compliance: 6, results: 3, budget: -2 }
+            },
+            {
+              key: 'C',
+              text: "Accept the resignation reluctantly, and rush to assign cover classes to junior science staff while looking for temporary lecturers.",
+              effects: { teachersTrust: -4, academicTime: -5, results: -6, reputation: -3, whatsappHeat: 4 }
+            },
+            {
+              key: 'D',
+              text: "Ignore the threat, believing their loyalty to the school will prevail, and take no action until the coordinator officially resigns.",
+              effects: { teachersTrust: -8, reputation: -6, results: -8, whatsappHeat: 8 }
+            }
+          ]
+        },
+        {
+          id: 2,
+          theme: "Crisis Management",
+          text: "A parent voice note criticizing the school’s discipline system is spreading rapidly across class WhatsApp groups and creating panic among parents.",
+          options: [
+            {
+              key: 'A',
+              text: "Release a transparent official video address explaining the school's safety guidelines, invite PTM representatives for a dialogue, and outline the corrective action plan.",
+              effects: { parentTrust: 10, reputation: 8, whatsappHeat: -8, integrity: 6 }
+            },
+            {
+              key: 'B',
+              text: "Send a formal clarification circular via the school ERP, reinforcing the school handbook rules, and direct class teachers to address queries in group chats.",
+              effects: { parentTrust: 5, reputation: 4, whatsappHeat: -4 }
+            },
+            {
+              key: 'C',
+              text: "Identify and issue a warning letter to the parent who generated the voice note, requesting them to retract the statement immediately.",
+              effects: { parentTrust: -5, reputation: -4, whatsappHeat: 6 }
+            },
+            {
+              key: 'D',
+              text: "Ignore the rumor, expecting the issue to die down naturally, and instruct teachers to block parent queries on the matter.",
+              effects: { parentTrust: -10, reputation: -8, whatsappHeat: 12, admissions: -6 }
+            }
+          ]
+        },
+        {
+          id: 3,
+          theme: "Regulatory Auditing",
+          text: "During a DEO inspection notice, you realize that fire safety records, lab registers, and transport compliance files are incomplete.",
+          options: [
+            {
+              key: 'A',
+              text: "Constitute a task force to compile registers overnight, hire an external compliance consultant to audit, and schedule a safety mock run.",
+              effects: { compliance: 10, auditScores: 8, budget: -4, managementTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Instruct admin staff to update safety logs using last year's formats and prepare a formal extension request for the DEO inspection date.",
+              effects: { compliance: 5, auditScores: 4, integrity: -2 }
+            },
+            {
+              key: 'C',
+              text: "Quickly fill missing entries with arbitrary signatures to present a completed file during the inspection, hoping they won't check closely.",
+              effects: { compliance: -5, integrity: -10, auditScores: -5 }
+            },
+            {
+              key: 'D',
+              text: "Delegate the entire stack to the junior transport supervisor without supervision, assuming they will handle it somehow.",
+              effects: { compliance: -10, auditScores: -10, reputation: -5 }
+            }
+          ]
+        },
+        {
+          id: 4,
+          theme: "Admissions Pipeline",
+          text: "Admissions for Nursery and Grade 11 have dropped sharply this year despite heavy spending on newspaper ads and social media campaigns.",
+          options: [
+            {
+              key: 'A',
+              text: "Conduct a comprehensive local demographic survey, offer scholarship trials, and shift marketing budget to parent-led micro-communities and open-house events.",
+              effects: { admissions: 10, budget: -5, reputation: 8, parentTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Redesign social media creatives, run promotional campaigns highlighting board toppers, and offer fee installments for early enrollments.",
+              effects: { admissions: 6, budget: -3, reputation: 4 }
+            },
+            {
+              key: 'C',
+              text: "Direct admissions staff to cold-call previous year's inquiry databases and offer sudden, unapproved discounts to close leads.",
+              effects: { admissions: 2, budget: -4, integrity: -4 }
+            },
+            {
+              key: 'D',
+              text: "Blame the economic slowdown and competitor undercutting in the board meeting, maintaining the same ad strategy.",
+              effects: { admissions: -8, reputation: -4, managementTrust: -8 }
+            }
+          ]
+        },
+        {
+          id: 5,
+          theme: "Academic Time & Events",
+          text: "Teachers complain that frequent annual day practice, competitions, and event rehearsals are reducing actual classroom teaching hours.",
+          options: [
+            {
+              key: 'A',
+              text: "Restructure the event schedule to run rehearsals in split shifts, implement digital flipped-classroom modules, and integrate academic themes into performance items.",
+              effects: { academicTime: 8, studentProgress: 6, results: 4, teachersTrust: 5 }
+            },
+            {
+              key: 'B',
+              text: "Shorten other non-academic assemblies and direct teachers to take extra classes on working Saturdays to cover the lost periods.",
+              effects: { academicTime: 4, teachersTrust: -3, studentProgress: 2 }
+            },
+            {
+              key: 'C',
+              text: "Cancel minor competitions last minute to retrieve teaching days, causing frustration among students and co-curricular staff.",
+              effects: { academicTime: -2, teachersTrust: -2, reputation: -3 }
+            },
+            {
+              key: 'D',
+              text: "Allow rehearsals to run unrestricted, and tell teachers to rush syllabus completion by dictating notes directly in the last week.",
+              effects: { academicTime: -8, studentProgress: -6, results: -8, teachersTrust: -4 }
+            }
+          ]
+        },
+        {
+          id: 6,
+          theme: "Academic Integrity",
+          text: "A student who consistently failed internal tests suddenly scores extremely high marks just before board practicals, raising doubts among staff.",
+          options: [
+            {
+              key: 'A',
+              text: "Constitute an internal audit committee, re-evaluate their practical work under double-blind supervision, and implement a personalized tutoring path.",
+              effects: { integrity: 10, studentProgress: 8, teachersTrust: 6, auditScores: 5 }
+            },
+            {
+              key: 'B',
+              text: "Instruct the subject teacher to present the student's project files and conduct a formal viva-voce to justify the high internal scores.",
+              effects: { integrity: 5, studentProgress: 4 }
+            },
+            {
+              key: 'C',
+              text: "Admonish the teacher in private, adjust the practical marks downward arbitrarily to avoid raising external examiner suspicion.",
+              effects: { integrity: -5, teachersTrust: -6, studentProgress: -3 }
+            },
+            {
+              key: 'D',
+              text: "Approve the marks without checking, assuming the teacher knows best and that it benefits the school's overall passing average.",
+              effects: { integrity: -10, auditScores: -8, managementTrust: -5 }
+            }
+          ]
+        },
+        {
+          id: 7,
+          theme: "Campus Safety",
+          text: "Parents are demanding CCTV coverage and stricter gate security after a student left campus unnoticed during dispersal.",
+          options: [
+            {
+              key: 'A',
+              text: "Install smart RFID gate access, construct an assembly holding zone for dispersal, and mandate teacher-led exit escorts.",
+              effects: { parentTrust: 10, compliance: 8, budget: -6, reputation: 6 }
+            },
+            {
+              key: 'B',
+              text: "Issue warnings to the security staff on duty, revise gate entry-exit log formats, and restrict student movement during academic hours.",
+              effects: { parentTrust: 5, compliance: 4 }
+            },
+            {
+              key: 'C',
+              text: "Send a generic ERP reminder accusing parents of late pickups, and suspend the student who left campus for violating rules.",
+              effects: { parentTrust: -5, reputation: -4, whatsappHeat: 6 }
+            },
+            {
+              key: 'D',
+              text: "Defend the gate security in parent meetings, stating it was a one-off accident and that students should be responsible for themselves.",
+              effects: { parentTrust: -10, reputation: -8, whatsappHeat: 10 }
+            }
+          ]
+        },
+        {
+          id: 8,
+          theme: "Financial Operations",
+          text: "School management asks you to reduce expenses immediately while still maintaining board exam performance and school reputation.",
+          options: [
+            {
+              key: 'A',
+              text: "Re-negotiate vendor contracts, audit power/waste systems for utility savings, and digitize administrative processes to protect academic investments.",
+              effects: { budget: 10, managementTrust: 8, academicTime: 4 }
+            },
+            {
+              key: 'B',
+              text: "Reduce co-curricular trip budgets, freeze teacher training funds, and purchase lower-cost library/lab consumables.",
+              effects: { budget: 6, managementTrust: 4, teachersTrust: -4 }
+            },
+            {
+              key: 'C',
+              text: "Cut teacher allowances, reduce air conditioning hours in classrooms, and delay vendor payments for essential sanitation services.",
+              effects: { budget: 2, teachersTrust: -8, reputation: -6, compliance: -5 }
+            },
+            {
+              key: 'D',
+              text: "Refuse budget cuts in writing, arguing it is impossible, while allowing departments to spend without control until funds run dry.",
+              effects: { budget: -10, managementTrust: -10, auditScores: -6 }
+            }
+          ]
+        },
+        {
+          id: 9,
+          theme: "Staff Alignment",
+          text: "A senior teacher openly questions a new lesson plan monitoring system during a staff meeting in front of junior teachers.",
+          options: [
+            {
+              key: 'A',
+              text: "Validate their experience during the meeting, invite them to co-design the monitoring metrics, and position them as a mentor for implementation.",
+              effects: { teachersTrust: 10, managementTrust: 6, compliance: 6 }
+            },
+            {
+              key: 'B',
+              text: "Explain the board requirements necessitating the system calmly, and schedule a private feedback meeting with the teacher later that day.",
+              effects: { teachersTrust: 5, compliance: 4 }
+            },
+            {
+              key: 'C',
+              text: "Defend the system aggressively in public, pointing out that compliance is non-negotiable and that senior teachers must set a better example.",
+              effects: { teachersTrust: -4, reputation: -2, compliance: 2 }
+            },
+            {
+              key: 'D',
+              text: "Back down immediately to avoid conflict, deferring the monitoring project indefinitely to preserve staff harmony.",
+              effects: { teachersTrust: -2, compliance: -8, managementTrust: -6 }
+            }
+          ]
+        },
+        {
+          id: 10,
+          theme: "Social Media Crisis",
+          text: "A classroom incident video recorded by students becomes viral on Instagram and damages the school’s public image locally.",
+          options: [
+            {
+              key: 'A',
+              text: "Issue a prompt public statement outlining school action, suspend phone privileges, and run digital ethics workshops with parent council panels.",
+              effects: { reputation: 10, parentTrust: 8, whatsappHeat: -8, compliance: 6 }
+            },
+            {
+              key: 'B',
+              text: "Identify the students in the video, contact their parents for a private inquiry, and request Instagram to take down the post.",
+              effects: { reputation: 5, parentTrust: 4, whatsappHeat: -4 }
+            },
+            {
+              key: 'C',
+              text: "Ban all students from using smartphones on campus, and threaten expulsion for anyone caught sharing the video.",
+              effects: { reputation: -4, parentTrust: -4, whatsappHeat: 6 }
+            },
+            {
+              key: 'D',
+              text: "Do nothing publicly, hoping the algorithm buries the post, and instruct teachers to pretend nothing happened.",
+              effects: { reputation: -10, parentTrust: -8, whatsappHeat: 12 }
+            }
+          ]
+        },
+        {
+          id: 11,
+          theme: "Retention & Workload",
+          text: "Several experienced teachers are quietly attending interviews in other schools because they feel overworked and unappreciated.",
+          options: [
+            {
+              key: 'A',
+              text: "Introduce structured work hours, establish a transparent appreciation bonus pool, and hire teaching assistants to reduce non-academic loads.",
+              effects: { teachersTrust: 10, budget: -5, reputation: 6, results: 4 }
+            },
+            {
+              key: 'B',
+              text: "Conduct appraisal reviews, adjust salaries to align with city benchmarks, and offer professional development certificate programs.",
+              effects: { teachersTrust: 6, budget: -3 }
+            },
+            {
+              key: 'C',
+              text: "Hold emotional counseling sessions urging them not to leave mid-term, and recruit fresh B.Ed graduates as backup replacements.",
+              effects: { teachersTrust: -2, results: -3, reputation: -2 }
+            },
+            {
+              key: 'D',
+              text: "Let them leave, stating that anyone who is not committed to the school's mission is free to go.",
+              effects: { teachersTrust: -10, results: -8, reputation: -6 }
+            }
+          ]
+        },
+        {
+          id: 12,
+          theme: "Institutional Branding",
+          text: "Parents of toppers publicly credit private tuition centres instead of the school during PTA meetings and social media posts.",
+          options: [
+            {
+              key: 'A',
+              text: "Publish detailed performance diagnostic logs showcasing internal school improvement curves, and launch a 'My School, My Mentor' student appreciation campaign.",
+              effects: { reputation: 10, parentTrust: 8, admissions: 6, results: 4 }
+            },
+            {
+              key: 'B',
+              text: "Congratulate toppers in public ceremonies, publish advertisements detailing their board scores, and feature school teachers alongside them.",
+              effects: { reputation: 6, parentTrust: 4 }
+            },
+            {
+              key: 'C',
+              text: "Mandate parents of toppers to sign declaration forms stating the school was solely responsible for their scores before issuing certificates.",
+              effects: { reputation: -4, parentTrust: -6, whatsappHeat: 6 }
+            },
+            {
+              key: 'D',
+              text: "Ignore the social posts, feeling that board results speak for themselves and tuition centers cannot be controlled.",
+              effects: { reputation: -6, admissions: -4 }
+            }
+          ]
+        },
+        {
+          id: 13,
+          theme: "Communication & ERP",
+          text: "Parents complain that fee circulars, exam instructions, and holiday updates are confusing and poorly communicated.",
+          options: [
+            {
+              key: 'A',
+              text: "Standardize communications into a unified, weekly 'Strategic Bulletin', simplify the ERP interface, and run training webinars for parents.",
+              effects: { parentTrust: 10, reputation: 6, whatsappHeat: -8 }
+            },
+            {
+              key: 'B',
+              text: "Instruct class teachers to send brief follow-up summaries in class WhatsApp groups, and establish an ERP helpdesk team.",
+              effects: { parentTrust: 5, whatsappHeat: -4 }
+            },
+            {
+              key: 'C',
+              text: "Tell parents to refer to the student handbook and call the front desk during office hours if they have issues.",
+              effects: { parentTrust: -5, whatsappHeat: 5 }
+            },
+            {
+              key: 'D',
+              text: "Blame the software developer company for layout bugs and tell teachers not to send any updates until the system is fixed.",
+              effects: { parentTrust: -10, whatsappHeat: 8 }
+            }
+          ]
+        },
+        {
+          id: 14,
+          theme: "Pedagogy vs. Rote",
+          text: "During classroom rounds, you notice students are disengaged while teachers mainly dictate notes for board exams.",
+          options: [
+            {
+              key: 'A',
+              text: "Introduce experiential lesson blueprints, allocate 20% of class time to interactive group problems, and run teacher coaching workshops.",
+              effects: { studentProgress: 10, results: 6, academicTime: 6, teachersTrust: 4 }
+            },
+            {
+              key: 'B',
+              text: "Provide teachers with readymade question bank sheets, and set up surprise checks to ensure active student participation.",
+              effects: { studentProgress: 5, results: 4, academicTime: 2 }
+            },
+            {
+              key: 'C',
+              text: "Reprimand the teachers in private, demanding they stop dictating notes and instead write everything on the board.",
+              effects: { studentProgress: -2, teachersTrust: -6 }
+            },
+            {
+              key: 'D',
+              text: "Leave it as is, believing that dictating notes is a time-tested method that secures board exam percentages.",
+              effects: { studentProgress: -8, results: -4, academicTime: -4 }
+            }
+          ]
+        },
+        {
+          id: 15,
+          theme: "Parent Feedback Loop",
+          text: "The school achieves good board results, but parent feedback forms show declining satisfaction with school leadership and communication.",
+          options: [
+            {
+              key: 'A',
+              text: "Host monthly 'Principal-Parent Townhalls', launch a digital suggestion box, and publish a quarterly school roadmap.",
+              effects: { parentTrust: 10, integrity: 8, reputation: 6 }
+            },
+            {
+              key: 'B',
+              text: "Increase the frequency of class-level PTMs, and direct coordinators to resolve complaints within 72 hours.",
+              effects: { parentTrust: 6, reputation: 3 }
+            },
+            {
+              key: 'C',
+              text: "Run a survey to identify dissatisfied parents, and call them individually to defend the leadership's actions.",
+              effects: { parentTrust: -4, whatsappHeat: 4 }
+            },
+            {
+              key: 'D',
+              text: "Focus on advertising the board results, assuming happy toppers will drown out any administrative complaints.",
+              effects: { parentTrust: -10, reputation: -6, whatsappHeat: 8 }
+            }
+          ]
+        },
+        {
+          id: 16,
+          theme: "Market Competition",
+          text: "A newly opened international school nearby is attracting parents with modern infrastructure, robotics labs, and lower student-teacher ratios.",
+          options: [
+            {
+              key: 'A',
+              text: "Introduce a STEM/Robotics curriculum using existing computer labs, highlight school values, and showcase individual student mentoring records.",
+              effects: { admissions: 10, budget: -4, reputation: 8, parentTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Add a smart board to classrooms, organize science exhibition events, and offer loyalty discounts for sibling admissions.",
+              effects: { admissions: 5, budget: -3 }
+            },
+            {
+              key: 'C',
+              text: "Match the competitor's fee structure downward immediately, creating severe operational budget constraints.",
+              effects: { admissions: 2, budget: -8, managementTrust: -6 }
+            },
+            {
+              key: 'D',
+              text: "Assume competitor's fees are unsustainable, and take no action, hoping parents return once the hype fades.",
+              effects: { admissions: -8, reputation: -6 }
+            }
+          ]
+        },
+        {
+          id: 17,
+          theme: "Admin Overhead",
+          text: "Teachers say they spend more time updating ERP records, Excel sheets, and reports than actually planning lessons.",
+          options: [
+            {
+              key: 'A',
+              text: "Automate ERP templates, establish a data administrative clerk team, and declare 'No-Data-Entry Fridays' for lesson planning.",
+              effects: { teachersTrust: 10, academicTime: 8, budget: -4, results: 4 }
+            },
+            {
+              key: 'B',
+              text: "Create standard template sheets, and run workshops on advanced Excel tips to make report filing faster.",
+              effects: { teachersTrust: 5, academicTime: 4 }
+            },
+            {
+              key: 'C',
+              text: "Extend report deadlines slightly, but demand teachers complete both detailed lesson plans and reports without compromises.",
+              effects: { teachersTrust: -4, academicTime: -4 }
+            },
+            {
+              key: 'D',
+              text: "Enforce strict penalties for late ERP entries, stating administrative logs are essential for audits.",
+              effects: { teachersTrust: -10, academicTime: -8, auditScores: 4 }
+            }
+          ]
+        },
+        {
+          id: 18,
+          theme: "Legal & Discipline Risk",
+          text: "A parent threatens legal action claiming their child was unfairly treated during a disciplinary inquiry or exam evaluation.",
+          options: [
+            {
+              key: 'A',
+              text: "Present complete CCTV, witness statements, and evaluation rubrics, host an ombudsman review, and invite their legal representative for a facts session.",
+              effects: { compliance: 10, integrity: 8, parentTrust: 6, reputation: 6 }
+            },
+            {
+              key: 'B',
+              text: "Review the evaluation files with the HOD, hold a parent conference to explain the assessment system, and offer a supervised re-check.",
+              effects: { compliance: 6, parentTrust: 4 }
+            },
+            {
+              key: 'C',
+              text: "Offer a grace pass grade to the student in private to settle the dispute and avoid court cases.",
+              effects: { compliance: -5, integrity: -10, reputation: -4 }
+            },
+            {
+              key: 'D',
+              text: "Refuse to meet the parents, instructing school lawyers to respond directly while keeping the student isolated.",
+              effects: { compliance: -8, parentTrust: -8, whatsappHeat: 8 }
+            }
+          ]
+        },
+        {
+          id: 19,
+          theme: "Management Pressure",
+          text: "Management pressures you to increase admissions beyond classroom capacity to improve revenue for the next academic year.",
+          options: [
+            {
+              key: 'A',
+              text: "Present management with a data-backed capacity threshold, propose building a new wing, or suggest implementing afternoon shifts to preserve quality.",
+              effects: { integrity: 10, compliance: 8, managementTrust: 6, parentTrust: 4 }
+            },
+            {
+              key: 'B',
+              text: "Convert library or activity rooms into classrooms, and recruit part-time teachers to support the extra student strength.",
+              effects: { compliance: 4, budget: 6, parentTrust: -4, studentProgress: -3 }
+            },
+            {
+              key: 'C',
+              text: "Add extra benches to existing classrooms, increasing student strength to 55 per room without expanding infrastructure.",
+              effects: { compliance: -6, parentTrust: -8, studentProgress: -6, whatsappHeat: 6 }
+            },
+            {
+              key: 'D',
+              text: "Enroll all applicants without informing teachers, allowing classrooms to become overcrowded and unmanageable.",
+              effects: { compliance: -10, teachersTrust: -10, parentTrust: -10 }
+            }
+          ]
+        },
+        {
+          id: 20,
+          theme: "Student Discipline",
+          text: "Students frequently bunk afternoon periods after lunch, and teachers report poor attention and discipline during last-hour classes.",
+          options: [
+            {
+              key: 'A',
+              text: "Introduce project-based labs in the afternoon, run physical transition breaks, and deploy an automated gate log check.",
+              effects: { academicTime: 8, studentProgress: 8, compliance: 6 }
+            },
+            {
+              key: 'B',
+              text: "Reschedule difficult subjects like Math and Physics to morning hours, and mandate surprise class attendance checks.",
+              effects: { academicTime: 5, studentProgress: 4 }
+            },
+            {
+              key: 'C',
+              text: "Issue suspension letters to bunking students and impose heavy fines on their parents.",
+              effects: { academicTime: -2, parentTrust: -4, whatsappHeat: 4 }
+            },
+            {
+              key: 'D',
+              text: "Blame weather and fatigue, allowing teachers to let students leave early or sit idle in the library.",
+              effects: { academicTime: -8, results: -6 }
+            }
+          ]
+        },
+        {
+          id: 21,
+          theme: "Safety & Compliance",
+          text: "Before a surprise inspection, you discover that mandatory evacuation drills and safety training sessions were skipped for months.",
+          options: [
+            {
+              key: 'A',
+              text: "Conduct an immediate mock drill, document the training log, and run safety audit certifications.",
+              effects: { compliance: 10, auditScores: 8, reputation: 6 }
+            },
+            {
+              key: 'B',
+              text: "Hold a safety briefing assembly, update safety banners around campus, and fill backdated logs for safety check sheets.",
+              effects: { compliance: 5, integrity: -3, auditScores: 4 }
+            },
+            {
+              key: 'C',
+              text: "Write a letter to the inspector stating drills were skipped due to weather and promise to run them next semester.",
+              effects: { compliance: -4, auditScores: -4 }
+            },
+            {
+              key: 'D',
+              text: "Do nothing, hoping the inspector won't check safety logs or that the school's reputation prevents surprise visits.",
+              effects: { compliance: -10, auditScores: -8, reputation: -5 }
+            }
+          ]
+        },
+        {
+          id: 22,
+          theme: "Leadership Continuity",
+          text: "After a respected academic coordinator resigns suddenly, teachers begin worrying about leadership stability and future planning.",
+          options: [
+            {
+              key: 'A',
+              text: "Promote a senior teacher to acting coordinator, outline a clear transition workflow, and host a staff alignment meeting.",
+              effects: { teachersTrust: 10, reputation: 6, managementTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Divide the coordinator's duties among HODs and begin external interviews through standard agencies.",
+              effects: { teachersTrust: 5, managementTrust: 4 }
+            },
+            {
+              key: 'C',
+              text: "Ask the resigning coordinator to work without notice, leading to arguments and a messy handover.",
+              effects: { teachersTrust: -4, reputation: -3 }
+            },
+            {
+              key: 'D',
+              text: "Leave the post vacant to save budget, taking over the load yourself without delegation.",
+              effects: { teachersTrust: -8, academicTime: -6, results: -4 }
+            }
+          ]
+        },
+        {
+          id: 23,
+          theme: "Referral Ecosystem",
+          text: "Parent referrals, once the school’s strongest admission source, have reduced significantly over the past two years.",
+          options: [
+            {
+              key: 'A',
+              text: "Conduct focus group interviews with loyal parents, introduce a 'Parent Ambassador' club, and improve feedback SLA response time.",
+              effects: { admissions: 10, parentTrust: 10, reputation: 8 }
+            },
+            {
+              key: 'B',
+              text: "Run a referral discount scheme on fee bills and organize parent engagement events like carnivals.",
+              effects: { admissions: 6, parentTrust: 4, budget: -3 }
+            },
+            {
+              key: 'C',
+              text: "Send SMS messages asking parents to share positive reviews online and refer their friends.",
+              effects: { admissions: 2, parentTrust: -2 }
+            },
+            {
+              key: 'D',
+              text: "Assume competition is high and take no action, focusing instead on paid digital banner ads.",
+              effects: { admissions: -6, budget: -4 }
+            }
+          ]
+        },
+        {
+          id: 24,
+          theme: "Administrative Clarity",
+          text: "Teachers complain that leadership decisions are communicated at the last minute, creating confusion during implementation.",
+          options: [
+            {
+              key: 'A',
+              text: "Implement a structured weekly planner, establish a 48-hour notice policy for events, and run bi-weekly coordinator planning rounds.",
+              effects: { teachersTrust: 10, academicTime: 8, compliance: 6 }
+            },
+            {
+              key: 'B',
+              text: "Use the ERP calendar to publish schedules a week in advance and set auto-reminders for staff.",
+              effects: { teachersTrust: 5, academicTime: 4 }
+            },
+            {
+              key: 'C',
+              text: "Direct coordinators to send WhatsApp announcements late at night, expecting staff to comply immediately.",
+              effects: { teachersTrust: -6, whatsappHeat: 4 }
+            },
+            {
+              key: 'D',
+              text: "Tell staff that flexibility is key to school management and refuse to establish fixed calendars.",
+              effects: { teachersTrust: -10, academicTime: -6 }
+            }
+          ]
+        },
+        {
+          id: 25,
+          theme: "Technology ROI",
+          text: "The school invested heavily in smart classrooms and campus branding, but academic performance and student discipline remain unchanged.",
+          options: [
+            {
+              key: 'A',
+              text: "Audit technology usage, link classroom tech tools to pedagogical lessons, and train teachers on student engagement dashboards.",
+              effects: { studentProgress: 10, results: 8, budget: -4, teachersTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Conduct training sessions on smart boards and mandate that teachers use tech in at least two classes daily.",
+              effects: { studentProgress: 5, results: 4 }
+            },
+            {
+              key: 'C',
+              text: "Restrict student access to smart boards, blaming them for distraction, and return to blackboard teaching.",
+              effects: { studentProgress: -2, reputation: -4 }
+            },
+            {
+              key: 'D',
+              text: "Do nothing, assuming tech is just a marketing tool for parents and has no real impact on learning.",
+              effects: { studentProgress: -8, results: -6, managementTrust: -8 }
+            }
+          ]
+        },
+        {
+          id: 26,
+          theme: "Remedial Architecture",
+          text: "Weak-performing students are promoted from class to class without structured remedial support or learning intervention plans.",
+          options: [
+            {
+              key: 'A',
+              text: "Establish a diagnostic assessment desk, create personalized learning profiles, and run a structured after-school remedial grid.",
+              effects: { studentProgress: 10, results: 8, parentTrust: 8, compliance: 6 }
+            },
+            {
+              key: 'B',
+              text: "Conduct extra classes for weak students before term exams, and assign peer mentors from topper students.",
+              effects: { studentProgress: 5, results: 4, parentTrust: 4 }
+            },
+            {
+              key: 'C',
+              text: "Direct teachers to lower grading standards during internal tests to ensure everyone achieves passing grades.",
+              effects: { studentProgress: -6, results: -6, integrity: -10 }
+            },
+            {
+              key: 'D',
+              text: "Promote them unconditionally, believing that failed students create parent issues and that they will catch up on their own.",
+              effects: { studentProgress: -10, results: -10, compliance: -8 }
+            }
+          ]
+        },
+        {
+          id: 27,
+          theme: "Staff Well-being",
+          text: "Despite achieving strong board results, many teachers feel mentally exhausted due to workload, pressure, and lack of appreciation.",
+          options: [
+            {
+              key: 'A',
+              text: "Reduce report compliance tasks, introduce wellness days, and establish a teacher appreciation bonus program.",
+              effects: { teachersTrust: 10, budget: -4, reputation: 6, results: 4 }
+            },
+            {
+              key: 'B',
+              text: "Arrange team lunch gatherings, provide tea/coffee, and set up suggestion boxes for workload feedback.",
+              effects: { teachersTrust: 5 }
+            },
+            {
+              key: 'C',
+              text: "Hold a meeting telling teachers that teaching is a noble service and urging them to work harder for the board results.",
+              effects: { teachersTrust: -4, reputation: -2 }
+            },
+            {
+              key: 'D',
+              text: "Ignore the complaints, stating that the workload is normal for the academic sector and that board results are the priority.",
+              effects: { teachersTrust: -10, results: -6 }
+            }
+          ]
+        },
+        {
+          id: 28,
+          theme: "Policy Execution",
+          text: "During management review, it becomes clear that many school policies exist only on paper and are not followed consistently in daily operations.",
+          options: [
+            {
+              key: 'A',
+              text: "Run a policy audit, run compliance workshops, and link coordinator appraisals to policy execution logs.",
+              effects: { compliance: 10, auditScores: 8, integrity: 8, managementTrust: 6 }
+            },
+            {
+              key: 'B',
+              text: "Update the policy manual booklets, distribute them to all staff, and run safety quizzes.",
+              effects: { compliance: 5, auditScores: 4 }
+            },
+            {
+              key: 'C',
+              text: "Quickly draft policy summary sheets during the audit period, and file them to satisfy inspector checks.",
+              effects: { compliance: 2, integrity: -6, auditScores: 2 }
+            },
+            {
+              key: 'D',
+              text: "Ignore policy deviations, believing that practical school management is different from theory.",
+              effects: { compliance: -10, auditScores: -8, integrity: -8 }
+            }
+          ]
+        }
+      ];
+
+      // 2. Global State Variables
+      let principalName = "";
+      let schoolName = "";
+      let answers = {};
+      let currentQuestionIndex = 0;
+      let minMaxScores = {};
+      let screen = "welcome";
+
+      // Initialize Min/Max Possible Scores dynamically based on choice deltas
+      function calculateMinMaxScores() {
+        Object.keys(CATEGORIES).forEach(cat => {
+          minMaxScores[cat] = { min: 0, max: 0 };
+        });
+
+        QUESTIONS.forEach(q => {
+          Object.keys(CATEGORIES).forEach(cat => {
+            let maxVal = -Infinity;
+            let minVal = Infinity;
+            
+            q.options.forEach(opt => {
+              const val = opt.effects[cat] || 0;
+              if (val > maxVal) maxVal = val;
+              if (val < minVal) minVal = val;
+            });
+
+            minMaxScores[cat].max += maxVal;
+            minMaxScores[cat].min += minVal;
+          });
+        });
+      }
+      calculateMinMaxScores();
+
+      // 3. Screen Navigation & Flow Logic
+      const screenWelcome = document.getElementById('screen-welcome');
+      const screenQuestions = document.getElementById('screen-questions');
+      const screenDashboard = document.getElementById('screen-dashboard');
+
+      const welcomeForm = document.getElementById('welcome-form');
+      const welcomeError = document.getElementById('welcome-error');
+
+      welcomeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        principalName = document.getElementById('input-principal').value.trim();
+        schoolName = document.getElementById('input-school').value.trim();
+
+        if (!principalName || !schoolName) {
+          welcomeError.classList.remove('hidden');
+          return;
+        }
+
+        welcomeError.classList.add('hidden');
+        screenWelcome.classList.add('hidden');
+        screenQuestions.classList.remove('hidden');
+        screen = 'questions';
+        
+        saveProgress();
+        renderQuestion();
+      });
+
+      function renderQuestion() {
+        const q = QUESTIONS[currentQuestionIndex];
+        
+        document.getElementById('question-theme').textContent = q.theme;
+        document.getElementById('question-index-label').textContent = currentQuestionIndex + 1;
+        document.getElementById('question-text').textContent = q.text;
+
+        // Progress timeline blocks rendering
+        renderProgressTimeline();
+
+        // Choices Grid rendering (large futuristic buttons)
+        const choicesContainer = document.getElementById('choices-container');
+        choicesContainer.innerHTML = '';
+
+        q.options.forEach(opt => {
+          const isSelected = answers[q.id] === opt.key;
+          
+          const btn = document.createElement('button');
+          btn.setAttribute('data-key', opt.key);
+          btn.onclick = () => selectOption(opt.key);
+          btn.className = `w-full py-4 px-6 rounded-xl border relative text-sm font-semibold transition-all duration-300 text-left flex flex-col justify-between min-h-[90px] group ${
+            isSelected 
+              ? 'bg-cyber-accent border-cyber-cyan text-white shadow-[0_0_20px_rgba(0,242,254,0.5)]' 
+              : 'bg-gray-950/60 border-gray-800 text-gray-300 hover:border-cyber-cyan/50 hover:bg-gray-950'
+          }`;
+          
+          btn.innerHTML = `
+            <div class="flex items-start gap-4">
+              <span class="w-6 h-6 rounded-lg bg-cyber-purple/20 border border-cyber-purple/40 font-mono text-xs flex items-center justify-center shrink-0 text-cyber-cyan mt-0.5 group-hover:shadow-[0_0_8px_rgba(127,0,255,0.6)] transition-all">
+                ${opt.key}
+              </span>
+              <p class="leading-relaxed text-sm pr-4">${opt.text}</p>
+            </div>
+            <span class="confidence-lock hidden text-[9px] font-mono text-cyber-cyan uppercase absolute right-4 bottom-2 tracking-widest">
+              ✓ Decision Locked
+            </span>
+          `;
+          choicesContainer.appendChild(btn);
+        });
+
+        // Handle Back button state
+        const btnPrev = document.getElementById('btn-prev');
+        if (currentQuestionIndex === 0) {
+          btnPrev.classList.add('text-gray-700', 'cursor-not-allowed');
+          btnPrev.classList.remove('text-gray-400', 'hover:text-cyber-cyan');
+        } else {
+          btnPrev.classList.remove('text-gray-700', 'cursor-not-allowed');
+          btnPrev.classList.add('text-gray-400', 'hover:text-cyber-cyan');
+        }
+
+        // Update current running stress meter
+        updateStressMeter();
+      }
+
+      function renderProgressTimeline() {
+        const container = document.getElementById('progress-timeline');
+        if (!container) return;
+        container.innerHTML = '';
+        
+        for (let i = 0; i < QUESTIONS.length; i++) {
+          const dot = document.createElement('div');
+          dot.className = `h-2 rounded-sm transition-all duration-300 ${
+            i === currentQuestionIndex 
+              ? 'w-6 bg-cyber-purple shadow-[0_0_10px_#7f00ff] animate-pulse' 
+              : i < currentQuestionIndex 
+                ? 'w-2 bg-cyber-cyan shadow-[0_0_5px_#00f2fe]' 
+                : 'w-2 bg-gray-800'
+          }`;
+          container.appendChild(dot);
+        }
+      }
+
+      function updateStressMeter() {
+        let runningStress = 40;
+        Object.keys(answers).forEach(qId => {
+          const q = QUESTIONS.find(qi => qi.id == qId);
+          const ansKey = answers[qId];
+          if (q && ansKey) {
+            const opt = q.options.find(o => o.key === ansKey);
+            if (opt && opt.effects) {
+              if (opt.effects.whatsappHeat) runningStress += opt.effects.whatsappHeat * 0.8;
+              if (opt.effects.parentTrust) runningStress -= opt.effects.parentTrust * 0.4;
+              if (opt.effects.teachersTrust) runningStress -= opt.effects.teachersTrust * 0.4;
+            }
+          }
+        });
+        runningStress = Math.max(10, Math.min(100, Math.round(runningStress)));
+
+        const bar = document.getElementById('stress-meter-bar');
+        const label = document.getElementById('stress-meter-label');
+        const desc = document.getElementById('stress-meter-desc');
+
+        if (bar && label && desc) {
+          bar.style.height = `${runningStress}%`;
+          label.textContent = `${runningStress}%`;
+          
+          if (runningStress >= 70) {
+            bar.className = "w-full rounded-b-xl bg-gradient-to-t from-cyber-pink to-red-500 shadow-[0_0_15px_rgba(255,0,127,0.6)] transition-all duration-500";
+            desc.textContent = "CRITICAL INSIGHT: Extreme operational resistance detected. Immediate strategic adjustments required.";
+            desc.className = "text-xs font-mono mt-2 text-cyber-pink uppercase font-semibold animate-pulse";
+          } else if (runningStress >= 45) {
+            bar.className = "w-full rounded-b-xl bg-gradient-to-t from-amber-500 to-yellow-400 shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-all duration-500";
+            desc.textContent = "STRESS PROFILE: ELEVATED. Coordination load is high. Balance operational costs.";
+            desc.className = "text-xs font-mono mt-2 text-amber-400 uppercase font-semibold";
+          } else {
+            bar.className = "w-full rounded-b-xl bg-gradient-to-t from-cyber-cyan to-emerald-400 shadow-[0_0_15px_rgba(0,242,254,0.5)] transition-all duration-500";
+            desc.textContent = "STRESS PROFILE: STABLE. Stakeholder trust and systems are operating efficiently.";
+            desc.className = "text-xs font-mono mt-2 text-emerald-400 uppercase font-semibold";
+          }
+        }
+      }
+
+      function selectOption(choiceKey) {
+        const q = QUESTIONS[currentQuestionIndex];
+        answers[q.id] = choiceKey;
+        
+        saveProgress();
+        
+        // Highlight option & run confidence locking animation
+        const buttons = document.querySelectorAll('#choices-container button');
+        buttons.forEach(btn => {
+          btn.disabled = true; // disable all
+          const optKey = btn.getAttribute('data-key');
+          if (optKey === choiceKey) {
+            btn.classList.add('border-cyber-cyan', 'shadow-[0_0_20px_rgba(0,242,254,0.6)]', 'bg-cyber-accent');
+            // add confirmation text
+            const confirmationText = btn.querySelector('.confidence-lock');
+            if (confirmationText) {
+              confirmationText.classList.remove('hidden');
+              confirmationText.classList.add('animate-ping');
+            }
+          } else {
+            btn.classList.add('opacity-40');
+          }
+        });
+
+        setTimeout(() => {
+          if (currentQuestionIndex < QUESTIONS.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+          } else {
+            screenQuestions.classList.add('hidden');
+            screenDashboard.classList.remove('hidden');
+            screen = 'dashboard';
+            saveProgress();
+            calculateAndDisplayResults();
+          }
+        }, 400); // 400ms for short visual confirmation
+      }
+
+      function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          renderQuestion();
+        }
+      }
+
+      // 5. Calculations & Dashboard Engine
+      function calculateAndDisplayResults() {
+        // A. Calculate 13 Category Scores
+        const rawScores = {};
+        Object.keys(CATEGORIES).forEach(cat => { rawScores[cat] = 0; });
+
+        QUESTIONS.forEach(q => {
+          const selectedKey = answers[q.id];
+          if (selectedKey) {
+            const option = q.options.find(o => o.key === selectedKey);
+            if (option && option.effects) {
+              Object.keys(option.effects).forEach(cat => {
+                rawScores[cat] += option.effects[cat];
+              });
+            }
+          }
+        });
+
+        const catScores = {};
+        Object.keys(CATEGORIES).forEach(cat => {
+          const min = minMaxScores[cat].min;
+          const max = minMaxScores[cat].max;
+          const raw = rawScores[cat];
+          const percentage = max !== min 
+            ? Math.max(0, Math.min(100, Math.round(((raw - min) / (max - min)) * 100))) 
+            : 50;
+          catScores[cat] = percentage;
+        });
+
+        // B. Calculate 5 Axes
+        const axesScores = {
+          Trust: Math.round((catScores.parentTrust + catScores.teachersTrust + catScores.managementTrust) / 3),
+          Stability: Math.round((catScores.budget + catScores.compliance + catScores.auditScores) / 3),
+          Growth: Math.round((catScores.admissions + catScores.reputation) / 2),
+          AcademicStrength: Math.round((catScores.academicTime + catScores.studentProgress + catScores.results) / 3),
+          Governance: Math.round((catScores.integrity + (100 - catScores.whatsappHeat)) / 2)
+        };
+
+        // C. Classification Decision Engine
+        const classification = getSchoolClassification(catScores, axesScores);
+
+        // D. Populate UI Elements
+        document.getElementById('profile-avatar').textContent = principalName.slice(0, 2);
+        document.getElementById('profile-school').textContent = schoolName;
+        document.getElementById('profile-principal').textContent = `Principal: ${principalName}`;
+
+        // Classification badge and description
+        const classBadge = document.getElementById('badge-classification');
+        classBadge.textContent = `🏫 Classification: ${classification.type}`;
+        classBadge.style.color = classification.color;
+        classBadge.style.borderColor = `${classification.color}50`;
+        classBadge.style.backgroundColor = `${classification.color}15`;
+
+        document.getElementById('classification-desc').textContent = classification.description;
+
+        // Recommendations checklist
+        const recsContainer = document.getElementById('recommendations-container');
+        recsContainer.innerHTML = '';
+        classification.recommendations.forEach(rec => {
+          const item = document.createElement('div');
+          item.className = 'flex gap-3 items-start text-sm';
+          item.innerHTML = `
+            <span class="text-cyber-cyan mt-0.5 shrink-0">⚡</span>
+            <p class="text-gray-300 font-medium">${rec}</p>
+          `;
+          recsContainer.appendChild(item);
+        });
+
+        // Populate the 8 new metrics (Institutional Intelligence Matrix)
+        // Leadership Stability Score
+        const stability = Math.round((catScores.managementTrust + catScores.integrity + catScores.compliance) / 3);
+        document.getElementById('metric-stability-score').textContent = `${stability}%`;
+        document.getElementById('metric-stability-bar').style.width = `${stability}%`;
+
+        // Trust Index
+        const trust = Math.round((catScores.parentTrust + catScores.teachersTrust + catScores.managementTrust) / 3);
+        document.getElementById('metric-trust-score').textContent = `${trust}%`;
+        document.getElementById('metric-trust-bar').style.width = `${trust}%`;
+
+        // Academic Sustainability Index
+        const academic = Math.round((catScores.academicTime + catScores.studentProgress + catScores.results) / 3);
+        document.getElementById('metric-academic-score').textContent = `${academic}%`;
+        document.getElementById('metric-academic-bar').style.width = `${academic}%`;
+
+        // Operational Stability
+        const ops = Math.round((catScores.budget + catScores.compliance + catScores.auditScores) / 3);
+        document.getElementById('metric-ops-score').textContent = `${ops}%`;
+        document.getElementById('metric-ops-bar').style.width = `${ops}%`;
+
+        // Staff Retention Risk (or Attrition Risk)
+        const attritionRisk = Math.round(100 - catScores.teachersTrust);
+        document.getElementById('metric-retention-score').textContent = `${attritionRisk}%`;
+        document.getElementById('metric-retention-bar').style.width = `${attritionRisk}%`;
+
+        // Admission Growth Probability
+        const admissionProb = Math.round((catScores.admissions + catScores.reputation) / 2);
+        document.getElementById('metric-admission-score').textContent = `${admissionProb}%`;
+        document.getElementById('metric-admission-bar').style.width = `${admissionProb}%`;
+
+        // Institutional Risk Level
+        const riskScore = Math.round((catScores.whatsappHeat + (100 - catScores.compliance) + (100 - catScores.auditScores) + (100 - catScores.budget)) / 4);
+        const riskBadge = document.getElementById('badge-risk-level');
+        if (riskScore >= 60) {
+          riskBadge.textContent = "CRITICAL";
+          riskBadge.style.color = "#ff007f";
+          riskBadge.style.borderColor = "rgba(255,0,127,0.5)";
+          riskBadge.style.backgroundColor = "rgba(255,0,127,0.1)";
+        } else if (riskScore >= 45) {
+          riskBadge.textContent = "HIGH";
+          riskBadge.style.color = "#ff9f00";
+          riskBadge.style.borderColor = "rgba(245,158,11,0.5)";
+          riskBadge.style.backgroundColor = "rgba(245,158,11,0.1)";
+        } else if (riskScore >= 30) {
+          riskBadge.textContent = "MEDIUM";
+          riskBadge.style.color = "#00f2fe";
+          riskBadge.style.borderColor = "rgba(0,242,254,0.5)";
+          riskBadge.style.backgroundColor = "rgba(0,242,254,0.1)";
+        } else {
+          riskBadge.textContent = "LOW";
+          riskBadge.style.color = "#00ff66";
+          riskBadge.style.borderColor = "rgba(0,255,102,0.5)";
+          riskBadge.style.backgroundColor = "rgba(0,255,102,0.1)";
+        }
+
+        // Reputation Forecast
+        const repScore = Math.round((catScores.reputation + catScores.admissions) / 2);
+        const repBadge = document.getElementById('badge-reputation-forecast');
+        if (repScore >= 75) {
+          repBadge.textContent = "EXPANDING";
+          repBadge.style.color = "#00ff66";
+          repBadge.style.borderColor = "rgba(0,255,102,0.5)";
+          repBadge.style.backgroundColor = "rgba(0,255,102,0.1)";
+        } else if (repScore >= 55) {
+          repBadge.textContent = "STABLE";
+          repBadge.style.color = "#00f2fe";
+          repBadge.style.borderColor = "rgba(0,242,254,0.5)";
+          repBadge.style.backgroundColor = "rgba(0,242,254,0.1)";
+        } else if (repScore >= 40) {
+          repBadge.textContent = "DECLINING";
+          repBadge.style.color = "#ff9f00";
+          repBadge.style.borderColor = "rgba(245,158,11,0.5)";
+          repBadge.style.backgroundColor = "rgba(245,158,11,0.1)";
+        } else {
+          repBadge.textContent = "CRITICAL";
+          repBadge.style.color = "#ff007f";
+          repBadge.style.borderColor = "rgba(255,0,127,0.5)";
+          repBadge.style.backgroundColor = "rgba(255,0,127,0.1)";
+        }
+
+        // Detailed Categories Grid
+        const gridContainer = document.getElementById('categories-grid');
+        gridContainer.innerHTML = '';
+        Object.entries(catScores).forEach(([catId, score]) => {
+          const label = CATEGORIES[catId];
+          let progressColorClass = 'bg-cyber-pink shadow-[0_0_10px_rgba(255,0,127,0.4)]';
+          let textColorClass = 'text-cyber-pink';
+          if (score >= 75) {
+            progressColorClass = 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]';
+            textColorClass = 'text-emerald-400';
+          } else if (score >= 50) {
+            progressColorClass = 'bg-cyber-cyan shadow-[0_0_10px_rgba(0,242,254,0.4)]';
+            textColorClass = 'text-cyber-cyan';
+          }
+
+          const card = document.createElement('div');
+          card.className = 'bg-gray-950/40 border border-gray-900/60 rounded-xl p-4 flex flex-col justify-between hover:border-gray-800 transition-colors duration-300';
+          card.innerHTML = `
+            <div class="flex justify-between items-start gap-2 mb-2">
+              <span class="text-xs font-bold text-gray-400 tracking-wide">${label}</span>
+              <span class="text-sm font-extrabold font-mono shrink-0 ${textColorClass}">${score}%</span>
+            </div>
+            <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800/50">
+              <div class="h-full rounded-full transition-all duration-500 ${progressColorClass}" style="width: ${score}%"></div>
+            </div>
+          `;
+          gridContainer.appendChild(card);
+        });
+
+        // E. Render the 3D Surface Plot
+        render3DChart(axesScores);
+
+        // F. Prepare Offline PDF template details
+        preparePDFTemplate(catScores, axesScores, classification, {
+          stability, trust, academic, ops, attritionRisk, admissionProb, riskLabel: riskBadge.textContent, riskColor: riskBadge.style.color, repLabel: repBadge.textContent, repColor: repBadge.style.color
+        });
+      }
+
+      function getSchoolClassification(catScores, axes) {
+        if (axes.Growth > 80 && axes.AcademicStrength > 80) {
+          return {
+            type: "Future Ready Campus",
+            color: "#00ff66",
+            description: "Demonstrates exceptional forward-looking parameters. Balanced growth and academic quality models place this school in the top tier of institutional readiness.",
+            recommendations: [
+              "Systematize digital innovation frameworks across standard teaching modules.",
+              "Establish regional peer-learning models to export curriculum design best practices.",
+              "Develop structured endowment funding channels for campus scalability."
+            ]
+          };
+        } else if (axes.Growth > 75 && axes.Stability > 70) {
+          return {
+            type: "Growth Ready Institution",
+            color: "#00f2fe",
+            description: "Exhibits strong admissions pipelines, reputation trends, and compliance baselines. Ready to scale student capacity or branch locations.",
+            recommendations: [
+              "Leverage strong parent satisfaction indices to execute referral-based expansion campaigns.",
+              "Reinvest financial surpluses into teacher retention programs and specialized labs.",
+              "Standardize compliance manuals to protect academic consistency during growth."
+            ]
+          };
+        } else if (catScores.reputation < 50 || catScores.whatsappHeat > 55) {
+          return {
+            type: "Reputation Risk Zone",
+            color: "#ff007f",
+            description: "External messaging, social platforms, and parent communications are highly volatile. High risk of immediate brand dilution.",
+            recommendations: [
+              "Incorporate a dedicated communications coordinator to handle public alerts within 12 hours.",
+              "Conduct proactive parent alignment focus groups to defuse rumors.",
+              "Host open webinars clarifying campus safety and disciplinary processes."
+            ]
+          };
+        } else if (axes.AcademicStrength > 80) {
+          return {
+            type: "Academic Powerhouse",
+            color: "#a052ff",
+            description: "Academic systems are highly structured and successful, but administrative overhead or trust issues could bottleneck operations.",
+            recommendations: [
+              "Reduce non-academic tasks for core coordinators to focus on curriculum scaling.",
+              "Rebalance budgets to secure long-term capital and administrative reserves.",
+              "Improve staff engagement systems to prevent high-performer attrition."
+            ]
+          };
+        } else if (axes.Stability < 50) {
+          return {
+            type: "Operationally Fragile School",
+            color: "#ff9f00",
+            description: "Compliance systems, audit readiness, or cash management reserves are thin, presenting legal or inspection threats to daily cycles.",
+            recommendations: [
+              "Initiate a comprehensive compliance audit for transport, fire safety, and lab systems.",
+              "Decentralize audit logging and establish daily document tracking registers.",
+              "Create dedicated backup operational reserves within the next two quarters."
+            ]
+          };
+        } else if (catScores.parentTrust < 50) {
+          return {
+            type: "Parent Trust Deficit Institution",
+            color: "#ff3333",
+            description: "Suffers from declining parent alignment. Poor grievance turnaround times and lack of clear ERP alerts are causing stakeholder disconnect.",
+            recommendations: [
+              "Revamp school-to-home messaging templates into a structured weekly update format.",
+              "Establish parent alignment townhalls hosted directly by school leadership.",
+              "Define clear SLAs for resolving general academic and administrative inquiries."
+            ]
+          };
+        } else if (catScores.managementTrust < 50 || (100 - catScores.teachersTrust) > 55) {
+          return {
+            type: "Leadership Pressure Zone",
+            color: "#ff5b00",
+            description: "Leadership is facing acute stress from staff attrition, teacher dissatisfaction, and management mismatch.",
+            recommendations: [
+              "Introduce structured teacher appreciation bonuses and workload adjustments.",
+              "Formulate a transparent performance scorecard to align coordinator goals with management expectations.",
+              "Hold bi-weekly coordinator feedback workshops to address internal grievances."
+            ]
+          };
+        } else {
+          return {
+            type: "High Stability Institution",
+            color: "#00ff66",
+            description: "Shows stable baseline metrics across all categories, with highly structured compliance records and solid trust indexes.",
+            recommendations: [
+              "Define an institutional branding roadmap to transition from moderate to high regional reputation.",
+              "Incorporate advanced learning tracking tools to push academic scores from good to outstanding.",
+              "Review budget structures to free up 10% more funding for teacher recognition systems."
+            ]
+          };
+        }
+      }
+
+      // 6. Plotly 3D Surface Rendering
+      function render3DChart(axes) {
+        const chartDiv = document.getElementById('plotly-surface-chart');
+        if (!chartDiv) return;
+
+        const size = 45;
+        const xGrid = [];
+        const yGrid = [];
+        const zGrid = [];
+
+        for (let i = 0; i < size; i++) {
+          xGrid.push(-110 + (220 * i) / (size - 1));
+          yGrid.push(-110 + (220 * i) / (size - 1));
+        }
+
+        const axesList = [
+          { name: 'Trust', val: axes.Trust, theta: 0 },
+          { name: 'Stability', val: axes.Stability, theta: (2 * Math.PI) / 5 },
+          { name: 'Growth', val: axes.Growth, theta: (4 * Math.PI) / 5 },
+          { name: 'Academic Strength', val: axes.AcademicStrength, theta: (6 * Math.PI) / 5 },
+          { name: 'Governance', val: axes.Governance, theta: (8 * Math.PI) / 5 }
+        ];
+
+        for (let i = 0; i < size; i++) {
+          const row = [];
+          const currentY = yGrid[i];
+          for (let j = 0; j < size; j++) {
+            const currentX = xGrid[j];
+            const r = Math.sqrt(currentX * currentX + currentY * currentY);
+            let theta = Math.atan2(currentY, currentX);
+            if (theta < 0) theta += 2 * Math.PI;
+
+            let axisA = axesList[0];
+            let axisB = axesList[1];
+
+            for (let k = 0; k < 5; k++) {
+              const a = axesList[k];
+              const b = axesList[(k + 1) % 5];
+              const aTheta = a.theta;
+              let bTheta = b.theta;
+              if (bTheta === 0) bTheta = 2 * Math.PI;
+
+              if (theta >= aTheta && theta <= bTheta) {
+                axisA = a;
+                axisB = b;
+                break;
+              }
+            }
+
+            if (theta >= axesList[4].theta) {
+              axisA = axesList[4];
+              axisB = { ...axesList[0], theta: 2 * Math.PI };
+            }
+
+            const t = (theta - axisA.theta) / (axisB.theta - axisA.theta);
+            const targetScore = (1 - t) * axisA.val + t * axisB.val;
+
+            const sigma = 45;
+            const height = targetScore * Math.exp(-(r * r) / (2 * sigma * sigma));
+            row.push(height);
+          }
+          zGrid.push(row);
+        }
+
+        const surfaceTrace = {
+          type: 'surface',
+          x: xGrid,
+          y: yGrid,
+          z: zGrid,
+          colorscale: [
+            [0.0, '#7f00ff'],
+            [0.5, '#00f2fe'],
+            [1.0, '#ff007f']
+          ],
+          showscale: false,
+          hoverinfo: 'x+y+z',
+          lighting: {
+            ambient: 0.65,
+            diffuse: 0.8,
+            specular: 1.5,
+            roughness: 0.15,
+            fresnel: 0.6
+          },
+          contours: {
+            z: {
+              show: true,
+              usecolormap: true,
+              project: { z: true },
+              width: 2
+            }
+          }
+        };
+
+        const labelsTrace = {
+          type: 'scatter3d',
+          mode: 'text+markers',
+          x: axesList.map(a => 105 * Math.cos(a.theta)),
+          y: axesList.map(a => 105 * Math.sin(a.theta)),
+          z: axesList.map(a => a.val),
+          text: axesList.map(a => `<b>${a.name}</b><br>${a.val}%`),
+          textposition: 'top center',
+          marker: {
+            size: 7,
+            color: '#00f2fe',
+            symbol: 'circle',
+            line: { color: '#06060c', width: 2 }
+          },
+          textfont: {
+            family: 'Outfit, sans-serif',
+            size: 11,
+            color: '#e2e8f0'
+          },
+          hoverinfo: 'none'
+        };
+
+        const skeletonTraces = axesList.map(a => ({
+          type: 'scatter3d',
+          mode: 'lines',
+          x: [0, 105 * Math.cos(a.theta)],
+          y: [0, 105 * Math.sin(a.theta)],
+          z: [0, a.val],
+          line: {
+            color: 'rgba(0, 242, 254, 0.4)',
+            width: 3.5,
+            dash: 'solid'
+          },
+          hoverinfo: 'none'
+        }));
+
+        const thetaCircle = Array.from({ length: 100 }, (_, i) => (i * 2 * Math.PI) / 99);
+        const circleTrace = {
+          type: 'scatter3d',
+          mode: 'lines',
+          x: thetaCircle.map(t => 100 * Math.cos(t)),
+          y: thetaCircle.map(t => 100 * Math.sin(t)),
+          z: Array(100).fill(1),
+          line: {
+            color: 'rgba(255, 0, 127, 0.3)',
+            width: 2,
+            dash: 'dash'
+          },
+          hoverinfo: 'none'
+        };
+
+        const data = [surfaceTrace, labelsTrace, circleTrace, ...skeletonTraces];
+
+        const layout = {
+          autosize: true,
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          showlegend: false,
+          margin: { l: 0, r: 0, b: 0, t: 0 },
+          scene: {
+            camera: {
+              eye: { x: 1.45, y: 1.45, z: 1.15 }
+            },
+            xaxis: {
+              showgrid: false, zeroline: false, showline: false, showticklabels: false,
+              title: { text: '' }, range: [-130, 130]
+            },
+            yaxis: {
+              showgrid: false, zeroline: false, showline: false, showticklabels: false,
+              title: { text: '' }, range: [-130, 130]
+            },
+            zaxis: {
+              showgrid: true, gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, showline: false, showticklabels: true,
+              tickfont: { color: 'rgba(255,255,255,0.4)', size: 9 },
+              title: { text: 'Performance %', font: { color: 'rgba(255,255,255,0.4)', size: 10 } },
+              range: [0, 105]
+            }
+          }
+        };
+
+        const config = {
+          responsive: true,
+          displayModeBar: false,
+          staticPlot: false
+        };
+
+        Plotly.newPlot(chartDiv, data, layout, config);
+      }
+
+      // 7. PDF Template Compiler
+      function preparePDFTemplate(catScores, axes, classification, metrics) {
+        const currentDate = new Date().toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        // Set metadata text fields
+        document.getElementById('pdf-school-name').textContent = schoolName;
+        document.getElementById('pdf-principal-name').textContent = principalName;
+        document.getElementById('pdf-date').textContent = currentDate;
+
+        // Classification container style
+        const container = document.getElementById('pdf-class-container');
+        container.style.borderColor = classification.color;
+        
+        const typeEl = document.getElementById('pdf-class-type');
+        typeEl.textContent = classification.type;
+        typeEl.style.color = classification.color;
+
+        document.getElementById('pdf-class-desc').textContent = classification.description;
+
+        // Page 2: Populate Axes
+        const axesContainer = document.getElementById('pdf-axes-container');
+        axesContainer.innerHTML = '';
+        Object.entries(axes).forEach(([axisName, score]) => {
+          const axisRow = document.createElement('div');
+          axisRow.innerHTML = `
+            <div class="flex justify-between text-xs font-semibold text-gray-300 mb-1">
+              <span>${axisName}</span>
+              <span class="text-cyber-cyan font-mono">${score}%</span>
+            </div>
+            <div class="w-full bg-gray-900 h-1.5 rounded-full overflow-hidden">
+              <div class="bg-cyber-cyan h-full rounded-full" style="width: ${score}%"></div>
+            </div>
+          `;
+          axesContainer.appendChild(axisRow);
+        });
+
+        // Page 2: Populate Institutional Health Metrics
+        const metricsContainer = document.getElementById('pdf-metrics-container');
+        metricsContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Stability Index:</span>
+              <span class="font-bold text-cyber-cyan font-mono">${metrics.stability}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Trust Index:</span>
+              <span class="font-bold text-emerald-400 font-mono">${metrics.trust}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Acad Sustain:</span>
+              <span class="font-bold text-cyber-purple font-mono">${metrics.academic}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Operational:</span>
+              <span class="font-bold text-cyber-cyan font-mono">${metrics.ops}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Attrition Risk:</span>
+              <span class="font-bold text-cyber-pink font-mono">${metrics.attritionRisk}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between">
+              <span class="text-gray-500">Admission Prob:</span>
+              <span class="font-bold text-emerald-400 font-mono">${metrics.admissionProb}%</span>
+            </div>
+            <div class="border-b border-gray-900 pb-1 flex justify-between col-span-2">
+              <span class="text-gray-500">Risk Profile / Reputation Forecast:</span>
+              <span class="font-bold" style="color: ${metrics.riskColor}">${metrics.riskLabel} / ${metrics.repLabel}</span>
+            </div>
+          </div>
+        `;
+
+        // Page 2: Populate Subcategories
+        const catsContainer = document.getElementById('pdf-categories-container');
+        catsContainer.innerHTML = '';
+        Object.entries(catScores).forEach(([catId, score]) => {
+          const label = CATEGORIES[catId];
+          let colorClass = 'text-cyber-pink';
+          let barBgClass = 'bg-cyber-pink';
+          if (score >= 75) {
+            colorClass = 'text-emerald-400';
+            barBgClass = 'bg-emerald-400';
+          } else if (score >= 50) {
+            colorClass = 'text-cyber-cyan';
+            barBgClass = 'bg-cyber-cyan';
+          }
+
+          const catRow = document.createElement('div');
+          catRow.className = 'flex justify-between items-center text-[10px] border-b border-gray-900 pb-1';
+          catRow.innerHTML = `
+            <span class="text-gray-400 font-medium">${label}</span>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold ${colorClass}">${score}%</span>
+              <div class="w-12 bg-gray-900 h-1 rounded-full overflow-hidden">
+                <div class="h-full ${barBgClass}" style="width: ${score}%"></div>
+              </div>
+            </div>
+          `;
+          catsContainer.appendChild(catRow);
+        });
+
+        // Page 2: Populate Recommendations
+        const recsList = document.getElementById('pdf-recommendations-list');
+        recsList.innerHTML = '';
+        classification.recommendations.forEach((rec, index) => {
+          const recRow = document.createElement('div');
+          recRow.className = 'flex gap-4 items-start';
+          recRow.innerHTML = `
+            <div class="w-6 h-6 rounded-lg bg-cyber-cyan/15 border border-cyber-cyan/30 text-cyber-cyan font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
+              ${index + 1}
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed font-medium">
+              ${rec}
+            </p>
+          `;
+          recsList.appendChild(recRow);
+        });
+      }
+
+      async function downloadPDFReport() {
+        const btn = document.getElementById('btn-download-pdf');
+        const originalContent = btn.innerHTML;
+        
+        btn.disabled = true;
+        btn.innerHTML = `
+          <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <span>Compiling Intelligence Report...</span>
+        `;
+
+        try {
+          let chartImgUrl = '';
+          const chartElement = document.getElementById('plotly-surface-chart');
+          if (chartElement) {
+            chartImgUrl = await Plotly.toImage(chartElement, {
+              format: 'png',
+              width: 750,
+              height: 500
+            });
+          }
+
+          const imgPlaceholder = document.getElementById('pdf-chart-image');
+          if (imgPlaceholder && chartImgUrl) {
+            imgPlaceholder.src = chartImgUrl;
+            await new Promise((resolve) => {
+              imgPlaceholder.onload = resolve;
+              setTimeout(resolve, 500);
+            });
+          }
+
+          const page1El = document.getElementById('pdf-page-1');
+          const canvas1 = await html2canvas(page1El, {
+            scale: 2, useCORS: true, backgroundColor: '#06060c', logging: false
+          });
+
+          const page2El = document.getElementById('pdf-page-2');
+          const canvas2 = await html2canvas(page2El, {
+            scale: 2, useCORS: true, backgroundColor: '#06060c', logging: false
+          });
+
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgWidth = 210;
+
+          const pageData1 = canvas1.toDataURL('image/jpeg', 0.95);
+          pdf.addImage(pageData1, 'JPEG', 0, 0, imgWidth, 297);
+
+          pdf.addPage();
+          const pageData2 = canvas2.toDataURL('image/jpeg', 0.95);
+          pdf.addImage(pageData2, 'JPEG', 0, 0, imgWidth, 297);
+
+          const sanitizedFilename = `${schoolName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_leadership_assessment.pdf`;
+          pdf.save(sanitizedFilename);
+        } catch (err) {
+          console.error("PDF download failed:", err);
+          alert("An error occurred during PDF compilation. Please try again.");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalContent;
+        }
+      }
+
+      // 8. Progress Auto-Save / Resume Load
+      function saveProgress() {
+        localStorage.setItem('velammal_assessment_answers', JSON.stringify(answers));
+        localStorage.setItem('velammal_assessment_principal', principalName);
+        localStorage.setItem('velammal_assessment_school', schoolName);
+        localStorage.setItem('velammal_assessment_index', currentQuestionIndex);
+        localStorage.setItem('velammal_assessment_screen', screen);
+      }
+
+      function loadProgress() {
+        const savedAnswers = localStorage.getItem('velammal_assessment_answers');
+        const savedPrincipal = localStorage.getItem('velammal_assessment_principal');
+        const savedSchool = localStorage.getItem('velammal_assessment_school');
+        const savedIndex = localStorage.getItem('velammal_assessment_index');
+        const savedScreen = localStorage.getItem('velammal_assessment_screen');
+
+        if (savedAnswers) answers = JSON.parse(savedAnswers);
+        if (savedPrincipal) {
+          principalName = savedPrincipal;
+          document.getElementById('input-principal').value = principalName;
+        }
+        if (savedSchool) {
+          schoolName = savedSchool;
+          document.getElementById('input-school').value = schoolName;
+        }
+        if (savedIndex) currentQuestionIndex = parseInt(savedIndex);
+        if (savedScreen) {
+          screen = savedScreen;
+          if (screen === 'questions') {
+            screenWelcome.classList.add('hidden');
+            screenQuestions.classList.remove('hidden');
+            renderQuestion();
+          } else if (screen === 'dashboard') {
+            screenWelcome.classList.add('hidden');
+            screenDashboard.classList.remove('hidden');
+            calculateAndDisplayResults();
+          }
+        }
+      }
+
+      function resetApp() {
+        document.getElementById('input-principal').value = '';
+        document.getElementById('input-school').value = '';
+        answers = {};
+        currentQuestionIndex = 0;
+        screen = 'welcome';
+        
+        localStorage.removeItem('velammal_assessment_answers');
+        localStorage.removeItem('velammal_assessment_principal');
+        localStorage.removeItem('velammal_assessment_school');
+        localStorage.removeItem('velammal_assessment_index');
+        localStorage.removeItem('velammal_assessment_screen');
+
+        screenDashboard.classList.add('hidden');
+        screenQuestions.classList.add('hidden');
+        screenWelcome.classList.remove('hidden');
+      }
+
+      // Check on startup
+      window.onload = () => {
+        loadProgress();
+      };
+
+      // Resizing Plotly 3D layout support
+      window.addEventListener('resize', () => {
+        const chartElement = document.getElementById('plotly-surface-chart');
+        if (chartElement && window.Plotly) {
+          Plotly.Plots.resize(chartElement);
+        }
+      });
+    </script>
+  </body>
+</html>

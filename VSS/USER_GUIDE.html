@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velammal Bodhi Campus - User Manual & Strategic Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0284c7;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --border: #cbd5e1;
+            --text: #334155;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: white;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--dark);
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            border-bottom: 3px double var(--border);
+            padding-bottom: 12px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        h2 {
+            font-size: 18px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 6px;
+            margin-top: 35px;
+            color: var(--primary);
+            page-break-after: avoid;
+        }
+        h3 {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-top: 20px;
+            page-break-after: avoid;
+        }
+        p {
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        ul, ol {
+            margin: 8px 0;
+            padding-left: 20px;
+            font-size: 13px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .highlight-box {
+            background-color: var(--light);
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            page-break-inside: avoid;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 12px; border-radius: 8px; margin-bottom: 30px; font-size: 12px; color: #0369a1;">
+        <strong>📄 PDF Generation Note:</strong> Open this file in your browser, press <strong>Ctrl + P</strong> (Windows) or <strong>Cmd + P</strong> (Mac), set layout to <strong>Portrait</strong>, enable <strong>Background graphics</strong>, and click <strong>Save/Print as PDF</strong> to generate your user guide document.
+    </div>
+
+    <!-- HEADER BLOCK -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px;">
+        <div>
+            <h1 style="border:none; margin:0; padding:0;">VELAMMAL BODHI CAMPUS</h1>
+            <p style="margin:2px 0 0 0; font-size:12px; font-weight:700; color:var(--secondary); text-transform:uppercase;">
+                Staff Calculation & Financial forecasting System Guide
+            </p>
+        </div>
+        <div style="text-align: right; font-size: 11px;">
+            <strong>Document Version:</strong> 2.0 (June 2026)<br>
+            <strong>Target System:</strong> CBSE Day School Planner
+        </div>
+    </div>
+
+    <h2>1. Introduction & Overview</h2>
+    <p>
+        This Decision Support System (DSS) is designed specifically for Velammal Bodhi Campus administrators to model, project, and optimize manpower and budgets for a new CBSE Day School over its first five years of operation. The system automates the translation of grade-wise student enrollments and period allocations into required staffing levels, monthly/annual payrolls, teacher-to-student ratios, and unused teacher capacity room.
+    </p>
+
+    <div class="highlight-box">
+        <strong>Affiliation Compliance:</strong> The model integrates standard CBSE affiliation rules to ensure baseline staffing requirements (e.g. mandatory Principal, Stage Academic Coordinators, Librarian, PET, and Homeroom teachers) are met, even if enrollment is low.
+    </div>
+
+    <h2>2. Setup Wizard & Cohort Growth Projection</h2>
+    <p>
+        On initial load, a full-screen onboarding wizard captures the Year 1 student strength and location parameters. Projections for Years 2-5 are calculated automatically using cohort progression rules:
+    </p>
+    <ul>
+        <li><strong>Entry-Level Growth:</strong> Kindergarten classes (Pre-KG, LKG, UKG) grow at the specified annual growth rate.</li>
+        <li><strong>Cohort Slide:</strong> Students in Grade N slide up to Grade N+1 in the subsequent projection year.</li>
+        <li><strong>Grade Expansion Schedule:</strong>
+            <ul>
+                <li><strong>Year 1:</strong> Pre-KG to Grade 8 are open. Secondary and Senior Secondary classes are closed.</li>
+                <li><strong>Year 2:</strong> Grades 9 and 11 open automatically. Special programs (Foundation, IIT, NEET) commence.</li>
+                <li><strong>Year 3:</strong> Grades 10 and 12 open automatically. The school becomes fully operational (Pre-KG to Grade 12).</li>
+                <li><strong>Years 4 & 5:</strong> Stabilization and capacity growth years.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>3. Core CBSE Staffing Rules</h2>
+    <h3>Homeroom Teacher Rules</h3>
+    <ul>
+        <li><strong>KG Stage (PKG, LKG, UKG):</strong> Required teachers are calculated solely on a homeroom section basis (no subject specialists). Standard allocation is 1 Homeroom teacher per section.</li>
+        <li><strong>Grades 1 & 2:</strong> 1 Homeroom teacher per section handles Mathematics, EVS, General Knowledge, and Co-curricular slots. Pooled teachers instruct English and Tamil.</li>
+    </ul>
+
+    <h3>Subject Teacher Pooling</h3>
+    <p>
+        Workloads for core academic subjects (English, Tamil, Hindi, Mathematics, Social Science, Computer/AI, and Science) are pooled at the department level. The required staffing count is calculated by dividing total periods needed across stages by stage capacities:
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Academic Stage</th>
+                <th>Standard Teacher Workload Capacity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Primary & Middle Stages (Grades 1-8)</td>
+                <td>32 Periods per Week</td>
+            </tr>
+            <tr>
+                <td>Secondary & Senior Secondary (Grades 9-12)</td>
+                <td>36 Periods per Week</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Science Stage Options</h3>
+    <ul>
+        <li><strong>Option A (Composite):</strong> Middle School Science periods are split between two composite roles to optimize utilization:
+            <ul>
+                <li><em>Science Teacher 1:</em> Instructs Physics and Chemistry.</li>
+                <li><em>Science Teacher 2:</em> Instructs Biology and Physics.</li>
+            </ul>
+        </li>
+        <li><strong>Option B (Specialists):</strong> Physics, Chemistry, and Biology are treated as separate departments across all stages, hiring independent specialists.</li>
+    </ul>
+
+    <h2>4. Special Academic Programs (IIT & NEET)</h2>
+    <p>
+        Rather than hiring general "Program Faculty", the system splits IIT and NEET workloads among subject specialists.
+    </p>
+    <ul>
+        <li><strong>IIT Programme Specialists:</strong> Mathematics, Physics, Chemistry, and an optional Biology specialist (enable/disable via settings).</li>
+        <li><strong>NEET Programme Specialists:</strong> Physics, Chemistry, and Biology (Option 1: Combined Biology; Option 2: Separate Botany and Zoology).</li>
+        <li><strong>Faculty Sharing Mode:</strong>
+            <ul>
+                <li><em>Shared Faculty:</em> Program periods are added directly to CBSE teacher workloads to optimize utilization. Payroll is distributed proportionally based on FTE teaching fractions.</li>
+                <li><em>Dedicated Faculty:</em> Recruited separately in independent program pools.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>5. Export & Custom Report Designing</h2>
+    <p>
+        Using the <strong>Custom Report Designer</strong> tab, users can:
+    </p>
+    <ol>
+        <li>Drag and drop desired report blocks from the available sections.</li>
+        <li>Re-order pages using sorting controls in the layout panel.</li>
+        <li>Apply filters (Year, Program, Category) and toggle branding headers, logo crests, and page numbers.</li>
+        <li>Export the compiled report packages directly to **Print/PDF**, **Microsoft Excel (table sheets)**, or **Microsoft Word**.</li>
+    </ol>
+
+    <div style="margin-top: 50px; border-top: 1px solid var(--border); padding-top: 20px; font-size: 11px; text-align: center; color: #64748b;">
+        Velammal Bodhi Campus decision Support Guide • Confidential Board Briefing Document
+    </div>
+
+</body>
+</html>

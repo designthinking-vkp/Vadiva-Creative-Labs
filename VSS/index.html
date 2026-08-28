@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velammal Bodhi campus - Staff calculation</title>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- SheetJS Excel Export CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- html2pdf.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         SCHOOL SETUP WIZARD (FIRST SCREEN)
+         ========================================================================== -->
+    <div class="wizard-backdrop" id="setup-wizard-container">
+        <div class="wizard-card">
+            <div class="wizard-title-block">
+                <h1 class="wizard-main-title">Velammal Bodhi campus - Staff calculation</h1>
+                <p class="wizard-subtitle"><i class="fa-solid fa-school-flag"></i> CBSE Day School Affiliation & Staffing Planning Wizard</p>
+            </div>
+            
+            <div class="wizard-grid">
+                <!-- Column 1: School Information & Growth Assumptions -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="pane-card" style="background: rgba(255,255,255,0.01); border-radius: 12px; padding: 20px;">
+                        <h3 class="pane-title" style="font-size: 15px;"><i class="fa-solid fa-building-user"></i> School Information</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                            <div class="form-group">
+                                <label class="form-label">School Name</label>
+                                <input type="text" id="wiz-school-name" class="form-control" value="Velammal Bodhi campus - Staff calculation">
+                            </div>
+                            <div class="form-group-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div class="form-group">
+                                    <label class="form-label">Academic Year</label>
+                                    <select class="control-select" id="wiz-academic-year">
+                                        <option value="2026-27" selected>2026-27</option>
+                                        <option value="2027-28">2027-28</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CBSE Affiliation No. (Opt)</label>
+                                    <input type="text" id="wiz-affiliation" class="form-control" placeholder="e.g. 1930123">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">School Location</label>
+                                <input type="text" id="wiz-location" class="form-control" value="Chennai, Tamil Nadu">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pane-card" style="background: rgba(255,255,255,0.01); border-radius: 12px; padding: 20px;">
+                        <h3 class="pane-title" style="font-size: 15px;"><i class="fa-solid fa-chart-line"></i> Planning Assumptions (Years 2-5)</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                            <div class="form-group-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div class="form-group">
+                                    <label class="form-label">Annual Student Growth (%)</label>
+                                    <input type="number" id="wiz-growth-rate" class="form-control" value="15">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Annual Salary Increment (%)</label>
+                                    <input type="number" id="wiz-salary-inc" class="form-control" value="5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Teacher Salary Scale Tier</label>
+                                <select class="control-select" id="wiz-salary-tier">
+                                    <option value="tier1" selected>Tier 1 Scale (Higher)</option>
+                                    <option value="tier2">Tier 2 Scale (Standard)</option>
+                                    <option value="custom">Custom Scale</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Toggle switches for Special Programs -->
+                            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="wiz-opt-found" checked>
+                                    <span>Compulsory Foundation starts in Year 2</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="wiz-opt-iit-neet" checked>
+                                    <span>Special IIT / NEET batches start in Year 2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Year 1 Student Strength Intake -->
+                <div class="pane-card" style="background: rgba(255,255,255,0.01); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="pane-title" style="font-size: 15px;"><i class="fa-solid fa-people-group"></i> Year 1 Enrollment Intake</h3>
+                        <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">* Grades 9-12 open in Years 2 & 3</span>
+                    </div>
+                    
+                    <div class="table-wrapper" style="max-height: 310px; overflow-y: auto;">
+                        <table class="data-table" style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th>Grade Level</th>
+                                    <th>Year 1 Students</th>
+                                    <th>Max per Section</th>
+                                    <th class="text-center">Sections (Auto)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wiz-student-tbody">
+                                <!-- Populated dynamically by JS (Pre-KG to Grade 8 only) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <span style="font-size: 12px; color: var(--text-secondary); max-width: 600px;">
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent-secondary);"></i>
+                    This wizard automatically sets up sections, buses, workloads, budgets, and AI recommendations for the 5-year school plan.
+                </span>
+                <button class="btn btn-primary" id="generate-plan-btn" style="font-size: 14px; padding: 12px 28px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Generate Plan</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-shell" style="display: none;">
+        
+        <!-- ==========================================================================
+             SIDEBAR NAVIGATION
+             ========================================================================== -->
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">M</div>
+                <div class="sidebar-title">
+                    Manpower Planner
+                    <div style="font-size: 10px; color: var(--text-muted); font-weight: normal;">CBSE Affiliation System</div>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a class="sidebar-link active" data-target="section-dashboard">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-students">
+                        <i class="fa-solid fa-users-line"></i>
+                        <span>Student & Sections</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-periods">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>Period Allocations</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-manpower">
+                        <i class="fa-solid fa-people-group"></i>
+                        <span>Manpower Calc</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-salaries">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        <span>Salary & Budgets</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-optimization">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Optimization Hub</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-reports">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>Reports Hub</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" data-target="section-designer">
+                        <i class="fa-solid fa-compass-drafting"></i>
+                        <span>Report Designer</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer" style="display: flex; flex-direction: column; gap: 6px; padding: 12px;">
+                <div class="sidebar-link" id="relaunch-wizard-btn" style="color: var(--accent-secondary); padding: 8px 12px; margin: 0; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Setup Wizard</span>
+                </div>
+                <div class="sidebar-link" id="reset-data-btn" style="color: var(--status-red); padding: 8px 12px; margin: 0; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>Reset Settings</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==========================================================================
+             MAIN CONTENT VIEWPORT
+             ========================================================================== -->
+        <main class="main-content">
+            
+            <!-- TOP BAR -->
+            <header class="topbar">
+                <div class="topbar-left" style="flex-grow: 1; max-width: 400px; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-bars mobile-toggle" id="sidebar-toggle-mobile"></i>
+                    <div style="flex-grow: 1;">
+                        <input type="text" id="school-name-input" class="form-control" value="Velammal Bodhi campus - Staff calculation" style="font-weight: 700; font-size: 16px; background: transparent; border: none; padding: 4px 8px; border-bottom: 1px dashed var(--border-color); width: 100%; border-radius: 0;" placeholder="School Name">
+                    </div>
+                </div>
+                
+                <div class="topbar-right">
+                    <div class="form-group" style="margin: 0; flex-direction: row; align-items: center; gap: 8px;">
+                        <span class="form-label" style="white-space: nowrap;">Year Filter:</span>
+                        <select class="control-select" id="global-year-select">
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3" selected>Year 3 (Complete)</option>
+                            <option value="4">Year 4 (Expansion)</option>
+                            <option value="5">Year 5 (Stabilized)</option>
+                        </select>
+                    </div>
+                    
+                    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    
+                    <button class="btn btn-secondary" id="print-report-btn">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Print</span>
+                    </button>
+                    
+                    <button class="btn btn-success" id="export-excel-btn">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Export Excel</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ==========================================================================
+                 DASHBOARD TAB
+                 ========================================================================== -->
+            <div class="content-section active" id="section-dashboard">
+                <!-- Dashboard Cards -->
+                <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Total Students</span>
+                            <span class="stat-value" id="dash-total-students">0</span>
+                            <span class="stat-sub" id="dash-sections-count">0 Sections</span>
+                        </div>
+                        <div class="stat-icon-wrapper">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="dash-card-teaching" style="cursor: pointer;">
+                        <div class="stat-info">
+                            <span class="stat-label">Teaching Staff</span>
+                            <span class="stat-value" id="dash-total-teachers">0</span>
+                            <span class="stat-sub" id="dash-teaching-salaries">Monthly: ₹0 | Annual: ₹0</span>
+                        </div>
+                        <div class="stat-icon-wrapper">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="dash-card-nonteaching" style="cursor: pointer;">
+                        <div class="stat-info">
+                            <span class="stat-label">Non-Teaching Staff</span>
+                            <span class="stat-value" id="dash-total-nonteaching">0</span>
+                            <span class="stat-sub" id="dash-nonteaching-salaries">Monthly: ₹0 | Annual: ₹0</span>
+                        </div>
+                        <div class="stat-icon-wrapper">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="dash-card-eca" style="cursor: pointer;">
+                        <div class="stat-info">
+                            <span class="stat-label">Part-Time / ECA Staff</span>
+                            <span class="stat-value" id="dash-total-eca">0</span>
+                            <span class="stat-sub" id="dash-eca-salaries">Monthly: ₹0 | Annual: ₹0</span>
+                        </div>
+                        <div class="stat-icon-wrapper">
+                            <i class="fa-solid fa-volleyball"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card financial" id="dash-card-grand" style="cursor: pointer;">
+                        <div class="stat-info">
+                            <span class="stat-label">Grand Total Summary</span>
+                            <span class="stat-value" id="dash-grand-total-employees">0</span>
+                            <span class="stat-sub" id="dash-grand-total-salaries">Monthly: ₹0 | Annual: ₹0</span>
+                        </div>
+                        <div class="stat-icon-wrapper">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphs Row -->
+                <div class="dashboard-row equal">
+                    <div class="pane-card">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-chart-line"></i> 5-Year Salary budget Projection</h3>
+                        </div>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="chart-salary-projection"></canvas>
+                        </div>
+                    </div>
+                    <div class="pane-card">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-chart-pie"></i> Staff Composition</h3>
+                        </div>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="chart-staff-distribution"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- department Utilization Graph -->
+                <div class="dashboard-row full">
+                    <div class="pane-card">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-chart-column"></i> Department-wise Teacher Utilization</h3>
+                        </div>
+                        <div style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="chart-dept-utilization"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title" style="color: var(--accent-primary);">
+                            <i class="fa-solid fa-brain"></i> AI Staffing Recommendations & Analytics
+                        </h3>
+                    </div>
+                    <div class="insights-grid" id="ai-insights-container">
+                        <!-- AI Insights will be inserted dynamically here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 STUDENT & SECTIONS TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-students">
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-users-line"></i> Student Enrollment Planning</h3>
+                        <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px;">
+                            <span class="form-label" style="white-space: nowrap;">Max Students/Section:</span>
+                            <input type="number" id="max-students-per-section" class="form-control" value="40" style="width: 70px;">
+                        </div>
+                    </div>
+                    <p class="pane-desc">Enter the student strength for each grade across 5 years. Sections count will automatically adjust based on the ceiling capacity limit.</p>
+                    
+                    <div class="table-wrapper">
+                        <table class="data-table" id="student-strength-table">
+                            <thead>
+                                <tr>
+                                    <th>Grade Level</th>
+                                    <th>Year 1 Students</th>
+                                    <th>Year 1 Sections</th>
+                                    <th>Year 2 Students</th>
+                                    <th>Year 2 Sections</th>
+                                    <th>Year 3 Students</th>
+                                    <th>Year 3 Sections</th>
+                                    <th>Year 4 Students</th>
+                                    <th>Year 4 Sections</th>
+                                    <th>Year 5 Students</th>
+                                    <th>Year 5 Sections</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-strength-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td>Total Students / Sections</td>
+                                    <td id="tot-std-y1" class="font-semibold text-center">-</td>
+                                    <td id="tot-sec-y1" class="font-semibold text-center">-</td>
+                                    <td id="tot-std-y2" class="font-semibold text-center">-</td>
+                                    <td id="tot-sec-y2" class="font-semibold text-center">-</td>
+                                    <td id="tot-std-y3" class="font-semibold text-center">-</td>
+                                    <td id="tot-sec-y3" class="font-semibold text-center">-</td>
+                                    <td id="tot-std-y4" class="font-semibold text-center">-</td>
+                                    <td id="tot-sec-y4" class="font-semibold text-center">-</td>
+                                    <td id="tot-std-y5" class="font-semibold text-center">-</td>
+                                    <td id="tot-sec-y5" class="font-semibold text-center">-</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 PERIOD ALLOCATIONS TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-periods">
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-clock"></i> Weekly Period Allocation Master</h3>
+                        <div class="table-filters" style="border: none; padding: 0;">
+                            <div class="search-input-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" class="search-input" id="search-periods" placeholder="Search subjects...">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="pane-desc">Set the number of periods allocated per week for each subject across school stages. Changes here directly drive teacher workload calculations.</p>
+                    
+                    <div class="table-wrapper">
+                        <table class="data-table" id="periods-master-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject / Program</th>
+                                    <th>Primary (Gr 1-5)</th>
+                                    <th>Middle (Gr 6-8)</th>
+                                    <th>High (Gr 9-10)</th>
+                                    <th>Higher Sec (Gr 11-12)</th>
+                                    <th>Middle Foundation</th>
+                                    <th>High Foundation</th>
+                                    <th>IIT Batch (Gr 11-12)</th>
+                                    <th>NEET Batch (Gr 11-12)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="periods-master-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
+                        <span>* Pre-KG, LKG, UKG grades rely on Homeroom Teachers entirely and do not calculate based on subject-wise periods.</span>
+                        <span>* Non-teacher creating subjects (e.g. GK, Clubs, Value Ed) will be highlighted and their periods distributed amongst existing teachers.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 MANPOWER CALCULATOR TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-manpower">
+                
+                <!-- Configuration panel -->
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-gears"></i> Staffing Model Constraints</h3>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Science Teacher Model</label>
+                            <select class="control-select" id="science-model-select">
+                                <option value="A">Option A (Default: Combined Phy+Chem & Bio+Phys)</option>
+                                <option value="B">Option B (Separate Physics, Chemistry & Biology)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Faculty Sharing Mode</label>
+                            <select class="control-select" id="sharing-model-select">
+                                <option value="shared">CBSE & IIT/NEET Shared (Recommended)</option>
+                                <option value="dedicated">Dedicated IIT/NEET Faculty Pools</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">NEET Biology Structure</label>
+                            <select class="control-select" id="neet-biology-select">
+                                <option value="separate">Separate Botany & Zoology</option>
+                                <option value="combined">Combined Biology</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">IIT Biology Program</label>
+                            <select class="control-select" id="iit-biology-select">
+                                <option value="disabled">Disabled (No IIT Biology)</option>
+                                <option value="enabled">Enabled (Include IIT Biology)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primary Teacher Capacity</label>
+                            <input type="number" id="capacity-primary" class="form-control" value="32">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Middle Teacher Capacity</label>
+                            <input type="number" id="capacity-middle" class="form-control" value="32">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">High/HS Teacher Capacity</label>
+                            <input type="number" id="capacity-high-hs" class="form-control" value="36">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manpower calculations table -->
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-users"></i> Staff Requirements Planner (<span id="manpower-selected-year-label">Year 3</span>)</h3>
+                        <div class="tabs-header" style="border: none;" id="manpower-category-tabs">
+                            <button class="tab-btn active" data-category="cbse-teaching">CBSE Teachers</button>
+                            <button class="tab-btn" data-category="special-faculty">IIT/NEET/Foundation</button>
+                            <button class="tab-btn" data-category="non-teaching">Non-Teaching Staff</button>
+                            <button class="tab-btn" data-category="eca-parttime">ECA & Part-Time</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table class="data-table" id="manpower-calc-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Category / Role</th>
+                                    <th class="text-center">Workload (Periods/Wk)</th>
+                                    <th class="text-center">Calculated Staff</th>
+                                    <th class="text-center">Baseline Minimum</th>
+                                    <th class="text-center">Required (Hired)</th>
+                                    <th class="text-center">Workload Capacity</th>
+                                    <th class="text-center">Avg Utilization</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manpower-calc-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 SALARY & BUDGET MASTER TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-salaries">
+                <!-- Salary assumptions card -->
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-hand-holding-dollar"></i> Salary Scale Configuration</h3>
+                        <div class="form-group" style="flex-direction: row; align-items: center; gap: 12px; margin: 0;">
+                            <span class="form-label">Salary Tier:</span>
+                            <select class="control-select" id="salary-tier-select">
+                                <option value="tier1">Tier 1 Scale (Higher)</option>
+                                <option value="tier2">Tier 2 Scale (Standard)</option>
+                                <option value="custom">Custom Scale (Editable)</option>
+                            </select>
+                            <span class="form-label" style="margin-left: 12px;">Annual Increment:</span>
+                            <input type="number" id="annual-increment-pct" class="form-control" value="5" style="width: 60px;">
+                            <span class="form-label">%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table class="data-table" id="salary-scale-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Category / Grade Role</th>
+                                    <th>Base Monthly Salary (Y1)</th>
+                                    <th>Monthly Salary (Y2)</th>
+                                    <th>Monthly Salary (Y3)</th>
+                                    <th>Monthly Salary (Y4)</th>
+                                    <th>Monthly Salary (Y5)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salary-scale-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Annual financial budget table -->
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-money-bill-trend-up"></i> 5-Year School Salary Budget & Forecast</h3>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table" id="salary-projection-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Department</th>
+                                    <th class="text-right">Year 1 Annual</th>
+                                    <th class="text-right">Year 2 Annual</th>
+                                    <th class="text-right">Year 3 Annual</th>
+                                    <th class="text-right">Year 4 Annual</th>
+                                    <th class="text-right">Year 5 Annual</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salary-projection-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td>Grand Total Salary Expenses</td>
+                                    <td id="tot-sal-y1" class="text-right">-</td>
+                                    <td id="tot-sal-y2" class="text-right">-</td>
+                                    <td id="tot-sal-y3" class="text-right">-</td>
+                                    <td id="tot-sal-y4" class="text-right">-</td>
+                                    <td id="tot-sal-y5" class="text-right">-</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detailed designation salary breakdown -->
+                <div class="pane-card" style="margin-top: 20px;">
+                    <div class="pane-header" style="justify-content: space-between; align-items: center; display: flex;">
+                        <h3 class="pane-title"><i class="fa-solid fa-receipt"></i> Detailed Designation Salary Breakdown</h3>
+                        <div class="form-group" style="margin: 0; flex-direction: row; align-items: center; gap: 8px;">
+                            <span class="form-label" style="font-size:11px;">Category:</span>
+                            <select class="control-select" id="sal-breakdown-category-select" style="max-width: 150px; font-size:11px; padding:4px 8px; height:auto;">
+                                <option value="teaching">Teaching Staff</option>
+                                <option value="nonteaching">Non-Teaching Staff</option>
+                                <option value="eca">Part-Time / ECA Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Designation</th>
+                                    <th class="text-right">No. of Staff</th>
+                                    <th class="text-right">Salary per Staff</th>
+                                    <th class="text-center">Calculation</th>
+                                    <th class="text-right">Monthly Total</th>
+                                    <th class="text-right">Annual Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sal-breakdown-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="sal-breakdown-summary-container" style="margin-top:15px;"></div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 OPTIMIZATION & SIMULATION TAB
+                 ===============================================================            <div class="content-section" id="section-optimization">
+                <!-- Row 1: Expansion Summary Dashboard -->
+                <div class="dashboard-row equal" style="margin-bottom: 20px;">
+                    <!-- Table Summary -->
+                    <div class="pane-card" style="flex: 2;">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-square-poll-horizontal"></i> Grade-wise Additional Section Analysis</h3>
+                        </div>
+                        <p class="pane-desc">Analysis of section expansion room without hiring, computed from current teacher pool capacity.</p>
+                        <div class="table-wrapper" style="max-height: 380px; overflow-y: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Grade Level</th>
+                                        <th class="text-center">Current Sections</th>
+                                        <th class="text-center">Possible Sections</th>
+                                        <th class="text-center">Additional Possible</th>
+                                        <th>Limiting Department</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="opt-grade-analysis-tbody">
+                                    <!-- Populated dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Side Widget Summary -->
+                    <div class="pane-card" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-circle-nodes"></i> Capacity Summary Widget</h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px; margin: 10px 0; font-size: 13px;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+                                <span class="text-secondary">Total Extra Sections Possible:</span>
+                                <span class="font-bold text-primary" id="opt-widget-total-sections" style="font-size: 15px; color: var(--accent-primary);">0 Sections</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+                                <span class="text-secondary">Extra Student Capacity:</span>
+                                <span class="font-bold text-success" id="opt-widget-total-students" style="font-size: 15px; color: var(--status-green);">0 Students</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+                                <span class="text-secondary">Estimated New Hire Cost:</span>
+                                <span class="font-bold text-warning" id="opt-widget-total-hire-cost" style="color: var(--accent-tertiary);">₹0</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span class="text-secondary">Departments Requiring Recruitment:</span>
+                                <div id="opt-widget-recruitment-depts" style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;">
+                                    <!-- Badges populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background: rgba(99,102,241,0.06); border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; font-size: 11px; line-height: 1.4; color: var(--text-muted);">
+                            <strong>Capacity Threshold Alert:</strong> Opening sections beyond the "Possible Sections" ceiling will require hiring additional subject specialists as outlined in the Limiting Factor table.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Grade-wise Expansion Dashboard -->
+                <div class="pane-card" style="margin-bottom: 20px;">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-shapes"></i> Grade Expansion Dashboard</h3>
+                    </div>
+                    <p class="pane-desc">Real-time status cards showing maximum expansion thresholds for each individual grade level.</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; max-height: 380px; overflow-y: auto; padding: 5px;" id="opt-grade-cards-grid">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </div>
+
+                <!-- Row 3: Teacher Capacity Analysis & Recommendations -->
+                <div class="dashboard-row equal">
+                    <!-- Capacity analysis per grade -->
+                    <div class="pane-card" style="flex: 1.3;">
+                        <div class="pane-header" style="justify-content: space-between; align-items: center; display: flex;">
+                            <h3 class="pane-title"><i class="fa-solid fa-chart-gantt"></i> Teacher Capacity Analysis</h3>
+                            <select class="control-select" id="opt-capacity-grade-select" style="max-width: 150px; font-size: 11px; padding: 4px 8px; height: auto;">
+                                <!-- Dropdown options populated by JS -->
+                            </select>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject Department</th>
+                                        <th class="text-right">Available Capacity (P)</th>
+                                        <th class="text-right">Used Workload (P)</th>
+                                        <th class="text-right">Remaining (P)</th>
+                                        <th class="text-right">Extra Sections supported</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="opt-teacher-capacity-tbody">
+                                    <!-- Populated dynamically based on grade select -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Bottleneck subjects & recommendations -->
+                    <div class="pane-card" style="flex: 1;">
+                        <div class="pane-header">
+                            <h3 class="pane-title"><i class="fa-solid fa-triangle-exclamation"></i> Limiting Factors & Recommendations</h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div class="table-wrapper" style="max-height: 180px; overflow-y: auto;">
+                                <table class="data-table" style="font-size: 11px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Grade</th>
+                                            <th>Bottleneck Subject</th>
+                                            <th class="text-center">New Teacher Reqd</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="opt-limiting-factors-tbody">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; padding-right: 5px;" id="opt-grade-recs-list">
+                                <!-- AI Recommendations list -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 REPORTS HUB TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-reports">
+                <div class="pane-card">
+                    <div class="pane-header">
+                        <h3 class="pane-title"><i class="fa-solid fa-file-invoice"></i> Reports Compiler</h3>
+                        <div class="table-filters" style="border: none; padding: 0;">
+                            <div class="search-input-wrapper" style="margin-right: 12px;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" class="search-input" id="search-reports-table" placeholder="Filter report data...">
+                            </div>
+                            <select class="control-select" id="report-type-select" style="max-width: 320px;">
+                                <optgroup label="Teaching Reports">
+                                    <option value="teaching-summary" selected>1. Teaching Staff Summary</option>
+                                    <option value="subject-requirement">2. Subject-wise Teacher Requirement</option>
+                                    <option value="teacher-salary-details">3. Teacher Salary Details</option>
+                                    <option value="staff-utilization">4. Teacher Utilisation</option>
+                                </optgroup>
+                                <optgroup label="Non-Teaching Reports">
+                                    <option value="non-teaching-summary">5. Non-Teaching Staff Summary</option>
+                                    <option value="nonteaching-salary-details">6. Non-Teaching Salary Details</option>
+                                    <option value="transport-staff">7. Transport Staff Report</option>
+                                    <option value="admin-staff">8. Administration Staff Report</option>
+                                </optgroup>
+                                <optgroup label="Part-Time / ECA Reports">
+                                    <option value="eca-summary">9. ECA Staff Summary</option>
+                                    <option value="eca-salary-details">10. ECA Salary Details</option>
+                                </optgroup>
+                                <optgroup label="General & Expansion Reports">
+                                    <option value="grade-enrollment">11. Grade-wise Student Strength</option>
+                                    <option value="section-planning">12. Section Planning Report</option>
+                                    <option value="five-year-salaries">13. Five-Year Salary Projection</option>
+                                    <option value="utilization-extremes">14. Under/Over-utilized Staff Report</option>
+                                    <option value="expansion-capacity">15. Expansion Capacity Report</option>
+                                    <option value="five-year-manpower">16. Five-Year Manpower Projection</option>
+                                    <option value="org-chart">17. School Organization Chart</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Report dynamic canvas -->
+                    <div id="report-view-container">
+                        <div class="table-wrapper">
+                            <table class="data-table" id="compiled-report-table">
+                                <thead id="compiled-report-thead">
+                                    <!-- Populated dynamically by JS -->
+                                </thead>
+                                <tbody id="compiled-report-tbody">
+                                    <!-- Populated dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Org Chart Renderer (Hidden by default, shown for org-chart) -->
+                        <div id="org-chart-renderer" class="org-chart-container" style="display: none;">
+                            <!-- Org chart markup generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 CUSTOM REPORT DESIGNER TAB
+                 ========================================================================== -->
+            <div class="content-section" id="section-designer">
+                <div class="dashboard-row" style="grid-template-columns: 1fr 1fr 1.5fr; gap: 20px; align-items: start;">
+                    
+                    <!-- LEFT COLUMN: Available Sections & Templates -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="pane-card" style="padding: 20px;">
+                            <div class="pane-header" style="margin-bottom: 15px;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-cubes"></i> Report Packages</h3>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                                <button class="btn btn-secondary btn-sm" id="pkg-executive" style="font-size:11px; padding: 6px;"><i class="fa-solid fa-briefcase"></i> Executive</button>
+                                <button class="btn btn-secondary btn-sm" id="pkg-hr" style="font-size:11px; padding: 6px;"><i class="fa-solid fa-user-tie"></i> HR Report</button>
+                                <button class="btn btn-secondary btn-sm" id="pkg-finance" style="font-size:11px; padding: 6px;"><i class="fa-solid fa-sack-dollar"></i> Finance</button>
+                                <button class="btn btn-secondary btn-sm" id="pkg-complete" style="font-size:11px; padding: 6px;"><i class="fa-solid fa-book"></i> Complete</button>
+                            </div>
+                            
+                            <div class="pane-header" style="margin-bottom: 12px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-folder-open"></i> Saved Templates</h3>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <select class="control-select" id="saved-templates-select" style="font-size: 12px;">
+                                    <option value="">-- Select Template --</option>
+                                </select>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="new-template-name" class="form-control" placeholder="Template Name" style="font-size: 11px; height: 32px;">
+                                    <button class="btn btn-primary btn-sm" id="save-template-btn" style="padding: 0 12px; font-size:11px;"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pane-card" style="padding: 20px; max-height: 480px; overflow-y: auto;">
+                            <div class="pane-header" style="margin-bottom: 12px;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-list-ul"></i> Available Sections</h3>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 12px;" id="available-sections-list">
+                                <!-- Group categories -->
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">School Information</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="school-profile"><i class="fa-solid fa-school"></i> School Profile</div>
+                                        <div class="draggable-item" draggable="true" data-section="academic-year"><i class="fa-solid fa-calendar"></i> Academic Year</div>
+                                        <div class="draggable-item" draggable="true" data-section="growth-assumptions"><i class="fa-solid fa-chart-line"></i> Growth Assumptions</div>
+                                        <div class="draggable-item" draggable="true" data-section="school-config"><i class="fa-solid fa-gears"></i> School Configuration</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">Student Reports</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="student-strength"><i class="fa-solid fa-users"></i> Student Strength Summary</div>
+                                        <div class="draggable-item" draggable="true" data-section="grade-student-strength"><i class="fa-solid fa-users-line"></i> Grade-wise Students</div>
+                                        <div class="draggable-item" draggable="true" data-section="section-strength"><i class="fa-solid fa-table-cells-large"></i> Section-wise Strength</div>
+                                        <div class="draggable-item" draggable="true" data-section="five-year-student-proj"><i class="fa-solid fa-chart-gantt"></i> 5-Year Student Projection</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">Section Reports</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="grade-sections"><i class="fa-solid fa-puzzle-piece"></i> Grade-wise Sections</div>
+                                        <div class="draggable-item" draggable="true" data-section="total-sections"><i class="fa-solid fa-chart-simple"></i> Total Sections</div>
+                                        <div class="draggable-item" draggable="true" data-section="max-section-cap"><i class="fa-solid fa-circle-info"></i> Section Cap Limits</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">Teaching Staff</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="teach-summary"><i class="fa-solid fa-chalkboard-user"></i> Teaching Staff Summary</div>
+                                        <div class="draggable-item" draggable="true" data-section="homeroom-teachers"><i class="fa-solid fa-school-flag"></i> Homeroom Teachers</div>
+                                        <div class="draggable-item" draggable="true" data-section="math-dept"><i class="fa-solid fa-square-root-variable"></i> Mathematics Dept</div>
+                                        <div class="draggable-item" draggable="true" data-section="science-dept"><i class="fa-solid fa-flask-vial"></i> Science Dept</div>
+                                        <div class="draggable-item" draggable="true" data-section="english-dept"><i class="fa-solid fa-spell-check"></i> English Dept</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">Academic Programs</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="foundation-program"><i class="fa-solid fa-graduation-cap"></i> Foundation Program</div>
+                                        <div class="draggable-item" draggable="true" data-section="iit-program"><i class="fa-solid fa-rocket"></i> IIT Program</div>
+                                        <div class="draggable-item" draggable="true" data-section="neet-program"><i class="fa-solid fa-stethoscope"></i> NEET Program</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">Salaries & Utilization</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="salary-budget"><i class="fa-solid fa-wallet"></i> Salary Budget Summary</div>
+                                        <div class="draggable-item" draggable="true" data-section="teacher-salary-details"><i class="fa-solid fa-wallet"></i> Teacher Salary Details</div>
+                                        <div class="draggable-item" draggable="true" data-section="nonteaching-salary-details"><i class="fa-solid fa-wallet"></i> Non-Teaching Salary Details</div>
+                                        <div class="draggable-item" draggable="true" data-section="eca-salary-details"><i class="fa-solid fa-wallet"></i> ECA Salary Details</div>
+                                        <div class="draggable-item" draggable="true" data-section="five-year-salaries"><i class="fa-solid fa-chart-line"></i> 5-Year Salary Projection</div>
+                                        <div class="draggable-item" draggable="true" data-section="staff-utilization"><i class="fa-solid fa-chart-pie"></i> Staff Utilization</div>
+                                        <div class="draggable-item" draggable="true" data-section="grade-expansion-analysis"><i class="fa-solid fa-square-poll-horizontal"></i> Grade Expansion Analysis</div>
+                                    </div>
+                                </div>
+                                <div class="sect-group">
+                                    <div style="font-weight: 700; color: var(--accent-secondary); margin-bottom: 6px;">AI Recommendations</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="draggable-item" draggable="true" data-section="ai-recs"><i class="fa-solid fa-brain"></i> AI Recommendations</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- MIDDLE COLUMN: Selected Sections & Ordering & Filters -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="pane-card" style="padding: 20px;">
+                            <div class="pane-header" style="margin-bottom: 12px;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-filter"></i> Report Designer Filters</h3>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px;">
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:10px;">Academic Year</label>
+                                    <select class="control-select" id="des-filter-ac-year" style="font-size: 11px;">
+                                        <option value="all">All Years</option>
+                                        <option value="2026-27" selected>2026-27</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:10px;">Projection Year</label>
+                                    <select class="control-select" id="des-filter-proj-year" style="font-size: 11px;">
+                                        <option value="all">All 5 Years</option>
+                                        <option value="1">Year 1 Only</option>
+                                        <option value="2">Year 2 Only</option>
+                                        <option value="3" selected>Year 3 Only</option>
+                                        <option value="4">Year 4 Only</option>
+                                        <option value="5">Year 5 Only</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label class="form-label" style="font-size:10px;">Teacher Category / Program filter</label>
+                                    <select class="control-select" id="des-filter-program" style="font-size: 11px;">
+                                        <option value="all" selected>All (CBSE + Foundation + IIT + NEET)</option>
+                                        <option value="cbse">CBSE Core Only</option>
+                                        <option value="special">Foundation / IIT / NEET Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; font-size: 11px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="des-opt-exec-summary" checked>
+                                    <span style="font-weight: 600;">Include One-Page Executive Summary</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="des-opt-charts" checked>
+                                    <span style="font-weight: 600;">Include Visual Analytics (Charts)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="des-opt-branding" checked>
+                                    <span style="font-weight: 600;">Include School Branding & Logo Header</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pane-card" style="padding: 20px; flex-grow: 1;">
+                            <div class="pane-header" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-list-check"></i> Report Contents Layout</h3>
+                                <button class="btn btn-secondary btn-sm" id="clear-sections-btn" style="font-size: 10px; padding: 4px 8px;">Clear All</button>
+                            </div>
+                            <p class="pane-desc" style="font-size: 11px; margin-bottom: 10px;">Drag available sections here, or click them to append. Drag to re-order the pages sequence.</p>
+                            
+                            <div class="selected-sections-dropzone" id="selected-sections-list" style="min-height: 200px; border: 2px dashed var(--border-color); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 290px; overflow-y: auto;">
+                                <!-- Placed sections will render here -->
+                                <div class="dropzone-placeholder" style="text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 12px; margin: auto;">
+                                    <i class="fa-solid fa-arrows-to-dot" style="font-size: 24px; margin-bottom: 8px; display: block; color: var(--accent-primary);"></i>
+                                    Drag Report Modules Here
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RIGHT COLUMN: Live Document Preview & Export actions -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="pane-card" style="padding: 20px;">
+                            <div class="pane-header" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="pane-title" style="font-size: 14px;"><i class="fa-solid fa-eye"></i> Management Preview</h3>
+                                <div style="display: flex; gap: 6px;">
+                                    <button class="btn btn-danger btn-sm" id="des-btn-pdf" style="background: rgba(229,62,62,0.2); border-color: rgba(229,62,62,0.3); color: #feb2b2;"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                                    <button class="btn btn-primary btn-sm" id="des-btn-print"><i class="fa-solid fa-print"></i> Print</button>
+                                    <button class="btn btn-success btn-sm" id="des-btn-excel"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                                    <button class="btn btn-secondary btn-sm" id="des-btn-word" style="background: rgba(43,108,176,0.2); border-color: rgba(43,108,176,0.3); color: #90cdf4;"><i class="fa-solid fa-file-word"></i> Word</button>
+                                </div>
+                            </div>
+                            
+                            <!-- A4 Sheet Live Preview Pane -->
+                            <div class="designer-a4-preview-pane" id="designer-preview-page" style="background: white; color: #1a202c; border-radius: 8px; padding: 30px; font-size: 12px; font-family: 'Inter', sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-height: 520px; overflow-y: auto; border: 1px solid #e2e8f0; line-height: 1.4;">
+                                <!-- Live A4 Compiled report HTML injected here -->
+                                <div style="text-align: center; padding: 100px 0; color: #718096;">
+                                    <i class="fa-solid fa-file-invoice" style="font-size: 40px; margin-bottom: 12px; color: #cbd5e0;"></i>
+                                    <p>Select report modules to compile A4 preview.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript logic file -->
+    <script src="app.js"></script>
+</body>
+</html>

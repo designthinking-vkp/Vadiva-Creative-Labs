@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ology Riddle Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep: #050818;
+    --mid: #0d1230;
+    --surface: rgba(255,255,255,0.04);
+    --glass: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.12);
+    --orange: #ff7040;
+    --orange-glow: rgba(255,112,64,0.3);
+    --purple: #7c5cfc;
+    --purple-glow: rgba(124,92,252,0.25);
+    --lavender: #b8a4ff;
+    --soft-white: #f0eeff;
+    --muted: rgba(240,238,255,0.55);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Syne', sans-serif;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--deep);
+    color: var(--soft-white);
+    font-family: var(--sans);
+    overflow: hidden;
+  }
+
+  /* CANVAS */
+  #canvas {
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, #0d1a4a 0%, var(--deep) 70%);
+  }
+
+  /* PARTICLE CANVAS */
+  #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  /* SCREENS */
+  .screen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    padding: 2rem;
+  }
+  .screen.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .screen.exit {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* HOME SCREEN */
+  #home-screen { text-align: center; }
+
+  .home-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  .home-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--soft-white);
+    margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+
+  .home-title em {
+    font-style: italic;
+    color: var(--lavender);
+  }
+
+  .home-tagline {
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--muted);
+    margin: 1.5rem 0 0.7rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .home-subtitle {
+    font-family: var(--sans);
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(184,164,255,0.6);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--soft-white);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.1s forwards;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--purple), var(--orange));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .btn-primary:hover { border-color: transparent; }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-reveal {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--soft-white);
+    background: linear-gradient(135deg, rgba(124,92,252,0.3), rgba(255,112,64,0.3));
+    border: 1px solid rgba(255,112,64,0.4);
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 30px rgba(255,112,64,0.15);
+  }
+  .btn-reveal:hover {
+    background: linear-gradient(135deg, var(--purple), var(--orange));
+    box-shadow: 0 0 50px rgba(255,112,64,0.35);
+    border-color: transparent;
+  }
+
+  .btn-next {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(240,238,255,0.6);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 0.85rem 2.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-next:hover {
+    color: var(--soft-white);
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  /* RIDDLE SCREEN */
+  #riddle-screen { gap: 0; }
+
+  .riddle-progress {
+    position: fixed; top: 2rem; right: 2.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .riddle-card {
+    width: 100%;
+    max-width: 700px;
+    padding: 3.5rem 3rem;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    position: relative;
+    animation: cardIn 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+
+  .riddle-card::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  }
+
+  .riddle-visual {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .riddle-label {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+  }
+
+  .riddle-question {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--soft-white);
+    margin-bottom: 2.5rem;
+  }
+
+  .riddle-question strong {
+    font-weight: 600;
+    color: var(--lavender);
+  }
+
+  /* REVEAL SECTION */
+  .reveal-section {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.8s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease 0.2s;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 2rem;
+    padding-top: 0;
+  }
+  .reveal-section.open {
+    max-height: 400px;
+    opacity: 1;
+    padding-top: 2rem;
+  }
+
+  .reveal-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 1rem;
+  }
+
+  .reveal-answer {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--soft-white);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .reveal-reason {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    line-height: 1.75;
+    letter-spacing: 0.04em;
+    color: rgba(184,164,255,0.65);
+    background: rgba(124,92,252,0.07);
+    border-left: 2px solid rgba(124,92,252,0.4);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .reveal-footer {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 1.5rem;
+  }
+
+  /* TRANSITION QUOTE SCREEN */
+  #quote-screen { text-align: center; }
+
+  .quote-mark {
+    font-family: var(--serif);
+    font-size: 6rem;
+    line-height: 0.5;
+    color: rgba(124,92,252,0.25);
+    margin-bottom: 1rem;
+  }
+
+  .quote-text {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--soft-white);
+    max-width: 600px;
+    line-height: 1.4;
+  }
+
+  /* FINAL SCREEN */
+  #final-screen { text-align: center; }
+
+  .final-title {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--soft-white);
+    max-width: 580px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.4s forwards;
+  }
+
+  .final-divider {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    margin: 0 auto 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  /* GLOW RING */
+  .glow-ring {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.12;
+    filter: blur(80px);
+    z-index: 1;
+    transition: all 2s ease;
+  }
+  #glow1 { background: var(--purple); top: -100px; right: -100px; }
+  #glow2 { background: var(--orange); bottom: -100px; left: -100px; }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 8px;
+    z-index: 100;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.12; transform: scale(1); }
+    50% { opacity: 0.2; transform: scale(1.15); }
+  }
+
+  .glow-ring { animation: glowPulse 6s ease-in-out infinite; }
+  #glow2 { animation-delay: -3s; }
+
+  /* SPINNER for transitions */
+  .quote-bar {
+    width: 40px; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--orange));
+    margin: 2rem auto 0;
+    animation: barExpand 2s ease-in-out forwards;
+  }
+  @keyframes barExpand {
+    from { width: 0; opacity: 0; }
+    to { width: 80px; opacity: 1; }
+  }
+
+  /* SVG illustrations */
+  .svg-illustration svg {
+    filter: drop-shadow(0 0 12px rgba(124,92,252,0.35));
+  }
+
+  button:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; }
+</style>
+</head>
+<body>
+
+<div id="canvas"></div>
+<canvas id="particles"></canvas>
+<div id="glow1" class="glow-ring"></div>
+<div id="glow2" class="glow-ring"></div>
+
+<!-- HOME SCREEN -->
+<div class="screen active" id="home-screen">
+  <div class="home-eyebrow">A Workshop Experience</div>
+  <div class="home-title">Ology<br><em>Riddle Up</em></div>
+  <div class="home-tagline">"There is no single right answer."</div>
+  <div class="home-subtitle">Think differently &nbsp;·&nbsp; Observe deeply &nbsp;·&nbsp; Imagine freely</div>
+  <button class="btn-primary" onclick="startExperience()"><span>Start Experience</span></button>
+</div>
+
+<!-- RIDDLE SCREEN -->
+<div class="screen" id="riddle-screen">
+  <div class="riddle-progress" id="riddle-progress">1 / 20</div>
+  <div class="riddle-card" id="riddle-card">
+    <div class="riddle-label">Riddle</div>
+    <div id="riddle-visual" class="riddle-visual" style="display:none"></div>
+    <div class="riddle-question" id="riddle-question"></div>
+    <div id="btn-reveal-wrap">
+      <button class="btn-reveal" onclick="revealAnswer()">Reveal Perspective</button>
+    </div>
+    <div class="reveal-section" id="reveal-section">
+      <div class="reveal-eyebrow">Possible Perspective</div>
+      <div class="reveal-answer" id="reveal-answer"></div>
+      <div class="reveal-reason" id="reveal-reason"></div>
+      <div class="reveal-footer">There can be many ways to think about this.</div>
+      <button class="btn-next" onclick="nextRiddle()">Next Riddle →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE TRANSITION SCREEN -->
+<div class="screen" id="quote-screen">
+  <div class="quote-mark">"</div>
+  <div class="quote-text" id="quote-text"></div>
+  <div class="quote-bar"></div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="final-screen">
+  <div class="final-title">"There was never one correct answer.<br>Only different ways of seeing."</div>
+  <div class="final-divider"></div>
+  <button class="btn-primary" onclick="restartExperience()" style="animation-delay:1s"><span>Experience Again</span></button>
+</div>
+
+<script>
+const riddles = [
+  {
+    question: "A farmer has 17 sheep.\nAll but 9 die.\n\nHow many remain?",
+    answer: "9 remain.",
+    reason: "'All but 9' means all except 9. So 9 sheep survive. Our brain wants to subtract, but the phrase already tells us the answer — we just need to read it carefully.",
+    visual: null
+  },
+  {
+    question: "What could this become?",
+    answer: "A tornado, a galaxy, a snail shell, or a hidden idea.",
+    reason: "Open-ended visuals have no fixed meaning. The spiral shape triggers pattern recognition differently in every mind — this is how creativity works. Your first answer is valid.",
+    visual: "spiral"
+  },
+  {
+    question: "What gets wetter while drying?",
+    answer: "A towel.",
+    reason: "The towel absorbs moisture from whatever it dries, so it gets wetter even as it does its job. A beautiful contradiction — the tool that solves a problem takes on that problem itself.",
+    visual: null
+  },
+  {
+    question: "What is this dot waiting for?",
+    answer: "To be noticed.\n\nOr perhaps — a universe before creation.",
+    reason: "A single point holds infinite potential. In geometry, a dot is the origin of everything. In perception, we overlook the small. This riddle asks: what are we ignoring by looking too fast?",
+    visual: "dot"
+  },
+  {
+    question: "If you have 3 apples and take away 2,\nhow many do you have?",
+    answer: "2 — the ones you took away.",
+    reason: "The question asks what YOU have, not what remains. You took 2, so you have 2. This is a perspective shift: are we thinking from our own view, or the view left behind?",
+    visual: null
+  },
+  {
+    question: "What do you think this becomes?",
+    answer: "Every mind completes differently.",
+    reason: "An incomplete shape is an invitation. Research shows people finish partial images based on memory, culture, and emotion. There is no single completion — only your unique one.",
+    visual: "halfcircle"
+  },
+  {
+    question: "What belongs to you\nbut is used more by others?",
+    answer: "Your name.",
+    reason: "You rarely call yourself by your own name, yet others use it constantly to get your attention, describe you, or remember you. Identity is shaped more by others than we realise.",
+    visual: null
+  },
+  {
+    question: "What emotion do these lines carry?",
+    answer: "Stress, excitement, chaos, or energy.",
+    reason: "Jagged lines activate the same neural patterns as urgency and alertness. This is why warning signs use sharp angles, and why calm spaces use smooth curves. Shape carries feeling.",
+    visual: "zigzag"
+  },
+  {
+    question: "A bat and ball cost ₹110.\nThe bat costs ₹100 more than the ball.\n\nHow much does the ball cost?",
+    answer: "₹5",
+    reason: "Most people instinctively say ₹10, but let's check: if ball = ₹10, bat = ₹110, total = ₹120 — wrong. If ball = ₹5, bat = ₹105, total = ₹110 ✓. Our fast-thinking brain jumps to easy answers; slow thinking catches the truth.",
+    visual: null
+  },
+  {
+    question: "What do you see first?",
+    answer: "The brain searches for patterns instantly.",
+    reason: "We don't see raw data — we see meaning. The brain identifies faces, objects, and familiar shapes in milliseconds. What you notice first reveals how your mind organises the world.",
+    visual: "splash"
+  },
+  {
+    question: "What has keys but cannot open locks?",
+    answer: "A piano.",
+    reason: "The word 'keys' is a homonym — it unlocks both a door and a melody. Language riddles train us to hold multiple meanings at once, which is the foundation of flexible thinking.",
+    visual: null
+  },
+  {
+    question: "What is behind this door?",
+    answer: "Fear, opportunity, imagination, or memory.",
+    reason: "Doors are universal symbols of threshold. Every culture uses doors in stories to represent choice and transition. What you imagine behind it reveals what you value — or what you're avoiding.",
+    visual: "door"
+  },
+  {
+    question: "How many months have 28 days?",
+    answer: "All 12 months.",
+    reason: "Every month has at least 28 days. We hear '28 days' and think only of February — but the question asks which months HAVE 28 days, not which month has ONLY 28 days. Precision of language changes everything.",
+    visual: null
+  },
+  {
+    question: "Would you climb it?",
+    answer: "Growth begins where certainty ends.",
+    reason: "The staircase fades into darkness — the destination is unknown. Most real growth requires stepping forward without full visibility. Our hesitation at this image mirrors our hesitation in real life.",
+    visual: "staircase"
+  },
+  {
+    question: "What goes up but never comes down?",
+    answer: "Your age.",
+    reason: "Unlike most things that rise and fall, age moves in only one direction. It is invisible, unstoppable, and felt differently by everyone. A reminder to be present in each moment.",
+    visual: null
+  },
+  {
+    question: "What does curiosity become?",
+    answer: "Freedom.",
+    reason: "Curiosity breaks the cage of certainty. The question marks transforming into birds visualises this: rigid, closed questions become open, soaring exploration. Curiosity is not a problem — it is a superpower.",
+    visual: "birds"
+  },
+  {
+    question: "Take 1000\n+40\n+1000\n+30\n+1000\n+20\n+1000\n+10\n\nWhat is the answer?",
+    answer: "4100",
+    reason: "Most people get 5000. The trap is adding 1000+40+1000 = 2040, then +30 = 2070, and so on — each time rounding up in working memory. The actual sum: 4×1000 + (40+30+20+10) = 4000+100 = 4100. Cognitive load fools us.",
+    visual: null
+  },
+  {
+    question: "How would you complete this?",
+    answer: "Collaboration completes unfinished paths.",
+    reason: "No one person has every answer. The broken bridge is not a failure — it is an invitation. What we cannot finish alone, we finish together. Incompleteness is the beginning of collaboration.",
+    visual: "bridge"
+  },
+  {
+    question: "What has one eye but cannot see?",
+    answer: "A needle.",
+    reason: "The 'eye' of a needle is the small hole through which thread passes. It is called an eye by metaphor — humans have named tool parts after body parts for centuries. Metaphor is how we understand the unfamiliar.",
+    visual: null
+  },
+  {
+    question: "A classroom is not made of walls.\nThen what is it made of?",
+    answer: "Trust, curiosity, mistakes,\nimagination, and people.",
+    reason: "A building is just infrastructure. Learning happens through relationships and psychological safety. When students feel safe to be wrong, curious, and themselves — that is when a classroom truly exists.",
+    visual: "classroom"
+  }
+];
+
+const quotes = [
+  "Perspective changes everything.",
+  "Observation creates creativity.",
+  "Interesting minds see differently.",
+  "Creativity begins where certainty ends.",
+  "Simple questions reveal deep thinking."
+];
+
+// Visuals as inline SVG
+const visuals = {
+  spiral: `<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M60 60 Q65 55 70 60 Q80 70 60 80 Q35 85 30 60 Q25 30 60 25 Q100 20 105 60 Q110 100 60 105" stroke="rgba(124,92,252,0.7)" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  dot: `<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="6" fill="rgba(255,112,64,0.9)"/>
+    <circle cx="60" cy="60" r="20" stroke="rgba(255,112,64,0.2)" stroke-width="1"/>
+    <circle cx="60" cy="60" r="40" stroke="rgba(255,112,64,0.08)" stroke-width="1"/>
+  </svg>`,
+  halfcircle: `<svg width="140" height="80" viewBox="0 0 140 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 70 Q70 0 130 70" stroke="rgba(184,164,255,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4 3"/>
+  </svg>`,
+  zigzag: `<svg width="160" height="80" viewBox="0 0 160 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="10,20 35,60 60,20 85,60 110,20 135,60 150,40" stroke="rgba(255,112,64,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="10,40 35,70 60,40 85,70 110,40 135,70" stroke="rgba(124,92,252,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="10,10 35,50 60,10 85,50 110,10 135,50" stroke="rgba(184,164,255,0.35)" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+  splash: `<svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="70" cy="70" rx="25" ry="20" fill="rgba(124,92,252,0.5)"/>
+    <ellipse cx="40" cy="50" rx="15" ry="10" fill="rgba(255,112,64,0.4)" transform="rotate(-20 40 50)"/>
+    <ellipse cx="100" cy="45" rx="10" ry="14" fill="rgba(184,164,255,0.4)" transform="rotate(15 100 45)"/>
+    <ellipse cx="95" cy="95" rx="18" ry="12" fill="rgba(255,112,64,0.3)" transform="rotate(30 95 95)"/>
+    <ellipse cx="38" cy="100" rx="12" ry="8" fill="rgba(124,92,252,0.3)" transform="rotate(-10 38 100)"/>
+    <circle cx="115" cy="70" r="6" fill="rgba(184,164,255,0.5)"/>
+    <circle cx="25" cy="75" r="8" fill="rgba(255,112,64,0.3)"/>
+  </svg>`,
+  door: `<svg width="100" height="140" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="10" width="60" height="120" rx="2" stroke="rgba(184,164,255,0.6)" stroke-width="2"/>
+    <rect x="10" y="10" width="35" height="120" rx="2" fill="rgba(124,92,252,0.08)" stroke="rgba(124,92,252,0.5)" stroke-width="1.5"/>
+    <circle cx="42" cy="70" r="3" fill="rgba(255,112,64,0.8)"/>
+    <line x1="70" y1="10" x2="100" y2="5" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="70" y1="130" x2="100" y2="135" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+  </svg>`,
+  staircase: `<svg width="160" height="130" viewBox="0 0 160 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="100" y="100" width="40" height="15" fill="rgba(124,92,252,0.4)" rx="1"/>
+    <rect x="70" y="80" width="40" height="35" fill="rgba(124,92,252,0.3)" rx="1"/>
+    <rect x="40" y="60" width="40" height="55" fill="rgba(124,92,252,0.2)" rx="1"/>
+    <rect x="10" y="40" width="40" height="75" fill="rgba(124,92,252,0.12)" rx="1"/>
+    <line x1="10" y1="40" x2="50" y2="40" stroke="rgba(184,164,255,0.8)" stroke-width="1.5"/>
+    <line x1="40" y1="60" x2="80" y2="60" stroke="rgba(184,164,255,0.7)" stroke-width="1.5"/>
+    <line x1="70" y1="80" x2="110" y2="80" stroke="rgba(184,164,255,0.6)" stroke-width="1.5"/>
+    <line x1="100" y1="100" x2="140" y2="100" stroke="rgba(184,164,255,0.5)" stroke-width="1.5"/>
+    <rect x="140" y="40" width="15" height="75" fill="rgba(5,8,24,0.9)"/>
+    <rect x="5" y="115" width="155" height="10" fill="rgba(5,8,24,0.6)"/>
+  </svg>`,
+  birds: `<svg width="180" height="100" viewBox="0 0 180 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <text x="15" y="55" font-size="22" fill="rgba(184,164,255,0.4)" font-family="serif">?</text>
+    <text x="45" y="40" font-size="18" fill="rgba(184,164,255,0.55)" font-family="serif">?</text>
+    <text x="75" y="30" font-size="16" fill="rgba(184,164,255,0.65)" font-family="serif">?</text>
+    <path d="M105 50 Q110 44 115 50" stroke="rgba(255,112,64,0.9)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M120 38 Q127 30 134 38" stroke="rgba(255,112,64,0.8)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M140 22 Q149 12 158 22" stroke="rgba(255,112,64,0.7)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M95 52 Q100 60 108 55" stroke="rgba(255,112,64,0.5)" stroke-width="1" fill="none" stroke-dasharray="2 2"/>
+  </svg>`,
+  bridge: `<svg width="200" height="100" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="70" x2="80" y2="70" stroke="rgba(184,164,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="10" y1="70" x2="25" y2="40" stroke="rgba(184,164,255,0.5)" stroke-width="1.5"/>
+    <line x1="80" y1="70" x2="60" y2="40" stroke="rgba(184,164,255,0.5)" stroke-width="1.5"/>
+    <line x1="25" y1="40" x2="60" y2="40" stroke="rgba(184,164,255,0.5)" stroke-width="1.5"/>
+    <line x1="130" y1="70" x2="190" y2="70" stroke="rgba(255,112,64,0.7)" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4"/>
+    <line x1="80" y1="70" x2="130" y2="70" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-dasharray="4 6" stroke-linecap="round"/>
+    <text x="95" y="90" font-size="11" fill="rgba(255,255,255,0.2)" font-family="sans-serif">gap</text>
+  </svg>`,
+  classroom: `<svg width="160" height="120" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="10" width="140" height="90" rx="3" stroke="rgba(184,164,255,0.3)" stroke-width="1.5"/>
+    <line x1="10" y1="35" x2="150" y2="35" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    <circle cx="40" cy="65" r="12" fill="rgba(124,92,252,0.25)" stroke="rgba(124,92,252,0.5)" stroke-width="1.5"/>
+    <circle cx="80" cy="65" r="12" fill="rgba(255,112,64,0.2)" stroke="rgba(255,112,64,0.4)" stroke-width="1.5"/>
+    <circle cx="120" cy="65" r="12" fill="rgba(184,164,255,0.2)" stroke="rgba(184,164,255,0.4)" stroke-width="1.5"/>
+    <circle cx="60" cy="88" r="10" fill="rgba(124,92,252,0.15)" stroke="rgba(124,92,252,0.35)" stroke-width="1"/>
+    <circle cx="100" cy="88" r="10" fill="rgba(255,112,64,0.15)" stroke="rgba(255,112,64,0.3)" stroke-width="1"/>
+    <line x1="40" y1="20" x2="120" y2="20" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="50" y1="27" x2="110" y2="27" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`
+};
+
+let currentRiddle = 0;
+let quoteShownAt = [];
+const quoteFrequency = [4, 9, 14, 18]; // show after riddle index
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+function startExperience() {
+  currentRiddle = 0;
+  showRiddle(0);
+  showScreen('riddle-screen');
+}
+
+function showRiddle(index) {
+  if (index >= riddles.length) {
+    launchConfetti();
+    showScreen('final-screen');
+    return;
+  }
+
+  const r = riddles[index];
+  const card = document.getElementById('riddle-card');
+  const questionEl = document.getElementById('riddle-question');
+  const visualEl = document.getElementById('riddle-visual');
+  const revealSection = document.getElementById('reveal-section');
+  const revealAnswer = document.getElementById('reveal-answer');
+  const revealReason = document.getElementById('reveal-reason');
+  const progress = document.getElementById('riddle-progress');
+  const btnWrap = document.getElementById('btn-reveal-wrap');
+
+  // Reset
+  revealSection.classList.remove('open');
+  btnWrap.style.display = 'block';
+  card.style.animation = 'none';
+  card.offsetHeight; // reflow
+  card.style.animation = '';
+
+  // Progress
+  progress.textContent = `${index + 1} / ${riddles.length}`;
+
+  // Visual
+  if (r.visual && visuals[r.visual]) {
+    visualEl.style.display = 'flex';
+    visualEl.innerHTML = visuals[r.visual];
+  } else {
+    visualEl.style.display = 'none';
+    visualEl.innerHTML = '';
+  }
+
+  // Question
+  questionEl.innerHTML = r.question.replace(/\n/g, '<br>');
+
+  // Pre-set answer
+  revealAnswer.innerHTML = r.answer.replace(/\n/g, '<br>');
+
+  // Reason
+  if (r.reason) {
+    revealReason.style.display = 'block';
+    revealReason.textContent = r.reason;
+  } else {
+    revealReason.style.display = 'none';
+  }
+}
+
+function revealAnswer() {
+  const revealSection = document.getElementById('reveal-section');
+  const btnWrap = document.getElementById('btn-reveal-wrap');
+  revealSection.classList.add('open');
+  btnWrap.style.display = 'none';
+
+  // Pulse glows
+  document.getElementById('glow1').style.opacity = '0.35';
+  document.getElementById('glow2').style.opacity = '0.28';
+  setTimeout(() => {
+    document.getElementById('glow1').style.opacity = '';
+    document.getElementById('glow2').style.opacity = '';
+  }, 1500);
+}
+
+function nextRiddle() {
+  currentRiddle++;
+
+  // Check if we show a quote transition
+  if (quoteFrequency.includes(currentRiddle - 1) && currentRiddle < riddles.length) {
+    showQuoteTransition();
+  } else {
+    showRiddle(currentRiddle);
+    showScreen('riddle-screen');
+  }
+}
+
+function showQuoteTransition() {
+  const idx = quoteFrequency.indexOf(currentRiddle - 1);
+  const quote = quotes[idx % quotes.length];
+  document.getElementById('quote-text').textContent = quote;
+
+  // Re-trigger bar animation
+  const bar = document.querySelector('.quote-bar');
+  bar.style.animation = 'none';
+  bar.offsetHeight;
+  bar.style.animation = '';
+
+  showScreen('quote-screen');
+  setTimeout(() => {
+    showRiddle(currentRiddle);
+    showScreen('riddle-screen');
+  }, 2800);
+}
+
+function restartExperience() {
+  currentRiddle = 0;
+  showRiddle(0);
+  showScreen('riddle-screen');
+}
+
+// PARTICLES
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createParticles() {
+  particles = [];
+  const count = Math.floor((window.innerWidth * window.innerHeight) / 12000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: -(Math.random() * 0.3 + 0.1),
+      opacity: Math.random() * 0.5 + 0.1,
+      color: Math.random() > 0.5 ? [124, 92, 252] : [255, 112, 64]
+    });
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.y < -5) p.y = canvas.height + 5;
+    if (p.x < -5) p.x = canvas.width + 5;
+    if (p.x > canvas.width + 5) p.x = -5;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${p.opacity})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+// CONFETTI
+function launchConfetti() {
+  const colors = ['#7c5cfc','#ff7040','#b8a4ff','#ff9f80','#fff','#ffd700'];
+  const shapes = ['circle','rect','triangle'];
+  for (let i = 0; i < 90; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      const x = Math.random() * 100;
+      const duration = Math.random() * 2 + 2;
+      const size = Math.random() * 8 + 4;
+      el.style.cssText = `
+        left:${x}vw;
+        top:-20px;
+        width:${size}px;
+        height:${size}px;
+        background:${color};
+        border-radius:${shape === 'circle' ? '50%' : shape === 'triangle' ? '0' : '1px'};
+        animation-duration:${duration}s;
+        transform:rotate(${Math.random()*360}deg);
+        clip-path:${shape === 'triangle' ? 'polygon(50% 0%,0% 100%,100% 100%)' : 'none'};
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), (duration + 0.2) * 1000);
+    }, i * 30);
+  }
+}
+
+// INIT
+window.addEventListener('resize', () => { resizeCanvas(); createParticles(); });
+resizeCanvas();
+createParticles();
+animateParticles();
+</script>
+</body>
+</html>
