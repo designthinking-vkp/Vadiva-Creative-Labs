@@ -1,179 +1,266 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TM4G8FGG');</script>
-<!-- End Google Tag Manager -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vadiva Creative Labs | Building India's Innovation Infrastructure for Education</title>
-  <meta name="description" content="An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.">
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="style.css">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1825401188855459');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1825401188855459&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vadiva Tech Fest 3.0 | Explore. Create. Compete. Pitch. Champion.</title>
+<meta name="description" content="Vadiva Tech Fest 3.0 — 10 paid workshops, 10 free workshops, 7 competitions. Register for Rs.250.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="style.css">
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1825401188855459');fbq('track','PageView');</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1825401188855459&ev=PageView&noscript=1"/></noscript>
+<style>
+:root{--tf-primary:#f59e0b;}
+.tf-hero{background:var(--color-dark);color:var(--color-light);padding:6rem 0 5rem;text-align:center;}
+.tf-hero-badge{display:inline-block;background:var(--color-primary);color:var(--color-dark);font-family:var(--font-heading);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.35rem 1rem;border-radius:999px;margin-bottom:1.5rem;}
+.tf-hero h1{font-family:var(--font-heading);font-size:clamp(2.4rem,6vw,4.5rem);font-weight:800;line-height:1.1;color:var(--color-light);margin-bottom:1rem;}
+.tf-hero h1 span{color:var(--color-primary);}
+.tf-hero-tagline{font-family:var(--font-heading);font-size:clamp(.75rem,2vw,1rem);font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#94a3b8;margin-bottom:1.75rem;}
+.tf-hero-desc{font-size:1.1rem;color:#cbd5e1;max-width:600px;margin:0 auto 2.5rem;line-height:1.7;}
+.tf-hero-cta-group{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;margin-bottom:1.5rem;}
+.tf-btn-register{display:inline-flex;align-items:center;gap:.5rem;background:var(--color-primary);color:var(--color-dark);font-family:var(--font-heading);font-size:1rem;font-weight:700;padding:.9rem 2.2rem;border-radius:var(--border-radius-md);border:2px solid var(--color-dark);box-shadow:4px 4px 0px rgba(0,0,0,.4);text-decoration:none;transition:all .2s ease;}
+.tf-btn-register:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0px rgba(0,0,0,.5);}
+.tf-btn-secondary{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--color-light);font-family:var(--font-heading);font-size:1rem;font-weight:600;padding:.9rem 2rem;border-radius:var(--border-radius-md);border:2px solid rgba(255,255,255,.25);text-decoration:none;transition:all .2s ease;}
+.tf-btn-secondary:hover{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);}
+.tf-hero-note{font-size:.82rem;color:#64748b;}
+.tf-hero-stats{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:4rem;padding-top:3rem;border-top:1px solid rgba(255,255,255,.08);}
+.tf-stat{text-align:center;}
+.tf-stat-num{font-family:var(--font-heading);font-size:2rem;font-weight:800;color:var(--color-primary);}
+.tf-stat-label{font-size:.82rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem;}
+.tf-section{padding:5rem 0;}
+.tf-section-alt{background:var(--color-bg-alt);}
+.tf-section-title{text-align:center;margin-bottom:3rem;}
+.tf-section-title h2{font-family:var(--font-heading);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:.6rem;}
+.tf-section-title p{color:var(--color-dark-light);max-width:540px;margin:0 auto;line-height:1.6;}
+.tf-pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+@media(max-width:1024px){.tf-pillars-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.tf-pillars-grid{grid-template-columns:1fr;}}
+.tf-pillar-card{background:var(--color-light);border:2px solid var(--color-border);border-radius:var(--border-radius-lg);padding:2.5rem 1.5rem 2rem;text-align:center;transition:all .2s ease;}
+.tf-pillar-card:hover{transform:translateY(-6px);border-color:var(--color-primary);box-shadow:0 12px 32px rgba(0,0,0,.08);}
+.tf-pillar-icon{width:56px;height:56px;border-radius:50%;margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+.tf-pillar-card h3{font-family:var(--font-heading);font-size:1.2rem;font-weight:700;margin-bottom:.4rem;}
+.tf-pillar-card .tf-pass-label{font-size:.85rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.pillar-green .tf-pillar-icon{background:#dcfce7;} .pillar-green .tf-pass-label{color:#16a34a;}
+.pillar-blue .tf-pillar-icon{background:#dbeafe;} .pillar-blue .tf-pass-label{color:#2563eb;}
+.pillar-red .tf-pillar-icon{background:#fee2e2;} .pillar-red .tf-pass-label{color:#dc2626;}
+.pillar-gold .tf-pillar-icon{background:#fef9c3;} .pillar-gold .tf-pass-label{color:#ca8a04;}
+.tf-catalogue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+@media(max-width:900px){.tf-catalogue-grid{grid-template-columns:1fr;}}
+.tf-cat-card{background:var(--color-light);border:2px solid var(--color-border);border-radius:var(--border-radius-lg);padding:2rem;transition:all .2s ease;display:flex;flex-direction:column;}
+.tf-cat-card:hover{border-color:var(--color-primary);box-shadow:0 8px 24px rgba(0,0,0,.06);transform:translateY(-4px);}
+.tf-cat-num{font-family:var(--font-heading);font-size:2.5rem;font-weight:800;color:var(--color-primary);line-height:1;margin-bottom:.25rem;}
+.tf-cat-card h3{font-family:var(--font-heading);font-size:1.1rem;font-weight:700;margin-bottom:.5rem;}
+.tf-cat-card p{font-size:.88rem;color:var(--color-dark-light);flex:1;margin-bottom:1.25rem;line-height:1.6;}
+.tf-cat-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.25rem;}
+.tf-cat-tag{background:var(--color-bg-alt);color:var(--color-dark);font-size:.72rem;font-weight:600;padding:.2rem .65rem;border-radius:999px;border:1px solid var(--color-border);}
+.tf-cat-link{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-heading);font-size:.88rem;font-weight:700;color:var(--color-primary);text-decoration:none;border:2px solid var(--color-primary);padding:.55rem 1.2rem;border-radius:var(--border-radius-md);transition:all .2s;align-self:flex-start;}
+.tf-cat-link:hover{background:var(--color-primary);color:var(--color-dark);}
+.tf-register-banner{background:var(--color-dark);color:var(--color-light);padding:5rem 0;text-align:center;}
+.tf-register-banner h2{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:.75rem;color:var(--color-light);}
+.tf-register-banner p{color:#94a3b8;max-width:500px;margin:0 auto 2rem;line-height:1.6;}
+.tf-price-badge{display:inline-block;font-family:var(--font-heading);font-size:2.5rem;font-weight:800;color:var(--color-primary);background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);border-radius:var(--border-radius-md);padding:1rem 2.5rem;margin-bottom:2rem;}
+.tf-coord-box{background:var(--color-bg-alt);border:2px solid var(--color-border);border-radius:var(--border-radius-lg);padding:3rem 2rem;text-align:center;max-width:560px;margin:0 auto;}
+.tf-coord-box h3{font-family:var(--font-heading);font-size:1.3rem;font-weight:700;margin-bottom:.5rem;}
+.tf-coord-box p{color:var(--color-dark-light);margin-bottom:1.5rem;font-size:.95rem;}
+.tf-downloads{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-top:1.25rem;}
+.tf-download-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;color:var(--color-dark);text-decoration:none;border:1px solid var(--color-border);padding:.5rem 1rem;border-radius:var(--border-radius-md);background:var(--color-light);transition:all .2s;}
+.tf-download-link:hover{border-color:var(--color-primary);color:var(--color-primary);}
+@media(max-width:768px){
+  .tf-hero{padding:4rem 0 3.5rem;}
+  .tf-hero-stats{gap:1.75rem;}
+  .tf-section{padding:3.5rem 0;}
+  .tf-hero-cta-group{flex-direction:column;}
+  .tf-btn-register,.tf-btn-secondary{width:100%;text-align:center;justify-content:center;}
+}
+</style>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TM4G8FGG"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TM4G8FGG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <!-- Header Section -->
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="index.html">
-          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:52px;width:auto;display:block;">
         </a>
       </div>
-      
       <nav class="main-nav">
         <ul>
-          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">Services & Partnerships</a></li>
+          <li><a href="services.html">Services &amp; Partnerships</a></li>
           <li><a href="activity-center.html">Activity Center</a></li>
-          <li><a href="events.html">Events & Camps</a></li>
+          <li><a href="events.html">Events &amp; Camps</a></li>
           <li><a href="parents.html">Parent Hub</a></li>
           <li><a href="protospark.html">Protospark</a></li>
-          <li><a href="techfest">Tech Fest</a></li>
+          <li><a href="techfest" class="active">Tech Fest</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
-
       <div class="header-action">
         <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
         <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
         <a href="contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
         <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
   </header>
 
-    <!-- Tech Fest Hero -->
-  <section class="hero" style="background-color: var(--color-dark); color: var(--color-light);">
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <h1>Vadiva Tech Fest 3.0</h1>
-        <p style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--color-primary-light);">EXPLORE &rarr; CREATE &rarr; COMPETE &rarr; PITCH &rarr; CHAMPION</p>
-        <p>Join the ultimate technology and design festival. Experience 10 paid workshops, 10 free workshops, and 7 thrilling competitions.</p>
-        <div class="cta-group">
-          <a href="/techfest/register" class="btn btn-primary">REGISTER &mdash; &infin;250</a>
-        </div>
-        <p style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;">* The &infin;250 entry fee applies to everyone, including Velammal students.</p>
+  <section class="tf-hero">
+    <div class="container">
+      <div class="tf-hero-badge">Chennai &bull; November 2026</div>
+      <h1>Vadiva <span>Tech Fest</span> 3.0</h1>
+      <p class="tf-hero-tagline">Explore &rarr; Create &rarr; Compete &rarr; Pitch &rarr; Champion</p>
+      <p class="tf-hero-desc">India's most immersive school technology and design festival. Three days of hands-on workshops, national-level competitions, and innovation challenges for students across grades 4&ndash;12.</p>
+      <div class="tf-hero-cta-group">
+        <a href="techfest/register" class="tf-btn-register">
+          Register Now &mdash; &#8377;250
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#catalogues" class="tf-btn-secondary">Explore Workshops</a>
+      </div>
+      <p class="tf-hero-note">&#8377;250 entry fee applies to all participants, including Velammal students.</p>
+      <div class="tf-hero-stats">
+        <div class="tf-stat"><div class="tf-stat-num">10</div><div class="tf-stat-label">Paid Workshops</div></div>
+        <div class="tf-stat"><div class="tf-stat-num">10</div><div class="tf-stat-label">Free Workshops</div></div>
+        <div class="tf-stat"><div class="tf-stat-num">7</div><div class="tf-stat-label">Competitions</div></div>
+        <div class="tf-stat"><div class="tf-stat-num">3</div><div class="tf-stat-label">Days</div></div>
       </div>
     </div>
   </section>
 
-  <!-- Pillars Section -->
-  <style>
-    .four-pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-    @media (max-width: 1024px) {
-      .four-pillars-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 768px) {
-      .four-pillars-grid { grid-template-columns: 1fr; }
-    }
-    .techfest-card {
-      background: var(--color-light);
-      border: 1px solid var(--color-border);
-      border-radius: var(--border-radius-lg);
-      padding: 2.5rem 2rem;
-      box-shadow: 4px 4px 0px var(--color-border);
-      transition: var(--transition-bounce);
-      text-align: center;
-    }
-    .techfest-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 6px 6px 0px var(--color-primary);
-      border-color: var(--color-primary);
-    }
-  </style>
-  <section class="section" id="pillars">
+  <section class="tf-section" id="pillars">
     <div class="container">
-      <div class="section-header">
+      <div class="tf-section-title">
         <h2>The Four Pillars</h2>
+        <p>Every participant earns a pass colour based on their journey through the festival.</p>
       </div>
-      <div class="four-pillars-grid">
-        <div class="techfest-card"><h3>Explorer</h3><p>Green Pass</p></div>
-        <div class="techfest-card"><h3>Maker</h3><p>Blue Pass</p></div>
-        <div class="techfest-card"><h3>Competitor</h3><p>Red Pass</p></div>
-        <div class="techfest-card"><h3>Innovator</h3><p>Gold Pass</p></div>
+      <div class="tf-pillars-grid">
+        <div class="tf-pillar-card pillar-green">
+          <div class="tf-pillar-icon">&#127807;</div>
+          <h3>Explorer</h3>
+          <p class="tf-pass-label">Green Pass</p>
+        </div>
+        <div class="tf-pillar-card pillar-blue">
+          <div class="tf-pillar-icon">&#128736;&#65039;</div>
+          <h3>Maker</h3>
+          <p class="tf-pass-label">Blue Pass</p>
+        </div>
+        <div class="tf-pillar-card pillar-red">
+          <div class="tf-pillar-icon">&#127942;</div>
+          <h3>Competitor</h3>
+          <p class="tf-pass-label">Red Pass</p>
+        </div>
+        <div class="tf-pillar-card pillar-gold">
+          <div class="tf-pillar-icon">&#128161;</div>
+          <h3>Innovator</h3>
+          <p class="tf-pass-label">Gold Pass</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Previews -->
-  <section class="section section-alt">
+  <section class="tf-section tf-section-alt" id="catalogues">
     <div class="container">
-      <div class="section-header"><h2>Catalogues</h2></div>
-      <div class="features-row">
-        <div class="feature-card">
-          <h3>10 Paid Workshops</h3>
-          <p>Game Forge, Animation Lab, Rocket Lab, AR/VR, and more.</p>
-          <a href="/techfest/workshops/paid" class="btn btn-sm btn-secondary">Preview</a>
+      <div class="tf-section-title">
+        <h2>Catalogues</h2>
+        <p>Three ways to participate. Mix and match workshops and competitions.</p>
+      </div>
+      <div class="tf-catalogue-grid">
+        <div class="tf-cat-card">
+          <div class="tf-cat-num">10</div>
+          <h3>Paid Workshops</h3>
+          <p>4-hour immersive maker experiences across two days. Book a batch and build something real with hands-on expert mentors.</p>
+          <div class="tf-cat-tags">
+            <span class="tf-cat-tag">Game Forge</span>
+            <span class="tf-cat-tag">Rocket Lab</span>
+            <span class="tf-cat-tag">AI Inventors</span>
+            <span class="tf-cat-tag">Drone Academy</span>
+            <span class="tf-cat-tag">AR/VR Lab</span>
+            <span class="tf-cat-tag">+5 more</span>
+          </div>
+          <a href="techfest/workshops/paid" class="tf-cat-link">View All Workshops <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         </div>
-        <div class="feature-card">
-          <h3>10 Free Workshops</h3>
-          <p>Industry 4.0, Quantum Computing, IoT, Cybersecurity.</p>
-          <a href="/techfest/workshops/free" class="btn btn-sm btn-secondary">Preview</a>
+        <div class="tf-cat-card">
+          <div class="tf-cat-num">10</div>
+          <h3>Free Workshops</h3>
+          <p>1-hour insight sessions on cutting-edge technology. Included with your entry pass. Book up to 4 sessions across the festival.</p>
+          <div class="tf-cat-tags">
+            <span class="tf-cat-tag">Industry 4.0</span>
+            <span class="tf-cat-tag">Quantum Computing</span>
+            <span class="tf-cat-tag">Cybersecurity</span>
+            <span class="tf-cat-tag">Space Tech</span>
+            <span class="tf-cat-tag">IoT</span>
+            <span class="tf-cat-tag">+5 more</span>
+          </div>
+          <a href="techfest/workshops/free" class="tf-cat-link">View All Sessions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         </div>
-        <div class="feature-card">
-          <h3>7 Competitions</h3>
-          <p>Protospark, CODEX, Terrain-X, RoboLeague.</p>
-          <a href="/techfest/competitions" class="btn btn-sm btn-secondary">Preview</a>
+        <div class="tf-cat-card">
+          <div class="tf-cat-num">7</div>
+          <h3>Competitions</h3>
+          <p>National-level team and individual competitions. Build your team using Participant IDs and compete across three days.</p>
+          <div class="tf-cat-tags">
+            <span class="tf-cat-tag">Protospark</span>
+            <span class="tf-cat-tag">CODEX</span>
+            <span class="tf-cat-tag">Terrain-X</span>
+            <span class="tf-cat-tag">RoboLeague</span>
+            <span class="tf-cat-tag">Drone-X</span>
+            <span class="tf-cat-tag">+2 more</span>
+          </div>
+          <a href="techfest/competitions" class="tf-cat-link">View All Competitions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Coordinator and Downloads -->
-  <section class="section">
-    <div class="container" style="text-align: center;">
-      <h3>School Coordinators</h3>
-      <a href="/techfest/coordinator" class="btn btn-secondary">Coordinator Portal</a>
-      <div style="margin-top: 2rem;">
-        <a href="#" class="btn btn-sm">Download Rulebook</a>
-        <a href="#" class="btn btn-sm">Workshop Handbook</a>
+  <section class="tf-register-banner" id="register">
+    <div class="container">
+      <h2>Ready to Join?</h2>
+      <p>Register now to secure your spot. All participants pay a single entry fee &mdash; no exceptions.</p>
+      <div class="tf-price-badge">&#8377;250 Entry Fee</div>
+      <br>
+      <div class="tf-hero-cta-group" style="margin-top:0;margin-bottom:.75rem;">
+        <a href="techfest/register" class="tf-btn-register">Register as Participant <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href="techfest/login" class="tf-btn-secondary">Already Registered? Login</a>
+      </div>
+      <p class="tf-hero-note">Fee applies to all students including Velammal. Non-refundable.</p>
+    </div>
+  </section>
+
+  <section class="tf-section">
+    <div class="container">
+      <div class="tf-coord-box">
+        <h3>School Coordinators</h3>
+        <p>Register and manage your entire school contingent in one place. Bulk upload students, process group payments, and download consolidated QR packs.</p>
+        <a href="techfest/coordinator" class="btn btn-secondary">Access Coordinator Portal</a>
+        <div class="tf-downloads">
+          <a href="#" class="tf-download-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Rulebook
+          </a>
+          <a href="#" class="tf-download-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Workshop Handbook
+          </a>
+        </div>
       </div>
     </div>
-  </section><!-- Footer Section -->
+  </section>
+
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:38px;width:auto;margin-bottom:1.25rem;">
           <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
@@ -181,7 +268,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Us</a></li>
-            <li><a href="services.html">Services & Frameworks</a></li>
+            <li><a href="services.html">Services &amp; Frameworks</a></li>
             <li><a href="contact.html">Partner Inquiries</a></li>
           </ul>
         </div>
@@ -189,9 +276,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <h4>Ecosystem</h4>
           <ul>
             <li><a href="activity-center.html">Activity Center</a></li>
-            <li><a href="events.html">Camps & Festivals</a></li>
+            <li><a href="events.html">Camps &amp; Festivals</a></li>
             <li><a href="parents.html">Parent Hub</a></li>
-            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
           </ul>
         </div>
         <div class="footer-col footer-contact">
@@ -205,57 +292,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with ❤️ by VKP Team</p>
+        <p>Designed with &#10084;&#65039; by VKP Team</p>
       </div>
     </div>
   </footer>
 
-  <!-- Protospark Floating CTA -->
-  <div id="floating-cta" class="floating-cta">
-    <h3 class="floating-cta-title">PROTOSPARK'26</h3>
-    <p class="floating-cta-desc">Build. Innovate. Compete on a Global Stage.</p>
-    <div class="floating-cta-action">
-      <a href="protospark-register.html" class="btn btn-cta-register">
-        Register Now
-        <svg class="cta-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-
-  <!-- Protospark Registration Pop-up Modal -->
-  <div id="protospark-popup-modal" class="popup-modal">
-    <div class="popup-modal-overlay"></div>
-    <div class="popup-modal-content">
-      <button class="popup-modal-close" aria-label="Close Pop-up">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <a href="protospark-register.html" class="popup-modal-link">
-        <img src="assets/protospark-popup.png" alt="Protospark '26 Registration - $20,000 Worth Prizes" class="popup-modal-img">
-        <div class="popup-cta-overlay">
-          <span class="popup-cta-btn">
-            Register Now
-            <svg class="cta-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke: currentColor;">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </span>
-        </div>
-      </a>
-    </div>
-  </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="razorpay-checkout.js"></script>
-  <script src="assets/js/razorpay-checkout.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
-
-
