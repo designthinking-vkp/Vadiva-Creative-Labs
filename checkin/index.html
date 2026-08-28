@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vadiva Tech Fest - Check-In</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: system-ui; text-align: center; background: #111; color: #fff; margin: 0; padding: 20px; }
+        .scanner-box { width: 300px; height: 300px; border: 2px solid #0f0; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        .btn { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 4px; font-size: 16px; margin-top: 20px; }
+        .status { margin-top: 10px; color: #aaa; }
+        .success { color: #10b981; font-weight: bold; font-size: 20px; }
+        .error { color: #ef4444; font-weight: bold; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Check-In Operator</h2>
+    <div class="scanner-box" id="scanner">
+        [Camera Stream]
+    </div>
+    <div id="result"></div>
+    <div class="status" id="network-status">Online</div>
+    
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => {
+                console.log('Service Worker Registered');
+            });
+        }
+
+        window.addEventListener('online', () => document.getElementById('network-status').innerText = 'Online (Syncing...)');
+        window.addEventListener('offline', () => document.getElementById('network-status').innerText = 'Offline (Queueing locally)');
+
+        // Mock scan logic
+        function handleScan(qrToken) {
+            const isOnline = navigator.onLine;
+            if (isOnline) {
+                // TODO: POST to API to verify and mark attendance
+                document.getElementById('result').innerHTML = '<p class="success">Check-in Confirmed: ' + qrToken + '</p>';
+            } else {
+                // Queue locally
+                let queue = JSON.parse(localStorage.getItem('scanQueue') || '[]');
+                queue.push({token: qrToken, time: Date.now()});
+                localStorage.setItem('scanQueue', JSON.stringify(queue));
+                document.getElementById('result').innerHTML = '<p class="success">Saved Offline</p>';
+            }
+        }
+    </script>
+</body>
+</html>
