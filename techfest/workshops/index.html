@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workshops | Vadiva Tech Fest 3.0</title>
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    /* ── Workshops Styles (prefix: ws-) ── */
+    .ws-page {
+      background: #f8fafc;
+      min-height: 70vh;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    .ws-inner { max-width: 1100px; margin: 0 auto; }
+    .ws-page-header {
+      margin-bottom: 2rem;
+    }
+    .ws-page-header h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.35rem;
+    }
+    .ws-page-header p { color: #64748b; font-size: 0.95rem; }
+
+    /* Tabs */
+    .ws-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .ws-tab {
+      padding: 0.75rem 1.5rem;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .ws-tab.active { color: #f37e4b; border-bottom-color: #f37e4b; }
+    .ws-tab-content { display: none; }
+    .ws-tab-content.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+    /* Workshop card */
+    .ws-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .ws-card:hover { box-shadow: 0 8px 24px rgba(15,23,42,0.09); transform: translateY(-3px); }
+    .ws-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+    .ws-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #fef0e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .ws-free-badge {
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ws-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .ws-card p {
+      font-size: 0.83rem;
+      color: #64748b;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* Price row */
+    .ws-prices {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .ws-price-item { font-size: 0.8rem; color: #475569; }
+    .ws-price-item strong { color: #0f172a; font-weight: 700; }
+
+    /* Capacity bar */
+    .ws-capacity { }
+    .ws-cap-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 0.3rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .ws-cap-bar {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .ws-cap-fill {
+      height: 100%;
+      background: #f37e4b;
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+    .ws-cap-fill.near-full { background: #ef4444; }
+
+    /* Book button */
+    .ws-book-btn {
+      display: block;
+      text-align: center;
+      padding: 0.65rem;
+      background: #f37e4b;
+      color: #0f172a;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .ws-book-btn:hover { background: #d66432; color: #0f172a; }
+    .ws-book-btn:disabled, .ws-book-btn.disabled {
+      background: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+    .ws-locked-msg {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 0.35rem;
+    }
+    .ws-locked-msg a { color: #f37e4b; font-weight: 600; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .ws-tab-content.active { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ws-page">
+    <div class="ws-inner">
+      <div class="ws-page-header">
+        <h1>Workshops Catalogue</h1>
+        <p>Explore all paid and free workshop sessions for Tech Fest 3.0.</p>
+      </div>
+
+      <div class="ws-tabs">
+        <button class="ws-tab active" onclick="switchWsTab('paid', this)">Paid Workshops (10)</button>
+        <button class="ws-tab" onclick="switchWsTab('free', this)">Free Workshops (10)</button>
+      </div>
+
+      <!-- Paid Workshops -->
+      <div class="ws-tab-content active" id="ws-paid">
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🤖</div>
+          </div>
+          <h3>Robotics &amp; Automation</h3>
+          <p>Build and programme your own robot using sensors, servos and a micro-controller.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;400</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;550</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>28 / 40</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:70%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🧠</div>
+          </div>
+          <h3>AI &amp; Machine Learning Basics</h3>
+          <p>Hands-on intro to ML concepts — train your first model using real datasets.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;400</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;550</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>35 / 40</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill near-full" style="width:87%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🖨️</div>
+          </div>
+          <h3>3D Printing &amp; Design</h3>
+          <p>Design objects in Tinkercad and print them on a live 3D printer.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;350</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;500</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>12 / 30</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:40%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🎮</div>
+          </div>
+          <h3>Game Development</h3>
+          <p>Create your first 2D game from scratch using Unity — no prior experience needed.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;400</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;550</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>20 / 35</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:57%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">⚡</div>
+          </div>
+          <h3>Electronics &amp; Circuits</h3>
+          <p>Bread-board circuits, LEDs, resistors, and basic electronics for young engineers.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;300</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;450</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>8 / 25</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:32%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">💻</div>
+          </div>
+          <h3>Python for Beginners</h3>
+          <p>From variables to loops to functions — your first real Python coding workshop.</p>
+          <div class="ws-prices">
+            <div class="ws-price-item">Velammal: <strong>&#8377;350</strong></div>
+            <div class="ws-price-item">Others: <strong>&#8377;500</strong></div>
+          </div>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>30 / 40</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:75%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Book Workshop</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+      </div>
+
+      <!-- Free Workshops -->
+      <div class="ws-tab-content" id="ws-free">
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">💡</div>
+            <span class="ws-free-badge">Free</span>
+          </div>
+          <h3>Design Thinking Bootcamp</h3>
+          <p>Learn the 5-stage design thinking process through fun group activities and challenges.</p>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>45 / 80</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:56%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Reserve Seat</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">✏️</div>
+            <span class="ws-free-badge">Free</span>
+          </div>
+          <h3>Sketching &amp; Visual Thinking</h3>
+          <p>Turn your ideas into visual stories — no artistic talent required.</p>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>22 / 60</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:37%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Reserve Seat</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🎤</div>
+            <span class="ws-free-badge">Free</span>
+          </div>
+          <h3>Public Speaking &amp; Pitching</h3>
+          <p>Build confidence, structure your message, and pitch your idea like a pro.</p>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>38 / 60</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:63%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Reserve Seat</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🔬</div>
+            <span class="ws-free-badge">Free</span>
+          </div>
+          <h3>Science Demonstrations</h3>
+          <p>Mind-blowing live science experiments exploring chemistry, physics, and biology.</p>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>15 / 100</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:15%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Reserve Seat</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+        <div class="ws-card">
+          <div class="ws-card-top">
+            <div class="ws-card-icon">🚀</div>
+            <span class="ws-free-badge">Free</span>
+          </div>
+          <h3>Student Entrepreneurship</h3>
+          <p>Discover how to validate your idea, find your market, and build your first mini-business plan.</p>
+          <div class="ws-capacity">
+            <div class="ws-cap-label"><span>Seats filled</span><span>50 / 80</span></div>
+            <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:62%"></div></div>
+          </div>
+          <button class="ws-book-btn disabled" disabled>Reserve Seat</button>
+          <p class="ws-locked-msg">Pay &#8377;250 entry fee first. <a href="../register/">Register</a></p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with ❤️ by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script>
+    function switchWsTab(tab, btn) {
+      document.querySelectorAll('.ws-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.ws-tab-content').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('ws-' + tab).classList.add('active');
+    }
+
+    // Unlock Book buttons if entry is paid
+    const pid = localStorage.getItem('tf_participant_id');
+    // In production, check entry_paid via API; for now keep locked until logged in with paid entry.
+  </script>
+</body>
+</html>

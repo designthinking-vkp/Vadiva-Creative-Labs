@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coordinator Portal | Vadiva Tech Fest 3.0</title>
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    /* Coordinator Styles (prefix: coord-) */
+    .coord-page { background:#f8fafc; min-height:70vh; padding:2.5rem 1.25rem 4rem; }
+    .coord-inner { max-width:1100px; margin:0 auto; }
+    .coord-school-header {
+      background:#0f172a; color:#fff; border-radius:16px;
+      padding:1.5rem 2rem; margin-bottom:1.5rem;
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+    }
+    .coord-school-header h1 { font-family:var(--font-heading); font-size:1.3rem; font-weight:800; margin:0; }
+    .coord-school-header p { color:#94a3b8; margin:0; font-size:0.85rem; }
+    .coord-header-actions { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .coord-btn {
+      display:inline-block; padding:0.6rem 1.25rem; border-radius:10px;
+      font-family:var(--font-heading); font-weight:700; font-size:0.85rem;
+      text-decoration:none; cursor:pointer; border:none;
+      transition:background 0.2s, transform 0.2s; white-space:nowrap;
+    }
+    .coord-btn-primary { background:#f37e4b; color:#0f172a; }
+    .coord-btn-primary:hover { background:#d66432; transform:translateY(-2px); color:#0f172a; }
+    .coord-btn-outline { background:transparent; color:#e2e8f0; border:1.5px solid rgba(255,255,255,0.25); }
+    .coord-btn-outline:hover { border-color:#ffffff; background:rgba(255,255,255,0.07); color:#ffffff; }
+    .coord-warning {
+      background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px;
+      padding:0.875rem 1.25rem; display:flex; align-items:flex-start;
+      gap:0.75rem; margin-bottom:1.5rem; font-size:0.875rem; color:#92400e;
+    }
+    .coord-warning.hidden { display:none; }
+    .coord-stats-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+    .coord-stat-chip { background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:1rem 1.5rem; min-width:120px; flex:1; }
+    .coord-stat-chip strong { font-family:var(--font-heading); font-size:1.6rem; font-weight:800; color:#f37e4b; display:block; }
+    .coord-stat-chip span { font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
+    .coord-table-wrap { background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; box-shadow:0 2px 8px rgba(15,23,42,0.04); }
+    .coord-table-header {
+      padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    }
+    .coord-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:#0f172a; margin:0; }
+    .coord-search { padding:0.55rem 0.875rem; border:1.5px solid #e2e8f0; border-radius:8px; font-size:0.85rem; color:#0f172a; outline:none; transition:border-color 0.2s; min-width:200px; }
+    .coord-search:focus { border-color:#f37e4b; }
+    .coord-table-scroll { overflow-x:auto; }
+    table.coord-table { width:100%; border-collapse:collapse; min-width:620px; }
+    .coord-table th { background:#f8fafc; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1px solid #e2e8f0; }
+    .coord-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:#374151; border-bottom:1px solid #f1f5f9; }
+    .coord-table tr:last-child td { border-bottom:none; }
+    .coord-table tr:hover td { background:#fafafa; }
+    .coord-status-paid { background:#d1fae5; color:#065f46; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; text-transform:uppercase; }
+    .coord-status-pending { background:#fef9c3; color:#92400e; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; text-transform:uppercase; }
+    .coord-action-btn { padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:600; border:1.5px solid #e2e8f0; background:transparent; color:#475569; cursor:pointer; transition:border-color 0.15s, color 0.15s; }
+    .coord-action-btn:hover { border-color:#f37e4b; color:#f37e4b; }
+    .coord-upload-area { border:2px dashed #e2e8f0; border-radius:12px; padding:2rem; text-align:center; margin-top:1.5rem; color:#94a3b8; font-size:0.88rem; cursor:pointer; transition:border-color 0.2s; display:none; }
+    .coord-upload-area.show { display:block; }
+    .coord-upload-area:hover { border-color:#f37e4b; color:#f37e4b; }
+    @media (max-width:480px) { .coord-school-header { padding:1.25rem; } .coord-stat-chip { min-width:100px; padding:0.875rem 1rem; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:52px;width:auto;display:block;">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="coord-page">
+    <div class="coord-inner">
+
+      <div class="coord-school-header">
+        <div>
+          <h1 id="coord-school-name">Velammal Matriculation School</h1>
+          <p>Coordinator Portal &mdash; Vadiva Tech Fest 3.0</p>
+        </div>
+        <div class="coord-header-actions">
+          <button class="coord-btn coord-btn-outline" onclick="toggleUpload()">&#8593; Upload CSV</button>
+          <a href="#" class="coord-btn coord-btn-primary">&#8595; Download QR Pack</a>
+        </div>
+      </div>
+
+      <div class="coord-warning" id="escort-warning">
+        &#9888;&#65039; <strong>Escort Ratio Warning:</strong>&nbsp;
+        You have more than 20 students registered per escort. Please assign additional teachers to ensure a 1:20 escort ratio.
+      </div>
+
+      <div class="coord-stats-row">
+        <div class="coord-stat-chip"><strong id="stat-total">24</strong><span>Total Students</span></div>
+        <div class="coord-stat-chip"><strong id="stat-paid" style="color:#22c55e;">18</strong><span>Entry Paid</span></div>
+        <div class="coord-stat-chip"><strong id="stat-pending" style="color:#f59e0b;">6</strong><span>Pending Payment</span></div>
+        <div class="coord-stat-chip"><strong id="stat-escorts">1</strong><span>Escorts</span></div>
+      </div>
+
+      <div class="coord-upload-area" id="upload-area">
+        <input type="file" id="csv-file" accept=".csv" style="display:none" onchange="handleCSV(this)">
+        <p style="font-size:1.5rem;margin:0 0 0.5rem;">&#128193;</p>
+        <p>Click to select a CSV file or drag and drop here.</p>
+        <p style="font-size:0.75rem;margin-top:0.5rem;">Format: Name, Grade, Section, Mobile</p>
+        <button onclick="document.getElementById('csv-file').click()" class="coord-btn coord-btn-primary" style="margin-top:1rem;">Choose File</button>
+      </div>
+
+      <div class="coord-table-wrap">
+        <div class="coord-table-header">
+          <h2>Student List</h2>
+          <input type="text" class="coord-search" placeholder="Search by name&hellip;" oninput="filterTable(this.value)">
+        </div>
+        <div class="coord-table-scroll">
+          <table class="coord-table" id="coord-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Name</th><th>Grade</th><th>Section</th><th>Entry Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="coord-tbody">
+              <tr><td>1</td><td>Aanya Sharma</td><td>8</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
+              <tr><td>2</td><td>Rithvik Kumar</td><td>9</td><td>B</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
+              <tr><td>3</td><td>Priya Nair</td><td>7</td><td>C</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn">Send Reminder</button></td></tr>
+              <tr><td>4</td><td>Vikram Iyer</td><td>10</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
+              <tr><td>5</td><td>Sneha Rajendran</td><td>8</td><td>B</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn">Send Reminder</button></td></tr>
+              <tr><td>6</td><td>Arjun Balaji</td><td>9</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:38px;width:auto;margin-bottom:1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with &#10084;&#65039; by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script>
+    function toggleUpload() { document.getElementById('upload-area').classList.toggle('show'); }
+    function handleCSV(input) {
+      if (input.files && input.files[0]) {
+        alert('CSV "' + input.files[0].name + '" selected. Upload will connect to the API.');
+      }
+    }
+    function filterTable(q) {
+      document.querySelectorAll('#coord-tbody tr').forEach(row => {
+        row.style.display = row.cells[1].textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
+    var tot = parseInt(document.getElementById('stat-total').textContent) || 0;
+    var esc = parseInt(document.getElementById('stat-escorts').textContent) || 1;
+    if (tot / esc <= 20) { document.getElementById('escort-warning').classList.add('hidden'); }
+  </script>
+</body>
+</html>

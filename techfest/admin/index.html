@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Vadiva Tech Fest 3.0</title>
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    /* Admin Styles (prefix: adm-) */
+    .adm-page { background:#f8fafc; min-height:70vh; padding:2.5rem 1.25rem 4rem; }
+    .adm-inner { max-width:1100px; margin:0 auto; }
+    .adm-top-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:2rem; flex-wrap:wrap; gap:1rem;
+    }
+    .adm-top-bar h1 {
+      font-family:var(--font-heading); font-size:clamp(1.4rem,3vw,1.9rem);
+      font-weight:800; color:#0f172a; margin:0;
+    }
+    .adm-logout {
+      background:transparent; border:1.5px solid #e2e8f0; color:#64748b;
+      padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:600;
+      cursor:pointer; transition:border-color 0.2s, color 0.2s;
+    }
+    .adm-logout:hover { border-color:#f37e4b; color:#f37e4b; }
+
+    /* Stat cards */
+    .adm-stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.25rem; margin-bottom:2.5rem; }
+    .adm-stat-card {
+      background:#ffffff; border:1px solid #e2e8f0; border-radius:16px;
+      padding:1.5rem; box-shadow:0 2px 8px rgba(15,23,42,0.04);
+    }
+    .adm-stat-card .adm-stat-icon { font-size:1.4rem; margin-bottom:0.75rem; }
+    .adm-stat-card strong {
+      font-family:var(--font-heading); font-size:2rem; font-weight:900;
+      color:#f37e4b; display:block; line-height:1;
+    }
+    .adm-stat-card span { font-size:0.8rem; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+
+    /* Quick links */
+    .adm-section-title {
+      font-family:var(--font-heading); font-size:1rem; font-weight:700;
+      color:#0f172a; margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em;
+    }
+    .adm-quick-links { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin-bottom:2.5rem; }
+    .adm-ql-card {
+      background:#ffffff; border:1px solid #e2e8f0; border-radius:14px;
+      padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem;
+      text-decoration:none; color:#0f172a;
+      box-shadow:0 1px 4px rgba(15,23,42,0.04);
+      transition:box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .adm-ql-card:hover { box-shadow:0 8px 24px rgba(15,23,42,0.09); transform:translateY(-3px); border-color:#f37e4b; color:#0f172a; }
+    .adm-ql-icon { font-size:1.6rem; flex-shrink:0; }
+    .adm-ql-label { font-family:var(--font-heading); font-size:0.92rem; font-weight:700; }
+    .adm-ql-desc { font-size:0.75rem; color:#64748b; margin-top:0.15rem; }
+
+    /* Recent activity table */
+    .adm-table-wrap { background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; }
+    .adm-table-header { padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0; }
+    .adm-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:#0f172a; margin:0; }
+    .adm-table-scroll { overflow-x:auto; }
+    table.adm-table { width:100%; border-collapse:collapse; min-width:550px; }
+    .adm-table th { background:#f8fafc; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1px solid #e2e8f0; }
+    .adm-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:#374151; border-bottom:1px solid #f1f5f9; }
+    .adm-table tr:last-child td { border-bottom:none; }
+    .adm-table tr:hover td { background:#fafafa; }
+    .adm-badge-paid { background:#d1fae5; color:#065f46; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; }
+    .adm-badge-reg  { background:#dbeafe; color:#1e40af; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; }
+
+    @media (max-width:480px) { .adm-stats { grid-template-columns:1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:52px;width:auto;display:block;">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="adm-page">
+    <div class="adm-inner">
+
+      <div class="adm-top-bar">
+        <h1>&#128274; Admin Portal &mdash; Tech Fest 3.0</h1>
+        <button class="adm-logout" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="adm-stats">
+        <div class="adm-stat-card">
+          <div class="adm-stat-icon">&#128101;</div>
+          <strong id="adm-participants">&#8212;</strong>
+          <span>Total Participants</span>
+        </div>
+        <div class="adm-stat-card">
+          <div class="adm-stat-icon">&#8377;</div>
+          <strong id="adm-revenue">&#8212;</strong>
+          <span>Total Revenue</span>
+        </div>
+        <div class="adm-stat-card">
+          <div class="adm-stat-icon">&#127979;</div>
+          <strong id="adm-schools">&#8212;</strong>
+          <span>Schools Registered</span>
+        </div>
+        <div class="adm-stat-card">
+          <div class="adm-stat-icon">&#128200;</div>
+          <strong id="adm-fillrate">&#8212;</strong>
+          <span>Avg. Fill Rate</span>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <p class="adm-section-title">Quick Actions</p>
+      <div class="adm-quick-links">
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#128295;</div>
+          <div><div class="adm-ql-label">Manage Workshops</div><div class="adm-ql-desc">Edit slots, pricing, capacity</div></div>
+        </a>
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#127942;</div>
+          <div><div class="adm-ql-label">Manage Competitions</div><div class="adm-ql-desc">Results, brackets, judges</div></div>
+        </a>
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#128179;</div>
+          <div><div class="adm-ql-label">View Payments</div><div class="adm-ql-desc">Transactions &amp; receipts</div></div>
+        </a>
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#128196;</div>
+          <div><div class="adm-ql-label">Audit Log</div><div class="adm-ql-desc">System event history</div></div>
+        </a>
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#128144;</div>
+          <div><div class="adm-ql-label">Export Data</div><div class="adm-ql-desc">Download CSV / reports</div></div>
+        </a>
+        <a href="#" class="adm-ql-card">
+          <div class="adm-ql-icon">&#128106;</div>
+          <div><div class="adm-ql-label">School Coordinators</div><div class="adm-ql-desc">View all school portals</div></div>
+        </a>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="adm-table-wrap">
+        <div class="adm-table-header">
+          <h2>Recent Activity</h2>
+        </div>
+        <div class="adm-table-scroll">
+          <table class="adm-table">
+            <thead>
+              <tr><th>Time</th><th>Participant</th><th>School</th><th>Event</th><th>Status</th></tr>
+            </thead>
+            <tbody id="adm-activity-body">
+              <tr>
+                <td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">
+                  Loading activity&hellip;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:38px;width:auto;margin-bottom:1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with &#10084;&#65039; by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script>
+    const ADMIN_API = '../../techfest-api/admin.php';
+
+    async function loadStats() {
+      try {
+        const res  = await fetch(ADMIN_API + '?action=get_stats');
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('adm-participants').textContent = data.total_participants || '0';
+          document.getElementById('adm-revenue').textContent      = '\u20B9' + (data.total_revenue || '0');
+          document.getElementById('adm-schools').textContent      = data.total_schools    || '0';
+          document.getElementById('adm-fillrate').textContent     = (data.fill_rate || '0') + '%';
+
+          const tbody = document.getElementById('adm-activity-body');
+          if (data.recent_activity && data.recent_activity.length) {
+            tbody.innerHTML = data.recent_activity.map(a => `
+              <tr>
+                <td>${a.time}</td>
+                <td>${a.participant}</td>
+                <td>${a.school}</td>
+                <td>${a.event}</td>
+                <td><span class="${a.status === 'Paid' ? 'adm-badge-paid' : 'adm-badge-reg'}">${a.status}</span></td>
+              </tr>`).join('');
+          } else {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No recent activity yet.</td></tr>';
+          }
+        }
+      } catch (e) {
+        // Fallback demo data
+        document.getElementById('adm-participants').textContent = '142';
+        document.getElementById('adm-revenue').textContent      = '\u20B935,500';
+        document.getElementById('adm-schools').textContent      = '12';
+        document.getElementById('adm-fillrate').textContent     = '64%';
+        document.getElementById('adm-activity-body').innerHTML = `
+          <tr><td>10:32 AM</td><td>Aanya Sharma</td><td>Velammal</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>
+          <tr><td>10:45 AM</td><td>Rithvik Kumar</td><td>Velammal</td><td>Entry Payment</td><td><span class="adm-badge-paid">Paid</span></td></tr>
+          <tr><td>11:02 AM</td><td>Priya Nair</td><td>DAV School</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>`;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('tf_token');
+      localStorage.removeItem('tf_participant_id');
+      window.location.href = '../login/';
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>

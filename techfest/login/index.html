@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Login to your Vadiva Tech Fest 3.0 participant account.">
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    /* ── Login Page Styles (prefix: lgn-) ── */
+    .lgn-page {
+      background: #f8fafc;
+      min-height: 80vh;
+      padding: 3rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lgn-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(15,23,42,0.07);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+    .lgn-brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .lgn-brand img { height: 40px; width: auto; }
+    .lgn-brand h1 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0.75rem 0 0.25rem;
+    }
+    .lgn-brand p { color: #64748b; font-size: 0.88rem; margin: 0; }
+    .lgn-form-group { margin-bottom: 1.25rem; }
+    .lgn-form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.4rem;
+    }
+    .lgn-input-prefix {
+      display: flex;
+      align-items: stretch;
+    }
+    .lgn-prefix-label {
+      background: #e2e8f0;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0 0.875rem;
+      border: 1.5px solid #e2e8f0;
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      align-items: center;
+    }
+    .lgn-input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: #0f172a;
+      font-family: var(--font-body);
+      background: #f8fafc;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .lgn-input:focus {
+      border-color: #f37e4b;
+      box-shadow: 0 0 0 3px rgba(243,126,75,0.12);
+      background: #ffffff;
+    }
+    .lgn-input-prefix .lgn-input {
+      border-radius: 0 10px 10px 0;
+      flex: 1;
+    }
+    .lgn-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: #f37e4b;
+      color: #0f172a;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+    .lgn-btn:hover { background: #d66432; transform: translateY(-2px); }
+    .lgn-btn:disabled { background: #fdb99a; cursor: not-allowed; transform: none; }
+    .lgn-alert {
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .lgn-alert.show { display: block; }
+    .lgn-alert.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .lgn-alert.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .lgn-footer-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .lgn-footer-link a { color: #f37e4b; font-weight: 600; text-decoration: none; }
+    .lgn-footer-link a:hover { text-decoration: underline; }
+    @media (max-width: 480px) {
+      .lgn-card { padding: 2rem 1.25rem; }
+      .lgn-page { align-items: flex-start; padding-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Page -->
+  <div class="lgn-page">
+    <div class="lgn-card">
+      <div class="lgn-brand">
+        <img src="../../assets/logo.png" alt="Vadiva">
+        <h1>Welcome Back</h1>
+        <p>Login to your Tech Fest 3.0 account</p>
+      </div>
+
+      <div class="lgn-alert" id="lgn-alert"></div>
+
+      <form id="lgn-form" novalidate>
+        <div class="lgn-form-group">
+          <label for="mobile">Mobile Number</label>
+          <div class="lgn-input-prefix">
+            <span class="lgn-prefix-label">+91</span>
+            <input type="tel" id="mobile" name="mobile" class="lgn-input"
+                   placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required>
+          </div>
+        </div>
+
+        <div class="lgn-form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="lgn-input"
+                 placeholder="Your password" required>
+        </div>
+
+        <button type="submit" class="lgn-btn" id="lgn-btn">Login</button>
+      </form>
+
+      <div class="lgn-footer-link">
+        New to Tech Fest? <a href="../register/">Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with ❤️ by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script>
+    const API = '../../techfest-api/auth.php';
+
+    function showAlert(msg, type) {
+      const el = document.getElementById('lgn-alert');
+      el.textContent = msg;
+      el.className = 'lgn-alert show ' + type;
+    }
+
+    document.getElementById('lgn-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const mobile   = document.getElementById('mobile').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
+      if (!password) { showAlert('Enter your password.', 'error'); return; }
+
+      const btn = document.getElementById('lgn-btn');
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
+
+      try {
+        const res  = await fetch(API + '?action=login', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ mobile, password })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showAlert('Login successful! Redirecting…', 'success');
+          localStorage.setItem('tf_token', data.token || '');
+          localStorage.setItem('tf_participant_id', data.participant_id || '');
+          setTimeout(() => { window.location.href = '../dashboard/'; }, 1000);
+        } else {
+          showAlert(data.message || 'Invalid credentials. Please try again.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Login';
+        }
+      } catch (err) {
+        showAlert('Network error. Please check your connection.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>
