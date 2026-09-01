@@ -16,7 +16,7 @@ const CAMPAIGN_CONFIG = {
   startDate: "2026-08-19T00:00:00+05:30",
   endDate: "2026-09-03T23:59:59.999+05:30",
   originalLogo: "assets/logo.png",
-  temporaryLogo: "assets/temp vadiva logo.png",
+  temporaryLogo: "assets/logo.png",
   originalEventDate: "19th & 20th August 2026",
   campaignEventDate: "OCT 30 & 31",
   registrationStatusText: "Registration Open",
@@ -60,7 +60,8 @@ window.CAMPAIGN_CONFIG = CAMPAIGN_CONFIG;
 function applyCampaignUpdates(customDate) {
   const isCampaignActive = CAMPAIGN_CONFIG.isActive(customDate);
 
-  // 1. Site-Wide Logo Update & Favicon
+  // 1. Site-Wide Logo Update & Favicon (Disabled per request to keep Vadiva logo as primary site-wide)
+  /*
   const logoElements = document.querySelectorAll('img');
   logoElements.forEach(img => {
     const src = img.getAttribute('src') || '';
@@ -109,6 +110,7 @@ function applyCampaignUpdates(customDate) {
       icon.href = isCampaignActive ? (prefix + 'assets/temp vadiva logo.png') : (prefix + 'assets/logo.png');
     }
   });
+  */
 
   // 2. Protospark Event Date Update (OCT 30 & 31)
   document.querySelectorAll('[data-campaign-event-date]').forEach(el => {

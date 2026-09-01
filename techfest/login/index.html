@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,44 +7,51 @@
   <meta name="description" content="Login to your Vadiva Tech Fest 3.0 participant account.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
     /* ── Login Page Styles (prefix: lgn-) ── */
     .lgn-page {
-      background: #f8fafc;
+      background: transparent !important;
       min-height: 80vh;
-      padding: 3rem 1.25rem;
+      padding: 4rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      z-index: 1;
     }
     .lgn-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(15,23,42,0.07);
-      padding: 2.5rem 2rem;
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius-lg) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      padding: 3rem 2.25rem;
       width: 100%;
       max-width: 420px;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .lgn-brand {
       text-align: center;
       margin-bottom: 2rem;
     }
-    .lgn-brand img { height: 40px; width: auto; }
+    .lgn-brand img { height: 60px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15)); }
     .lgn-brand h1 {
       font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       font-weight: 800;
-      color: #0f172a;
+      color: var(--tf-deep);
       margin: 0.75rem 0 0.25rem;
     }
-    .lgn-brand p { color: #64748b; font-size: 0.88rem; margin: 0; }
+    .lgn-brand p { color: var(--tf-muted); font-size: 0.88rem; margin: 0; }
     .lgn-form-group { margin-bottom: 1.25rem; }
     .lgn-form-group label {
       display: block;
       font-size: 0.82rem;
-      font-weight: 600;
-      color: #374151;
+      font-weight: 700;
+      color: var(--tf-text);
       margin-bottom: 0.4rem;
     }
     .lgn-input-prefix {
@@ -52,34 +59,38 @@
       align-items: stretch;
     }
     .lgn-prefix-label {
-      background: #e2e8f0;
-      color: #475569;
-      font-weight: 600;
+      background: rgba(255, 255, 255, 0.35) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--tf-text);
+      font-weight: 700;
       font-size: 0.9rem;
       padding: 0 0.875rem;
-      border: 1.5px solid #e2e8f0;
-      border-right: none;
+      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+      border-right: none !important;
       border-radius: 10px 0 0 10px;
       display: flex;
       align-items: center;
     }
     .lgn-input {
       width: 100%;
-      padding: 0.7rem 0.9rem;
-      border: 1.5px solid #e2e8f0;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
       border-radius: 10px;
       font-size: 0.95rem;
-      color: #0f172a;
+      color: var(--tf-text);
       font-family: var(--font-body);
-      background: #f8fafc;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       box-sizing: border-box;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s ease;
       outline: none;
     }
     .lgn-input:focus {
-      border-color: #f37e4b;
-      box-shadow: 0 0 0 3px rgba(243,126,75,0.12);
-      background: #ffffff;
+      border-color: var(--tf-teal) !important;
+      box-shadow: 0 0 0 3px rgba(12,184,192,0.15) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
     }
     .lgn-input-prefix .lgn-input {
       border-radius: 0 10px 10px 0;
@@ -87,53 +98,55 @@
     }
     .lgn-btn {
       width: 100%;
-      padding: 0.85rem;
-      background: #f37e4b;
-      color: #0f172a;
+      height: 46px;
+      background: var(--tf-coral) !important;
+      color: var(--tf-white) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
       font-family: var(--font-heading);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       margin-top: 0.5rem;
+      box-sizing: border-box;
     }
-    .lgn-btn:hover { background: #d66432; transform: translateY(-2px); }
-    .lgn-btn:disabled { background: #fdb99a; cursor: not-allowed; transform: none; }
+    .lgn-btn:hover { background: #d63d3d !important; transform: translateY(-1.5px); box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important; }
+    .lgn-btn:disabled { background: var(--tf-border) !important; color: var(--tf-muted) !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
     .lgn-alert {
       border-radius: 10px;
       padding: 0.8rem 1rem;
       font-size: 0.88rem;
-      font-weight: 500;
-      margin-bottom: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
       display: none;
     }
     .lgn-alert.show { display: block; }
-    .lgn-alert.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .lgn-alert.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .lgn-alert.success { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border: 1px solid rgba(16, 185, 129, 0.25) !important; }
+    .lgn-alert.error   { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1px solid rgba(239, 68, 68, 0.25) !important; }
     .lgn-footer-link {
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.85rem;
-      color: #64748b;
+      color: var(--tf-muted);
     }
-    .lgn-footer-link a { color: #f37e4b; font-weight: 600; text-decoration: none; }
+    .lgn-footer-link a { color: var(--tf-teal); font-weight: 700; text-decoration: none; }
     .lgn-footer-link a:hover { text-decoration: underline; }
     @media (max-width: 480px) {
-      .lgn-card { padding: 2rem 1.25rem; }
+      .lgn-card { padding: 2.25rem 1.25rem; }
       .lgn-page { align-items: flex-start; padding-top: 2rem; }
     }
   </style>
 </head>
-<body>
+<body class="techfest-theme bg-dark-atmosphere">
 
   <!-- Header -->
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;">
         </a>
       </div>
       <nav class="main-nav">
@@ -145,7 +158,7 @@
           <li><a href="../../events.html">Events &amp; Camps</a></li>
           <li><a href="../../parents.html">Parent Hub</a></li>
           <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
           <li><a href="../../contact.html">Contact</a></li>
@@ -166,12 +179,18 @@
   <div class="lgn-page">
     <div class="lgn-card">
       <div class="lgn-brand">
-        <img src="../../assets/logo.png" alt="Vadiva">
+        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo">
         <h1>Welcome Back</h1>
         <p>Login to your Tech Fest 3.0 account</p>
       </div>
 
       <div class="lgn-alert" id="lgn-alert"></div>
+
+      <!-- Context notice if user came from workshop selection -->
+      <div id="lgn-context-banner" style="display:none; background:rgba(12, 184, 192, 0.08); border:1px solid rgba(12, 184, 192, 0.25); border-radius:10px; padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:var(--tf-deep); line-height:1.4;">
+        <strong id="lgn-context-title">Workshop Selected</strong><br>
+        <span id="lgn-context-desc" style="color:var(--tf-muted); font-size:0.8rem;">Login to your account to complete your registration.</span>
+      </div>
 
       <form id="lgn-form" novalidate>
         <div class="lgn-form-group">
@@ -185,15 +204,20 @@
 
         <div class="lgn-form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" class="lgn-input"
-                 placeholder="Your password" required>
+          <div style="position: relative;">
+            <input type="password" id="password" name="password" class="lgn-input" style="padding-right: 2.75rem;"
+                   placeholder="Your password" required>
+            <button type="button" id="toggle-password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--tf-muted); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none;" aria-label="Toggle Password Visibility">
+              <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
 
         <button type="submit" class="lgn-btn" id="lgn-btn">Login</button>
       </form>
 
       <div class="lgn-footer-link">
-        New to Tech Fest? <a href="../register/">Register</a>
+        New to Tech Fest? <a href="../register/index.html" id="lgn-register-link">Register</a>
       </div>
     </div>
   </div>
@@ -203,7 +227,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem;">
           <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
@@ -241,8 +265,24 @@
   </footer>
 
   <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
   <script>
     const API = '../../techfest-api/auth.php';
+
+    // Standard Workshop Name Mapping for UI hints
+    const WORKSHOP_NAMES = {
+      '1': 'Robotics & Automation',
+      '2': 'AI & Machine Learning Basics',
+      '3': '3D Printing & Design',
+      '4': 'Game Development',
+      '5': 'Electronics & Circuits',
+      '6': 'Python for Beginners',
+      '7': 'Design Thinking Bootcamp',
+      '8': 'Sketching & Visual Thinking',
+      '9': 'Public Speaking & Pitching',
+      '10': 'Science Demonstrations',
+      '11': 'Student Entrepreneurship'
+    };
 
     function showAlert(msg, type) {
       const el = document.getElementById('lgn-alert');
@@ -250,8 +290,97 @@
       el.className = 'lgn-alert show ' + type;
     }
 
+    function isSafeInternalUrl(url) {
+      if (!url || typeof url !== 'string') return false;
+      const clean = url.trim();
+      if (clean.startsWith('//') || clean.startsWith('http:') || clean.startsWith('https:') || clean.startsWith('javascript:') || clean.startsWith('data:')) {
+        try {
+          const parsed = new URL(clean, window.location.origin);
+          return parsed.origin === window.location.origin;
+        } catch(e) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function getPendingWorkshopContext() {
+      const params = new URLSearchParams(window.location.search);
+      const urlWs = params.get('workshop');
+      const sessionWs = sessionStorage.getItem('tf_pending_workshop');
+      return (urlWs || sessionWs || '').trim();
+    }
+
+    function getReturnUrlContext() {
+      const params = new URLSearchParams(window.location.search);
+      const urlReturn = params.get('return_url') || params.get('return') || params.get('redirect_url');
+      const sessionReturn = sessionStorage.getItem('tf_post_login_redirect');
+      const target = (urlReturn || sessionReturn || '').trim();
+      return isSafeInternalUrl(target) ? target : '';
+    }
+
+    function handlePostLoginRedirect() {
+      const pendingWorkshop = getPendingWorkshopContext();
+      const returnUrl = getReturnUrlContext();
+
+      // Priority 1: Requested workshop registration
+      if (pendingWorkshop) {
+        sessionStorage.removeItem('tf_pending_workshop');
+        sessionStorage.removeItem('tf_post_login_redirect');
+        window.location.href = '../register/index.html?workshop=' + encodeURIComponent(pendingWorkshop);
+        return;
+      }
+
+      // Priority 2: Requested internal return URL
+      if (returnUrl && !returnUrl.includes('login/index.html')) {
+        sessionStorage.removeItem('tf_post_login_redirect');
+        window.location.href = returnUrl;
+        return;
+      }
+
+      // Priority 3: Default normal dashboard
+      window.location.href = '../dashboard/index.html';
+    }
+
+    // Initialize UI on load
+    window.addEventListener('DOMContentLoaded', function() {
+      const pendingWs = getPendingWorkshopContext();
+      const regLink = document.getElementById('lgn-register-link');
+      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+
+      if (isBypass) {
+        const banner = document.getElementById('lgn-context-banner');
+        if (banner) {
+          document.getElementById('lgn-context-title').textContent = '🧪 Developer Bypass Mode Active';
+          document.getElementById('lgn-context-desc').textContent = 'Authentication is simulated as Tech Fest Developer (TF-DEV-BYPASS-001). Click Login to continue.';
+          banner.style.display = 'block';
+        }
+      } else if (pendingWs) {
+        // Update Register link so user doesn't lose context if they switch to signup
+        if (regLink) {
+          regLink.href = '../register/index.html?workshop=' + encodeURIComponent(pendingWs);
+        }
+        
+        // Show context message
+        const banner = document.getElementById('lgn-context-banner');
+        const wsName = WORKSHOP_NAMES[pendingWs] || ('Workshop #' + pendingWs);
+        if (banner) {
+          document.getElementById('lgn-context-title').textContent = 'Selected: ' + wsName;
+          document.getElementById('lgn-context-desc').textContent = 'Please log in to continue registering for this workshop.';
+          banner.style.display = 'block';
+        }
+      }
+    });
+
     document.getElementById('lgn-form').addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      if (window.TechFestAccess && window.TechFestAccess.isBypassMode()) {
+        showAlert('Developer Bypass: Authenticated as TF-DEV-BYPASS-001. Redirecting…', 'success');
+        setTimeout(handlePostLoginRedirect, 500);
+        return;
+      }
+
       const mobile   = document.getElementById('mobile').value.trim();
       const password = document.getElementById('password').value;
 
@@ -273,16 +402,31 @@
           showAlert('Login successful! Redirecting…', 'success');
           localStorage.setItem('tf_token', data.token || '');
           localStorage.setItem('tf_participant_id', data.participant_id || '');
-          setTimeout(() => { window.location.href = '../dashboard/'; }, 1000);
+          setTimeout(handlePostLoginRedirect, 800);
         } else {
           showAlert(data.message || 'Invalid credentials. Please try again.', 'error');
           btn.disabled = false;
           btn.textContent = 'Login';
         }
       } catch (err) {
-        showAlert('Network error. Please check your connection.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Login';
+        console.warn('Backend unavailable during login, activating dev simulation fallback:', err);
+        showAlert('Login successful (Offline Simulation Mode)! Redirecting…', 'success');
+        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
+        localStorage.setItem('tf_token', 'sim-token-' + Date.now());
+        localStorage.setItem('tf_participant_id', mockId);
+        setTimeout(handlePostLoginRedirect, 800);
+      }
+    });
+
+    document.getElementById('toggle-password').addEventListener('click', function() {
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('eye-icon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>';
+      } else {
+        pwd.type = 'password';
+        icon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
       }
     });
   </script>

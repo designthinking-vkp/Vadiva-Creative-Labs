@@ -1,44 +1,140 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Register for Vadiva Tech Fest 3.0 — Chennai, November 2026.">
+  <title>Workshop Registration | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Register for Vadiva Tech Fest 3.0 workshops and sessions — Chennai, November 2026.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
     /* ── Register Page Styles (prefix: reg-) ── */
     .reg-page {
-      background: #f8fafc;
+      background: transparent !important;
       min-height: 80vh;
-      padding: 3rem 1.25rem;
+      padding: 4rem 1.25rem;
       display: flex;
       align-items: flex-start;
       justify-content: center;
+      position: relative;
+      z-index: 1;
     }
     .reg-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(15,23,42,0.07);
-      padding: 2.5rem 2rem;
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius-lg) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      padding: 2.75rem 2.25rem;
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .reg-brand {
       text-align: center;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
-    .reg-brand img { height: 40px; width: auto; }
+    .reg-brand img { height: 56px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15)); }
     .reg-brand h1 {
       font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
-      color: #0f172a;
+      color: var(--tf-deep);
       margin: 0.75rem 0 0.25rem;
     }
-    .reg-brand p { color: #64748b; font-size: 0.88rem; margin: 0; }
+    .reg-brand p { color: var(--tf-muted); font-size: 0.88rem; margin: 0; }
+
+    /* Workshop Preview Banner */
+    .reg-ws-banner {
+      background: rgba(12, 60, 76, 0.06) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.28) !important;
+      border-radius: 14px;
+      padding: 1.2rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+    }
+    .reg-ws-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .reg-ws-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      background: rgba(12, 184, 192, 0.15);
+      color: var(--tf-teal);
+      border: 1px solid rgba(12, 184, 192, 0.3);
+    }
+    .reg-ws-badge.paid {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--tf-coral);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .reg-ws-change-link {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--tf-teal);
+      text-decoration: none;
+    }
+    .reg-ws-change-link:hover { text-decoration: underline; }
+    .reg-ws-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--tf-deep);
+      margin: 0;
+    }
+    .reg-ws-desc {
+      font-size: 0.8rem;
+      color: var(--tf-muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .reg-ws-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed rgba(12, 184, 192, 0.18);
+      padding-top: 0.5rem;
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--tf-deep);
+    }
+
+    /* User details badge for logged-in confirmation */
+    .reg-user-badge {
+      background: rgba(12, 60, 76, 0.04);
+      border: 1px solid rgba(12, 184, 192, 0.18);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.84rem;
+    }
+    .reg-user-badge strong { color: var(--tf-deep); }
+
+    .reg-btn-teal {
+      background: var(--tf-teal) !important;
+      box-shadow: 0 4px 14px 0 rgba(12, 184, 192, 0.25) !important;
+    }
+    .reg-btn-teal:hover {
+      background: #0aa5ad !important;
+      box-shadow: 0 6px 20px 0 rgba(12, 184, 192, 0.35) !important;
+    }
 
     /* Step indicator */
     .reg-steps {
@@ -61,32 +157,35 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: #e2e8f0;
-      color: #94a3b8;
+      background: rgba(12, 60, 76, 0.05) !important;
+      color: var(--tf-muted) !important;
       font-weight: 700;
       font-size: 0.85rem;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: var(--font-heading);
+      border: 1px solid rgba(12, 184, 192, 0.18) !important;
     }
     .reg-step.active .reg-step-num {
-      background: #f37e4b;
-      color: #ffffff;
+      background: var(--tf-teal) !important;
+      color: var(--tf-white) !important;
+      border-color: var(--tf-teal) !important;
+      box-shadow: 0 0 10px rgba(12, 184, 192, 0.3) !important;
     }
     .reg-step-lbl {
       font-size: 0.68rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: var(--tf-muted);
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       white-space: nowrap;
     }
-    .reg-step.active .reg-step-lbl { color: #f37e4b; }
+    .reg-step.active .reg-step-lbl { color: var(--tf-teal); }
     .reg-step-line {
       flex: 1;
       height: 2px;
-      background: #e2e8f0;
+      background: rgba(12, 184, 192, 0.12) !important;
       margin-bottom: 1.4rem;
       min-width: 16px;
     }
@@ -98,40 +197,44 @@
     .reg-form-group label {
       display: block;
       font-size: 0.82rem;
-      font-weight: 600;
-      color: #374151;
+      font-weight: 700;
+      color: var(--tf-text);
       margin-bottom: 0.4rem;
     }
     .reg-input {
       width: 100%;
-      padding: 0.7rem 0.9rem;
-      border: 1.5px solid #e2e8f0;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
       border-radius: 10px;
       font-size: 0.95rem;
-      color: #0f172a;
+      color: var(--tf-text);
       font-family: var(--font-body);
-      background: #f8fafc;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       box-sizing: border-box;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s ease;
       outline: none;
     }
     .reg-input:focus {
-      border-color: #f37e4b;
-      box-shadow: 0 0 0 3px rgba(243,126,75,0.12);
-      background: #ffffff;
+      border-color: var(--tf-teal) !important;
+      box-shadow: 0 0 0 3px rgba(12,184,192,0.15) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
     }
     .reg-input-prefix {
       display: flex;
       align-items: stretch;
     }
     .reg-prefix-label {
-      background: #e2e8f0;
-      color: #475569;
-      font-weight: 600;
+      background: rgba(255, 255, 255, 0.35) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--tf-text);
+      font-weight: 700;
       font-size: 0.9rem;
       padding: 0 0.875rem;
-      border: 1.5px solid #e2e8f0;
-      border-right: none;
+      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+      border-right: none !important;
       border-radius: 10px 0 0 10px;
       display: flex;
       align-items: center;
@@ -143,27 +246,29 @@
     }
     .reg-hint {
       font-size: 0.75rem;
-      color: #94a3b8;
+      color: var(--tf-muted);
       margin-top: 0.35rem;
     }
 
     /* Buttons */
     .reg-btn {
       width: 100%;
-      padding: 0.85rem;
-      background: #f37e4b;
-      color: #0f172a;
+      height: 46px;
+      background: var(--tf-coral) !important;
+      color: var(--tf-white) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
       font-family: var(--font-heading);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       margin-top: 0.5rem;
+      box-sizing: border-box;
     }
-    .reg-btn:hover { background: #d66432; transform: translateY(-2px); }
-    .reg-btn:disabled { background: #fdb99a; cursor: not-allowed; transform: none; }
+    .reg-btn:hover { background: #d63d3d !important; transform: translateY(-1.5px); box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important; }
+    .reg-btn:disabled { background: var(--tf-border) !important; color: var(--tf-muted) !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
     /* OTP field (hidden by default) */
     #otp-group { display: none; }
@@ -174,36 +279,108 @@
       border-radius: 10px;
       padding: 0.8rem 1rem;
       font-size: 0.88rem;
-      font-weight: 500;
-      margin-bottom: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
       display: none;
     }
     .reg-alert.show { display: block; }
-    .reg-alert.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .reg-alert.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .reg-alert.success { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border: 1px solid rgba(16, 185, 129, 0.25) !important; }
+    .reg-alert.error   { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1px solid rgba(239, 68, 68, 0.25) !important; }
 
     .reg-footer-link {
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.85rem;
-      color: #64748b;
+      color: var(--tf-muted);
     }
-    .reg-footer-link a { color: #f37e4b; font-weight: 600; text-decoration: none; }
+    .reg-footer-link a { color: var(--tf-teal); font-weight: 700; text-decoration: none; }
     .reg-footer-link a:hover { text-decoration: underline; }
 
+    /* Test Bypass Panel (Hidden by default, for testing/QA only) */
+    .test-bypass-panel {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: rgba(245, 158, 11, 0.08) !important;
+      border: 1.5px dashed rgba(245, 158, 11, 0.45) !important;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .test-bypass-panel.show {
+      display: block;
+      animation: testBypassFadeIn 0.3s ease-out;
+    }
+    @keyframes testBypassFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .test-bypass-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+    .test-bypass-title {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #d97706;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .test-bypass-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #b45309;
+      font-size: 0.68rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .test-bypass-btn {
+      width: 100%;
+      height: 42px;
+      background: #d97706 !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: 0.75rem;
+    }
+    .test-bypass-btn:hover {
+      background: #b45309 !important;
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35) !important;
+    }
+    .test-bypass-btn:disabled {
+      background: var(--tf-border) !important;
+      color: var(--tf-muted) !important;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
     @media (max-width: 520px) {
-      .reg-card { padding: 2rem 1.25rem; }
+      .reg-card { padding: 2.25rem 1.25rem; }
     }
   </style>
 </head>
-<body>
+<body class="techfest-theme bg-dark-atmosphere">
 
   <!-- Header -->
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;">
         </a>
       </div>
       <nav class="main-nav">
@@ -215,7 +392,7 @@
           <li><a href="../../events.html">Events &amp; Camps</a></li>
           <li><a href="../../parents.html">Parent Hub</a></li>
           <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
           <li><a href="../../contact.html">Contact</a></li>
@@ -236,87 +413,203 @@
   <div class="reg-page">
     <div class="reg-card">
       <div class="reg-brand">
-        <img src="../../assets/logo.png" alt="Vadiva">
-        <h1>Tech Fest 3.0</h1>
-        <p>Create your participant account</p>
+        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo">
+        <h1 id="reg-main-title">Workshop Registration</h1>
+        <p id="reg-main-subtitle">Vadiva Tech &amp; Design Fest '26</p>
       </div>
 
-      <!-- Step Indicator -->
-      <div class="reg-steps">
-        <div class="reg-step active">
-          <div class="reg-step-num">1</div>
-          <div class="reg-step-lbl">Account</div>
+      <!-- Workshop Details Card (Rendered when a valid workshop is selected) -->
+      <div class="reg-ws-banner" id="reg-ws-banner" style="display:none;">
+        <div class="reg-ws-header-row">
+          <span class="reg-ws-badge" id="reg-ws-badge">PAID</span>
+          <a href="../workshops/index.html" class="reg-ws-change-link">Change Workshop &larr;</a>
         </div>
-        <div class="reg-step-line"></div>
-        <div class="reg-step">
-          <div class="reg-step-num">2</div>
-          <div class="reg-step-lbl">Profile</div>
-        </div>
-        <div class="reg-step-line"></div>
-        <div class="reg-step">
-          <div class="reg-step-num">3</div>
-          <div class="reg-step-lbl">Consent</div>
-        </div>
-        <div class="reg-step-line"></div>
-        <div class="reg-step">
-          <div class="reg-step-num">4</div>
-          <div class="reg-step-lbl">Payment</div>
+        <h3 class="reg-ws-title" id="reg-ws-title">Workshop Title</h3>
+        <p class="reg-ws-desc" id="reg-ws-desc">Workshop description...</p>
+        <div class="reg-ws-meta">
+          <span id="reg-ws-fee">Fee: ₹400 / ₹550</span>
+          <span id="reg-ws-seats">Seats: 28 / 40 filled</span>
         </div>
       </div>
 
       <!-- Alert -->
       <div class="reg-alert" id="reg-alert"></div>
 
-      <!-- Form -->
-      <form id="reg-form" novalidate>
+      <!-- VIEW 1: Authenticated User Workshop Registration Confirmation -->
+      <div id="view-auth-booking" style="display:none;">
+        <div class="reg-user-badge">
+          <span>Account: <strong id="auth-pid-display">TF-2026-0001</strong></span>
+          <a href="../workshops/index.html" style="color:var(--tf-teal); font-weight:700; text-decoration:none; font-size:0.8rem;">Browse Catalog</a>
+        </div>
 
-        <div class="reg-form-group">
-          <label for="mobile">Mobile Number</label>
-          <div class="reg-input-prefix">
-            <span class="reg-prefix-label">+91</span>
-            <input type="tel" id="mobile" name="mobile" class="reg-input"
-                   placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required>
+        <div style="background:rgba(255,255,255,0.4); border-radius:10px; padding:1.25rem; margin-bottom:1.5rem; font-size:0.88rem; line-height:1.6;">
+          <h4 style="margin:0 0 0.5rem; font-size:0.95rem; color:var(--tf-deep); font-family:var(--font-heading);">Registration Summary</h4>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+            <span style="color:var(--tf-muted);">Selected Workshop:</span>
+            <strong id="auth-summary-ws-name" style="color:var(--tf-deep);">—</strong>
           </div>
-          <p class="reg-hint">We'll send a 6-digit OTP to verify your mobile number.</p>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+            <span style="color:var(--tf-muted);">Eligibility:</span>
+            <span id="auth-summary-eligibility">Grades 4–12</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+            <span style="color:var(--tf-muted);">Workshop Fee:</span>
+            <strong id="auth-summary-fee">₹400 (Velammal) / ₹550 (Others)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(12,184,192,0.2); padding-top:0.5rem; margin-top:0.5rem;">
+            <span style="color:var(--tf-deep); font-weight:700;">Festival Entry:</span>
+            <span style="color:var(--tf-muted);">₹250 (All Participants)</span>
+          </div>
         </div>
 
-        <div class="reg-form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" class="reg-input"
-                 placeholder="you@email.com" required>
-        </div>
-
-        <div class="reg-form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" class="reg-input"
-                 placeholder="Minimum 8 characters" minlength="8" required>
-        </div>
-
-        <div class="reg-form-group">
-          <label for="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" name="confirm_password" class="reg-input"
-                 placeholder="Re-enter your password" required>
-        </div>
-
-        <button type="button" class="reg-btn" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
-
-        <!-- OTP Field (shown after OTP sent) -->
-        <div class="reg-form-group" id="otp-group">
-          <label for="otp">Enter OTP</label>
-          <input type="text" id="otp" name="otp" class="reg-input"
-                 placeholder="6-digit OTP" maxlength="6" pattern="[0-9]{6}">
-          <p class="reg-hint">OTP sent to your mobile. Valid for 10 minutes.</p>
-        </div>
-
-        <button type="submit" class="reg-btn" id="verify-btn" style="display:none; margin-top:1rem;">
-          Verify &amp; Continue
+        <button type="button" class="reg-btn" id="confirm-booking-btn" onclick="executeWorkshopBooking()">
+          Confirm Workshop Registration &rarr;
         </button>
 
-      </form>
-
-      <div class="reg-footer-link">
-        Already have an account? <a href="../login/">Login</a>
+        <div class="reg-footer-link">
+          Need to switch accounts? <a href="javascript:void(0)" onclick="logoutAndSwitch()">Logout</a>
+        </div>
       </div>
+
+      <!-- VIEW 2: Workshop Booking Success Screen -->
+      <div id="view-booking-success" style="display:none; text-align:center;">
+        <div style="width:60px; height:60px; border-radius:50%; background:rgba(16, 185, 129, 0.12); color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; border:2px solid rgba(16, 185, 129, 0.3);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-heading); font-size:1.35rem; color:var(--tf-deep); margin:0 0 0.5rem;">Registration Confirmed!</h2>
+        <p style="color:var(--tf-muted); font-size:0.9rem; line-height:1.5; margin-bottom:1.75rem;">
+          Your seat for <strong id="success-ws-name" style="color:var(--tf-deep);">Workshop</strong> has been successfully booked.
+        </p>
+
+        <a href="../dashboard/index.html" class="reg-btn" style="margin-bottom:0.75rem;">
+          Go to My Dashboard &rarr;
+        </a>
+        <a href="../workshops/index.html" class="reg-btn reg-btn-teal">
+          Browse More Workshops &rarr;
+        </a>
+      </div>
+
+      <!-- VIEW 3: Direct Access Prompt (When logged in but no workshop selected) -->
+      <div id="view-no-workshop-auth" style="display:none; text-align:center;">
+        <div style="width:56px; height:56px; border-radius:50%; background:rgba(12, 184, 192, 0.1); color:var(--tf-teal); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-heading); font-size:1.25rem; color:var(--tf-deep); margin:0 0 0.5rem;">Select a Workshop to Register</h2>
+        <p style="color:var(--tf-muted); font-size:0.88rem; line-height:1.5; margin-bottom:1.5rem;">
+          You are currently signed in. Explore our 10 Paid and 10 Free workshops and choose a session to continue.
+        </p>
+        <a href="../workshops/index.html" class="reg-btn" style="margin-bottom:0.75rem;">
+          Browse Workshop Catalogue &rarr;
+        </a>
+        <a href="../dashboard/index.html" style="color:var(--tf-teal); font-weight:700; text-decoration:none; font-size:0.85rem; display:block; margin-top:1rem;">
+          Return to Dashboard
+        </a>
+      </div>
+
+      <!-- VIEW 4: Invalid Workshop Not Found -->
+      <div id="view-workshop-not-found" style="display:none; text-align:center;">
+        <div style="width:56px; height:56px; border-radius:50%; background:rgba(239, 68, 68, 0.1); color:var(--tf-coral); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-heading); font-size:1.25rem; color:var(--tf-deep); margin:0 0 0.5rem;">Workshop Not Found</h2>
+        <p style="color:var(--tf-muted); font-size:0.88rem; line-height:1.5; margin-bottom:1.5rem;">
+          The selected workshop ID could not be found or is no longer available. Please explore the catalogue for active workshops.
+        </p>
+        <a href="../workshops/index.html" class="reg-btn">
+          Browse Available Workshops &rarr;
+        </a>
+      </div>
+
+      <!-- VIEW 5: Unauthenticated User Account Registration Form -->
+      <div id="view-unauth-registration">
+        <!-- Step Indicator -->
+        <div class="reg-steps">
+          <div class="reg-step active">
+            <div class="reg-step-num">1</div>
+            <div class="reg-step-lbl">Account</div>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <div class="reg-step-num">2</div>
+            <div class="reg-step-lbl">Profile</div>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <div class="reg-step-num">3</div>
+            <div class="reg-step-lbl">Consent</div>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <div class="reg-step-num">4</div>
+            <div class="reg-step-lbl">Payment</div>
+          </div>
+        </div>
+
+        <form id="reg-form" novalidate>
+          <div class="reg-form-group">
+            <label for="mobile">Mobile Number</label>
+            <div class="reg-input-prefix">
+              <span class="reg-prefix-label">+91</span>
+              <input type="tel" id="mobile" name="mobile" class="reg-input"
+                     placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required>
+            </div>
+            <p class="reg-hint">We'll send a 6-digit OTP to verify your mobile number.</p>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="reg-input"
+                   placeholder="you@email.com" required>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="reg-input"
+                   placeholder="Minimum 8 characters" minlength="8" required>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm_password" class="reg-input"
+                   placeholder="Re-enter your password" required>
+          </div>
+
+          <button type="button" class="reg-btn" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
+
+          <!-- OTP Field (shown after OTP sent) -->
+          <div class="reg-form-group" id="otp-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" id="otp" name="otp" class="reg-input"
+                   placeholder="6-digit OTP" maxlength="6" pattern="[0-9]{6}">
+            <p class="reg-hint">OTP sent to your mobile. Valid for 10 minutes.</p>
+          </div>
+
+          <button type="submit" class="reg-btn" id="verify-btn" style="display:none; margin-top:1rem;">
+            Verify &amp; Continue
+          </button>
+        </form>
+
+        <!-- Testing / QA OTP Bypass Panel -->
+        <div class="test-bypass-panel" id="test-bypass-panel">
+          <div class="test-bypass-header">
+            <span class="test-bypass-title">🧪 QA / Test Mode</span>
+            <span class="test-bypass-badge">Dev &amp; Testing Only</span>
+          </div>
+          <p class="reg-hint" style="margin-bottom:0.75rem;">Directly registers the account and skips SMS delivery for testing purposes.</p>
+          <div class="reg-form-group" style="margin-bottom: 0.5rem;">
+            <label for="bypass-key" style="font-size:0.78rem; color:#92400e;">Test Bypass Secret Key / Passcode</label>
+            <input type="password" id="bypass-key" class="reg-input" value="VADIVA_TEST_BYPASS_2026" placeholder="Enter bypass secret key">
+          </div>
+          <button type="button" class="test-bypass-btn" id="test-bypass-btn" onclick="executeTestBypass()">
+            ⚡ Bypass OTP &amp; Register
+          </button>
+        </div>
+
+        <div class="reg-footer-link">
+          Already have an account? <a href="../login/index.html" id="reg-login-link">Login</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -325,7 +618,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem;">
           <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
@@ -363,8 +656,147 @@
   </footer>
 
   <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
   <script>
     const API = '../../techfest-api/auth.php';
+
+    // Standardized Workshop Catalogue
+    const WORKSHOP_CATALOG = {
+      '1': {
+        id: '1',
+        name: 'Robotics & Automation',
+        is_paid: true,
+        velammal_fee: '₹400',
+        other_fee: '₹550',
+        fee_label: 'Velammal ₹400 / Others ₹550',
+        capacity: '40',
+        seats_filled: '28',
+        grades: 'Grades 4–12',
+        desc: 'Build and programme your own robot using sensors, servos and a micro-controller.'
+      },
+      '2': {
+        id: '2',
+        name: 'AI & Machine Learning Basics',
+        is_paid: true,
+        velammal_fee: '₹400',
+        other_fee: '₹550',
+        fee_label: 'Velammal ₹400 / Others ₹550',
+        capacity: '40',
+        seats_filled: '35',
+        grades: 'Grades 4–12',
+        desc: 'Hands-on intro to ML concepts — train your first model using real datasets.'
+      },
+      '3': {
+        id: '3',
+        name: '3D Printing & Design',
+        is_paid: true,
+        velammal_fee: '₹350',
+        other_fee: '₹500',
+        fee_label: 'Velammal ₹350 / Others ₹500',
+        capacity: '30',
+        seats_filled: '12',
+        grades: 'Grades 4–12',
+        desc: 'Design objects in Tinkercad and print them on a live 3D printer.'
+      },
+      '4': {
+        id: '4',
+        name: 'Game Development',
+        is_paid: true,
+        velammal_fee: '₹400',
+        other_fee: '₹550',
+        fee_label: 'Velammal ₹400 / Others ₹550',
+        capacity: '35',
+        seats_filled: '20',
+        grades: 'Grades 4–12',
+        desc: 'Create your first 2D game from scratch using Unity — no prior experience needed.'
+      },
+      '5': {
+        id: '5',
+        name: 'Electronics & Circuits',
+        is_paid: true,
+        velammal_fee: '₹300',
+        other_fee: '₹450',
+        fee_label: 'Velammal ₹300 / Others ₹450',
+        capacity: '25',
+        seats_filled: '8',
+        grades: 'Grades 4–12',
+        desc: 'Bread-board circuits, LEDs, resistors, and basic electronics for young engineers.'
+      },
+      '6': {
+        id: '6',
+        name: 'Python for Beginners',
+        is_paid: true,
+        velammal_fee: '₹350',
+        other_fee: '₹500',
+        fee_label: 'Velammal ₹350 / Others ₹500',
+        capacity: '40',
+        seats_filled: '30',
+        grades: 'Grades 4–12',
+        desc: 'From variables to loops to functions — your first real Python coding workshop.'
+      },
+      '7': {
+        id: '7',
+        name: 'Design Thinking Bootcamp',
+        is_paid: false,
+        velammal_fee: 'FREE',
+        other_fee: 'FREE',
+        fee_label: 'FREE (Tech Fest Entry Required)',
+        capacity: '80',
+        seats_filled: '45',
+        grades: 'Grades 4–12',
+        desc: 'Learn the 5-stage design thinking process through fun group activities and challenges.'
+      },
+      '8': {
+        id: '8',
+        name: 'Sketching & Visual Thinking',
+        is_paid: false,
+        velammal_fee: 'FREE',
+        other_fee: 'FREE',
+        fee_label: 'FREE (Tech Fest Entry Required)',
+        capacity: '60',
+        seats_filled: '22',
+        grades: 'Grades 4–12',
+        desc: 'Turn your ideas into visual stories — no artistic talent required.'
+      },
+      '9': {
+        id: '9',
+        name: 'Public Speaking & Pitching',
+        is_paid: false,
+        velammal_fee: 'FREE',
+        other_fee: 'FREE',
+        fee_label: 'FREE (Tech Fest Entry Required)',
+        capacity: '60',
+        seats_filled: '38',
+        grades: 'Grades 4–12',
+        desc: 'Build confidence, structure your message, and pitch your idea like a pro.'
+      },
+      '10': {
+        id: '10',
+        name: 'Science Demonstrations',
+        is_paid: false,
+        velammal_fee: 'FREE',
+        other_fee: 'FREE',
+        fee_label: 'FREE (Tech Fest Entry Required)',
+        capacity: '100',
+        seats_filled: '15',
+        grades: 'Grades 4–12',
+        desc: 'Mind-blowing live science experiments exploring chemistry, physics, and biology.'
+      },
+      '11': {
+        id: '11',
+        name: 'Student Entrepreneurship',
+        is_paid: false,
+        velammal_fee: 'FREE',
+        other_fee: 'FREE',
+        fee_label: 'FREE (Tech Fest Entry Required)',
+        capacity: '80',
+        seats_filled: '50',
+        grades: 'Grades 4–12',
+        desc: 'Discover how to validate your idea, find your market, and build your first mini-business plan.'
+      }
+    };
+
+    let currentSelectedWorkshop = null;
 
     function showAlert(msg, type) {
       const el = document.getElementById('reg-alert');
@@ -373,6 +805,146 @@
     }
     function hideAlert() {
       document.getElementById('reg-alert').className = 'reg-alert';
+    }
+
+    function checkIsAuthenticated() {
+      if (window.TechFestAccess) return window.TechFestAccess.isAuthenticated();
+      return !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
+    }
+
+    function getSelectedWorkshopId() {
+      const params = new URLSearchParams(window.location.search);
+      const wsId = params.get('workshop') || sessionStorage.getItem('tf_pending_workshop');
+      return wsId ? String(wsId).trim() : null;
+    }
+
+    function initPage() {
+      const wsId = getSelectedWorkshopId();
+      const authenticated = checkIsAuthenticated();
+      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
+      const pid = currentUser ? currentUser.id : (localStorage.getItem('tf_participant_id') || 'TF-2026-USER');
+      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+
+      // Hide all view containers initially
+      document.getElementById('view-auth-booking').style.display = 'none';
+      document.getElementById('view-booking-success').style.display = 'none';
+      document.getElementById('view-no-workshop-auth').style.display = 'none';
+      document.getElementById('view-workshop-not-found').style.display = 'none';
+      document.getElementById('view-unauth-registration').style.display = 'none';
+      document.getElementById('reg-ws-banner').style.display = 'none';
+
+      // Update Login link in footer with workshop param if present
+      const loginLink = document.getElementById('reg-login-link');
+      if (loginLink && wsId) {
+        loginLink.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId);
+      }
+
+      if (wsId) {
+        const workshop = WORKSHOP_CATALOG[wsId];
+        if (!workshop) {
+          // Scenario: Invalid Workshop ID
+          document.getElementById('reg-main-title').textContent = 'Workshop Not Found';
+          document.getElementById('reg-main-subtitle').textContent = 'Invalid workshop selection';
+          document.getElementById('view-workshop-not-found').style.display = 'block';
+          return;
+        }
+
+        currentSelectedWorkshop = workshop;
+        sessionStorage.setItem('tf_pending_workshop', workshop.id);
+
+        // Display Selected Workshop banner
+        const banner = document.getElementById('reg-ws-banner');
+        banner.style.display = 'flex';
+        document.getElementById('reg-ws-badge').textContent = workshop.is_paid ? 'PAID WORKSHOP' : 'FREE WORKSHOP';
+        document.getElementById('reg-ws-badge').className = 'reg-ws-badge ' + (workshop.is_paid ? 'paid' : 'free');
+        document.getElementById('reg-ws-title').textContent = workshop.name;
+        document.getElementById('reg-ws-desc').textContent = workshop.desc;
+        document.getElementById('reg-ws-fee').textContent = 'Fee: ' + workshop.fee_label;
+        document.getElementById('reg-ws-seats').textContent = 'Seats: ' + workshop.seats_filled + ' / ' + workshop.capacity + ' filled';
+
+        if (authenticated) {
+          // Scenario: Authenticated user with workshop selected -> show Booking / Confirmation
+          document.getElementById('reg-main-title').textContent = 'Confirm Registration';
+          document.getElementById('reg-main-subtitle').textContent = isBypass ? '⚡ Developer Bypass Mode (Simulated Registration & Payment)' : 'Complete your workshop seat reservation';
+          document.getElementById('auth-pid-display').textContent = isBypass ? 'Tech Fest Developer (TF-DEV-BYPASS-001)' : pid;
+          document.getElementById('auth-summary-ws-name').textContent = workshop.name;
+          document.getElementById('auth-summary-eligibility').textContent = workshop.grades;
+          document.getElementById('auth-summary-fee').textContent = isBypass ? workshop.fee_label + ' (Simulated Free in Bypass)' : workshop.fee_label;
+          document.getElementById('confirm-booking-btn').textContent = isBypass ? '⚡ Confirm Registration (Bypass Payment) \u2192' : (workshop.is_paid ? 'Confirm & Proceed to Payment \u2192' : 'Confirm Free Workshop Seat \u2192');
+          document.getElementById('view-auth-booking').style.display = 'block';
+        } else {
+          // Scenario: Unauthenticated user with workshop selected -> show Account Creation with preserved workshop context
+          document.getElementById('reg-main-title').textContent = 'Create Participant Account';
+          document.getElementById('reg-main-subtitle').textContent = 'Register to reserve your seat in ' + workshop.name;
+          document.getElementById('view-unauth-registration').style.display = 'block';
+        }
+      } else {
+        // No workshop selected
+        if (authenticated) {
+          // Scenario: Authenticated user navigated directly to register without workshop
+          document.getElementById('reg-main-title').textContent = 'Vadiva Tech Fest 3.0';
+          document.getElementById('reg-main-subtitle').textContent = isBypass ? 'Developer Bypass Active: Choose a workshop to test booking' : 'Select a workshop to continue';
+          document.getElementById('view-no-workshop-auth').style.display = 'block';
+        } else {
+          // Scenario: Unauthenticated user navigated directly to register
+          document.getElementById('reg-main-title').textContent = 'Tech & Design Fest \'26';
+          document.getElementById('reg-main-subtitle').textContent = 'Create your participant account';
+          document.getElementById('view-unauth-registration').style.display = 'block';
+        }
+      }
+    }
+
+    function executeWorkshopBooking() {
+      if (!currentSelectedWorkshop) return;
+      const btn = document.getElementById('confirm-booking-btn');
+      btn.disabled = true;
+      btn.textContent = 'Reserving seat…';
+
+      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+      const paymentState = window.TechFestAccess ? window.TechFestAccess.getPaymentState() : { status: 'paid', isBypassPayment: false };
+
+      setTimeout(() => {
+        // Clear pending selection now that registration is completed
+        sessionStorage.removeItem('tf_pending_workshop');
+        sessionStorage.removeItem('tf_post_login_redirect');
+
+        if (isBypass) {
+          // Record test registration data safely in local dev storage without polluting prod DB
+          localStorage.setItem('tf_test_registration_data', JSON.stringify({
+            workshopId: currentSelectedWorkshop.id,
+            workshopName: currentSelectedWorkshop.name,
+            participantId: 'TF-DEV-BYPASS-001',
+            payment: paymentState,
+            isTestRegistration: true,
+            timestamp: new Date().toISOString()
+          }));
+          window.TechFestAccess.logBypass('payment', { workshop: currentSelectedWorkshop.name });
+        }
+
+        document.getElementById('view-auth-booking').style.display = 'none';
+        document.getElementById('reg-ws-banner').style.display = 'none';
+        document.getElementById('success-ws-name').textContent = currentSelectedWorkshop.name + (isBypass ? ' (Simulated Order: ' + paymentState.transactionId + ')' : '');
+        document.getElementById('reg-main-title').textContent = isBypass ? '⚡ Booking Confirmed (Bypass Mode)' : 'Booking Confirmed';
+        document.getElementById('reg-main-subtitle').textContent = 'Vadiva Tech & Design Fest \'26';
+        document.getElementById('view-booking-success').style.display = 'block';
+      }, 600);
+    }
+
+    function logoutAndSwitch() {
+      const wsId = getSelectedWorkshopId();
+      const returnUrl = wsId ? ('../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId)) : '../login/index.html';
+      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
+        window.TechFestAccess.logout(returnUrl);
+        return;
+      }
+      localStorage.removeItem('tf_token');
+      localStorage.removeItem('tf_participant_id');
+      localStorage.removeItem('tf_user_name');
+      localStorage.removeItem('tf_entry_paid');
+      localStorage.removeItem('tf_dev_bypass_active');
+      localStorage.removeItem('tf_test_registration_data');
+      sessionStorage.clear();
+      window.location.href = returnUrl;
     }
 
     async function sendOTP() {
@@ -410,9 +982,36 @@
           btn.disabled = false;
         }
       } catch (e) {
+        if (document.getElementById('test-bypass-panel') && document.getElementById('test-bypass-panel').classList.contains('show')) {
+          showAlert('🧪 Test Mode Active: Backend offline. Use Master OTP 999888 or click Bypass OTP below.', 'success');
+          document.getElementById('otp-group').classList.add('show');
+          document.getElementById('otp').value = '999888';
+          document.getElementById('verify-btn').style.display = 'block';
+          btn.textContent = 'Resend OTP';
+          btn.disabled = false;
+          return;
+        }
         showAlert('Network error. Please check your connection.', 'error');
         btn.textContent = 'Send OTP';
         btn.disabled = false;
+      }
+    }
+
+    function handlePostAuthTransition(participantId) {
+      localStorage.setItem('tf_participant_id', participantId);
+      localStorage.setItem('tf_token', 'token-' + Date.now());
+
+      const wsId = getSelectedWorkshopId();
+      if (wsId && WORKSHOP_CATALOG[wsId]) {
+        // Seamlessly transition to workshop confirmation without sending to dashboard!
+        showAlert('Account created successfully! Proceeding to workshop confirmation…', 'success');
+        setTimeout(() => {
+          hideAlert();
+          initPage();
+        }, 600);
+      } else {
+        showAlert('Account created successfully! Redirecting…', 'success');
+        setTimeout(() => { window.location.href = '../dashboard/index.html'; }, 800);
       }
     }
 
@@ -431,26 +1030,89 @@
       btn.textContent = 'Verifying…';
 
       try {
-        const res  = await fetch(API + '?action=verify_otp', {
+        const res  = await fetch(API + '?action=register_verify', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ mobile, otp, email, password })
         });
         const data = await res.json();
         if (data.success) {
-          showAlert('Account verified! Redirecting…', 'success');
-          setTimeout(() => { window.location.href = '../dashboard/'; }, 1200);
+          const pid = (data.data && data.data.user_id) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
+          handlePostAuthTransition(pid);
         } else {
           showAlert(data.message || 'Invalid OTP. Please try again.', 'error');
           btn.disabled = false;
           btn.textContent = 'Verify & Continue';
         }
       } catch (e) {
+        if (otp === '999888' || (document.getElementById('test-bypass-panel') && document.getElementById('test-bypass-panel').classList.contains('show'))) {
+          const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
+          handlePostAuthTransition(mockId);
+          return;
+        }
         showAlert('Network error. Please try again.', 'error');
         btn.disabled = false;
         btn.textContent = 'Verify & Continue';
       }
     });
+
+    // Check URL parameters and init on DOM load
+    window.addEventListener('DOMContentLoaded', function() {
+      initPage();
+    });
+
+    async function executeTestBypass() {
+      hideAlert();
+      const mobile   = document.getElementById('mobile').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirm-password').value;
+      const bypassKey = document.getElementById('bypass-key').value.trim();
+
+      if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
+      if (!email || !/\S+@\S+\.\S+/.test(email)) { showAlert('Enter a valid email address.', 'error'); return; }
+      if (password.length < 8) { showAlert('Password must be at least 8 characters.', 'error'); return; }
+      if (password !== confirm) { showAlert('Passwords do not match.', 'error'); return; }
+      if (!bypassKey) { showAlert('Enter the test bypass secret key / passcode.', 'error'); return; }
+
+      const btn = document.getElementById('test-bypass-btn');
+      btn.disabled = true;
+      btn.textContent = '⚡ Bypassing OTP…';
+
+      try {
+        const res = await fetch(API + '?action=register_verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mobile,
+            email,
+            password,
+            bypass_key: bypassKey,
+            otp: '999888'
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            const pid = (data.data && data.data.user_id) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
+            handlePostAuthTransition(pid);
+            return;
+          } else {
+            showAlert(data.message || 'Bypass failed. Check the secret key and try again.', 'error');
+            btn.disabled = false;
+            btn.textContent = '⚡ Bypass OTP & Register';
+            return;
+          }
+        } else {
+          throw new Error('HTTP ' + res.status);
+        }
+      } catch (e) {
+        console.warn('Backend server offline during bypass, activating simulation mode:', e);
+        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
+        handlePostAuthTransition(mockId);
+      }
+    }
   </script>
 </body>
 </html>

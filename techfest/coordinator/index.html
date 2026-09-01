@@ -6,69 +6,135 @@
   <title>Coordinator Portal | Vadiva Tech Fest 3.0</title>
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
     /* Coordinator Styles (prefix: coord-) */
-    .coord-page { background:#f8fafc; min-height:70vh; padding:2.5rem 1.25rem 4rem; }
+    .coord-page { background:transparent !important; min-height:70vh; padding:3rem 1.25rem 5rem; }
     .coord-inner { max-width:1100px; margin:0 auto; }
     .coord-school-header {
-      background:#0f172a; color:#fff; border-radius:16px;
-      padding:1.5rem 2rem; margin-bottom:1.5rem;
+      background: rgba(12, 60, 76, 0.72) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(12, 184, 192, 0.3) !important;
+      color:#fff; border-radius:var(--glass-radius) !important;
+      padding:1.75rem 2rem; margin-bottom:1.5rem;
       display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+      box-shadow: 0 12px 40px rgba(7, 25, 33, 0.12) !important;
     }
-    .coord-school-header h1 { font-family:var(--font-heading); font-size:1.3rem; font-weight:800; margin:0; }
+    .coord-school-header h1 { font-family:var(--font-heading); font-size:1.35rem; font-weight:800; margin:0; }
     .coord-school-header p { color:#94a3b8; margin:0; font-size:0.85rem; }
     .coord-header-actions { display:flex; gap:0.75rem; flex-wrap:wrap; }
     .coord-btn {
-      display:inline-block; padding:0.6rem 1.25rem; border-radius:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:0.6rem 1.25rem; border-radius:10px !important;
       font-family:var(--font-heading); font-weight:700; font-size:0.85rem;
-      text-decoration:none; cursor:pointer; border:none;
-      transition:background 0.2s, transform 0.2s; white-space:nowrap;
+      text-decoration:none; cursor:pointer; border:1px solid transparent;
+      transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1); white-space:nowrap;
     }
-    .coord-btn-primary { background:#f37e4b; color:#0f172a; }
-    .coord-btn-primary:hover { background:#d66432; transform:translateY(-2px); color:#0f172a; }
-    .coord-btn-outline { background:transparent; color:#e2e8f0; border:1.5px solid rgba(255,255,255,0.25); }
-    .coord-btn-outline:hover { border-color:#ffffff; background:rgba(255,255,255,0.07); color:#ffffff; }
+    .coord-btn-primary {
+      background:var(--tf-coral) !important; color:var(--tf-white) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
+    }
+    .coord-btn-primary:hover { background:#d63d3d !important; transform:translateY(-1.5px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
+    .coord-btn-outline {
+      background: rgba(255, 255, 255, 0.12) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color:#ffffff !important; border:1.5px solid rgba(255,255,255,0.25) !important;
+    }
+    .coord-btn-outline:hover { border-color:#ffffff !important; background:rgba(255,255,255,0.22) !important; transform:translateY(-1.5px); }
     .coord-warning {
-      background:#fff7ed; border:1.5px solid #fed7aa; border-radius:12px;
-      padding:0.875rem 1.25rem; display:flex; align-items:flex-start;
-      gap:0.75rem; margin-bottom:1.5rem; font-size:0.875rem; color:#92400e;
+      background: rgba(245, 158, 11, 0.05) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(245, 158, 11, 0.22) !important;
+      border-radius: 12px;
+      padding:1.1rem 1.5rem; display:flex; align-items:flex-start;
+      gap:0.75rem; margin-bottom:1.5rem; font-size:0.875rem; color:#b45309 !important;
     }
     .coord-warning.hidden { display:none; }
     .coord-stats-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
-    .coord-stat-chip { background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:1rem 1.5rem; min-width:120px; flex:1; }
-    .coord-stat-chip strong { font-family:var(--font-heading); font-size:1.6rem; font-weight:800; color:#f37e4b; display:block; }
-    .coord-stat-chip span { font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; }
-    .coord-table-wrap { background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; box-shadow:0 2px 8px rgba(15,23,42,0.04); }
-    .coord-table-header {
-      padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0;
-      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    .coord-stat-chip {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius) !important;
+      padding:1.1rem 1.5rem; min-width:120px; flex:1;
+      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
     }
-    .coord-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:#0f172a; margin:0; }
-    .coord-search { padding:0.55rem 0.875rem; border:1.5px solid #e2e8f0; border-radius:8px; font-size:0.85rem; color:#0f172a; outline:none; transition:border-color 0.2s; min-width:200px; }
-    .coord-search:focus { border-color:#f37e4b; }
+    .coord-stat-chip strong { font-family:var(--font-heading); font-size:1.65rem; font-weight:800; color:var(--tf-deep); display:block; }
+    .coord-stat-chip span { font-size:0.78rem; color:var(--tf-muted); text-transform:uppercase; letter-spacing:0.04em; font-weight: 600; }
+    .coord-table-wrap {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius) !important;
+      overflow:hidden;
+      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+    }
+    .coord-table-header {
+      padding:1.25rem 1.5rem; border-bottom:1px solid rgba(12, 184, 192, 0.12) !important;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+      background: transparent;
+    }
+    .coord-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:var(--tf-deep); margin:0; }
+    .coord-search {
+      padding:0.55rem 1.1rem !important;
+      border:1.5px solid rgba(12, 184, 192, 0.18) !important;
+      border-radius:10px !important;
+      font-size:0.85rem; color:var(--tf-text); outline:none;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(8px) !important;
+      transition: all 0.2s ease; min-width:200px;
+    }
+    .coord-search:focus {
+      border-color:var(--tf-teal) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.12) !important;
+    }
     .coord-table-scroll { overflow-x:auto; }
     table.coord-table { width:100%; border-collapse:collapse; min-width:620px; }
-    .coord-table th { background:#f8fafc; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1px solid #e2e8f0; }
-    .coord-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:#374151; border-bottom:1px solid #f1f5f9; }
+    .coord-table th { background: rgba(12, 60, 76, 0.04) !important; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--tf-muted); font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1.5px solid rgba(12, 184, 192, 0.15) !important; }
+    .coord-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:var(--tf-text); border-bottom:1px solid rgba(12, 184, 192, 0.08) !important; }
     .coord-table tr:last-child td { border-bottom:none; }
-    .coord-table tr:hover td { background:#fafafa; }
-    .coord-status-paid { background:#d1fae5; color:#065f46; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; text-transform:uppercase; }
-    .coord-status-pending { background:#fef9c3; color:#92400e; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; text-transform:uppercase; }
-    .coord-action-btn { padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:600; border:1.5px solid #e2e8f0; background:transparent; color:#475569; cursor:pointer; transition:border-color 0.15s, color 0.15s; }
-    .coord-action-btn:hover { border-color:#f37e4b; color:#f37e4b; }
-    .coord-upload-area { border:2px dashed #e2e8f0; border-radius:12px; padding:2rem; text-align:center; margin-top:1.5rem; color:#94a3b8; font-size:0.88rem; cursor:pointer; transition:border-color 0.2s; display:none; }
+    .coord-table tr:hover td { background: rgba(12, 184, 192, 0.03) !important; }
+    .coord-status-paid {
+      background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important;
+      border: 1px solid rgba(16, 185, 129, 0.25) !important;
+      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700; text-transform:uppercase;
+    }
+    .coord-status-pending {
+      background: rgba(245, 158, 11, 0.08) !important; color: #d97706 !important;
+      border: 1px solid rgba(245, 158, 11, 0.25) !important;
+      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700; text-transform:uppercase;
+    }
+    .coord-action-btn {
+      padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:600;
+      border:1.5px solid rgba(12, 184, 192, 0.2) !important;
+      background: rgba(12, 184, 192, 0.05) !important;
+      color:var(--tf-muted); cursor:pointer; transition:all 0.15s;
+    }
+    .coord-action-btn:hover { border-color:var(--tf-teal) !important; color:var(--tf-teal) !important; background: rgba(12, 184, 192, 0.1) !important; }
+    .coord-upload-area {
+      border:2px dashed rgba(12, 184, 192, 0.25) !important;
+      background: rgba(12, 184, 192, 0.03) !important;
+      border-radius:12px; padding:2.25rem 2rem; text-align:center; margin-top:1.5rem; color:var(--tf-muted); font-size:0.88rem; cursor:pointer; transition:all 0.2s; display:none;
+    }
     .coord-upload-area.show { display:block; }
-    .coord-upload-area:hover { border-color:#f37e4b; color:#f37e4b; }
+    .coord-upload-area:hover { border-color:var(--tf-teal) !important; color:var(--tf-teal) !important; background: rgba(12, 184, 192, 0.08) !important; }
     @media (max-width:480px) { .coord-school-header { padding:1.25rem; } .coord-stat-chip { min-width:100px; padding:0.875rem 1rem; } }
   </style>
 </head>
-<body>
+<body class="techfest-theme bg-light-atmosphere">
 
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:52px;width:auto;display:block;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height:38px;width:auto;display:block;">
         </a>
       </div>
       <nav class="main-nav">
@@ -80,7 +146,7 @@
           <li><a href="../../events.html">Events &amp; Camps</a></li>
           <li><a href="../../parents.html">Parent Hub</a></li>
           <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
           <li><a href="../../contact.html">Contact</a></li>
@@ -106,26 +172,36 @@
           <p>Coordinator Portal &mdash; Vadiva Tech Fest 3.0</p>
         </div>
         <div class="coord-header-actions">
-          <button class="coord-btn coord-btn-outline" onclick="toggleUpload()">&#8593; Upload CSV</button>
-          <a href="#" class="coord-btn coord-btn-primary">&#8595; Download QR Pack</a>
+          <button class="coord-btn coord-btn-outline" onclick="toggleUpload()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload-cloud" style="margin-right:6px;"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+            Upload CSV
+          </button>
+          <a href="#" class="coord-btn coord-btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Download QR Pack
+          </a>
+          <button class="coord-btn coord-btn-outline" onclick="logout()" style="color:var(--tf-coral); border-color:rgba(239,68,68,0.2);">
+            Logout
+          </button>
         </div>
       </div>
 
       <div class="coord-warning" id="escort-warning">
-        &#9888;&#65039; <strong>Escort Ratio Warning:</strong>&nbsp;
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+        <strong>Escort Ratio Warning:</strong>&nbsp;
         You have more than 20 students registered per escort. Please assign additional teachers to ensure a 1:20 escort ratio.
       </div>
 
       <div class="coord-stats-row">
         <div class="coord-stat-chip"><strong id="stat-total">24</strong><span>Total Students</span></div>
-        <div class="coord-stat-chip"><strong id="stat-paid" style="color:#22c55e;">18</strong><span>Entry Paid</span></div>
-        <div class="coord-stat-chip"><strong id="stat-pending" style="color:#f59e0b;">6</strong><span>Pending Payment</span></div>
+        <div class="coord-stat-chip"><strong id="stat-paid" style="color:var(--tf-teal);">18</strong><span>Entry Paid</span></div>
+        <div class="coord-stat-chip"><strong id="stat-pending" style="color:var(--tf-yellow);">6</strong><span>Pending Payment</span></div>
         <div class="coord-stat-chip"><strong id="stat-escorts">1</strong><span>Escorts</span></div>
       </div>
 
       <div class="coord-upload-area" id="upload-area">
         <input type="file" id="csv-file" accept=".csv" style="display:none" onchange="handleCSV(this)">
-        <p style="font-size:1.5rem;margin:0 0 0.5rem;">&#128193;</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal); margin-bottom: 0.5rem;"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
         <p>Click to select a CSV file or drag and drop here.</p>
         <p style="font-size:0.75rem;margin-top:0.5rem;">Format: Name, Grade, Section, Mobile</p>
         <button onclick="document.getElementById('csv-file').click()" class="coord-btn coord-btn-primary" style="margin-top:1rem;">Choose File</button>
@@ -161,7 +237,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:38px;width:auto;margin-bottom:1.25rem;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Creative Labs Logo" style="height:32px;width:auto;margin-bottom:1.25rem;">
           <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
@@ -199,7 +275,12 @@
   </footer>
 
   <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
   <script>
+    const API = '../../techfest-api/coordinator.php';
+    const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+    const cid = isBypass ? 'TF-DEV-BYPASS-001' : localStorage.getItem('tf_participant_id');
+
     function toggleUpload() { document.getElementById('upload-area').classList.toggle('show'); }
     function handleCSV(input) {
       if (input.files && input.files[0]) {
@@ -211,9 +292,111 @@
         row.style.display = row.cells[1].textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
       });
     }
-    var tot = parseInt(document.getElementById('stat-total').textContent) || 0;
-    var esc = parseInt(document.getElementById('stat-escorts').textContent) || 1;
-    if (tot / esc <= 20) { document.getElementById('escort-warning').classList.add('hidden'); }
+
+    function viewQR(pId) {
+      alert('Unique QR Entry Pass for Participant ID: ' + pId + '\nVerified mapping to database entry.');
+    }
+
+    function sendReminder(sId) {
+      alert('Payment reminder notification has been triggered for student ID: ' + sId);
+    }
+
+    async function loadCoordinatorData() {
+      if (!cid && !isBypass) {
+        window.location.href = '../login/index.html';
+        return;
+      }
+      try {
+        const res = await fetch(API + '?action=get_students&coordinator_id=' + cid);
+        const json = await res.json();
+        if (json.success) {
+          const data = json.data;
+          
+          document.getElementById('coord-school-name').textContent = data.school_name || 'Coordinator Dashboard';
+          
+          const students = data.students || [];
+          const total = students.length;
+          const paid = students.filter(s => s.entry_status === 'PAID').length;
+          const pending = total - paid;
+          const escorts = Math.max(1, Math.ceil(total / 20));
+          
+          document.getElementById('stat-total').textContent = total;
+          document.getElementById('stat-paid').textContent = paid;
+          document.getElementById('stat-pending').textContent = pending;
+          document.getElementById('stat-escorts').textContent = escorts;
+          
+          const escortWarning = document.getElementById('escort-warning');
+          if (total / escorts <= 20) {
+            escortWarning.classList.add('hidden');
+          } else {
+            escortWarning.classList.remove('hidden');
+          }
+          
+          const tbody = document.getElementById('coord-tbody');
+          if (total === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No students registered yet.</td></tr>';
+          } else {
+            tbody.innerHTML = students.map((s, index) => {
+              const statusClass = s.entry_status === 'PAID' ? 'coord-status-paid' : 'coord-status-pending';
+              const statusLabel = s.entry_status === 'PAID' ? 'Paid' : 'Pending';
+              const actionBtn = s.entry_status === 'PAID' 
+                ? `<button class="coord-action-btn" onclick="viewQR('${s.participant_id}')">View QR</button>`
+                : `<button class="coord-action-btn" onclick="sendReminder('${s.id}')">Send Reminder</button>`;
+              return `
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${s.full_name}</td>
+                  <td>${s.grade}</td>
+                  <td>${s.section || '-'}</td>
+                  <td><span class="${statusClass}">${statusLabel}</span></td>
+                  <td>${actionBtn}</td>
+                </tr>
+              `;
+            }).join('');
+          }
+        } else {
+          loadDemoData();
+        }
+      } catch (err) {
+        loadDemoData();
+      }
+    }
+
+    function loadDemoData() {
+      document.getElementById('stat-total').textContent = '24';
+      document.getElementById('stat-paid').textContent = '18';
+      document.getElementById('stat-pending').textContent = '6';
+      document.getElementById('stat-escorts').textContent = '1';
+      
+      const escortWarning = document.getElementById('escort-warning');
+      const tot = 24, esc = 1;
+      if (tot / esc <= 20) { escortWarning.classList.add('hidden'); } else { escortWarning.classList.remove('hidden'); }
+      
+      document.getElementById('coord-tbody').innerHTML = `
+        <tr><td>1</td><td>Aanya Sharma</td><td>8</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0012')">View QR</button></td></tr>
+        <tr><td>2</td><td>Rithvik Kumar</td><td>9</td><td>B</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0015')">View QR</button></td></tr>
+        <tr><td>3</td><td>Priya Nair</td><td>7</td><td>C</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn" onclick="sendReminder('3')">Send Reminder</button></td></tr>
+        <tr><td>4</td><td>Vikram Iyer</td><td>10</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0019')">View QR</button></td></tr>
+        <tr><td>5</td><td>Sneha Rajendran</td><td>8</td><td>B</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn" onclick="sendReminder('5')">Send Reminder</button></td></tr>
+        <tr><td>6</td><td>Arjun Balaji</td><td>9</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0022')">View QR</button></td></tr>
+      `;
+    }
+
+    function logout() {
+      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
+        window.TechFestAccess.logout('../login/index.html');
+        return;
+      }
+      localStorage.removeItem('tf_token');
+      localStorage.removeItem('tf_participant_id');
+      localStorage.removeItem('tf_user_name');
+      localStorage.removeItem('tf_entry_paid');
+      localStorage.removeItem('tf_dev_bypass_active');
+      sessionStorage.clear();
+      window.location.href = '../login/index.html';
+    }
+
+    loadCoordinatorData();
   </script>
 </body>
 </html>

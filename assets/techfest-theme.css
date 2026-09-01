@@ -1,0 +1,776 @@
+/* ==========================================================================
+   VADIVA TECH & DESIGN FEST '26 - SCOPED THEME STYLES
+   Prefix/Scope: .techfest-theme
+   This file overrides global style.css specifically for the Tech Fest section.
+   ========================================================================== */
+
+/* Scoped variables for Tech Fest colors and glass system */
+.techfest-theme {
+  --tf-deep: #0c3c4c;      /* Deep Teal / Dark Blue */
+  --tf-teal: #0cb8c0;      /* Turquoise / Cyan */
+  --tf-coral: #ef4444;     /* Coral / Red */
+  --tf-yellow: #f5b932;    /* Golden Yellow */
+  --tf-dark: #071921;      /* Dark charcoal / navy */
+  --tf-white: #ffffff;
+  --tf-bg: #f8fafc;        /* Off-white background */
+  --tf-border: #e2e8f0;    /* Subtle border color */
+  --tf-text: #1e293b;      /* Dark gray body text */
+  --tf-muted: #64748b;     /* Muted neutral text */
+  
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Glass system custom variables */
+  --glass-radius: 16px;
+  --glass-radius-lg: 24px;
+  --glass-blur: 16px;
+  
+  /* Layout variables */
+  --container-max-width: 1200px;
+  --page-padding: clamp(16px, 4vw, 32px);
+
+  background-color: var(--tf-bg);
+  color: var(--tf-text);
+  font-family: var(--font-body);
+}
+
+/* ── Global Layout Container System ── */
+.techfest-theme .container {
+  width: min(100% - (var(--page-padding) * 2), var(--container-max-width)) !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+}
+
+/* ── Typography & Smooth Defaults ── */
+.techfest-theme h1, 
+.techfest-theme h2, 
+.techfest-theme h3, 
+.techfest-theme h4 {
+  font-family: var(--font-heading);
+  color: var(--tf-deep);
+}
+
+/* ── Header overrides ── */
+.techfest-theme .site-header {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+  position: sticky !important;
+  top: 12px !important;
+  margin: 12px auto !important;
+  width: calc(100% - 24px) !important;
+  max-width: 1380px !important;
+  border-radius: 14px !important;
+  z-index: 1000 !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .header-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: clamp(0.5rem, 1.5vw, 2rem) !important;
+  height: 70px !important;
+  width: 100% !important;
+  max-width: 1380px !important;
+  margin: 0 auto !important;
+  padding: 0 1.5rem !important;
+}
+
+.techfest-theme .logo a {
+  color: var(--tf-deep) !important;
+}
+
+.techfest-theme .mobile-menu-toggle {
+  display: none !important;
+}
+
+/* Hover & Active Indication for Navigation */
+.techfest-theme nav.main-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+}
+
+.techfest-theme nav.main-nav ul {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(0.3rem, 0.6vw, 0.95rem) !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.techfest-theme nav.main-nav a {
+  color: var(--tf-muted) !important;
+  font-size: clamp(0.7rem, 0.75vw, 0.8rem) !important;
+  padding: 0.5rem 0 !important;
+  transition: color 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.techfest-theme nav.main-nav a:hover,
+.techfest-theme nav.main-nav a.active {
+  color: var(--tf-teal) !important;
+}
+
+.techfest-theme nav.main-nav a::after {
+  background-color: var(--tf-teal) !important;
+}
+
+/* Header Buttons styling */
+.techfest-theme .header-action {
+  display: flex !important;
+  align-items: center !important;
+  gap: clamp(0.25rem, 0.5vw, 0.6rem) !important;
+}
+
+.techfest-theme .header-action .btn {
+  height: 38px !important;
+  padding: 0 clamp(0.5rem, 0.8vw, 0.95rem) !important;
+  border-radius: 8px !important;
+  font-size: clamp(0.7rem, 0.75vw, 0.8rem) !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease-in-out !important;
+  border: 1px solid transparent !important;
+  white-space: nowrap !important;
+}
+
+.techfest-theme .header-action .header-cta {
+  background-color: var(--tf-deep) !important;
+  color: var(--tf-white) !important;
+}
+.techfest-theme .header-action .header-cta:hover {
+  background-color: #072733 !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(12, 60, 76, 0.15) !important;
+}
+
+.techfest-theme .header-action .header-payment-btn {
+  background-color: rgba(12, 184, 192, 0.08) !important;
+  border: 1.5px solid rgba(12, 184, 192, 0.3) !important;
+  color: var(--tf-teal) !important;
+}
+.techfest-theme .header-action .header-payment-btn:hover {
+  background-color: var(--tf-teal) !important;
+  color: var(--tf-white) !important;
+  border-color: var(--tf-teal) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(12, 184, 192, 0.2) !important;
+}
+
+/* ── Responsive Header Breakpoint (1320px) ── */
+@media (max-width: 1320px) {
+  .techfest-theme .header-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    height: 60px !important;
+  }
+  
+  .techfest-theme .mobile-menu-toggle {
+    display: block !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer !important;
+    padding: 0.6rem !important;
+    border-radius: 8px !important;
+    z-index: 150 !important;
+  }
+
+  .techfest-theme .mobile-menu-toggle span {
+    display: block !important;
+    width: 20px !important;
+    height: 2px !important;
+    background-color: var(--tf-deep) !important;
+    margin: 4px 0 !important;
+    transition: transform 0.3s, opacity 0.3s !important;
+  }
+
+  .techfest-theme nav.main-nav {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 320px !important;
+    max-width: 85% !important;
+    height: 100vh !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    z-index: 140 !important;
+    padding: 6rem 2rem 2.5rem !important;
+    box-shadow: -10px 0 40px rgba(7, 25, 33, 0.08) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+    transform: translateX(100%) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .techfest-theme nav.main-nav.active {
+    transform: translateX(0) !important;
+  }
+
+  .techfest-theme nav.main-nav ul {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    align-items: flex-start !important;
+  }
+
+  .techfest-theme nav.main-nav a {
+    font-size: 1.1rem !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .techfest-theme .header-action {
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .techfest-theme .header-action .btn {
+    display: none !important;
+  }
+  
+  .techfest-theme .mobile-only-nav-item {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1281px) {
+  .techfest-theme .mobile-only-nav-item {
+    display: none !important;
+  }
+}
+
+/* ── Primary & Scoped Button Overrides ── */
+.techfest-theme .btn-brand,
+.techfest-theme button[type="submit"],
+.techfest-theme .tf-btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 46px !important;
+  padding: 0 1.75rem !important;
+  background-color: var(--tf-coral) !important;
+  color: var(--tf-white) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  border-radius: 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s, transform 0.2s !important;
+  box-sizing: border-box !important;
+}
+
+.techfest-theme .btn-brand:hover,
+.techfest-theme button[type="submit"]:hover,
+.techfest-theme .tf-btn-primary:hover {
+  background-color: #d63d3d !important;
+  transform: translateY(-1px) !important;
+}
+
+.techfest-theme .tf-btn-outline {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 46px !important;
+  padding: 0 1.75rem !important;
+  background-color: transparent !important;
+  color: var(--tf-white) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  border-radius: 8px !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  text-decoration: none !important;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.2s !important;
+  box-sizing: border-box !important;
+}
+
+.techfest-theme .tf-btn-outline:hover {
+  border-color: var(--tf-white) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ── Card Redesign Token ── */
+.techfest-theme .card-clean {
+  background-color: var(--tf-white) !important;
+  border: 1px solid var(--tf-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02) !important;
+  padding: 1.5rem !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.techfest-theme .card-clean:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* ── Unified Badges ── */
+.techfest-theme .tf-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.25rem 0.65rem !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border: 1px solid transparent !important;
+}
+
+.techfest-theme .tf-badge-paid,
+.techfest-theme .tf-badge-green {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+.techfest-theme .tf-badge-pending,
+.techfest-theme .tf-badge-yellow {
+  background-color: #fef9c3 !important;
+  color: #92400e !important;
+  border-color: #fef08a !important;
+}
+
+.techfest-theme .tf-badge-full,
+.techfest-theme .tf-badge-red {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fca5a5 !important;
+}
+
+.techfest-theme .tf-badge-available,
+.techfest-theme .tf-badge-teal {
+  background-color: #ccfbf1 !important;
+  color: #0f766e !important;
+  border-color: #99f6e4 !important;
+}
+
+.techfest-theme .tf-badge-warning,
+.techfest-theme .tf-badge-gold {
+  background-color: #fff7ed !important;
+  color: #c2410c !important;
+  border-color: #ffedd5 !important;
+}
+
+/* ── Footer Overrides ── */
+.techfest-theme .site-footer {
+  background-color: var(--tf-dark) !important;
+  color: #94a3b8 !important;
+  padding: 4rem 0 2.5rem !important;
+}
+
+.techfest-theme .site-footer h4 {
+  color: var(--tf-white) !important;
+  font-weight: 700 !important;
+}
+
+.techfest-theme .site-footer h4::after {
+  background-color: var(--tf-teal) !important;
+}
+
+.techfest-theme .site-footer a {
+  color: #94a3b8 !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.techfest-theme .site-footer a:hover {
+  color: var(--tf-teal) !important;
+}
+
+.techfest-theme .footer-bottom {
+  border-top: 1px solid #1e293b !important;
+  color: #64748b !important;
+  font-size: 0.8rem !important;
+}
+
+/* ── Animation: Subtle fade-in elements ── */
+@keyframes tfFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.techfest-theme .animate-fade-in {
+  animation: tfFadeInUp 0.5s ease-out forwards !important;
+}
+
+/* ── Form Inputs Redesign ── */
+.techfest-theme input[type="text"],
+.techfest-theme input[type="tel"],
+.techfest-theme input[type="email"],
+.techfest-theme input[type="password"],
+.techfest-theme select {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  border: 1.5px solid var(--tf-border) !important;
+  border-radius: 8px !important;
+  background-color: #fafbfd !important;
+  color: var(--tf-text) !important;
+  font-size: 0.95rem !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.techfest-theme input:focus,
+.techfest-theme select:focus {
+  border-color: var(--tf-teal) !important;
+  background-color: var(--tf-white) !important;
+  box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.12) !important;
+}
+
+/* ── LIQUID GLASS ATMOSPHERES ── */
+.techfest-theme.bg-dark-atmosphere {
+  background-color: #071921 !important;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(12, 184, 192, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.03) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(12, 60, 76, 0.22) 0%, transparent 70%) !important;
+  background-attachment: fixed !important;
+}
+
+.techfest-theme.bg-light-atmosphere {
+  background-color: #f8fafc !important;
+  background-image: 
+    radial-gradient(circle at 5% 15%, rgba(12, 184, 192, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 95% 85%, rgba(239, 68, 68, 0.015) 0%, transparent 35%),
+    radial-gradient(circle at 50% 50%, rgba(12, 60, 76, 0.04) 0%, transparent 60%) !important;
+  background-attachment: fixed !important;
+}
+
+/* ── LIQUID GLASS CARD SYSTEM ── */
+.techfest-theme .glass-card-subtle {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(var(--glass-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.02) !important;
+  border-radius: var(--glass-radius) !important;
+}
+
+.techfest-theme .glass-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(var(--glass-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+  border-radius: var(--glass-radius) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .glass-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(12, 184, 192, 0.35) !important;
+  box-shadow: 0 16px 40px 0 rgba(7, 25, 33, 0.08) !important;
+}
+
+.techfest-theme .glass-card-dark {
+  background: rgba(12, 60, 76, 0.72) !important;
+  backdrop-filter: blur(var(--glass-blur)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) !important;
+  border: 1px solid rgba(12, 184, 192, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.12) !important;
+  border-radius: var(--glass-radius) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .glass-card-dark:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(12, 184, 192, 0.45) !important;
+  box-shadow: 0 16px 40px 0 rgba(7, 25, 33, 0.2) !important;
+}
+
+.techfest-theme .glass-card-elevated {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.08) !important;
+  border-radius: var(--glass-radius-lg) !important;
+}
+
+.techfest-theme .glass-card-elevated-dark {
+  background: rgba(12, 60, 76, 0.85) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(12, 184, 192, 0.35) !important;
+  box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.2) !important;
+  border-radius: var(--glass-radius-lg) !important;
+}
+
+/* ── LIQUID GLASS BUTTON SYSTEM ── */
+.techfest-theme .glass-btn-primary {
+  background-color: var(--tf-coral) !important;
+  color: var(--tf-white) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  height: 46px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 1.75rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .glass-btn-primary:hover {
+  background-color: #d63d3d !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important;
+}
+
+.techfest-theme .glass-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  color: var(--tf-white) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  height: 46px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 1.75rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .glass-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+.techfest-theme .glass-btn-accent {
+  background-color: rgba(12, 184, 192, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(12, 184, 192, 0.28) !important;
+  color: var(--tf-teal) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  height: 46px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 1.75rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.techfest-theme .glass-btn-accent:hover {
+  background-color: var(--tf-teal) !important;
+  color: var(--tf-white) !important;
+  border-color: var(--tf-teal) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 16px 0 rgba(12, 184, 192, 0.25) !important;
+}
+
+/* ── LIQUID GLASS FORM INPUTS ── */
+.techfest-theme .glass-input {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+  border-radius: 10px !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.95rem !important;
+  color: var(--tf-text) !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+.techfest-theme .glass-input:focus {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: var(--tf-teal) !important;
+  box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15) !important;
+}
+
+.techfest-theme .glass-prefix-label {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+  border-right: none !important;
+  border-radius: 10px 0 0 10px !important;
+  color: var(--tf-text) !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  padding: 0 0.875rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.techfest-theme .lgn-input-prefix .glass-input,
+.techfest-theme .reg-input-prefix .glass-input {
+  border-radius: 0 10px 10px 0 !important;
+  flex: 1 !important;
+}
+
+/* ── LIQUID GLASS SEGMENTED CONTROL / TABS ── */
+.techfest-theme .glass-tabs-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 2rem !important;
+  flex-wrap: wrap !important;
+  gap: 1.25rem !important;
+}
+
+.techfest-theme .glass-tabs {
+  background: rgba(12, 60, 76, 0.06) !important;
+  border: 1px solid rgba(12, 184, 192, 0.12) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.techfest-theme .glass-tab {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 9px !important;
+  padding: 0.55rem 1.25rem !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  color: var(--tf-muted) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+.techfest-theme .glass-tab.active {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: var(--tf-deep) !important;
+  box-shadow: 0 3px 10px rgba(7, 25, 33, 0.05) !important;
+}
+
+.techfest-theme .glass-tab.active:hover {
+  transform: none !important;
+}
+
+/* ── LIQUID GLASS BADGES ── */
+.techfest-theme .glass-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.3rem 0.75rem !important;
+  border-radius: 20px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: 1px solid transparent !important;
+}
+
+.techfest-theme .glass-badge-paid {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  color: #059669 !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+.techfest-theme .glass-badge-pending {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  color: #d97706 !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+.techfest-theme .glass-badge-full {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: #dc2626 !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+.techfest-theme .glass-badge-available {
+  background-color: rgba(6, 182, 212, 0.08) !important;
+  color: #0891b2 !important;
+  border-color: rgba(6, 182, 212, 0.25) !important;
+}
+
+/* ── LIQUID GLASS TABLES ── */
+.techfest-theme .glass-table-container {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: var(--glass-shadow-lvl2) !important;
+  border-radius: var(--glass-radius) !important;
+  overflow: hidden !important;
+}
+
+.techfest-theme .glass-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.techfest-theme .glass-table th {
+  background: rgba(12, 60, 76, 0.04) !important;
+  border-bottom: 1.5px solid rgba(12, 184, 192, 0.15) !important;
+  color: var(--tf-deep) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 1rem 1.25rem !important;
+  text-align: left !important;
+}
+
+.techfest-theme .glass-table td {
+  padding: 1rem 1.25rem !important;
+  border-bottom: 1px solid rgba(12, 184, 192, 0.08) !important;
+  color: var(--tf-text) !important;
+  font-size: 0.9rem !important;
+}
+
+.techfest-theme .glass-table tr:last-child td {
+  border-bottom: none !important;
+}
+
+.techfest-theme .glass-table tr {
+  transition: background-color 0.15s ease !important;
+}
+
+.techfest-theme .glass-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.35) !important;
+}
+

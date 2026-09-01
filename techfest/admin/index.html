@@ -6,9 +6,10 @@
   <title>Admin Portal | Vadiva Tech Fest 3.0</title>
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
     /* Admin Styles (prefix: adm-) */
-    .adm-page { background:#f8fafc; min-height:70vh; padding:2.5rem 1.25rem 4rem; }
+    .adm-page { background:transparent !important; min-height:70vh; padding:3rem 1.25rem 5rem; }
     .adm-inner { max-width:1100px; margin:0 auto; }
     .adm-top-bar {
       display:flex; align-items:center; justify-content:space-between;
@@ -16,69 +17,218 @@
     }
     .adm-top-bar h1 {
       font-family:var(--font-heading); font-size:clamp(1.4rem,3vw,1.9rem);
-      font-weight:800; color:#0f172a; margin:0;
+      font-weight:800; color:var(--tf-deep); margin:0;
     }
     .adm-logout {
-      background:transparent; border:1.5px solid #e2e8f0; color:#64748b;
-      padding:0.5rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:600;
-      cursor:pointer; transition:border-color 0.2s, color 0.2s;
+      background: rgba(12, 184, 192, 0.05) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.25) !important;
+      color: var(--tf-teal) !important;
+      padding:0.55rem 1.25rem; border-radius:10px !important; font-size:0.85rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .adm-logout:hover { border-color:#f37e4b; color:#f37e4b; }
+    .adm-logout:hover {
+      background: var(--tf-teal) !important;
+      color: #ffffff !important;
+      border-color: var(--tf-teal) !important;
+      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.2) !important;
+      transform: translateY(-1px);
+    }
 
     /* Stat cards */
     .adm-stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.25rem; margin-bottom:2.5rem; }
     .adm-stat-card {
-      background:#ffffff; border:1px solid #e2e8f0; border-radius:16px;
-      padding:1.5rem; box-shadow:0 2px 8px rgba(15,23,42,0.04);
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius) !important;
+      padding:1.5rem; box-shadow:0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
     }
-    .adm-stat-card .adm-stat-icon { font-size:1.4rem; margin-bottom:0.75rem; }
+    .adm-stat-card .adm-stat-icon { font-size:1.4rem; margin-bottom:0.75rem; color: var(--tf-teal); }
     .adm-stat-card strong {
       font-family:var(--font-heading); font-size:2rem; font-weight:900;
-      color:#f37e4b; display:block; line-height:1;
+      color:var(--tf-deep); display:block; line-height:1;
     }
-    .adm-stat-card span { font-size:0.8rem; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+    .adm-stat-card span { font-size:0.8rem; color:var(--tf-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 
     /* Quick links */
     .adm-section-title {
       font-family:var(--font-heading); font-size:1rem; font-weight:700;
-      color:#0f172a; margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em;
+      color:var(--tf-deep); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em;
     }
     .adm-quick-links { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin-bottom:2.5rem; }
     .adm-ql-card {
-      background:#ffffff; border:1px solid #e2e8f0; border-radius:14px;
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius) !important;
       padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem;
-      text-decoration:none; color:#0f172a;
-      box-shadow:0 1px 4px rgba(15,23,42,0.04);
-      transition:box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      text-decoration:none; color:var(--tf-text);
+      box-shadow:0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+      transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .adm-ql-card:hover { box-shadow:0 8px 24px rgba(15,23,42,0.09); transform:translateY(-3px); border-color:#f37e4b; color:#0f172a; }
-    .adm-ql-icon { font-size:1.6rem; flex-shrink:0; }
-    .adm-ql-label { font-family:var(--font-heading); font-size:0.92rem; font-weight:700; }
-    .adm-ql-desc { font-size:0.75rem; color:#64748b; margin-top:0.15rem; }
+    .adm-ql-card:hover {
+      box-shadow: 0 16px 40px rgba(7, 25, 33, 0.08) !important;
+      transform:translateY(-3px) !important;
+      border-color: rgba(12, 184, 192, 0.3) !important;
+    }
+    .adm-ql-icon { font-size:1.6rem; flex-shrink:0; color: var(--tf-teal); }
+    .adm-ql-label { font-family:var(--font-heading); font-size:0.92rem; font-weight:700; color: var(--tf-deep); }
+    .adm-ql-desc { font-size:0.75rem; color:var(--tf-muted); margin-top:0.15rem; }
 
     /* Recent activity table */
-    .adm-table-wrap { background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; }
-    .adm-table-header { padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0; }
-    .adm-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:#0f172a; margin:0; }
+    .adm-table-wrap {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: var(--glass-radius) !important;
+      overflow:hidden;
+      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+    }
+    .adm-table-header { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(12, 184, 192, 0.12) !important; background: transparent; }
+    .adm-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:var(--tf-deep); margin:0; }
     .adm-table-scroll { overflow-x:auto; }
     table.adm-table { width:100%; border-collapse:collapse; min-width:550px; }
-    .adm-table th { background:#f8fafc; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1px solid #e2e8f0; }
-    .adm-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:#374151; border-bottom:1px solid #f1f5f9; }
+    .adm-table th { background: rgba(12, 60, 76, 0.04) !important; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--tf-muted); font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1.5px solid rgba(12, 184, 192, 0.15) !important; }
+    .adm-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:var(--tf-text); border-bottom:1px solid rgba(12, 184, 192, 0.08) !important; }
     .adm-table tr:last-child td { border-bottom:none; }
-    .adm-table tr:hover td { background:#fafafa; }
-    .adm-badge-paid { background:#d1fae5; color:#065f46; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; }
-    .adm-badge-reg  { background:#dbeafe; color:#1e40af; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.72rem; font-weight:700; }
+    .adm-table tr:hover td { background: rgba(12, 184, 192, 0.03) !important; }
+    .adm-badge-paid {
+      background: rgba(16, 185, 129, 0.08) !important; color:#059669 !important;
+      border: 1px solid rgba(16, 185, 129, 0.25) !important;
+      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700;
+    }
+    .adm-badge-reg  {
+      background: rgba(6, 182, 212, 0.08) !important; color:#0891b2 !important;
+      border: 1px solid rgba(6, 182, 212, 0.25) !important;
+      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700;
+    }
 
     @media (max-width:480px) { .adm-stats { grid-template-columns:1fr 1fr; } }
+
+    /* ── Admin Workshops Modal Styles ── */
+    .adm-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(7, 25, 33, 0.5) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .adm-modal.show {
+      opacity: 1; pointer-events: auto;
+    }
+    .adm-modal-content {
+      background: rgba(255, 255, 255, 0.88) !important;
+      backdrop-filter: blur(25px) !important;
+      -webkit-backdrop-filter: blur(25px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 750px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 64px rgba(7, 25, 33, 0.15) !important;
+      animation: admModalSlide 0.3s ease-out;
+    }
+    @keyframes admModalSlide {
+      from { transform: translateY(20px); }
+      to { transform: translateY(0); }
+    }
+    .adm-modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(12, 184, 192, 0.12) !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .adm-modal-header h2 { margin: 0; font-size: 1.3rem; color: var(--tf-deep); }
+    .adm-modal-close {
+      background: none; border: none; font-size: 1.75rem; color: var(--tf-muted); cursor: pointer; line-height: 1;
+    }
+    .adm-modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .adm-btn-add {
+      background: var(--tf-teal) !important;
+      color: var(--tf-white) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      padding: 0.6rem 1.25rem;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.25) !important;
+      margin-bottom: 1rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .adm-btn-add:hover { background: #0aa5ad !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(12, 184, 192, 0.35) !important; }
+    .adm-form {
+      background: rgba(12, 60, 76, 0.03) !important;
+      border: 1px solid rgba(12, 184, 192, 0.12) !important;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .adm-form-group { margin-bottom: 1rem; }
+    .adm-form-group label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--tf-text); margin-bottom: 0.4rem; }
+    .adm-form-group input, .adm-form-group textarea, .adm-form-group select {
+      width: 100%; padding: 0.65rem 0.9rem !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+      border-radius: 10px !important;
+      font-family: var(--font-body); outline: none; box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+    .adm-form-group input:focus, .adm-form-group textarea:focus, .adm-form-group select:focus {
+      border-color: var(--tf-teal) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.12) !important;
+    }
+    .adm-form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+    .adm-btn-submit {
+      background: var(--tf-coral) !important; color: var(--tf-white) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
+      transition: all 0.2s;
+    }
+    .adm-btn-submit:hover { background: #d63d3d !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
+    .adm-btn-cancel {
+      background: rgba(12, 60, 76, 0.05) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.2) !important;
+      padding: 0.6rem 1.25rem; border-radius: 10px; color: var(--tf-text) !important; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .adm-btn-cancel:hover { background: rgba(12, 60, 76, 0.1) !important; }
+    .adm-action-btn-sm {
+      padding: 0.35rem 0.65rem !important; border-radius: 6px; border: none; font-size: 0.78rem; font-weight: 700; cursor: pointer; margin-right: 0.4rem;
+      transition: all 0.2s;
+    }
+    .adm-edit-btn { background: rgba(6, 182, 212, 0.08) !important; color: #0891b2 !important; border: 1.5px solid rgba(6, 182, 212, 0.18) !important; }
+    .adm-edit-btn:hover { background: rgba(6, 182, 212, 0.15) !important; }
+    .adm-del-btn { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1.5px solid rgba(239, 68, 68, 0.18) !important; }
+    .adm-del-btn:hover { background: rgba(239, 68, 68, 0.15) !important; }
   </style>
 </head>
-<body>
+<body class="techfest-theme bg-light-atmosphere">
 
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:52px;width:auto;display:block;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 52px; width: auto; display: block;">
         </a>
       </div>
       <nav class="main-nav">
@@ -90,7 +240,7 @@
           <li><a href="../../events.html">Events &amp; Camps</a></li>
           <li><a href="../../parents.html">Parent Hub</a></li>
           <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../../techfest" class="active">Tech Fest</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
           <li><a href="../../contact.html">Contact</a></li>
@@ -111,29 +261,40 @@
     <div class="adm-inner">
 
       <div class="adm-top-bar">
-        <h1>&#128274; Admin Portal &mdash; Tech Fest 3.0</h1>
+        <h1>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle; color: var(--tf-teal);"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Admin Portal &mdash; Tech Fest 3.0
+        </h1>
         <button class="adm-logout" onclick="logout()">Logout</button>
       </div>
 
       <!-- Stats -->
       <div class="adm-stats">
         <div class="adm-stat-card">
-          <div class="adm-stat-icon">&#128101;</div>
+          <div class="adm-stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
           <strong id="adm-participants">&#8212;</strong>
           <span>Total Participants</span>
         </div>
         <div class="adm-stat-card">
-          <div class="adm-stat-icon">&#8377;</div>
+          <div class="adm-stat-icon">
+            <strong>&#8377;</strong>
+          </div>
           <strong id="adm-revenue">&#8212;</strong>
           <span>Total Revenue</span>
         </div>
         <div class="adm-stat-card">
-          <div class="adm-stat-icon">&#127979;</div>
+          <div class="adm-stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
           <strong id="adm-schools">&#8212;</strong>
           <span>Schools Registered</span>
         </div>
         <div class="adm-stat-card">
-          <div class="adm-stat-icon">&#128200;</div>
+          <div class="adm-stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          </div>
           <strong id="adm-fillrate">&#8212;</strong>
           <span>Avg. Fill Rate</span>
         </div>
@@ -142,28 +303,40 @@
       <!-- Quick links -->
       <p class="adm-section-title">Quick Actions</p>
       <div class="adm-quick-links">
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#128295;</div>
+        <a href="#" class="adm-ql-card" onclick="openWsModal(event)">
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
           <div><div class="adm-ql-label">Manage Workshops</div><div class="adm-ql-desc">Edit slots, pricing, capacity</div></div>
         </a>
         <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#127942;</div>
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6c0 2.22-1 4.58-2.6 6H8.6C7 12.58 6 10.22 6 8a6 6 0 0 1 6-6z"/></svg>
+          </div>
           <div><div class="adm-ql-label">Manage Competitions</div><div class="adm-ql-desc">Results, brackets, judges</div></div>
         </a>
         <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#128179;</div>
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          </div>
           <div><div class="adm-ql-label">View Payments</div><div class="adm-ql-desc">Transactions &amp; receipts</div></div>
         </a>
         <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#128196;</div>
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+          </div>
           <div><div class="adm-ql-label">Audit Log</div><div class="adm-ql-desc">System event history</div></div>
         </a>
         <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#128144;</div>
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          </div>
           <div><div class="adm-ql-label">Export Data</div><div class="adm-ql-desc">Download CSV / reports</div></div>
         </a>
         <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">&#128106;</div>
+          <div class="adm-ql-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
           <div><div class="adm-ql-label">School Coordinators</div><div class="adm-ql-desc">View all school portals</div></div>
         </a>
       </div>
@@ -192,11 +365,77 @@
     </div>
   </div>
 
+  <!-- Manage Workshops Modal -->
+  <div class="adm-modal" id="ws-modal">
+    <div class="adm-modal-content">
+      <div class="adm-modal-header">
+        <h2>Manage Workshops</h2>
+        <button class="adm-modal-close" onclick="closeWsModal()">&times;</button>
+      </div>
+      <div class="adm-modal-body">
+        <button class="adm-btn-add" onclick="showAddWsForm()">+ Add New Workshop</button>
+        
+        <!-- Workshop Add/Edit Form -->
+        <form id="ws-form" class="adm-form" style="display:none;" onsubmit="saveWorkshop(event)">
+          <input type="hidden" id="ws-id">
+          <div class="adm-form-group">
+            <label for="ws-name">Workshop Name</label>
+            <input type="text" id="ws-name" required placeholder="e.g. Robotics & Automation">
+          </div>
+          <div class="adm-form-group">
+            <label for="ws-desc">Description</label>
+            <textarea id="ws-desc" rows="3" required placeholder="Brief description..."></textarea>
+          </div>
+          <div style="display:flex; gap:1rem;">
+            <div class="adm-form-group" style="flex:1;">
+              <label for="ws-type">Type</label>
+              <select id="ws-type">
+                <option value="paid">Paid</option>
+                <option value="free">Free</option>
+              </select>
+            </div>
+            <div class="adm-form-group" style="flex:1;">
+              <label for="ws-capacity">Capacity</label>
+              <input type="number" id="ws-capacity" value="40" min="5" required>
+            </div>
+          </div>
+          <div style="display:flex; gap:1rem;">
+            <div class="adm-form-group" style="flex:1;">
+              <label for="ws-min-grade">Min Grade</label>
+              <input type="number" id="ws-min-grade" value="4" min="4" max="12" required>
+            </div>
+            <div class="adm-form-group" style="flex:1;">
+              <label for="ws-max-grade">Max Grade</label>
+              <input type="number" id="ws-max-grade" value="12" min="4" max="12" required>
+            </div>
+          </div>
+          <div class="adm-form-actions">
+            <button type="submit" class="adm-btn-submit">Save Workshop</button>
+            <button type="button" class="adm-btn-cancel" onclick="hideWsForm()">Cancel</button>
+          </div>
+        </form>
+
+        <div class="adm-table-wrap" style="margin-top:1.5rem;">
+          <table class="adm-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Type</th><th>Grades</th><th>Capacity</th><th>Seats Taken</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ws-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="../../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height:38px;width:auto;margin-bottom:1.25rem;">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Creative Labs Logo" style="height:32px;width:auto;margin-bottom:1.25rem;">
           <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
@@ -234,12 +473,19 @@
   </footer>
 
   <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
   <script>
     const ADMIN_API = '../../techfest-api/admin.php';
+    const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+    const aid = isBypass ? 'TF-DEV-BYPASS-001' : localStorage.getItem('tf_participant_id');
 
     async function loadStats() {
+      if (!aid && !isBypass) {
+        window.location.href = '../login/index.html';
+        return;
+      }
       try {
-        const res  = await fetch(ADMIN_API + '?action=get_stats');
+        const res  = await fetch(ADMIN_API + '?action=get_stats&admin_id=' + aid);
         const data = await res.json();
         if (data.success) {
           document.getElementById('adm-participants').textContent = data.total_participants || '0';
@@ -260,24 +506,192 @@
           } else {
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No recent activity yet.</td></tr>';
           }
+        } else {
+          loadDemoData();
         }
       } catch (e) {
-        // Fallback demo data
-        document.getElementById('adm-participants').textContent = '142';
-        document.getElementById('adm-revenue').textContent      = '\u20B935,500';
-        document.getElementById('adm-schools').textContent      = '12';
-        document.getElementById('adm-fillrate').textContent     = '64%';
-        document.getElementById('adm-activity-body').innerHTML = `
-          <tr><td>10:32 AM</td><td>Aanya Sharma</td><td>Velammal</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>
-          <tr><td>10:45 AM</td><td>Rithvik Kumar</td><td>Velammal</td><td>Entry Payment</td><td><span class="adm-badge-paid">Paid</span></td></tr>
-          <tr><td>11:02 AM</td><td>Priya Nair</td><td>DAV School</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>`;
+        loadDemoData();
+      }
+    }
+
+    function loadDemoData() {
+      document.getElementById('adm-participants').textContent = '142';
+      document.getElementById('adm-revenue').textContent      = '₹35,500';
+      document.getElementById('adm-schools').textContent      = '12';
+      document.getElementById('adm-fillrate').textContent     = '64%';
+      document.getElementById('adm-activity-body').innerHTML = `
+        <tr><td>10:32 AM</td><td>Aanya Sharma</td><td>Velammal</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>
+        <tr><td>10:45 AM</td><td>Rithvik Kumar</td><td>Velammal</td><td>Entry Payment</td><td><span class="adm-badge-paid">Paid</span></td></tr>
+        <tr><td>11:02 AM</td><td>Priya Nair</td><td>DAV School</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>`;
+    }
+
+    let allWorkshops = [];
+
+    function openWsModal(e) {
+      if (e) e.preventDefault();
+      document.getElementById('ws-modal').classList.add('show');
+      loadWorkshops();
+    }
+
+    function closeWsModal() {
+      document.getElementById('ws-modal').classList.remove('show');
+      hideWsForm();
+    }
+
+    function showAddWsForm() {
+      document.getElementById('ws-id').value = '';
+      document.getElementById('ws-name').value = '';
+      document.getElementById('ws-desc').value = '';
+      document.getElementById('ws-type').value = 'paid';
+      document.getElementById('ws-capacity').value = '40';
+      document.getElementById('ws-min-grade').value = '4';
+      document.getElementById('ws-max-grade').value = '12';
+      document.getElementById('ws-form').style.display = 'block';
+    }
+
+    function hideWsForm() {
+      document.getElementById('ws-form').style.display = 'none';
+      document.getElementById('ws-form').reset();
+    }
+
+    async function loadWorkshops() {
+      try {
+        const res = await fetch(ADMIN_API + '?action=list_workshops&admin_id=' + aid);
+        const data = await res.json();
+        if (data.success) {
+          allWorkshops = data.data.workshops || [];
+          renderWorkshopsTable();
+        } else {
+          loadMockWorkshops();
+        }
+      } catch (err) {
+        loadMockWorkshops();
+      }
+    }
+
+    function loadMockWorkshops() {
+      allWorkshops = [
+        { id: 1, name: 'Robotics & Automation', description: 'Build and programme your own robot using sensors...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 28 },
+        { id: 2, name: 'AI & Machine Learning Basics', description: 'Hands-on intro to ML concepts and data...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 30 },
+        { id: 3, name: 'Electronics & Circuits', description: 'Bread-board circuits, LEDs, and resistors...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 25, seats_taken: 8 },
+        { id: 4, name: 'Python for Beginners', description: 'From variables to loops to functions...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 30 },
+        { id: 5, name: 'Game Development with Scratch', description: 'Introduction to visual coding...', is_paid: 0, min_grade: 4, max_grade: 12, capacity: 30, seats_taken: 14 }
+      ];
+      renderWorkshopsTable();
+    }
+
+    function renderWorkshopsTable() {
+      const tbody = document.getElementById('ws-table-body');
+      tbody.innerHTML = allWorkshops.map(w => {
+        const typeLabel = w.is_paid ? 'PAID' : 'FREE';
+        const typeStyle = w.is_paid ? 'color: var(--tf-coral); font-weight:700;' : 'color: var(--tf-teal); font-weight:700;';
+        return `
+          <tr>
+            <td><strong>${w.name}</strong><br><small style="color:var(--tf-muted);">${w.description.substring(0,60)}...</small></td>
+            <td><span style="${typeStyle}">${typeLabel}</span></td>
+            <td>Grade ${w.min_grade}-${w.max_grade}</td>
+            <td>${w.capacity}</td>
+            <td>${w.seats_taken || 0}</td>
+            <td>
+              <button class="adm-action-btn-sm adm-edit-btn" onclick="editWorkshop(${w.id})">Edit</button>
+              <button class="adm-action-btn-sm adm-del-btn" onclick="deleteWorkshop(${w.id})">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function editWorkshop(id) {
+      const w = allWorkshops.find(x => x.id == id);
+      if (!w) return;
+      document.getElementById('ws-id').value = w.id;
+      document.getElementById('ws-name').value = w.name;
+      document.getElementById('ws-desc').value = w.description;
+      document.getElementById('ws-type').value = w.is_paid ? 'paid' : 'free';
+      document.getElementById('ws-capacity').value = w.capacity;
+      document.getElementById('ws-min-grade').value = w.min_grade || '4';
+      document.getElementById('ws-max-grade').value = w.max_grade || '12';
+      document.getElementById('ws-form').style.display = 'block';
+    }
+
+    async function saveWorkshop(e) {
+      e.preventDefault();
+      const id = document.getElementById('ws-id').value;
+      const name = document.getElementById('ws-name').value.trim();
+      const description = document.getElementById('ws-desc').value.trim();
+      const is_paid = document.getElementById('ws-type').value === 'paid';
+      const capacity = parseInt(document.getElementById('ws-capacity').value);
+      const min_grade = parseInt(document.getElementById('ws-min-grade').value);
+      const max_grade = parseInt(document.getElementById('ws-max-grade').value);
+
+      const payload = { id, name, description, is_paid, capacity, min_grade, max_grade };
+
+      try {
+        const res = await fetch(ADMIN_API + '?action=save_workshop&admin_id=' + aid, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Workshop saved successfully.');
+          hideWsForm();
+          loadWorkshops();
+        } else {
+          alert(data.message || 'Error saving workshop.');
+        }
+      } catch (err) {
+        if (id) {
+          const idx = allWorkshops.findIndex(x => x.id == id);
+          if (idx !== -1) {
+            allWorkshops[idx] = { ...allWorkshops[idx], name, description, is_paid: is_paid?1:0, capacity, min_grade, max_grade };
+          }
+        } else {
+          allWorkshops.push({
+            id: Date.now(), name, description, is_paid: is_paid?1:0, capacity, min_grade, max_grade, seats_taken: 0
+          });
+        }
+        alert('Saved successfully (Demo Mode).');
+        hideWsForm();
+        renderWorkshopsTable();
+      }
+    }
+
+    async function deleteWorkshop(id) {
+      if (!confirm('Are you sure you want to delete this workshop?')) return;
+
+      try {
+        const res = await fetch(ADMIN_API + '?action=delete_workshop&admin_id=' + aid, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Workshop deleted successfully.');
+          loadWorkshops();
+        } else {
+          alert(data.message || 'Error deleting workshop.');
+        }
+      } catch (err) {
+        allWorkshops = allWorkshops.filter(x => x.id != id);
+        alert('Deleted successfully (Demo Mode).');
+        renderWorkshopsTable();
       }
     }
 
     function logout() {
+      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
+        window.TechFestAccess.logout('../login/index.html');
+        return;
+      }
       localStorage.removeItem('tf_token');
       localStorage.removeItem('tf_participant_id');
-      window.location.href = '../login/';
+      localStorage.removeItem('tf_user_name');
+      localStorage.removeItem('tf_entry_paid');
+      localStorage.removeItem('tf_dev_bypass_active');
+      sessionStorage.clear();
+      window.location.href = '../login/index.html';
     }
 
     loadStats();
