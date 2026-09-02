@@ -374,8 +374,6 @@
       let orderId = urlParams.get('order_id') || 'ORDER_UNKNOWN';
       let wsId = urlParams.get('workshop') || '1';
 
-      const isBypass = urlParams.get('bypass') === 'true' || sessionStorage.getItem('tf_test_secret') || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
-
       const ws = WORKSHOPS[wsId] || WORKSHOPS['1'];
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
       let userName = currentUser ? currentUser.name : (localStorage.getItem('tf_user_name') || 'Registered Participant');
@@ -383,7 +381,7 @@
       let wsTitle = ws.name;
       let dateStr = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
-      // Fetch official registration from MySQL (Even for test mode, since it's now server-backed!)
+      // Fetch official registration from MySQL
       if (regId) {
         try {
           const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
@@ -411,20 +409,15 @@
         }
       }
 
-      document.getElementById('suc-participant-name').textContent = isBypass ? 'Tech Fest Developer (TF-DEV-BYPASS-001)' : userName;
+      document.getElementById('suc-participant-name').textContent = userName;
       document.getElementById('suc-workshop-name').textContent = wsTitle;
       document.getElementById('suc-workshop-schedule').textContent = ws.schedule;
       document.getElementById('suc-workshop-venue').textContent = ws.venue;
       document.getElementById('suc-reg-id').textContent = regId;
       document.getElementById('suc-pay-id').textContent = payId;
       document.getElementById('suc-order-id').textContent = orderId;
-      document.getElementById('suc-amount-paid').textContent = isBypass ? `${ws.fee} (Simulated)` : amountFormatted;
+      document.getElementById('suc-amount-paid').textContent = amountFormatted;
       document.getElementById('suc-date').textContent = dateStr;
-
-      if (isBypass) {
-        document.getElementById('suc-main-title').textContent = '⚡ Booking Confirmed (Bypass Mode)';
-        document.getElementById('suc-main-subtitle').textContent = 'Developer Bypass Mode simulated payment & confirmed seat reservation.';
-      }
     });
   </script>
 </body>

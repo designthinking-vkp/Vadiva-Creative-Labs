@@ -467,7 +467,6 @@
       currentWorkshop = WORKSHOPS[wsId] || WORKSHOPS['1'];
       currentParticipantId = regId;
 
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
 
       // Update UI components with defaults
@@ -478,7 +477,7 @@
       document.getElementById('pay-badge').className = 'pay-ws-badge ' + (currentWorkshop.is_paid ? 'paid' : 'free');
 
       const userDisplayName = currentUser ? currentUser.name : (localStorage.getItem('tf_user_name') || 'Registered Participant');
-      document.getElementById('pay-participant-name').textContent = isBypass ? 'Tech Fest Developer (TF-DEV-BYPASS-001)' : userDisplayName;
+      document.getElementById('pay-participant-name').textContent = userDisplayName;
 
       if (regId) {
         document.getElementById('pay-participant-id').textContent = regId;
@@ -489,10 +488,10 @@
       let formattedAmount = '₹' + amount;
       document.getElementById('pay-fee-item').textContent = formattedAmount;
       document.getElementById('pay-total-amount').textContent = formattedAmount;
-      document.getElementById('pay-btn-label').textContent = isBypass ? '⚡ Simulate Payment in Bypass Mode' : `Proceed to Secure Payment ${formattedAmount}`;
+      document.getElementById('pay-btn-label').textContent = `Proceed to Secure Payment ${formattedAmount}`;
 
       // Fetch official registration directly from Hostinger MySQL
-      if (regId && !isBypass) {
+      if (regId) {
         try {
           const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
           const data = await res.json();
@@ -538,18 +537,14 @@
       btn.innerHTML = '<span class="pay-spinner" style="width:16px; height:16px; border-width:2px; display:inline-block; margin:0 6px 0 0; vertical-align:middle;"></span> Connecting to Secure Gateway…';
       isPaymentInProgress = true;
 
-      const isBypass = sessionStorage.getItem('tf_test_secret') || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
-      const testSecret = sessionStorage.getItem('tf_test_secret') || '';
-
-      // --- LIVE PRODUCTION (OR SERVER-SIDE TEST) FLOW ---
+      // --- LIVE PRODUCTION FLOW ---
       try {
         const orderPayload = {
           participant_id: currentParticipantId || '0',
           workshop_id: currentWorkshop.id,
           user_id: localStorage.getItem('tf_participant_id') || '0',
           tier: 'OTHER',
-          name: document.getElementById('pay-participant-name').textContent,
-          test_secret: testSecret
+          name: document.getElementById('pay-participant-name').textContent
         };
 
         const createRes = await fetch(`${PAYMENT_API}?action=create_order`, {
@@ -652,19 +647,7 @@
           window.location.href = `../payment-failed/index.html?registration_id=${encodeURIComponent(currentParticipantId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&reason=${encodeURIComponent(response.error.description || 'Payment failed')}&order_id=${encodeURIComponent(order_id)}`;
         });
 
-        if (isBypass && order_id.startsWith('TEST_ORDER_')) {
-          // Immediately simulate successful Razorpay callback
-          setTimeout(() => {
-            rzpOptions.handler({
-              razorpay_order_id: order_id,
-              razorpay_payment_id: 'TEST_PAY_' + Date.now(),
-              razorpay_signature: 'TEST_SIGNATURE_BYPASS'
-            });
-          }, 800);
-        } else {
-          rzp.open();
-        }
-
+        rzp.open();
       } catch (err) {
         isPaymentInProgress = false;
         btn.disabled = false;

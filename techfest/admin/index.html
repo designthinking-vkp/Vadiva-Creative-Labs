@@ -476,11 +476,10 @@
   <script src="../../assets/techfest-core.js"></script>
   <script>
     const ADMIN_API = '../../techfest-api/admin.php';
-    const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
-    const aid = isBypass ? 'TF-DEV-BYPASS-001' : localStorage.getItem('tf_participant_id');
+    const aid = localStorage.getItem('tf_participant_id');
 
     async function loadStats() {
-      if (!aid && !isBypass) {
+      if (!aid) {
         window.location.href = '../login/index.html';
         return;
       }

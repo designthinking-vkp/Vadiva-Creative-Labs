@@ -292,74 +292,6 @@
     .reg-footer-link a { color: var(--tf-teal); font-weight: 700; text-decoration: none; }
     .reg-footer-link a:hover { text-decoration: underline; }
 
-    /* Test Bypass Panel (Hidden by default, for testing/QA only) */
-    .test-bypass-panel {
-      display: block;
-      margin-top: 1.5rem;
-      padding: 1.25rem;
-      background: rgba(245, 158, 11, 0.08) !important;
-      border: 1.5px dashed rgba(245, 158, 11, 0.45) !important;
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-    @keyframes testBypassFadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .test-bypass-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.6rem;
-    }
-    .test-bypass-title {
-      font-size: 0.84rem;
-      font-weight: 800;
-      color: #d97706;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .test-bypass-badge {
-      background: rgba(245, 158, 11, 0.2);
-      color: #b45309;
-      font-size: 0.68rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      font-weight: 700;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-    .test-bypass-btn {
-      width: 100%;
-      height: 42px;
-      background: #d97706 !important;
-      color: #ffffff !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      font-family: var(--font-heading);
-      font-size: 0.9rem;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25) !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-top: 0.75rem;
-    }
-    .test-bypass-btn:hover {
-      background: #b45309 !important;
-      transform: translateY(-1.5px);
-      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35) !important;
-    }
-    .test-bypass-btn:disabled {
-      background: var(--tf-border) !important;
-      color: var(--tf-muted) !important;
-      cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
     @media (max-width: 520px) {
       .reg-card { padding: 2.25rem 1.25rem; }
     }
@@ -597,21 +529,6 @@
           </button>
         </form>
 
-        <!-- Testing / QA Demo Panel -->
-        <div class="test-bypass-panel" id="test-bypass-panel">
-          <div class="test-bypass-header">
-            <span class="test-bypass-title">🧪 QA / Test Mode</span>
-            <span class="test-bypass-badge">Dev &amp; Testing Only</span>
-          </div>
-          <p class="reg-hint" style="margin-bottom:0.75rem;">Fast-track account setup and demo auto-fill for testing.</p>
-          <button type="button" class="test-bypass-btn" id="load-demo-btn" onclick="loadDemoData()" style="margin-bottom: 0.5rem; background:#0ea5e9 !important; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;">
-            📝 Load Demo Data
-          </button>
-          <button type="button" class="test-bypass-btn" id="test-bypass-btn" onclick="executeTestBypass()">
-            ⚡ Quick Test Register
-          </button>
-        </div>
-
         <div class="reg-footer-link">
           Already have an account? <a href="../login/index.html" id="reg-login-link">Login</a>
         </div>
@@ -720,7 +637,6 @@
       const authenticated = checkIsAuthenticated();
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
       const pid = currentUser ? currentUser.id : (localStorage.getItem('tf_participant_id') || 'TF-2026-USER');
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
 
       // Hide all view containers initially
       document.getElementById('view-auth-booking').style.display = 'none';
@@ -762,12 +678,12 @@
         if (authenticated) {
           // Scenario: Authenticated user with workshop selected -> show Booking / Confirmation
           document.getElementById('reg-main-title').textContent = 'Confirm Registration';
-          document.getElementById('reg-main-subtitle').textContent = isBypass ? '⚡ Developer Bypass Mode (Simulated Registration & Payment)' : 'Complete your workshop seat reservation';
-          document.getElementById('auth-pid-display').textContent = isBypass ? 'Tech Fest Developer (TF-DEV-BYPASS-001)' : pid;
+          document.getElementById('reg-main-subtitle').textContent = 'Complete your workshop seat reservation';
+          document.getElementById('auth-pid-display').textContent = pid;
           document.getElementById('auth-summary-ws-name').textContent = workshop.name;
           document.getElementById('auth-summary-eligibility').textContent = workshop.grades;
-          document.getElementById('auth-summary-fee').textContent = isBypass ? workshop.fee_label + ' (Simulated Free in Bypass)' : workshop.fee_label;
-          document.getElementById('confirm-booking-btn').textContent = isBypass ? '⚡ Confirm Registration (Bypass Payment) \u2192' : (workshop.is_paid ? 'Confirm & Proceed to Payment \u2192' : 'Confirm Free Workshop Seat \u2192');
+          document.getElementById('auth-summary-fee').textContent = workshop.fee_label;
+          document.getElementById('confirm-booking-btn').textContent = workshop.is_paid ? 'Confirm & Proceed to Payment \u2192' : 'Confirm Free Workshop Seat \u2192';
           document.getElementById('view-auth-booking').style.display = 'block';
         } else {
           // Scenario: Unauthenticated user with workshop selected -> show Account Creation with preserved workshop context
@@ -780,7 +696,7 @@
         if (authenticated) {
           // Scenario: Authenticated user navigated directly to register without workshop
           document.getElementById('reg-main-title').textContent = 'Vadiva Tech Fest 3.0';
-          document.getElementById('reg-main-subtitle').textContent = isBypass ? 'Developer Bypass Active: Choose a workshop to test booking' : 'Select a workshop to continue';
+          document.getElementById('reg-main-subtitle').textContent = 'Select a workshop to continue';
           document.getElementById('view-no-workshop-auth').style.display = 'block';
         } else {
           // Scenario: Unauthenticated user navigated directly to register
@@ -797,12 +713,9 @@
       btn.disabled = true;
       btn.textContent = 'Saving registration…';
 
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
       const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
 
-      // For Centralized Test Mode, we still go through standard DB route!
-      // The backend (registration.php) handles the mock order, and the payment page handles the mock payment.
       try {
         const payload = {
           student_name: localStorage.getItem('tf_user_name') || currentUser?.name || 'Participant',
@@ -813,8 +726,7 @@
           class_name: localStorage.getItem('tf_class_name') || '',
           city: localStorage.getItem('tf_city') || 'Chennai',
           user_id: pid,
-          workshop_id: currentSelectedWorkshop.id,
-          test_secret: sessionStorage.getItem('tf_test_secret') || ''
+          workshop_id: currentSelectedWorkshop.id
         };
 
         const res = await fetch('../../techfest-api/registration.php?action=create_registration', {
@@ -943,69 +855,16 @@
           btn.textContent = 'Create Account & Continue';
         }
       } catch (err) {
-        console.warn('Backend server offline during registration, activating simulation mode:', err);
-        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
-        handlePostAuthTransition(mockId);
+        console.error('Error during registration:', err);
+        showAlert('Unable to complete registration. Please check your network connection and try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Create Account & Continue';
       }
     });
 
-    // Check URL parameters and init on DOM load
-    window.addEventListener('DOMContentLoaded', async function() {
+    window.addEventListener('DOMContentLoaded', function() {
       initPage();
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const isTestUrl = urlParams.has('test') || urlParams.has('test_mode') || urlParams.get('mode') === 'test';
-
-      if (isTestUrl) {
-        const panel = document.getElementById('test-bypass-panel');
-        if (panel) panel.classList.add('show');
-      }
-
-      // Auto-unhide the Test Demo Panel if server is in TEST_MODE
-      try {
-        const configRes = await fetch(API + '?action=get_config');
-        if (configRes.ok) {
-          const configData = await configRes.json();
-          if (configData.success && configData.data && configData.data.test_mode) {
-            const panel = document.getElementById('test-bypass-panel');
-            if (panel) panel.classList.add('show');
-          }
-        }
-      } catch (e) {
-        console.warn('Could not fetch server test mode config:', e);
-      }
     });
-
-    // Keyboard shortcut to toggle Test Panel: Ctrl + Shift + T
-    window.addEventListener('keydown', function(e) {
-      if (e.ctrlKey && e.shiftKey && (e.key === 'T' || e.key === 't')) {
-        e.preventDefault();
-        const panel = document.getElementById('test-bypass-panel');
-        if (panel) {
-          panel.classList.toggle('show');
-        }
-      }
-    });
-
-    function loadDemoData() {
-      document.getElementById('student_name').value = 'Demo Student';
-      document.getElementById('parent_name').value = 'Demo Parent';
-      document.getElementById('school_name').value = 'Demo School';
-      document.getElementById('class_name').value = '12';
-      document.getElementById('city').value = 'Chennai';
-      document.getElementById('mobile').value = '9000000000';
-      document.getElementById('email').value = 'demo@example.invalid';
-      document.getElementById('password').value = 'DeveloperTest123!';
-      document.getElementById('confirm-password').value = 'DeveloperTest123!';
-    }
-
-    async function executeTestBypass() {
-      loadDemoData();
-      const submitBtn = document.getElementById('reg-submit-btn');
-      if (submitBtn) {
-        submitBtn.click();
-      }
-    }
   </script>
 </body>
 </html>

@@ -368,49 +368,11 @@
     };
 
     async function loadDashboard() {
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
-      const pid = currentUser ? currentUser.id : (localStorage.getItem('tf_participant_id') || '');
+      const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
 
-      if (!pid && !isBypass) {
+      if (!pid) {
         window.location.href = '../login/index.html';
-        return;
-      }
-
-      if (isBypass) {
-        document.getElementById('dash-avatar').textContent = 'TD';
-        document.getElementById('dash-name').textContent   = 'Tech Fest Developer';
-        document.getElementById('dash-pid').textContent    = 'Participant ID: TF-DEV-BYPASS-001';
-
-        const badgesEl = document.getElementById('dash-badges');
-        badgesEl.innerHTML = `
-          <span class="dash-badge dash-badge-band" style="background:#f59e0b;color:#000;font-weight:800;">DEVELOPER BYPASS</span>
-          <span class="dash-badge dash-badge-green">Green Pass (Simulated)</span>
-          <span class="dash-badge dash-badge-blue">Entry Paid (Simulated)</span>
-        `;
-
-        // Check if there are any test registrations recorded in dev mode
-        try {
-          const testRegJson = localStorage.getItem('tf_test_registration_data');
-          if (testRegJson) {
-            const testReg = JSON.parse(testRegJson);
-            const wsTab = document.getElementById('tab-workshops');
-            if (wsTab && testReg.workshopName) {
-              wsTab.innerHTML = `
-                <div style="background:rgba(255,255,255,0.72); backdrop-filter:blur(12px); border:1px solid rgba(12,184,192,0.25); border-radius:14px; padding:1.5rem; margin-bottom:1rem;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-                    <span style="background:rgba(16,185,129,0.15); color:#059669; font-weight:800; font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:20px;">CONFIRMED (TEST)</span>
-                    <span style="font-size:0.8rem; color:var(--tf-muted);">Order: ${testReg.payment ? testReg.payment.transactionId : 'BYPASS-TEST'}</span>
-                  </div>
-                  <h3 style="margin:0 0 0.5rem; color:var(--tf-deep); font-size:1.15rem;">${testReg.workshopName}</h3>
-                  <p style="margin:0 0 1rem; color:var(--tf-muted); font-size:0.85rem;">Registered via Developer Bypass Mode on ${new Date(testReg.timestamp || Date.now()).toLocaleDateString()}.</p>
-                  <a href="../workshops/index.html" class="dash-browse-btn" style="display:inline-block; text-decoration:none;">Browse More Workshops</a>
-                </div>
-              `;
-            }
-          }
-        } catch(e) {}
-
         return;
       }
 

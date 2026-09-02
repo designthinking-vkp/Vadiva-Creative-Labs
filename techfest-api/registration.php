@@ -176,34 +176,40 @@ if ($action === 'create_registration') {
             $regCount = (int)($stmt->fetch()['cnt'] ?? 0) + 1;
             $registrationNumber = sprintf('VF-2026-%06d', $regCount);
 
-            // Developer Test Mode Checks
-            $isTest = isTestModeActive($input['test_secret'] ?? '');
-            if ($isTest) {
-                $registrationNumber = sprintf('TF26-TEST-%06d', $regCount);
+            // 3. Insert Registration Record (Schema-safe)
+            $regCols = [];
+            try {
+                $rColQuery = $pdo->query("SHOW COLUMNS FROM registrations");
+                while ($rRow = $rColQuery->fetch(PDO::FETCH_ASSOC)) {
+                    $regCols[] = strtolower($rRow['Field']);
+                }
+            } catch (Exception $e) {
+                $regCols = ['id', 'registration_number', 'student_id', 'user_id', 'total_amount', 'currency', 'registration_status'];
             }
-            $env = $isTest ? 'test' : 'production';
-            $paymentMode = $isTest ? 'TEST_MODE' : 'razorpay';
-            $otpStatus = $isTest ? 'TEST_VERIFIED' : 'VERIFIED';
-            $isTestInt = $isTest ? 1 : 0;
 
-            // 3. Insert Registration Record
-            $stmt = $pdo->prepare('
-                INSERT INTO registrations (
-                    registration_number, student_id, user_id, total_amount, currency, registration_status,
-                    is_test_registration, environment, payment_mode, otp_status, test_session_id
-                ) VALUES (?, ?, ?, ?, "INR", "pending_payment", ?, ?, ?, ?, ?)
-            ');
-            $stmt->execute([
-                $registrationNumber,
-                $studentId,
-                $userId > 0 ? $userId : null,
-                $totalAmount,
-                $isTestInt,
-                $env,
-                $paymentMode,
-                $otpStatus,
-                $isTest ? ($input['test_secret'] ?? 'TEST') : null
-            ]);
+            $rCols = ['registration_number', 'student_id', 'user_id', 'total_amount', 'currency', 'registration_status'];
+            $rVals = [$registrationNumber, $studentId, ($userId > 0 ? $userId : null), $totalAmount, 'INR', 'pending_payment'];
+
+            if (in_array('is_test_registration', $regCols)) {
+                $rCols[] = 'is_test_registration';
+                $rVals[] = 0;
+            }
+            if (in_array('environment', $regCols)) {
+                $rCols[] = 'environment';
+                $rVals[] = 'production';
+            }
+            if (in_array('payment_mode', $regCols)) {
+                $rCols[] = 'payment_mode';
+                $rVals[] = 'razorpay';
+            }
+            if (in_array('otp_status', $regCols)) {
+                $rCols[] = 'otp_status';
+                $rVals[] = 'VERIFIED';
+            }
+
+            $placeholders = array_fill(0, count($rVals), '?');
+            $stmt = $pdo->prepare('INSERT INTO registrations (' . implode(', ', $rCols) . ') VALUES (' . implode(', ', $placeholders) . ')');
+            $stmt->execute($rVals);
             $registrationId = $pdo->lastInsertId();
 
             // 4. Insert Workshop Snapshots

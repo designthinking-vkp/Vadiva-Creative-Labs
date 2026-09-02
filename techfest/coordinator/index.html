@@ -278,8 +278,7 @@
   <script src="../../assets/techfest-core.js"></script>
   <script>
     const API = '../../techfest-api/coordinator.php';
-    const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
-    const cid = isBypass ? 'TF-DEV-BYPASS-001' : localStorage.getItem('tf_participant_id');
+    const cid = localStorage.getItem('tf_participant_id');
 
     function toggleUpload() { document.getElementById('upload-area').classList.toggle('show'); }
     function handleCSV(input) {
@@ -302,7 +301,7 @@
     }
 
     async function loadCoordinatorData() {
-      if (!cid && !isBypass) {
+      if (!cid) {
         window.location.href = '../login/index.html';
         return;
       }

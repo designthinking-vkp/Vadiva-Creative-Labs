@@ -343,16 +343,8 @@
     window.addEventListener('DOMContentLoaded', function() {
       const pendingWs = getPendingWorkshopContext();
       const regLink = document.getElementById('lgn-register-link');
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
 
-      if (isBypass) {
-        const banner = document.getElementById('lgn-context-banner');
-        if (banner) {
-          document.getElementById('lgn-context-title').textContent = '🧪 Developer Bypass Mode Active';
-          document.getElementById('lgn-context-desc').textContent = 'Authentication is simulated as Tech Fest Developer (TF-DEV-BYPASS-001). Click Login to continue.';
-          banner.style.display = 'block';
-        }
-      } else if (pendingWs) {
+      if (pendingWs) {
         // Update Register link so user doesn't lose context if they switch to signup
         if (regLink) {
           regLink.href = '../register/index.html?workshop=' + encodeURIComponent(pendingWs);
@@ -371,12 +363,6 @@
 
     document.getElementById('lgn-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-
-      if (window.TechFestAccess && window.TechFestAccess.isBypassMode()) {
-        showAlert('Developer Bypass: Authenticated as TF-DEV-BYPASS-001. Redirecting…', 'success');
-        setTimeout(handlePostLoginRedirect, 500);
-        return;
-      }
 
       const loginId  = document.getElementById('login_id').value.trim();
       const password = document.getElementById('password').value;
@@ -409,12 +395,10 @@
           btn.textContent = 'Login';
         }
       } catch (err) {
-        console.warn('Backend unavailable during login, activating dev simulation fallback:', err);
-        showAlert('Login successful (Offline Simulation Mode)! Redirecting…', 'success');
-        const mockId = loginId.startsWith('TF-') ? loginId : ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
-        localStorage.setItem('tf_token', 'sim-token-' + Date.now());
-        localStorage.setItem('tf_participant_id', mockId);
-        setTimeout(handlePostLoginRedirect, 800);
+        console.error('Error during login:', err);
+        showAlert('Unable to connect to server. Please check your network connection and try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Login';
       }
     });
 

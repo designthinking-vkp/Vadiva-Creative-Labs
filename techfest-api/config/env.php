@@ -24,15 +24,12 @@ if (!function_exists('tf_env')) {
 // App Environment
 defined('TF_APP_ENV') or define('TF_APP_ENV', tf_env('APP_ENV', 'production'));
 
-// Centralized Developer Test Mode Config
-$rawTestMode = tf_env('TEST_MODE', true);
-defined('TEST_MODE') or define('TEST_MODE', ($rawTestMode === 'true' || $rawTestMode === true || $rawTestMode === '1'));
-defined('TEST_MODE_SECRET') or define('TEST_MODE_SECRET', tf_env('TEST_MODE_SECRET', 'VADIVA_TEST_BYPASS_2026'));
-defined('TEST_OTP') or define('TEST_OTP', tf_env('TEST_OTP', '123456'));
+// Testing mode is completely disabled in production
+defined('TEST_MODE') or define('TEST_MODE', false);
 
 if (!function_exists('isTestModeActive')) {
     function isTestModeActive($clientSecret = '') {
-        return TEST_MODE && !empty($clientSecret) && hash_equals(TEST_MODE_SECRET, (string)$clientSecret);
+        return false;
     }
 }
 

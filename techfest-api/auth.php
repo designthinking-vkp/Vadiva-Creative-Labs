@@ -13,14 +13,14 @@ function sendResponse($success, $message, $data = []) {
 
 if ($action === 'get_config') {
     sendResponse(true, 'Config loaded', [
-        'test_mode' => defined('TEST_MODE') ? TEST_MODE : false,
+        'test_mode' => false,
         'app_env' => defined('TF_APP_ENV') ? TF_APP_ENV : 'production'
     ]);
 }
-// Direct user registration using User ID / Mobile / Email & Password (No OTP)
+// Direct user registration using User ID / Mobile / Email & Password (No OTP, Production Mode)
 elseif ($action === 'register' || $action === 'register_verify' || $action === 'register_request') {
-    $mobile      = trim($input['mobile'] ?? $input['phone'] ?? $input['login_id'] ?? '');
-    $email       = trim($input['email'] ?? '');
+    $mobile      = trim($input['mobile'] ?? $input['phone'] ?? $input['student_phone'] ?? $input['login_id'] ?? '');
+    $email       = trim($input['email'] ?? $input['student_email'] ?? '');
     $password    = $input['password'] ?? '';
     $studentName = trim($input['student_name'] ?? $input['name'] ?? $input['full_name'] ?? '');
     $parentName  = trim($input['parent_name'] ?? $input['guardian_name'] ?? '');
@@ -38,13 +38,49 @@ elseif ($action === 'register' || $action === 'register_verify' || $action === '
         sendResponse(false, 'Mobile number or User ID / Email is required.');
     }
 
+    // Inspect columns of users table for maximum database compatibility
+    $userCols = [];
+    if ($pdo) {
+        try {
+            $colQuery = $pdo->query("SHOW COLUMNS FROM users");
+            while ($row = $colQuery->fetch(PDO::FETCH_ASSOC)) {
+                $userCols[] = strtolower($row['Field']);
+            }
+        } catch (Exception $e) {
+            $userCols = ['id', 'email', 'phone', 'password_hash', 'role'];
+        }
+    }
+
+    $hasPhoneCol = in_array('phone', $userCols);
+    $hasMobileCol = in_array('mobile', $userCols);
+
     // Duplicate account check
     if ($pdo) {
         try {
-            $stmt = $pdo->prepare('SELECT id FROM users WHERE (mobile = ? AND mobile != "") OR (email = ? AND email != "")');
-            $stmt->execute([$mobile, $email]);
-            if ($stmt->fetch()) {
-                sendResponse(false, 'An account with this Mobile Number or Email already exists. Please log in.');
+            $checkSql = 'SELECT id FROM users WHERE ';
+            $checkParams = [];
+            $clauses = [];
+
+            if ($hasPhoneCol && !empty($mobile)) {
+                $clauses[] = 'phone = ?';
+                $checkParams[] = $mobile;
+            }
+            if ($hasMobileCol && !empty($mobile)) {
+                $clauses[] = 'mobile = ?';
+                $checkParams[] = $mobile;
+            }
+            if (!empty($email)) {
+                $clauses[] = 'email = ?';
+                $checkParams[] = $email;
+            }
+
+            if (!empty($clauses)) {
+                $checkSql .= '(' . implode(' OR ', $clauses) . ') LIMIT 1';
+                $stmt = $pdo->prepare($checkSql);
+                $stmt->execute($checkParams);
+                if ($stmt->fetch()) {
+                    sendResponse(false, 'An account with this Mobile Number or Email already exists. Please log in.');
+                }
             }
         } catch (PDOException $e) {
             // Ignore if check fails
@@ -53,35 +89,97 @@ elseif ($action === 'register' || $action === 'register_verify' || $action === '
 
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     $userId = 0;
-    $participantId = '';
+    $studentId = 0;
     $token = bin2hex(random_bytes(32));
 
     try {
         if ($pdo) {
-            $stmt = $pdo->prepare('INSERT INTO users (mobile, email, password_hash, role, mobile_verified_at, email_verified_at) VALUES (?, ?, ?, "participant", NOW(), NOW())');
-            $stmt->execute([$mobile ?: null, $email ?: null, $passwordHash]);
+            // Build dynamic INSERT query based on actual existing columns in users table
+            $insertCols = [];
+            $insertPlaceholders = [];
+            $insertVals = [];
+
+            if (in_array('email', $userCols) && !empty($email)) {
+                $insertCols[] = 'email';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = $email;
+            } elseif (in_array('email', $userCols)) {
+                // Generate a dummy email if column is NOT NULL and empty
+                $insertCols[] = 'email';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = $mobile ? ($mobile . '@vadiva.temp') : ('user_' . time() . '@vadiva.temp');
+            }
+
+            if ($hasPhoneCol) {
+                $insertCols[] = 'phone';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = $mobile ?: null;
+            }
+            if ($hasMobileCol) {
+                $insertCols[] = 'mobile';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = $mobile ?: null;
+            }
+
+            if (in_array('password_hash', $userCols)) {
+                $insertCols[] = 'password_hash';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = $passwordHash;
+            }
+
+            if (in_array('role', $userCols)) {
+                $insertCols[] = 'role';
+                $insertPlaceholders[] = '?';
+                $insertVals[] = 'student';
+            }
+
+            if (in_array('is_active', $userCols)) {
+                $insertCols[] = 'is_active';
+                $insertPlaceholders[] = '1';
+            }
+            if (in_array('mobile_verified_at', $userCols)) {
+                $insertCols[] = 'mobile_verified_at';
+                $insertPlaceholders[] = 'NOW()';
+            }
+            if (in_array('email_verified_at', $userCols)) {
+                $insertCols[] = 'email_verified_at';
+                $insertPlaceholders[] = 'NOW()';
+            }
+
+            $sql = 'INSERT INTO users (' . implode(', ', $insertCols) . ') VALUES (' . implode(', ', $insertPlaceholders) . ')';
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($insertVals);
             $userId = (int)$pdo->lastInsertId();
-            $participantId = sprintf('TF-2026-%04d', $userId);
 
-            // Create participant profile record if student details provided
-            if (!empty($studentName) && $userId > 0) {
-                try {
-                    // Check or insert school
-                    $schoolId = 1;
-                    if (!empty($schoolName)) {
-                        $sStmt = $pdo->prepare('SELECT id FROM schools WHERE name = ? LIMIT 1');
-                        $sStmt->execute([$schoolName]);
-                        $sRow = $sStmt->fetch();
-                        if ($sRow) {
-                            $schoolId = $sRow['id'];
-                        } else {
-                            $tier = (stripos($schoolName, 'velammal') !== false) ? 'VELAMMAL' : 'OTHER';
-                            $insSchool = $pdo->prepare('INSERT INTO schools (name, tier, city) VALUES (?, ?, ?)');
-                            $insSchool->execute([$schoolName, $tier, $city]);
-                            $schoolId = (int)$pdo->lastInsertId();
-                        }
-                    }
+            // Insert into students table (matching Hostinger schema)
+            try {
+                $sStmt = $pdo->prepare('
+                    INSERT INTO students (
+                        user_id, student_name, student_phone, student_email,
+                        parent_name, parent_phone, school_name, class_name, city, state
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "Tamil Nadu")
+                ');
+                $sStmt->execute([
+                    $userId > 0 ? $userId : null,
+                    $studentName ?: 'Student',
+                    $mobile ?: null,
+                    $email ?: null,
+                    $parentName ?: 'Parent',
+                    $mobile ?: null,
+                    $schoolName ?: 'School',
+                    $className ?: '10',
+                    $city ?: 'Chennai'
+                ]);
+                $studentId = (int)$pdo->lastInsertId();
+            } catch (Exception $stErr) {
+                // Students table insert error fallback
+            }
 
+            // Also insert into participants if table exists
+            try {
+                $pCheck = $pdo->query("SHOW TABLES LIKE 'participants'");
+                if ($pCheck && $pCheck->rowCount() > 0) {
+                    $participantPublicId = sprintf('TF-2026-%04d', $userId);
                     $gradeNum = (int)preg_replace('/[^0-9]/', '', $className) ?: 6;
                     $band = ($gradeNum <= 5) ? 'JUNIOR' : (($gradeNum <= 8) ? 'INTERMEDIATE' : 'SENIOR');
                     $tier = (stripos($schoolName, 'velammal') !== false) ? 'VELAMMAL' : 'OTHER';
@@ -90,31 +188,33 @@ elseif ($action === 'register' || $action === 'register_verify' || $action === '
                         INSERT INTO participants (
                             user_id, school_id, participant_id, full_name, grade, date_of_birth,
                             guardian_name, guardian_mobile, band, tier, entry_status
-                        ) VALUES (?, ?, ?, ?, ?, "2010-01-01", ?, ?, ?, ?, "PENDING")
+                        ) VALUES (?, 1, ?, ?, ?, "2010-01-01", ?, ?, ?, ?, "PENDING")
                     ');
                     $pStmt->execute([
                         $userId,
-                        $schoolId,
-                        $participantId,
-                        $studentName,
+                        $participantPublicId,
+                        $studentName ?: 'Student',
                         $gradeNum,
                         $parentName ?: 'Parent',
                         $mobile ?: '9999999999',
                         $band,
                         $tier
                     ]);
-                } catch (Exception $pErr) {
-                    // Participant table insert error fallback
                 }
+            } catch (Exception $pErr) {
+                // Ignore participants fallback
             }
         } else {
             $userId = mt_rand(1000, 9999);
-            $participantId = 'TF-2026-' . $userId;
+            $studentId = $userId;
         }
+
+        $publicId = sprintf('TF-2026-%04d', $userId);
 
         sendResponse(true, 'Account registered successfully.', [
             'user_id' => $userId,
-            'participant_id' => $participantId ?: ('TF-2026-' . $userId),
+            'student_id' => $studentId ?: $userId,
+            'participant_id' => $publicId,
             'token' => $token,
             'name' => $studentName ?: $mobile
         ]);
@@ -124,7 +224,7 @@ elseif ($action === 'register' || $action === 'register_verify' || $action === '
 }
 // Login using User ID / Mobile / Email & Password
 elseif ($action === 'login') {
-    $loginId  = trim($input['login_id'] ?? $input['user_id'] ?? $input['mobile'] ?? $input['email'] ?? '');
+    $loginId  = trim($input['login_id'] ?? $input['user_id'] ?? $input['mobile'] ?? $input['phone'] ?? $input['email'] ?? '');
     $password = $input['password'] ?? '';
 
     if (empty($loginId) || empty($password)) {
@@ -133,28 +233,68 @@ elseif ($action === 'login') {
 
     if ($pdo) {
         try {
-            $stmt = $pdo->prepare('
-                SELECT u.id, u.mobile, u.email, u.password_hash, u.role,
-                       p.id AS participant_db_id, p.participant_id, p.full_name
-                FROM users u
-                LEFT JOIN participants p ON p.user_id = u.id
-                WHERE u.mobile = ? OR u.email = ? OR u.id = ? OR p.participant_id = ?
-                LIMIT 1
-            ');
-            $stmt->execute([$loginId, $loginId, is_numeric($loginId) ? (int)$loginId : 0, $loginId]);
-            $user = $stmt->fetch();
+            // Detect user columns
+            $userCols = [];
+            try {
+                $colQuery = $pdo->query("SHOW COLUMNS FROM users");
+                while ($row = $colQuery->fetch(PDO::FETCH_ASSOC)) {
+                    $userCols[] = strtolower($row['Field']);
+                }
+            } catch (Exception $e) {
+                $userCols = ['id', 'email', 'phone', 'password_hash', 'role'];
+            }
 
-            if ($user && password_verify($password, $user['password_hash'])) {
-                $token = bin2hex(random_bytes(32));
-                $participantId = $user['participant_id'] ?: ($user['participant_db_id'] ? sprintf('TF-2026-%04d', $user['participant_db_id']) : sprintf('TF-2026-%04d', $user['id']));
+            $hasPhoneCol = in_array('phone', $userCols);
+            $hasMobileCol = in_array('mobile', $userCols);
 
-                sendResponse(true, 'Login successful.', [
-                    'user_id' => $user['id'],
-                    'role' => $user['role'],
-                    'token' => $token,
-                    'participant_id' => $participantId,
-                    'name' => $user['full_name'] ?: ($user['mobile'] ?: $user['email'])
-                ]);
+            $searchClauses = [];
+            $searchParams = [];
+
+            if (in_array('email', $userCols)) {
+                $searchClauses[] = 'email = ?';
+                $searchParams[] = $loginId;
+            }
+            if ($hasPhoneCol) {
+                $searchClauses[] = 'phone = ?';
+                $searchParams[] = $loginId;
+            }
+            if ($hasMobileCol) {
+                $searchClauses[] = 'mobile = ?';
+                $searchParams[] = $loginId;
+            }
+            if (is_numeric($loginId)) {
+                $searchClauses[] = 'id = ?';
+                $searchParams[] = (int)$loginId;
+            }
+
+            if (!empty($searchClauses)) {
+                $stmt = $pdo->prepare('SELECT * FROM users WHERE ' . implode(' OR ', $searchClauses) . ' LIMIT 1');
+                $stmt->execute($searchParams);
+                $user = $stmt->fetch();
+
+                if ($user && password_verify($password, $user['password_hash'])) {
+                    $token = bin2hex(random_bytes(32));
+                    $publicId = sprintf('TF-2026-%04d', $user['id']);
+                    $userName = $user['email'] ?? ($user['phone'] ?? ($user['mobile'] ?? $publicId));
+
+                    // Fetch student name if available
+                    try {
+                        $sStmt = $pdo->prepare('SELECT student_name, id FROM students WHERE user_id = ? LIMIT 1');
+                        $sStmt->execute([$user['id']]);
+                        $st = $sStmt->fetch();
+                        if ($st && !empty($st['student_name'])) {
+                            $userName = $st['student_name'];
+                        }
+                    } catch (Exception $sErr) {}
+
+                    sendResponse(true, 'Login successful.', [
+                        'user_id' => $user['id'],
+                        'role' => $user['role'] ?? 'student',
+                        'token' => $token,
+                        'participant_id' => $publicId,
+                        'name' => $userName
+                    ]);
+                }
             }
         } catch (PDOException $e) {
             sendResponse(false, 'Database error during login.');
