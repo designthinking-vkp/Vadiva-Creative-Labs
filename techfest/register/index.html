@@ -298,7 +298,7 @@
 
     /* Test Bypass Panel (Hidden by default, for testing/QA only) */
     .test-bypass-panel {
-      display: none;
+      display: block;
       margin-top: 1.5rem;
       padding: 1.25rem;
       background: rgba(245, 158, 11, 0.08) !important;
@@ -306,10 +306,6 @@
       border-radius: 12px;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-    }
-    .test-bypass-panel.show {
-      display: block;
-      animation: testBypassFadeIn 0.3s ease-out;
     }
     @keyframes testBypassFadeIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -1092,8 +1088,41 @@
     });
 
     // Check URL parameters and init on DOM load
-    window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', async function() {
       initPage();
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const isTestUrl = urlParams.has('test') || urlParams.has('test_mode') || urlParams.get('mode') === 'test';
+
+      if (isTestUrl) {
+        const panel = document.getElementById('test-bypass-panel');
+        if (panel) panel.classList.add('show');
+      }
+
+      // Auto-unhide the Test Bypass Panel if server is in TEST_MODE
+      try {
+        const configRes = await fetch(API + '?action=get_config');
+        if (configRes.ok) {
+          const configData = await configRes.json();
+          if (configData.success && configData.data && configData.data.test_mode) {
+            const panel = document.getElementById('test-bypass-panel');
+            if (panel) panel.classList.add('show');
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch server test mode config:', e);
+      }
+    });
+
+    // Keyboard shortcut to toggle Test Panel: Ctrl + Shift + T
+    window.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'T' || e.key === 't')) {
+        e.preventDefault();
+        const panel = document.getElementById('test-bypass-panel');
+        if (panel) {
+          panel.classList.toggle('show');
+        }
+      }
     });
 
     function loadDemoData() {
