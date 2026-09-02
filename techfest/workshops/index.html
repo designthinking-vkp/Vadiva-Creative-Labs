@@ -4,33 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workshops | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Explore 10 Paid Masterclasses and 10 Free Hands-on Workshops with real-time live seat tracking for Vadiva Tech Fest 3.0.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
-    /* ── Workshops Styles (prefix: ws-) ── */
+    /* ── Workshops Catalogue Specific Styles ── */
     .ws-page {
-      background: transparent !important;
-      min-height: 70vh;
-      padding: 3rem 1.25rem 5rem;
+      background: transparent;
+      min-height: 75vh;
+      padding: clamp(2rem, 4vw, 3.5rem) 0 6rem;
     }
-    .ws-inner { max-width: 1200px; margin: 0 auto; }
     
     .ws-page-header {
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
       text-align: left;
     }
     .ws-breadcrumbs {
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       color: var(--tf-teal);
       text-transform: uppercase;
       margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+    .ws-breadcrumbs a {
+      color: var(--tf-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .ws-breadcrumbs a:hover { color: var(--tf-teal); }
+    
     .ws-page-header h1 {
       font-family: var(--font-heading);
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 900;
       color: var(--tf-deep);
       margin: 0 0 0.5rem;
@@ -38,8 +51,36 @@
     }
     .ws-page-header p { 
       color: var(--tf-muted); 
-      font-size: 1rem; 
+      font-size: 1.05rem; 
+      max-width: 680px;
       margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Live Real-Time Banner Pill */
+    .ws-live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.75rem;
+    }
+    .ws-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 8px #10b981;
+      animation: tfPulse 1.8s infinite;
     }
     
     /* Tabs & Filters Bar */
@@ -52,8 +93,8 @@
       flex-wrap: wrap;
     }
     .ws-tabs {
-      background: rgba(12, 60, 76, 0.05) !important;
-      border: 1px solid rgba(12, 184, 192, 0.12) !important;
+      background: rgba(12, 60, 76, 0.06) !important;
+      border: 1px solid rgba(12, 184, 192, 0.15) !important;
       border-radius: 12px !important;
       padding: 4px !important;
       display: inline-flex !important;
@@ -65,7 +106,7 @@
       background: transparent !important;
       border: none !important;
       border-radius: 9px !important;
-      padding: 0.55rem 1.25rem !important;
+      padding: 0.6rem 1.4rem !important;
       font-family: var(--font-heading) !important;
       font-weight: 700 !important;
       font-size: 0.9rem !important;
@@ -76,9 +117,9 @@
       margin-bottom: 0 !important;
     }
     .ws-tab.active { 
-      background: rgba(255, 255, 255, 0.95) !important;
+      background: rgba(255, 255, 255, 0.98) !important;
       color: var(--tf-deep) !important;
-      box-shadow: 0 3px 10px rgba(7, 25, 33, 0.05) !important;
+      box-shadow: 0 3px 12px rgba(7, 25, 33, 0.08) !important;
     }
     
     .ws-filters {
@@ -87,33 +128,30 @@
       flex-wrap: wrap;
       justify-content: flex-end;
       flex: 1;
-      min-width: 280px;
+      min-width: 260px;
     }
     .ws-filter-select {
       width: auto !important;
-      min-width: 155px !important;
-      flex: 1 1 auto !important;
+      min-width: 150px !important;
       padding: 0.55rem 1.25rem !important;
       border-radius: 10px !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
-      background-color: rgba(255, 255, 255, 0.65) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.22) !important;
+      background-color: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(8px) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
       font-family: var(--font-heading) !important;
-      font-size: 0.82rem !important;
+      font-size: 0.85rem !important;
       font-weight: 700 !important;
-      color: var(--tf-text) !important;
+      color: var(--tf-deep) !important;
       cursor: pointer !important;
       outline: none !important;
       transition: all 0.2s ease !important;
     }
     .ws-filter-select:focus {
       border-color: var(--tf-teal) !important;
-      background-color: rgba(255, 255, 255, 0.92) !important;
       box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15) !important;
     }
 
-    /* Catalogue Grid */
+    /* Workshop Card Grid */
     .ws-tab-content { display: none; }
     .ws-tab-content.active { 
       display: grid; 
@@ -123,676 +161,643 @@
 
     /* Workshop Card */
     .ws-card {
-      background: rgba(255, 255, 255, 0.72) !important;
+      background: rgba(255, 255, 255, 0.88) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
+      border: 1px solid rgba(226, 232, 240, 0.9) !important;
+      border-radius: var(--tf-radius-xl) !important;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      min-height: 480px;
+      box-shadow: var(--tf-shadow-md) !important;
+      transition: var(--tf-transition);
+      position: relative;
     }
     .ws-card:hover { 
-      transform: translateY(-4px) !important;
+      transform: translateY(-6px) !important;
       border-color: rgba(12, 184, 192, 0.35) !important;
-      box-shadow: 0 16px 40px 0 rgba(7, 25, 33, 0.08) !important;
+      box-shadow: var(--tf-shadow-lg) !important;
+      background: #ffffff !important;
     }
     
-    /* Image Section */
     .ws-card-image-wrap {
       position: relative;
       width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 190px;
       overflow: hidden;
-      background: rgba(12, 60, 76, 0.08);
+      background: #0f172a;
     }
     .ws-card-image {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.25s ease-out;
+      transition: transform 0.4s ease;
     }
     .ws-card:hover .ws-card-image {
-      transform: scale(1.025);
+      transform: scale(1.05);
     }
     
-    .ws-card-image-wrap::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 3px;
-      background: var(--tf-teal);
-      opacity: 0.5;
-    }
-    
-    /* Small status badge over image */
-    .ws-free-badge {
+    .ws-card-badge-row {
       position: absolute;
       top: 12px;
+      left: 12px;
       right: 12px;
-      background: rgba(239, 68, 68, 0.9) !important;
-      color: var(--tf-white);
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.25rem 0.65rem !important;
-      border-radius: 20px !important;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      border: 1px solid rgba(255,255,255,0.2) !important;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       z-index: 2;
     }
-    .ws-free-badge.free {
-      background: rgba(12, 184, 192, 0.9) !important;
+    .ws-badge-type {
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+    .ws-badge-type.paid {
+      background: rgba(239, 68, 68, 0.9);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+    }
+    .ws-badge-type.free {
+      background: rgba(16, 185, 129, 0.9);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+    }
+    .ws-grade-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.75);
+      color: #ffffff;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
     }
 
-    /* Content Area */
     .ws-card-content {
-      padding: 1.25rem 1.5rem 1.5rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
-      gap: 0.75rem;
+      flex: 1;
+      gap: 1rem;
     }
-    
-    .ws-card h3 {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      font-weight: 800;
+    .ws-card-content h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
       color: var(--tf-deep);
       margin: 0;
       line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 2.9rem;
     }
-    .ws-card p {
-      font-size: 0.82rem;
-      color: var(--tf-muted);
-      line-height: 1.45;
+    .ws-card-desc {
+      font-size: 0.88rem;
+      color: var(--tf-text-secondary);
+      line-height: 1.55;
       margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 3.5rem;
+      flex: 1;
     }
 
-    /* Pricing Metadata Row */
+    /* Binding Constraint Chip */
+    .ws-constraint-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--tf-muted);
+      background: rgba(12, 60, 76, 0.04);
+      border: 1px dashed rgba(12, 60, 76, 0.15);
+      border-radius: 6px;
+      padding: 0.35rem 0.65rem;
+    }
+
+    /* Pricing Row */
     .ws-prices {
       display: flex;
-      gap: 1.25rem;
-      border-top: 1px dashed rgba(12, 184, 192, 0.15) !important;
-      padding-top: 0.75rem;
-      margin-top: auto;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--tf-border);
     }
-    .ws-price-item { 
-      font-size: 0.65rem; 
-      color: var(--tf-muted); 
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 700;
+    .ws-price-item {
+      font-size: 0.82rem;
+      color: var(--tf-text-secondary);
     }
-    .ws-price-item strong { 
-      color: var(--tf-deep); 
-      font-size: 0.9rem;
-      font-weight: 700; 
-      display: block;
-      margin-top: 0.15rem;
+    .ws-price-item strong {
+      font-size: 0.95rem;
+      color: var(--tf-deep);
+      margin-left: 2px;
     }
 
-    /* Capacity Progress Bar */
+    /* Batch Selector Dropdown */
+    .ws-batch-select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ws-batch-select-lbl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tf-muted);
+    }
+    .ws-batch-select {
+      width: 100% !important;
+      padding: 0.45rem 0.75rem !important;
+      border-radius: 8px !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.2) !important;
+      background: #f8fafc !important;
+      font-size: 0.82rem !important;
+      font-family: var(--font-body) !important;
+      color: var(--tf-text) !important;
+      outline: none !important;
+      cursor: pointer;
+    }
+
+    /* Real-Time Capacity Bar */
     .ws-capacity {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 6px;
     }
     .ws-cap-label {
-      font-size: 0.7rem;
-      color: var(--tf-muted);
       display: flex;
       justify-content: space-between;
+      font-size: 0.78rem;
       font-weight: 600;
+      color: var(--tf-text);
     }
+    .ws-cap-status {
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .ws-cap-status.available { color: #059669; }
+    .ws-cap-status.getting-full { color: #0284c7; }
+    .ws-cap-status.near-full { color: #d97706; }
+    .ws-cap-status.full { color: #dc2626; }
+
     .ws-cap-bar {
-      height: 4px;
-      background: rgba(12, 60, 76, 0.08) !important;
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
       border-radius: 999px;
       overflow: hidden;
+      position: relative;
     }
     .ws-cap-fill {
       height: 100%;
-      background: var(--tf-teal);
+      background: #10b981;
       border-radius: 999px;
-      transition: width 0.4s ease;
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
     }
-    .ws-cap-fill.getting-full { background: var(--tf-yellow) !important; }
-    .ws-cap-fill.near-full { background: var(--tf-coral) !important; }
+    .ws-cap-fill.getting-full { background: #0ea5e9; }
+    .ws-cap-fill.near-full { background: #f59e0b; }
+    .ws-cap-fill.full { background: #ef4444; }
 
-    /* Action Block */
     .ws-card-action {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      margin-top: 0.25rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
     }
     .ws-book-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 40px;
-      background-color: var(--tf-deep) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      gap: 8px;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--tf-deep);
+      color: #ffffff !important;
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: 0.88rem;
-      border-radius: 10px;
+      font-size: 0.9rem;
+      border-radius: var(--tf-radius-md);
       text-decoration: none;
+      transition: var(--tf-transition);
+      border: none;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(12, 60, 76, 0.15) !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      width: 100%;
-      box-sizing: border-box;
     }
-    .ws-book-btn:hover { 
-      background-color: #072733 !important; 
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(12, 60, 76, 0.2) !important;
+    .ws-book-btn:hover {
+      background: var(--tf-teal);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(12, 184, 192, 0.3);
     }
-    .ws-book-btn.need-register {
-      background-color: rgba(12, 184, 192, 0.08) !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.3) !important;
-      color: var(--tf-teal) !important;
-      box-shadow: none !important;
-    }
-    .ws-book-btn.need-register:hover {
-      background-color: var(--tf-teal) !important;
-      color: var(--tf-white) !important;
-      border-color: var(--tf-teal) !important;
-      box-shadow: 0 6px 16px rgba(12, 184, 192, 0.25) !important;
-    }
-    .ws-locked-msg {
-      font-size: 0.7rem;
-      color: var(--tf-muted);
-      text-align: center;
-      margin: 0;
+    .ws-book-btn:disabled, .ws-book-btn.disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
-    @media (max-width: 900px) {
-      .ws-tab-content.active { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    @media (max-width: 1080px) {
+      .ws-tab-content.active { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .ws-tab-content.active { grid-template-columns: 1fr; }
-      .ws-tabs-container { justify-content: center; }
+      .ws-tabs-container { flex-direction: column; align-items: stretch; }
+      .ws-filters { justify-content: stretch; }
+      .ws-filter-select { width: 100% !important; }
     }
   </style>
 </head>
-<body class="techfest-theme bg-light-atmosphere">
+<body class="techfest-theme">
 
-  <!-- Header -->
+  <!-- ============================================================
+       FLOATING FROSTED NAVIGATION
+       ============================================================ -->
   <header class="site-header">
-    <div class="container header-container">
+    <div class="header-container">
       <div class="logo">
-        <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        <a href="../../index.html" aria-label="Vadiva Home">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech Fest 3.0 Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
         </a>
       </div>
-      <nav class="main-nav">
+      
+      <nav class="main-nav" id="mainNav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
           <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../services.html">Services</a></li>
           <li><a href="../../activity-center.html">Activity Center</a></li>
           <li><a href="../../events.html">Events &amp; Camps</a></li>
           <li><a href="../../parents.html">Parent Hub</a></li>
           <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
+          <li><a href="../index.html">Tech Fest</a></li>
+          <li><a href="./index.html" class="active">Workshops</a></li>
           <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li class="mobile-only-nav-item"><a href="../register/index.html">Register</a></li>
           <li><a href="../../contact.html">Contact</a></li>
         </ul>
       </nav>
+
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn header-payment-btn">Sign In</a>
+        <a href="../register/index.html" class="btn header-cta">Register Now</a>
+        <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
       </div>
     </div>
   </header>
 
-  <div class="ws-page">
-    <div class="ws-inner">
+  <!-- ============================================================
+       WORKSHOPS CATALOGUE & REAL-TIME CAPACITY MATRIX
+       ============================================================ -->
+  <main class="ws-page">
+    <div class="container">
+      
+      <!-- Page Header -->
       <div class="ws-page-header">
-        <div class="ws-breadcrumbs">TECH FEST 3.0 &nbsp;/&nbsp; WORKSHOPS</div>
-        <h1>Workshops that make ideas real.</h1>
-        <p>Explore hands-on, expert-led sessions in technology, art, design, and innovation.</p>
+        <div class="ws-breadcrumbs">
+          <a href="../index.html">Tech Fest 3.0</a>
+          <span>&rsaquo;</span>
+          <span>Workshops &amp; Masterclasses</span>
+        </div>
+        <h1>Workshops &amp; Masterclasses</h1>
+        <p>
+          Explore hands-on masterclasses across robotics, AI, aerospace, coding, and design. Choose your batch track and reserve seats in real time.
+        </p>
+        <div class="ws-live-status-pill">
+          <span class="ws-live-dot"></span>
+          <span>Live Real-Time Seat Availability Sync Active</span>
+        </div>
       </div>
 
+      <!-- Tabs & Filters -->
       <div class="ws-tabs-container">
         <div class="ws-tabs">
-          <button class="ws-tab active" onclick="switchWsTab('paid', this)">Paid Workshops</button>
-          <button class="ws-tab" onclick="switchWsTab('free', this)">Free Workshops</button>
+          <button class="ws-tab active" id="tab-paid-btn" onclick="switchCatalogueTab('paid')">
+            10 Paid Masterclasses
+          </button>
+          <button class="ws-tab" id="tab-free-btn" onclick="switchCatalogueTab('free')">
+            10 Free Workshops (20 Sessions)
+          </button>
+        </div>
+
+        <div class="ws-filters">
+          <select class="ws-filter-select" id="gradeFilter" onchange="applyFilters()">
+            <option value="all">All Grades (4–12)</option>
+            <option value="junior">Junior (Grades 4–6)</option>
+            <option value="intermediate">Intermediate (Grades 7–9)</option>
+            <option value="senior">Senior (Grades 10–12)</option>
+          </select>
+
+          <select class="ws-filter-select" id="availabilityFilter" onchange="applyFilters()">
+            <option value="all">All Statuses</option>
+            <option value="available">Available Only</option>
+            <option value="fast">Filling Fast</option>
+          </select>
         </div>
       </div>
 
-        <!-- Paid Workshops -->
-        <div class="ws-tab-content active" id="ws-paid">
+      <!-- Paid Workshops Catalogue Grid (Dynamic Live Container) -->
+      <div class="ws-tab-content active" id="ws-paid-grid">
+        <!-- Rendered dynamically by TechFestCapacity real-time engine -->
+      </div>
 
-          <div class="ws-card" data-workshop-id="1">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80" alt="Robotics & Automation thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Robotics &amp; Automation</h3>
-              <p class="ws-card-desc">Build and programme your own robot using sensors, servos and a micro-controller.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;400</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;550</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>28 / 40</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:70%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=1" class="ws-book-btn need-register" onclick="selectWorkshop(event, '1')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
+      <!-- Free Workshops Catalogue Grid (Dynamic Live Container) -->
+      <div class="ws-tab-content" id="ws-free-grid">
+        <!-- Rendered dynamically by TechFestCapacity real-time engine -->
+      </div>
 
-          <div class="ws-card" data-workshop-id="2">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=600&q=80" alt="AI & ML Basics thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>AI &amp; Machine Learning Basics</h3>
-              <p class="ws-card-desc">Hands-on intro to ML concepts — train your first model using real datasets.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;400</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;550</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>35 / 40</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill near-full" style="width:87.5%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=2" class="ws-book-btn need-register" onclick="selectWorkshop(event, '2')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
+    </div>
+  </main>
 
-          <div class="ws-card" data-workshop-id="3">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="3D Printing & Design thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>3D Printing &amp; Design</h3>
-              <p class="ws-card-desc">Design objects in Tinkercad and print them on a live 3D printer.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;350</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;500</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>12 / 30</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:40%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=3" class="ws-book-btn need-register" onclick="selectWorkshop(event, '3')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="4">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80" alt="Game Development thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Game Development</h3>
-              <p class="ws-card-desc">Create your first 2D game from scratch using Unity — no prior experience needed.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;400</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;550</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>20 / 35</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill getting-full" style="width:57%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=4" class="ws-book-btn need-register" onclick="selectWorkshop(event, '4')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="5">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80" alt="Electronics & Circuits thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Electronics &amp; Circuits</h3>
-              <p class="ws-card-desc">Bread-board circuits, LEDs, resistors, and basic electronics for young engineers.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;300</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;450</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>8 / 25</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:32%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=5" class="ws-book-btn need-register" onclick="selectWorkshop(event, '5')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="6">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80" alt="Python for Beginners thumbnail" class="ws-card-image">
-              <span class="ws-free-badge">PAID</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Python for Beginners</h3>
-              <p class="ws-card-desc">From variables to loops to functions — your first real Python coding workshop.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Velammal <strong>&#8377;350</strong></div>
-                <div class="ws-price-item">Others <strong>&#8377;500</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>30 / 40</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill getting-full" style="width:75%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=6" class="ws-book-btn need-register" onclick="selectWorkshop(event, '6')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
+  <!-- ============================================================
+       SITE FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech &amp; Design Fest Logo" style="height: 36px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <p>Vadiva Creative Labs transforms how young minds cultivate systems thinking, computational creativity, and real-world innovation.</p>
         </div>
-
-        <!-- Free Workshops -->
-        <div class="ws-tab-content" id="ws-free">
-
-          <div class="ws-card" data-workshop-id="7">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80" alt="Design Thinking Bootcamp thumbnail" class="ws-card-image">
-              <span class="ws-free-badge free">FREE</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Design Thinking Bootcamp</h3>
-              <p class="ws-card-desc">Learn the 5-stage design thinking process through fun group activities and challenges.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee <strong>FREE</strong></div>
-                <div class="ws-price-item">Tech Fest Entry <strong>&#8377;250</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>45 / 80</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill getting-full" style="width:56.25%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=7" class="ws-book-btn need-register" onclick="selectWorkshop(event, '7')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="8">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80" alt="Sketching & Visual Thinking thumbnail" class="ws-card-image">
-              <span class="ws-free-badge free">FREE</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Sketching &amp; Visual Thinking</h3>
-              <p class="ws-card-desc">Turn your ideas into visual stories — no artistic talent required.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee <strong>FREE</strong></div>
-                <div class="ws-price-item">Tech Fest Entry <strong>&#8377;250</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>22 / 60</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:36.66%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=8" class="ws-book-btn need-register" onclick="selectWorkshop(event, '8')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="9">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80" alt="Public Speaking & Pitching thumbnail" class="ws-card-image">
-              <span class="ws-free-badge free">FREE</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Public Speaking &amp; Pitching</h3>
-              <p class="ws-card-desc">Build confidence, structure your message, and pitch your idea like a pro.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee <strong>FREE</strong></div>
-                <div class="ws-price-item">Tech Fest Entry <strong>&#8377;250</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>38 / 60</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill getting-full" style="width:63.33%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=9" class="ws-book-btn need-register" onclick="selectWorkshop(event, '9')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="10">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80" alt="Science Demonstrations thumbnail" class="ws-card-image">
-              <span class="ws-free-badge free">FREE</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Science Demonstrations</h3>
-              <p class="ws-card-desc">Mind-blowing live science experiments exploring chemistry, physics, and biology.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee <strong>FREE</strong></div>
-                <div class="ws-price-item">Tech Fest Entry <strong>&#8377;250</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>15 / 100</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill" style="width:15%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=10" class="ws-book-btn need-register" onclick="selectWorkshop(event, '10')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ws-card" data-workshop-id="11">
-            <div class="ws-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Student Entrepreneurship thumbnail" class="ws-card-image">
-              <span class="ws-free-badge free">FREE</span>
-            </div>
-            <div class="ws-card-content">
-              <h3>Student Entrepreneurship</h3>
-              <p class="ws-card-desc">Discover how to validate your idea, find your market, and build your first mini-business plan.</p>
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee <strong>FREE</strong></div>
-                <div class="ws-price-item">Tech Fest Entry <strong>&#8377;250</strong></div>
-              </div>
-              <div class="ws-capacity">
-                <div class="ws-cap-label"><span>Seats filled</span><span>50 / 80</span></div>
-                <div class="ws-cap-bar"><div class="ws-cap-fill getting-full" style="width:62.5%"></div></div>
-              </div>
-              <div class="ws-card-action">
-                <a href="../register/index.html?workshop=11" class="ws-book-btn need-register" onclick="selectWorkshop(event, '11')">Select Workshop &rarr;</a>
-                <p class="ws-locked-msg">&#8377;250 entry fee applies</p>
-              </div>
-            </div>
-          </div>
-
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
         </div>
-
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Location:</strong> Chennai, Tamil Nadu, India</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Vadiva Tech Fest 3.0 &middot; Slot &amp; Capacity Model Active</p>
       </div>
     </div>
+  </footer>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-col footer-about">
-            <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-            <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-          </div>
-          <div class="footer-col footer-links">
-            <h4>Enterprise</h4>
-            <ul>
-              <li><a href="../../index.html">Home</a></li>
-              <li><a href="../../about.html">About Us</a></li>
-              <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-              <li><a href="../../contact.html">Partner Inquiries</a></li>
-            </ul>
-          </div>
-          <div class="footer-col footer-links">
-            <h4>Ecosystem</h4>
-            <ul>
-              <li><a href="../../activity-center.html">Activity Center</a></li>
-              <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-              <li><a href="../../parents.html">Parent Hub</a></li>
-              <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-            </ul>
-          </div>
-          <div class="footer-col footer-contact">
-            <h4>Connect</h4>
-            <div class="footer-contact-info">
-              <p><strong>Hotline:</strong> +91 72009 81134</p>
-              <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-              <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+  <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
+  <script>
+    let currentTab = 'paid';
+    let selectedBatches = {}; // workshopId -> batch_code
+
+    function switchCatalogueTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-paid-btn').classList.toggle('active', tab === 'paid');
+      document.getElementById('tab-free-btn').classList.toggle('active', tab === 'free');
+      document.getElementById('ws-paid-grid').classList.toggle('active', tab === 'paid');
+      document.getElementById('ws-free-grid').classList.toggle('active', tab === 'free');
+      applyFilters();
+    }
+
+    function onBatchChange(workshopId, batchCode) {
+      selectedBatches[workshopId] = batchCode;
+      if (window.TechFestCapacity) {
+        renderPaidWorkshops(window.TechFestCapacity.getPaidWorkshops());
+      }
+    }
+
+    function renderPaidWorkshops(workshops) {
+      const container = document.getElementById('ws-paid-grid');
+      if (!container || !workshops) return;
+
+      const gradeVal = document.getElementById('gradeFilter') ? document.getElementById('gradeFilter').value : 'all';
+      const availVal = document.getElementById('availabilityFilter') ? document.getElementById('availabilityFilter').value : 'all';
+
+      let html = '';
+      workshops.forEach(ws => {
+        // Filter checks
+        if (gradeVal === 'junior' && ws.max_grade < 4) return;
+        if (gradeVal === 'senior' && ws.min_grade > 10) return;
+
+        const currentBatchCode = selectedBatches[ws.id] || (ws.batches[0] ? ws.batches[0].batch_code : 'B-01');
+        const activeBatch = ws.batches.find(b => b.batch_code === currentBatchCode) || ws.batches[0];
+
+        const cap = activeBatch.capacity;
+        const filled = activeBatch.seats_filled + (activeBatch.soft_locks || 0);
+        const available = Math.max(0, cap - filled);
+        const pct = Math.min(100, Math.round((filled / cap) * 100));
+
+        let statusClass = 'available';
+        let statusLabel = 'Seats Available';
+        if (filled >= cap) {
+          statusClass = 'full';
+          statusLabel = 'Sold Out (Waitlist)';
+        } else if (pct >= 80) {
+          statusClass = 'near-full';
+          statusLabel = 'Filling Fast';
+        } else if (pct >= 50) {
+          statusClass = 'getting-full';
+          statusLabel = 'Active Booking';
+        }
+
+        if (availVal === 'available' && statusClass === 'full') return;
+        if (availVal === 'fast' && statusClass !== 'near-full') return;
+
+        let batchOptionsHtml = '';
+        ws.batches.forEach(b => {
+          const bFilled = b.seats_filled + (b.soft_locks || 0);
+          const bAvail = Math.max(0, b.capacity - bFilled);
+          const isSelected = b.batch_code === currentBatchCode ? 'selected' : '';
+          batchOptionsHtml += `<option value="${b.batch_code}" ${isSelected}>${b.batch_code}: ${b.slots} (${bAvail} left)</option>`;
+        });
+
+        html += `
+          <div class="ws-card" data-workshop-id="${ws.id}">
+            <div class="ws-card-image-wrap">
+              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy">
+              <div class="ws-card-badge-row">
+                <span class="ws-badge-type paid">PAID MASTERCLASS</span>
+                <span class="ws-grade-badge">Grades ${ws.min_grade}–${ws.max_grade}</span>
+              </div>
+            </div>
+            
+            <div class="ws-card-content">
+              <h3>${ws.name}</h3>
+              <p class="ws-card-desc">${ws.short_desc}</p>
+              
+              <div class="ws-constraint-chip" title="Capacity Binding Constraint">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Constraint: ${ws.binding_constraint}</span>
+              </div>
+
+              <div class="ws-prices">
+                <div class="ws-price-item">Velammal: <strong>&#8377;${ws.price_velammal}</strong></div>
+                <div class="ws-price-item">Others: <strong>&#8377;${ws.price_other}</strong></div>
+              </div>
+
+              <div class="ws-batch-select-wrap">
+                <label class="ws-batch-select-lbl">Select 2-Day Batch Slot:</label>
+                <select class="ws-batch-select" onchange="onBatchChange(${ws.id}, this.value)">
+                  ${batchOptionsHtml}
+                </select>
+              </div>
+
+              <div class="ws-capacity">
+                <div class="ws-cap-label">
+                  <span>Live Seats Filled: <strong>${filled} / ${cap}</strong></span>
+                  <span class="ws-cap-status ${statusClass}">${statusLabel}</span>
+                </div>
+                <div class="ws-cap-bar">
+                  <div class="ws-cap-fill ${statusClass}" style="width: ${pct}%"></div>
+                </div>
+              </div>
+
+              <div class="ws-card-action">
+                <a href="../register/index.html?workshop=${ws.id}&batch=${currentBatchCode}" 
+                   class="ws-book-btn ${available <= 0 ? 'disabled' : ''}" 
+                   onclick="handleWorkshopSelect(event, ${ws.id}, '${currentBatchCode}')">
+                  ${available <= 0 ? 'Join Waitlist &rarr;' : 'Select Masterclass &rarr;'}
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-          <p>Designed with ❤️ by VKP Team</p>
-        </div>
-      </div>
-    </footer>
+        `;
+      });
 
-    <script src="../../main.js"></script>
-    <script src="../../assets/techfest-core.js"></script>
-    <script>
-      function switchWsTab(tab, btn) {
-        document.querySelectorAll('.ws-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.ws-tab-content').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('ws-' + tab).classList.add('active');
-      }
+      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: var(--tf-muted); padding: 3rem;">No workshops matching criteria.</p>';
+    }
 
-      function selectWorkshop(event, workshopId) {
-        if (event) event.preventDefault();
-        
-        const wsId = String(workshopId).trim();
-        if (!wsId) return;
+    function renderFreeWorkshops(workshops) {
+      const container = document.getElementById('ws-free-grid');
+      if (!container || !workshops) return;
 
-        // Persist pending workshop in sessionStorage
-        sessionStorage.setItem('tf_pending_workshop', wsId);
-        sessionStorage.setItem('tf_post_login_redirect', '../register/index.html?workshop=' + encodeURIComponent(wsId));
+      let html = '';
+      workshops.forEach(ws => {
+        const s1 = ws.sessions[0];
+        const s2 = ws.sessions[1];
 
-        const access = window.TechFestAccess ? window.TechFestAccess.checkAccess('workshop', { workshopId: wsId }) : null;
-        const isAuth = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
+        const totalCap = ws.public_capacity * 2;
+        const totalFilled = (s1.seats_filled + (s1.soft_locks || 0)) + (s2.seats_filled + (s2.soft_locks || 0));
+        const pct = Math.min(100, Math.round((totalFilled / totalCap) * 100));
 
-        if (isAuth) {
-          // Authenticated or Developer Bypass -> go straight to workshop registration
-          window.location.href = '../register/index.html?workshop=' + encodeURIComponent(wsId);
-        } else {
-          // Not logged in -> show popup message
-          showLoginPopup(wsId);
+        let statusClass = 'available';
+        let statusLabel = 'Seats Available';
+        if (totalFilled >= totalCap) {
+          statusClass = 'full';
+          statusLabel = 'Full';
+        } else if (pct >= 80) {
+          statusClass = 'near-full';
+          statusLabel = 'Filling Fast';
+        } else if (pct >= 50) {
+          statusClass = 'getting-full';
+          statusLabel = 'Active';
         }
-      }
 
-      function showLoginPopup(wsId) {
-        // Create modal overlay
-        const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); opacity:0; transition:opacity 0.3s ease;';
-        
-        // Create modal box
-        const modal = document.createElement('div');
-        modal.style.cssText = 'background:#fff; padding:2rem; border-radius:12px; max-width:400px; width:90%; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); transform:translateY(20px); transition:transform 0.3s ease;';
-        
-        modal.innerHTML = `
-          <div style="width:50px; height:50px; border-radius:50%; background:rgba(12, 184, 192, 0.1); color:var(--tf-teal); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          </div>
-          <h3 style="font-family:var(--font-heading); color:var(--tf-deep); font-size:1.25rem; margin-bottom:0.5rem;">Authentication Required</h3>
-          <p style="color:var(--tf-muted); font-size:0.95rem; margin-bottom:1.5rem; line-height:1.5;">Please login or create an account to select and reserve your workshop seat.</p>
-          <div style="display:flex; gap:0.75rem; justify-content:center;">
-            <button id="popup-cancel-btn" style="padding:0.6rem 1.2rem; border:1px solid #cbd5e1; background:transparent; border-radius:6px; color:#475569; font-weight:600; cursor:pointer;">Cancel</button>
-            <button id="popup-login-btn" style="padding:0.6rem 1.2rem; border:none; background:var(--tf-teal); border-radius:6px; color:#fff; font-weight:700; cursor:pointer; box-shadow:0 4px 10px rgba(12, 184, 192, 0.25);">Login / Register</button>
+        html += `
+          <div class="ws-card" data-workshop-id="${ws.id}">
+            <div class="ws-card-image-wrap">
+              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy">
+              <div class="ws-card-badge-row">
+                <span class="ws-badge-type free">FREE WITH PASS</span>
+                <span class="ws-grade-badge">Grades ${ws.min_grade}–${ws.max_grade}</span>
+              </div>
+            </div>
+            
+            <div class="ws-card-content">
+              <h3>${ws.name}</h3>
+              <p class="ws-card-desc">${ws.short_desc}</p>
+              
+              <div class="ws-constraint-chip">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                <span>2 Repeats &middot; ${s1.theatre_name || s1.theatre} &amp; ${s2.theatre_name || s2.theatre}</span>
+              </div>
+
+              <div class="ws-prices">
+                <div class="ws-price-item">Workshop Fee: <strong>FREE</strong></div>
+                <div class="ws-price-item">Festival Entry: <strong>&#8377;250</strong></div>
+              </div>
+
+              <div style="font-size: 0.8rem; color: var(--tf-text); background: #f1f5f9; padding: 0.5rem 0.75rem; border-radius: 8px;">
+                <div>&bull; Session 1: <strong>${s1.time}</strong> (${s1.theatre_name || s1.theatre})</div>
+                <div>&bull; Session 2: <strong>${s2.time}</strong> (${s2.theatre_name || s2.theatre})</div>
+              </div>
+
+              <div class="ws-capacity">
+                <div class="ws-cap-label">
+                  <span>Live Theatre Seats: <strong>${totalFilled} / ${totalCap}</strong></span>
+                  <span class="ws-cap-status ${statusClass}">${statusLabel}</span>
+                </div>
+                <div class="ws-cap-bar">
+                  <div class="ws-cap-fill ${statusClass}" style="width: ${pct}%"></div>
+                </div>
+              </div>
+
+              <div class="ws-card-action">
+                <a href="../register/index.html?workshop=${ws.id}" 
+                   class="ws-book-btn" 
+                   onclick="handleWorkshopSelect(event, ${ws.id}, 'FREE')">
+                  Select Free Session &rarr;
+                </a>
+              </div>
+            </div>
           </div>
         `;
-        
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-        
-        // Animate in
-        requestAnimationFrame(() => {
-          overlay.style.opacity = '1';
-          modal.style.transform = 'translateY(0)';
-        });
-        
-        // Handle clicks
-        document.getElementById('popup-cancel-btn').addEventListener('click', () => {
-          overlay.style.opacity = '0';
-          modal.style.transform = 'translateY(20px)';
-          setTimeout(() => overlay.remove(), 300);
-        });
-        
-        document.getElementById('popup-login-btn').addEventListener('click', () => {
-          overlay.style.opacity = '0';
-          setTimeout(() => {
-            window.location.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId);
-          }, 200);
+      });
+
+      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: var(--tf-muted); padding: 3rem;">No workshops matching criteria.</p>';
+    }
+
+    function applyFilters() {
+      if (window.TechFestCapacity) {
+        if (currentTab === 'paid') {
+          renderPaidWorkshops(window.TechFestCapacity.getPaidWorkshops());
+        } else {
+          renderFreeWorkshops(window.TechFestCapacity.getFreeWorkshops());
+        }
+      }
+    }
+
+    function handleWorkshopSelect(event, workshopId, batchCode) {
+      if (event) event.preventDefault();
+      const wsId = String(workshopId).trim();
+      if (!wsId) return;
+
+      sessionStorage.setItem('tf_pending_workshop', wsId);
+      sessionStorage.setItem('tf_pending_batch', batchCode);
+      
+      const targetUrl = '../register/index.html?workshop=' + encodeURIComponent(wsId) + '&batch=' + encodeURIComponent(batchCode);
+      sessionStorage.setItem('tf_post_login_redirect', targetUrl);
+
+      const isAuth = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
+      if (isAuth) {
+        window.location.href = targetUrl;
+      } else {
+        window.location.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId) + '&batch=' + encodeURIComponent(batchCode);
+      }
+    }
+
+    // Subscribe to real-time capacity engine
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.TechFestCapacity) {
+        window.TechFestCapacity.subscribe((data) => {
+          renderPaidWorkshops(data.paidWorkshops);
+          renderFreeWorkshops(data.freeWorkshops);
         });
       }
 
-      // Update button text and styles based on auth state
-      document.addEventListener('DOMContentLoaded', function() {
-        const loggedIn = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
-        document.querySelectorAll('.ws-card').forEach(card => {
-          const btn = card.querySelector('.ws-book-btn');
-          const wsId = card.getAttribute('data-workshop-id');
-          if (btn && wsId) {
-            btn.setAttribute('href', '../register/index.html?workshop=' + encodeURIComponent(wsId));
-            if (loggedIn) {
-              btn.textContent = 'Book Workshop \u2192';
-              btn.classList.remove('need-register');
-            } else {
-              btn.textContent = 'Select Workshop \u2192';
-            }
-          }
-        });
-      });
-    </script>
-  </body>
-  </html>
+      // Mobile Menu setup
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const mainNav = document.getElementById('mainNav');
+      if (mobileBtn && mainNav) {
+        mobileBtn.addEventListener('click', () => mainNav.classList.toggle('active'));
+      }
+    });
+  </script>
+</body>
+</html>

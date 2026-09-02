@@ -335,10 +335,476 @@
     }
   };
 
+  // 4. Real-Time Slot & Capacity Engine (Specification Part E)
+  const TechFestCapacity = {
+    subscribers: [],
+    pollTimer: null,
+    apiEndpoint: '../../techfest-api/slots_capacity.php?action=realtime_capacity',
+
+    data: {
+      paidWorkshops: [
+        {
+          id: 1,
+          code: 'WS-ROCKET',
+          name: 'Rocket Lab',
+          short_desc: 'Build pneumatic and solid-propellant rockets. Test thrust curves, stability, and aerodynamics with live outdoor launches.',
+          is_paid: true,
+          price_velammal: 400,
+          price_other: 550,
+          binding_constraint: 'Launch cycles at the outdoor pad',
+          capacity_per_batch: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1517976487541-05bf47990176?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 16, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 19, soft_locks: 1 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 12, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 14, soft_locks: 2 }
+          ]
+        },
+        {
+          id: 2,
+          code: 'WS-SATELLITE',
+          name: 'Satellite Makers',
+          short_desc: 'Assemble functioning CubeSat scale model payloads with environmental sensors, telemetry transceivers, and ground-station tracking.',
+          is_paid: true,
+          price_velammal: 450,
+          price_other: 600,
+          binding_constraint: 'Sensor kits and bench space',
+          capacity_per_batch: 25,
+          min_grade: 6,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 22, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 25, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 18, soft_locks: 2 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 15, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 3,
+          code: 'WS-DRONE',
+          name: 'Drone Pilot Academy',
+          short_desc: 'Learn quadcopter aerodynamics, optical-flow positioning, and manual FPV flight maneuvers inside the safety flight cage.',
+          is_paid: true,
+          price_velammal: 450,
+          price_other: 600,
+          binding_constraint: 'Cage flight time per pilot',
+          capacity_per_batch: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 18, soft_locks: 2 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 20, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 14, soft_locks: 1 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 11, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 4,
+          code: 'WS-AEROFORGE',
+          name: 'Aeroforge',
+          short_desc: 'Craft RC high-lift gliders from carbon composite and foam boards. Master transmitter trims, stall recovery, and arena flight physics.',
+          is_paid: true,
+          price_velammal: 400,
+          price_other: 550,
+          binding_constraint: 'Transmitter and Air Arena flight time',
+          capacity_per_batch: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 13, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 17, soft_locks: 1 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 15, soft_locks: 2 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 10, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 5,
+          code: 'WS-ARVR',
+          name: 'AR/VR Experience Lab',
+          short_desc: 'Develop immersive 3D spatial environments in WebXR. Deploy interactive holographic scenes directly to VR headsets.',
+          is_paid: true,
+          price_velammal: 350,
+          price_other: 500,
+          binding_constraint: 'Headset viewers and floor space',
+          capacity_per_batch: 40,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 34, soft_locks: 2 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 38, soft_locks: 1 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 28, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 22, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 6,
+          code: 'WS-AI',
+          name: 'AI Inventors Lab',
+          short_desc: 'Train computer vision and voice classification neural networks using edge accelerators. Build interactive gesture-controlled apps.',
+          is_paid: true,
+          price_velammal: 400,
+          price_other: 550,
+          binding_constraint: 'Instructor-to-student ratio',
+          capacity_per_batch: 40,
+          min_grade: 6,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 39, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 36, soft_locks: 2 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 31, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 26, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 7,
+          code: 'WS-GAMEFORGE',
+          name: 'Game Forge',
+          short_desc: 'Design and script 2D physics-based arcade and platformer games with custom sprite animations, sound effects, and enemy AI.',
+          is_paid: true,
+          price_velammal: 350,
+          price_other: 500,
+          binding_constraint: 'Instructor-to-student ratio',
+          capacity_per_batch: 40,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 29, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 33, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 25, soft_locks: 2 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 18, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 8,
+          code: 'WS-3DMAKERS',
+          name: '3D Makers Lab',
+          short_desc: 'Parametric 3D CAD modeling with live slicer optimization and multi-filament 3D printer calibration and physical manufacturing.',
+          is_paid: true,
+          price_velammal: 350,
+          price_other: 500,
+          binding_constraint: '3D printer throughput',
+          capacity_per_batch: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 17, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 20, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 12, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 14, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 9,
+          code: 'WS-ARDUINO',
+          name: 'Arduino Inventors Lab',
+          short_desc: 'Microcontroller circuits, PWM motor drives, ultrasonic sonar radar, and hardware sensor integration on breadboards.',
+          is_paid: true,
+          price_velammal: 350,
+          price_other: 500,
+          binding_constraint: 'Bench space and power outlets',
+          capacity_per_batch: 25,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 21, soft_locks: 2 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 24, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 16, soft_locks: 1 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 13, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 10,
+          code: 'WS-ANIMATION',
+          name: 'Animation Lab',
+          short_desc: 'Stop-motion, vector tweening, character rigging, and frame-by-frame visual storytelling for digital media production.',
+          is_paid: true,
+          price_velammal: 300,
+          price_other: 450,
+          binding_constraint: 'Instructor-to-student ratio',
+          capacity_per_batch: 40,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+          batches: [
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 32, soft_locks: 1 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 37, soft_locks: 2 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 27, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 21, soft_locks: 1 }
+          ]
+        }
+      ],
+
+      freeWorkshops: [
+        {
+          id: 11,
+          code: 'FREE-DT',
+          name: 'Design Thinking Bootcamp',
+          short_desc: '5-stage human-centered innovation method — rapid problem framing, ideation, and paper prototyping.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-1', theatre: 'Theatre Alpha', time: 'Day 1 · 10:00–11:00', seats_filled: 54, soft_locks: 2 },
+            { slot_code: 'F-D2-2', theatre: 'Theatre Alpha', time: 'Day 2 · 12:00–13:00', seats_filled: 68, soft_locks: 3 }
+          ]
+        },
+        {
+          id: 12,
+          code: 'FREE-SKETCH',
+          name: 'Sketching & Visual Thinking',
+          short_desc: 'Transform complex technical thoughts into visual frameworks, wireframe sketches, and graphic representations.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-1', theatre: 'Theatre Beta', time: 'Day 1 · 10:00–11:00', seats_filled: 41, soft_locks: 1 },
+            { slot_code: 'F-D2-2', theatre: 'Theatre Beta', time: 'Day 2 · 12:00–13:00', seats_filled: 47, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 13,
+          code: 'FREE-PITCH',
+          name: 'Public Speaking & Pitching',
+          short_desc: 'Story arcs, vocal projection, body language, and elevator pitch structuring for young startup creators.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-2', theatre: 'Theatre Alpha', time: 'Day 1 · 12:00–13:00', seats_filled: 71, soft_locks: 4 },
+            { slot_code: 'F-D2-3', theatre: 'Theatre Alpha', time: 'Day 2 · 14:00–15:00', seats_filled: 63, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 14,
+          code: 'FREE-SCIENCE',
+          name: 'Science Demonstrations',
+          short_desc: 'Spectacular live physics and chemistry experiments exploring cryogenics, vortex dynamics, and electromagnetism.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-2', theatre: 'Theatre Beta', time: 'Day 1 · 12:00–13:00', seats_filled: 76, soft_locks: 2 },
+            { slot_code: 'F-D2-3', theatre: 'Theatre Beta', time: 'Day 2 · 14:00–15:00', seats_filled: 79, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 15,
+          code: 'FREE-ENTREP',
+          name: 'Student Entrepreneurship',
+          short_desc: 'Validating customer pain points, unit economics, and building viable student-led venture blueprints.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 6,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-3', theatre: 'Theatre Alpha', time: 'Day 1 · 14:00–15:00', seats_filled: 48, soft_locks: 2 },
+            { slot_code: 'F-D2-4', theatre: 'Theatre Alpha', time: 'Day 2 · 16:00–17:00', seats_filled: 38, soft_locks: 0 }
+          ]
+        },
+        {
+          id: 16,
+          code: 'FREE-CODE',
+          name: 'Creative Coding with p5.js',
+          short_desc: 'Generate generative art, interactive visualizers, and mathematical beauty through introductory JavaScript.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-3', theatre: 'Theatre Beta', time: 'Day 1 · 14:00–15:00', seats_filled: 69, soft_locks: 3 },
+            { slot_code: 'F-D2-4', theatre: 'Theatre Beta', time: 'Day 2 · 16:00–17:00', seats_filled: 56, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 17,
+          code: 'FREE-ELEC',
+          name: 'Electronics Playground',
+          short_desc: 'Introductory circuitry, polarity, breadboard basics, and making your first light-chaser gadget.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-4', theatre: 'Theatre Alpha', time: 'Day 1 · 16:00–17:00', seats_filled: 35, soft_locks: 0 },
+            { slot_code: 'F-D3-1', theatre: 'Theatre Alpha', time: 'Day 3 · 10:00–11:00', seats_filled: 67, soft_locks: 2 }
+          ]
+        },
+        {
+          id: 18,
+          code: 'FREE-CAD',
+          name: 'CAD & 3D Modeling Intro',
+          short_desc: 'Beginner spatial design in Tinkercad, Boolean operations, and understanding 3D coordinate geometry.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 4,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D1-4', theatre: 'Theatre Beta', time: 'Day 1 · 16:00–17:00', seats_filled: 74, soft_locks: 2 },
+            { slot_code: 'F-D3-1', theatre: 'Theatre Beta', time: 'Day 3 · 10:00–11:00', seats_filled: 58, soft_locks: 1 }
+          ]
+        },
+        {
+          id: 19,
+          code: 'FREE-SPACE',
+          name: 'Space Exploration Lab',
+          short_desc: 'Astrophysics basics, orbital mechanics, planetary landers, and future lunar/Martian habitat engineering.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D2-1', theatre: 'Theatre Alpha', time: 'Day 2 · 10:00–11:00', seats_filled: 61, soft_locks: 2 },
+            { slot_code: 'F-D3-2', theatre: 'Theatre Alpha', time: 'Day 3 · 12:00–13:00', seats_filled: 72, soft_locks: 3 }
+          ]
+        },
+        {
+          id: 20,
+          code: 'FREE-CYBER',
+          name: 'Cyber Safety & AI Ethics',
+          short_desc: 'Protecting digital identity, understanding algorithmic bias, deepfake detection, and responsible online citizenship.',
+          is_paid: false,
+          binding_constraint: 'Theatre seat capacity',
+          capacity_per_session: 100,
+          public_capacity: 80,
+          standby_capacity: 20,
+          min_grade: 5,
+          max_grade: 12,
+          image_url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
+          sessions: [
+            { slot_code: 'F-D2-1', theatre: 'Theatre Beta', time: 'Day 2 · 10:00–11:00', seats_filled: 46, soft_locks: 1 },
+            { slot_code: 'F-D3-2', theatre: 'Theatre Beta', time: 'Day 3 · 12:00–13:00', seats_filled: 65, soft_locks: 2 }
+          ]
+        }
+      ]
+    },
+
+    init() {
+      this.fetchLiveData();
+      // Start live real-time simulation / background polling every 6 seconds
+      this.pollTimer = setInterval(() => {
+        this.simulateLiveActivity();
+        this.notifySubscribers();
+      }, 6000);
+    },
+
+    subscribe(callback) {
+      if (typeof callback === 'function') {
+        this.subscribers.push(callback);
+        // Immediately invoke with current state
+        callback(this.data);
+      }
+    },
+
+    notifySubscribers() {
+      this.subscribers.forEach(cb => {
+        try { cb(this.data); } catch (e) { console.error('Capacity subscriber error:', e); }
+      });
+    },
+
+    fetchLiveData() {
+      fetch(this.apiEndpoint)
+        .then(res => res.json())
+        .then(res => {
+          if (res && res.success && res.data) {
+            if (res.data.paid_workshops) this.data.paidWorkshops = res.data.paid_workshops;
+            if (res.data.free_workshops) this.data.freeWorkshops = res.data.free_workshops;
+            this.notifySubscribers();
+          }
+        })
+        .catch(() => {
+          // Fallback gracefully to local datastore
+          this.notifySubscribers();
+        });
+    },
+
+    simulateLiveActivity() {
+      // Small simulated live fluctuation (+1 seat or soft lock expiration)
+      if (Math.random() > 0.4) {
+        const randomWs = this.data.paidWorkshops[Math.floor(Math.random() * this.data.paidWorkshops.length)];
+        if (randomWs && randomWs.batches && randomWs.batches.length > 0) {
+          const randomBatch = randomWs.batches[Math.floor(Math.random() * randomWs.batches.length)];
+          const currentTotal = randomBatch.seats_filled + randomBatch.soft_locks;
+          if (currentTotal < randomBatch.capacity && Math.random() > 0.3) {
+            randomBatch.seats_filled += 1;
+          }
+        }
+      }
+    },
+
+    getPaidWorkshops() {
+      return this.data.paidWorkshops;
+    },
+
+    getFreeWorkshops() {
+      return this.data.freeWorkshops;
+    },
+
+    getWorkshopById(id) {
+      const numId = parseInt(id, 10);
+      return this.data.paidWorkshops.find(w => w.id === numId) ||
+             this.data.freeWorkshops.find(w => w.id === numId) || null;
+    }
+  };
+
+  // Auto initialize capacity engine
+  TechFestCapacity.init();
+
   // Expose to window
   window.TechFestConfig = TechFestConfig;
   window.TechFestAccess = TechFestAccess;
   window.TechFestDev = TechFestDev;
+  window.TechFestCapacity = TechFestCapacity;
 
   // Auto-init banner when DOM is ready
   if (document.readyState === 'loading') {
@@ -348,3 +814,4 @@
   }
 
 })(window);
+

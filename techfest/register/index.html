@@ -686,141 +686,31 @@
   <script>
     const API = '../../techfest-api/auth.php';
 
-    // Standardized Workshop Catalogue
-    const WORKSHOP_CATALOG = {
-      '1': {
-        id: '1',
-        name: 'Robotics & Automation',
-        is_paid: true,
-        velammal_fee: '₹400',
-        other_fee: '₹550',
-        fee_label: 'Velammal ₹400 / Others ₹550',
-        capacity: '40',
-        seats_filled: '28',
-        grades: 'Grades 4–12',
-        desc: 'Build and programme your own robot using sensors, servos and a micro-controller.'
-      },
-      '2': {
-        id: '2',
-        name: 'AI & Machine Learning Basics',
-        is_paid: true,
-        velammal_fee: '₹400',
-        other_fee: '₹550',
-        fee_label: 'Velammal ₹400 / Others ₹550',
-        capacity: '40',
-        seats_filled: '35',
-        grades: 'Grades 4–12',
-        desc: 'Hands-on intro to ML concepts — train your first model using real datasets.'
-      },
-      '3': {
-        id: '3',
-        name: '3D Printing & Design',
-        is_paid: true,
-        velammal_fee: '₹350',
-        other_fee: '₹500',
-        fee_label: 'Velammal ₹350 / Others ₹500',
-        capacity: '30',
-        seats_filled: '12',
-        grades: 'Grades 4–12',
-        desc: 'Design objects in Tinkercad and print them on a live 3D printer.'
-      },
-      '4': {
-        id: '4',
-        name: 'Game Development',
-        is_paid: true,
-        velammal_fee: '₹400',
-        other_fee: '₹550',
-        fee_label: 'Velammal ₹400 / Others ₹550',
-        capacity: '35',
-        seats_filled: '20',
-        grades: 'Grades 4–12',
-        desc: 'Create your first 2D game from scratch using Unity — no prior experience needed.'
-      },
-      '5': {
-        id: '5',
-        name: 'Electronics & Circuits',
-        is_paid: true,
-        velammal_fee: '₹300',
-        other_fee: '₹450',
-        fee_label: 'Velammal ₹300 / Others ₹450',
-        capacity: '25',
-        seats_filled: '8',
-        grades: 'Grades 4–12',
-        desc: 'Bread-board circuits, LEDs, resistors, and basic electronics for young engineers.'
-      },
-      '6': {
-        id: '6',
-        name: 'Python for Beginners',
-        is_paid: true,
-        velammal_fee: '₹350',
-        other_fee: '₹500',
-        fee_label: 'Velammal ₹350 / Others ₹500',
-        capacity: '40',
-        seats_filled: '30',
-        grades: 'Grades 4–12',
-        desc: 'From variables to loops to functions — your first real Python coding workshop.'
-      },
-      '7': {
-        id: '7',
-        name: 'Design Thinking Bootcamp',
-        is_paid: false,
-        velammal_fee: 'FREE',
-        other_fee: 'FREE',
-        fee_label: 'FREE (Tech Fest Entry Required)',
-        capacity: '80',
-        seats_filled: '45',
-        grades: 'Grades 4–12',
-        desc: 'Learn the 5-stage design thinking process through fun group activities and challenges.'
-      },
-      '8': {
-        id: '8',
-        name: 'Sketching & Visual Thinking',
-        is_paid: false,
-        velammal_fee: 'FREE',
-        other_fee: 'FREE',
-        fee_label: 'FREE (Tech Fest Entry Required)',
-        capacity: '60',
-        seats_filled: '22',
-        grades: 'Grades 4–12',
-        desc: 'Turn your ideas into visual stories — no artistic talent required.'
-      },
-      '9': {
-        id: '9',
-        name: 'Public Speaking & Pitching',
-        is_paid: false,
-        velammal_fee: 'FREE',
-        other_fee: 'FREE',
-        fee_label: 'FREE (Tech Fest Entry Required)',
-        capacity: '60',
-        seats_filled: '38',
-        grades: 'Grades 4–12',
-        desc: 'Build confidence, structure your message, and pitch your idea like a pro.'
-      },
-      '10': {
-        id: '10',
-        name: 'Science Demonstrations',
-        is_paid: false,
-        velammal_fee: 'FREE',
-        other_fee: 'FREE',
-        fee_label: 'FREE (Tech Fest Entry Required)',
-        capacity: '100',
-        seats_filled: '15',
-        grades: 'Grades 4–12',
-        desc: 'Mind-blowing live science experiments exploring chemistry, physics, and biology.'
-      },
-      '11': {
-        id: '11',
-        name: 'Student Entrepreneurship',
-        is_paid: false,
-        velammal_fee: 'FREE',
-        other_fee: 'FREE',
-        fee_label: 'FREE (Tech Fest Entry Required)',
-        capacity: '80',
-        seats_filled: '50',
-        grades: 'Grades 4–12',
-        desc: 'Discover how to validate your idea, find your market, and build your first mini-business plan.'
+    // Dynamic Workshop Catalogue Resolver matching Part E Slot & Capacity Model
+    function getWorkshopData(id) {
+      if (window.TechFestCapacity) {
+        const ws = window.TechFestCapacity.getWorkshopById(id);
+        if (ws) {
+          const defaultBatch = (ws.batches && ws.batches[0]) ? ws.batches[0] : null;
+          const cap = defaultBatch ? defaultBatch.capacity : (ws.capacity_per_session || 40);
+          const filled = defaultBatch ? (defaultBatch.seats_filled + (defaultBatch.soft_locks || 0)) : (ws.total_seats_filled || 20);
+          return {
+            id: String(ws.id),
+            name: ws.name,
+            is_paid: ws.is_paid,
+            velammal_fee: ws.is_paid ? '₹' + ws.price_velammal : 'FREE',
+            other_fee: ws.is_paid ? '₹' + ws.price_other : 'FREE',
+            fee_label: ws.is_paid ? `Velammal ₹${ws.price_velammal} / Others ₹${ws.price_other}` : 'FREE (Tech Fest Entry Required)',
+            capacity: String(cap),
+            seats_filled: String(filled),
+            grades: `Grades ${ws.min_grade}–${ws.max_grade}`,
+            desc: ws.short_desc,
+            binding_constraint: ws.binding_constraint
+          };
+        }
       }
-    };
+      return null;
+    }
 
     let currentSelectedWorkshop = null;
 
@@ -866,7 +756,7 @@
       }
 
       if (wsId) {
-        const workshop = WORKSHOP_CATALOG[wsId];
+        const workshop = getWorkshopData(wsId);
         if (!workshop) {
           // Scenario: Invalid Workshop ID
           document.getElementById('reg-main-title').textContent = 'Workshop Not Found';
