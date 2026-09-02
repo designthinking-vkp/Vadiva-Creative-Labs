@@ -163,30 +163,29 @@
   color: var(--tf-muted) !important;
   font-family: var(--font-body) !important;
   font-size: clamp(0.72rem, 0.78vw, 0.86rem) !important;
-  font-weight: 500 !important;
-  padding: 0.4rem clamp(2px, 0.25vw, 6px) !important;
+  font-weight: 600 !important;
+  padding: 0.45rem clamp(6px, 0.6vw, 10px) !important;
+  border-radius: 8px !important;
   text-decoration: none !important;
   position: relative !important;
-  transition: var(--tf-transition) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   white-space: nowrap !important;
   letter-spacing: -0.01em !important;
 }
 
-.techfest-theme nav.main-nav a:hover,
-.techfest-theme nav.main-nav a.active {
-  color: var(--tf-teal) !important;
-  font-weight: 600 !important;
+.techfest-theme nav.main-nav a::after {
+  display: none !important;
 }
 
-.techfest-theme nav.main-nav a.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--tf-teal);
-  border-radius: 2px;
+.techfest-theme nav.main-nav a:hover {
+  color: var(--tf-teal) !important;
+  background: rgba(12, 184, 192, 0.08) !important;
+}
+
+.techfest-theme nav.main-nav a.active {
+  color: var(--tf-teal) !important;
+  font-weight: 700 !important;
+  background: rgba(12, 184, 192, 0.14) !important;
 }
 
 .techfest-theme .header-action {
