@@ -58,6 +58,7 @@
     isBypassMode() {
       if (TechFestConfig.bypassMode === true) return true;
       try {
+        if (sessionStorage.getItem('tf_test_secret')) return true;
         return localStorage.getItem(TechFestConfig.storageKeys.bypassFlag) === 'true';
       } catch (e) {
         return false;
@@ -271,7 +272,7 @@
 
       banner.innerHTML = `
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-          <span>&#9888; DEVELOPER BYPASS MODE</span>
+          <span>&#9888; DEVELOPER TEST MODE &mdash; NO REAL PAYMENT / OTP</span>
           <span style="opacity:0.85; font-weight:400; font-size:11px;">| Auth &amp; Payment Simulated | Identity: TF-DEV-BYPASS-001</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
@@ -315,6 +316,7 @@
       localStorage.removeItem(TechFestConfig.storageKeys.entryPaid);
       sessionStorage.removeItem(TechFestConfig.storageKeys.pendingWorkshop);
       sessionStorage.removeItem(TechFestConfig.storageKeys.postLoginRedirect);
+      sessionStorage.removeItem('tf_test_secret');
       localStorage.removeItem(TechFestConfig.storageKeys.testRegistration);
       localStorage.removeItem(TechFestConfig.storageKeys.testPayment);
       console.info('%c[TechFest Dev] Test state reset. Reloading...', 'color: #3b82f6; font-weight: bold;');

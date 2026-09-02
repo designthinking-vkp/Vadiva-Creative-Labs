@@ -546,8 +546,35 @@
         </div>
 
         <form id="reg-form" novalidate>
+          <!-- Student Details -->
           <div class="reg-form-group">
-            <label for="mobile">Mobile Number</label>
+            <label for="student_name">Student Name</label>
+            <input type="text" id="student_name" name="student_name" class="reg-input" placeholder="Full Name" required>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="parent_name">Parent Name</label>
+            <input type="text" id="parent_name" name="parent_name" class="reg-input" placeholder="Parent/Guardian Name" required>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="school_name">School Name</label>
+            <input type="text" id="school_name" name="school_name" class="reg-input" placeholder="Current School" required>
+          </div>
+
+          <div class="reg-form-group" style="display: flex; gap: 1rem;">
+            <div style="flex: 1;">
+              <label for="class_name">Class / Grade</label>
+              <input type="text" id="class_name" name="class_name" class="reg-input" placeholder="e.g. 10th" required>
+            </div>
+            <div style="flex: 1;">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" class="reg-input" placeholder="City" value="Chennai" required>
+            </div>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="mobile">Mobile Number (Login ID)</label>
             <div class="reg-input-prefix">
               <span class="reg-prefix-label">+91</span>
               <input type="tel" id="mobile" name="mobile" class="reg-input"
@@ -563,7 +590,7 @@
           </div>
 
           <div class="reg-form-group">
-            <label for="password">Password</label>
+            <label for="password">Set Password</label>
             <input type="password" id="password" name="password" class="reg-input"
                    placeholder="Minimum 8 characters" minlength="8" required>
           </div>
@@ -600,6 +627,9 @@
             <label for="bypass-key" style="font-size:0.78rem; color:#92400e;">Test Bypass Secret Key / Passcode</label>
             <input type="password" id="bypass-key" class="reg-input" value="VADIVA_TEST_BYPASS_2026" placeholder="Enter bypass secret key">
           </div>
+          <button type="button" class="test-bypass-btn" id="load-demo-btn" onclick="loadDemoData()" style="margin-bottom: 0.5rem; background:#0ea5e9 !important; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;">
+            📝 Load Demo Data
+          </button>
           <button type="button" class="test-bypass-btn" id="test-bypass-btn" onclick="executeTestBypass()">
             ⚡ Bypass OTP &amp; Register
           </button>
@@ -904,30 +934,20 @@
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
       const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
 
-      if (isBypass) {
-        const paymentState = window.TechFestAccess ? window.TechFestAccess.getPaymentState() : { status: 'paid', isBypassPayment: false };
-        setTimeout(() => {
-          localStorage.setItem('tf_test_registration_data', JSON.stringify({
-            workshopId: currentSelectedWorkshop.id,
-            workshopName: currentSelectedWorkshop.name,
-            participantId: 'TF-DEV-BYPASS-001',
-            payment: paymentState,
-            isTestRegistration: true,
-            timestamp: new Date().toISOString()
-          }));
-          window.location.href = `../payment-success/index.html?bypass=true&workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=TF-DEV-BYPASS-001&payment_id=${paymentState.transactionId}`;
-        }, 500);
-        return;
-      }
-
-      // Normal live flow -> Create MySQL registration record
+      // For Centralized Test Mode, we still go through standard DB route!
+      // The backend (registration.php) handles the mock order, and the payment page handles the mock payment.
       try {
         const payload = {
           student_name: localStorage.getItem('tf_user_name') || currentUser?.name || 'Participant',
           student_phone: currentUser?.mobile || localStorage.getItem('tf_user_mobile') || '9876543210',
           student_email: currentUser?.email || localStorage.getItem('tf_user_email') || 'reach@vadivacreativelabs.com',
+          school_name: localStorage.getItem('tf_school_name') || 'Vadiva Student',
+          parent_name: localStorage.getItem('tf_parent_name') || '',
+          class_name: localStorage.getItem('tf_class_name') || '',
+          city: localStorage.getItem('tf_city') || 'Chennai',
           user_id: pid,
-          workshop_id: currentSelectedWorkshop.id
+          workshop_id: currentSelectedWorkshop.id,
+          test_secret: sessionStorage.getItem('tf_test_secret') || ''
         };
 
         const res = await fetch('../../techfest-api/registration.php?action=create_registration', {
@@ -1076,6 +1096,18 @@
       initPage();
     });
 
+    function loadDemoData() {
+      document.getElementById('student_name').value = 'Demo Student';
+      document.getElementById('parent_name').value = 'Demo Parent';
+      document.getElementById('school_name').value = 'Demo School';
+      document.getElementById('class_name').value = '12';
+      document.getElementById('city').value = 'Chennai';
+      document.getElementById('mobile').value = '9000000000';
+      document.getElementById('email').value = 'demo@example.invalid';
+      document.getElementById('password').value = 'DeveloperTest123!';
+      document.getElementById('confirm-password').value = 'DeveloperTest123!';
+    }
+
     async function executeTestBypass() {
       hideAlert();
       const mobile   = document.getElementById('mobile').value.trim();
@@ -1083,12 +1115,32 @@
       const password = document.getElementById('password').value;
       const confirm  = document.getElementById('confirm-password').value;
       const bypassKey = document.getElementById('bypass-key').value.trim();
+      
+      const studentName = document.getElementById('student_name').value.trim();
+      const parentName = document.getElementById('parent_name').value.trim();
+      const schoolName = document.getElementById('school_name').value.trim();
+      const className = document.getElementById('class_name').value.trim();
+      const city = document.getElementById('city').value.trim();
 
+      if (!studentName || !parentName || !schoolName || !className || !city) {
+          showAlert('Please fill all required profile fields (or click Load Demo Data).', 'error');
+          return;
+      }
       if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
       if (!email || !/\S+@\S+\.\S+/.test(email)) { showAlert('Enter a valid email address.', 'error'); return; }
       if (password.length < 8) { showAlert('Password must be at least 8 characters.', 'error'); return; }
       if (password !== confirm) { showAlert('Passwords do not match.', 'error'); return; }
       if (!bypassKey) { showAlert('Enter the test bypass secret key / passcode.', 'error'); return; }
+
+      // Save to localStorage so executeWorkshopBooking can pick it up
+      localStorage.setItem('tf_user_name', studentName);
+      localStorage.setItem('tf_user_mobile', mobile);
+      localStorage.setItem('tf_user_email', email);
+      localStorage.setItem('tf_school_name', schoolName);
+      localStorage.setItem('tf_parent_name', parentName);
+      localStorage.setItem('tf_class_name', className);
+      localStorage.setItem('tf_city', city);
+      sessionStorage.setItem('tf_test_secret', bypassKey); // Save test secret for next step
 
       const btn = document.getElementById('test-bypass-btn');
       btn.disabled = true;

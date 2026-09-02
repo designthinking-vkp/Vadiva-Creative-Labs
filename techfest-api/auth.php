@@ -11,7 +11,13 @@ function sendResponse($success, $message, $data = []) {
     exit;
 }
 
-if ($action === 'register_request') {
+if ($action === 'get_config') {
+    sendResponse(true, 'Config loaded', [
+        'test_mode' => defined('TEST_MODE') ? TEST_MODE : false,
+        'app_env' => defined('TF_APP_ENV') ? TF_APP_ENV : 'production'
+    ]);
+}
+elseif ($action === 'register_request') {
     $mobile = $input['mobile'] ?? '';
     $email = $input['email'] ?? '';
     $password = $input['password'] ?? '';
@@ -30,6 +36,9 @@ if ($action === 'register_request') {
     $otpHash = password_hash($otp, PASSWORD_DEFAULT);
     
     // Send OTP via SMS provider here using getenv('SMS_API_KEY')
+    if (!TEST_MODE) {
+        // ACTUAL SMS PROVIDER CALL GOES HERE
+    }
 
     $stmt = $pdo->prepare('INSERT INTO otp_verifications (mobile, purpose, otp_hash, expires_at) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 10 MINUTE))');
     $stmt->execute([$mobile, 'registration', $otpHash]);
@@ -47,12 +56,13 @@ elseif ($action === 'register_verify') {
         sendResponse(false, 'Mobile, email, and password are required.');
     }
 
-    // Configurable testing bypass secret
-    $serverBypassSecret = getenv('OTP_TEST_BYPASS_KEY') ?: 'VADIVA_TEST_BYPASS_2026';
-    $appEnv = getenv('APP_ENV') ?: 'development';
-    $isBypass = (!empty($bypassKey) && hash_equals($serverBypassSecret, (string)$bypassKey))
-             || (!empty($otp) && hash_equals($serverBypassSecret, (string)$otp))
-             || ($appEnv !== 'production' && $otp === '999888');
+    // Centralized Test Mode Verification
+    $isBypass = false;
+    if (TEST_MODE) {
+        $isBypass = isTestModeActive($bypassKey) 
+                 || isTestModeActive($otp) 
+                 || ($otp === TEST_OTP && isTestModeActive($bypassKey));
+    }
 
     if (!$isBypass) {
         if (empty($otp)) {

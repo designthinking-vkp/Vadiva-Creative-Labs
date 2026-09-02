@@ -176,17 +176,33 @@ if ($action === 'create_registration') {
             $regCount = (int)($stmt->fetch()['cnt'] ?? 0) + 1;
             $registrationNumber = sprintf('VF-2026-%06d', $regCount);
 
+            // Developer Test Mode Checks
+            $isTest = isTestModeActive($input['test_secret'] ?? '');
+            if ($isTest) {
+                $registrationNumber = sprintf('TF26-TEST-%06d', $regCount);
+            }
+            $env = $isTest ? 'test' : 'production';
+            $paymentMode = $isTest ? 'TEST_MODE' : 'razorpay';
+            $otpStatus = $isTest ? 'TEST_VERIFIED' : 'VERIFIED';
+            $isTestInt = $isTest ? 1 : 0;
+
             // 3. Insert Registration Record
             $stmt = $pdo->prepare('
                 INSERT INTO registrations (
-                    registration_number, student_id, user_id, total_amount, currency, registration_status
-                ) VALUES (?, ?, ?, ?, "INR", "pending_payment")
+                    registration_number, student_id, user_id, total_amount, currency, registration_status,
+                    is_test_registration, environment, payment_mode, otp_status, test_session_id
+                ) VALUES (?, ?, ?, ?, "INR", "pending_payment", ?, ?, ?, ?, ?)
             ');
             $stmt->execute([
                 $registrationNumber,
                 $studentId,
                 $userId > 0 ? $userId : null,
-                $totalAmount
+                $totalAmount,
+                $isTestInt,
+                $env,
+                $paymentMode,
+                $otpStatus,
+                $isTest ? ($input['test_secret'] ?? 'TEST') : null
             ]);
             $registrationId = $pdo->lastInsertId();
 
@@ -202,31 +218,37 @@ if ($action === 'create_registration') {
 
             // 5. Create Razorpay Order
             $receiptRef = 'TF_' . $registrationId . '_' . time();
-            $ch = curl_init('https://api.razorpay.com/v1/orders');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERPWD, $keyId . ':' . $keySecret);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-                'amount' => $amountInPaise,
-                'currency' => 'INR',
-                'receipt' => $receiptRef,
-                'notes' => [
-                    'registration_id' => (string)$registrationId,
-                    'registration_number' => $registrationNumber,
-                    'student_name' => $studentName,
-                    'school_name' => $schoolName,
-                    'workshop_count' => count($workshopsToRegister)
-                ]
-            ]));
+            
+            if ($isTest) {
+                // Bypass Razorpay API completely for test mode
+                $orderId = 'TEST_ORDER_' . time() . '_' . rand(1000, 9999);
+            } else {
+                $ch = curl_init('https://api.razorpay.com/v1/orders');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_USERPWD, $keyId . ':' . $keySecret);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                    'amount' => $amountInPaise,
+                    'currency' => 'INR',
+                    'receipt' => $receiptRef,
+                    'notes' => [
+                        'registration_id' => (string)$registrationId,
+                        'registration_number' => $registrationNumber,
+                        'student_name' => $studentName,
+                        'school_name' => $schoolName,
+                        'workshop_count' => count($workshopsToRegister)
+                    ]
+                ]));
 
-            $rzpRes = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+                $rzpRes = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
 
-            if ($httpCode >= 200 && $httpCode < 300) {
-                $rzpOrder = json_decode($rzpRes, true);
-                $orderId = $rzpOrder['id'] ?? '';
+                if ($httpCode >= 200 && $httpCode < 300) {
+                    $rzpOrder = json_decode($rzpRes, true);
+                    $orderId = $rzpOrder['id'] ?? '';
+                }
             }
 
             // 6. Record Initial Payment & Payment Attempt

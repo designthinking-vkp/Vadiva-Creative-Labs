@@ -538,37 +538,18 @@
       btn.innerHTML = '<span class="pay-spinner" style="width:16px; height:16px; border-width:2px; display:inline-block; margin:0 6px 0 0; vertical-align:middle;"></span> Connecting to Secure Gateway…';
       isPaymentInProgress = true;
 
-      const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
+      const isBypass = sessionStorage.getItem('tf_test_secret') || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
+      const testSecret = sessionStorage.getItem('tf_test_secret') || '';
 
-      // --- 1. DEVELOPER BYPASS MODE FLOW ---
-      if (isBypass) {
-        showProcessingState(true);
-        setTimeout(() => {
-          const mockPayment = {
-            transactionId: 'BYPASS-TEST-ORDER-' + Date.now(),
-            workshopId: currentWorkshop.id,
-            workshopName: currentWorkshop.name,
-            amount: currentWorkshop.other,
-            date: new Date().toLocaleString(),
-            isBypass: true
-          };
-          localStorage.setItem('tf_test_registration_data', JSON.stringify(mockPayment));
-          localStorage.setItem('tf_entry_paid', 'true');
-          sessionStorage.removeItem('tf_pending_workshop');
-
-          window.location.href = `../payment-success/index.html?bypass=true&workshop=${encodeURIComponent(currentWorkshop.id)}&registration_id=TF-DEV-BYPASS-001&payment_id=${mockPayment.transactionId}`;
-        }, 1000);
-        return;
-      }
-
-      // --- 2. LIVE PRODUCTION RAZORPAY FLOW ---
+      // --- LIVE PRODUCTION (OR SERVER-SIDE TEST) FLOW ---
       try {
         const orderPayload = {
           participant_id: currentParticipantId || '0',
           workshop_id: currentWorkshop.id,
           user_id: localStorage.getItem('tf_participant_id') || '0',
           tier: 'OTHER',
-          name: document.getElementById('pay-participant-name').textContent
+          name: document.getElementById('pay-participant-name').textContent,
+          test_secret: testSecret
         };
 
         const createRes = await fetch(`${PAYMENT_API}?action=create_order`, {
@@ -620,10 +601,11 @@
                 body: JSON.stringify({
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
+                  razorpay_signature: response.razorpay_signature || 'TEST_SIGNATURE_BYPASS',
                   registration_id: currentParticipantId || order_id,
                   workshop_id: currentWorkshop.id,
-                  name: prefill?.name || ''
+                  name: prefill?.name || '',
+                  test_secret: testSecret
                 })
               });
 
@@ -670,7 +652,18 @@
           window.location.href = `../payment-failed/index.html?registration_id=${encodeURIComponent(currentParticipantId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&reason=${encodeURIComponent(response.error.description || 'Payment failed')}&order_id=${encodeURIComponent(order_id)}`;
         });
 
-        rzp.open();
+        if (isBypass && order_id.startsWith('TEST_ORDER_')) {
+          // Immediately simulate successful Razorpay callback
+          setTimeout(() => {
+            rzpOptions.handler({
+              razorpay_order_id: order_id,
+              razorpay_payment_id: 'TEST_PAY_' + Date.now(),
+              razorpay_signature: 'TEST_SIGNATURE_BYPASS'
+            });
+          }, 800);
+        } else {
+          rzp.open();
+        }
 
       } catch (err) {
         isPaymentInProgress = false;

@@ -228,23 +228,31 @@ elseif ($action === 'verify_payment' || $action === 'verify_signature') {
     $regId      = $input['registration_id'] ?? $input['participant_id'] ?? '';
     $workshopId = $input['workshop_id'] ?? '1';
 
-    if (empty($orderId) || empty($paymentId) || empty($signature)) {
-        sendApiResponse(false, 'Missing required payment verification parameters.', ['error_code' => 'MISSING_PARAMETERS'], 400);
-    }
-
-    // Cryptographic HMAC SHA256 Verification
-    $generatedSignature = hash_hmac('sha256', $orderId . '|' . $paymentId, $keySecret);
-
-    if (!hash_equals($generatedSignature, $signature)) {
-        // Log attempt as failed
-        if ($pdo && is_numeric($regId) && (int)$regId > 0) {
-            try {
-                $pdo->prepare('UPDATE payments SET status = "failed", failure_reason = "Signature Mismatch" WHERE razorpay_order_id = ?')->execute([$orderId]);
-                $pdo->prepare('UPDATE payment_attempts SET status = "failed", failure_reason = "Signature Mismatch" WHERE razorpay_order_id = ?')->execute([$orderId]);
-                $pdo->prepare('UPDATE registrations SET registration_status = "payment_failed" WHERE id = ?')->execute([(int)$regId]);
-            } catch (Exception $e) {}
+    $isTest = isTestModeActive($input['test_secret'] ?? '');
+    
+    if ($isTest && strpos($orderId, 'TEST_ORDER_') === 0) {
+        // Test Mode Bypass
+        $paymentId = $paymentId ?: 'TEST_PAY_' . time() . rand(1000, 9999);
+        $signature = 'TEST_SIGNATURE_BYPASS';
+    } else {
+        if (empty($orderId) || empty($paymentId) || empty($signature)) {
+            sendApiResponse(false, 'Missing required payment verification parameters.', ['error_code' => 'MISSING_PARAMETERS'], 400);
         }
-        sendApiResponse(false, 'Invalid payment signature. Verification failed.', ['error_code' => 'SIGNATURE_MISMATCH'], 400);
+
+        // Cryptographic HMAC SHA256 Verification
+        $generatedSignature = hash_hmac('sha256', $orderId . '|' . $paymentId, $keySecret);
+
+        if (!hash_equals($generatedSignature, $signature)) {
+            // Log attempt as failed
+            if ($pdo && is_numeric($regId) && (int)$regId > 0) {
+                try {
+                    $pdo->prepare('UPDATE payments SET status = "failed", failure_reason = "Signature Mismatch" WHERE razorpay_order_id = ?')->execute([$orderId]);
+                    $pdo->prepare('UPDATE payment_attempts SET status = "failed", failure_reason = "Signature Mismatch" WHERE razorpay_order_id = ?')->execute([$orderId]);
+                    $pdo->prepare('UPDATE registrations SET registration_status = "payment_failed" WHERE id = ?')->execute([(int)$regId]);
+                } catch (Exception $e) {}
+            }
+            sendApiResponse(false, 'Invalid payment signature. Verification failed.', ['error_code' => 'SIGNATURE_MISMATCH'], 400);
+        }
     }
 
     $workshop = $WORKSHOP_CATALOG[$workshopId] ?? $WORKSHOP_CATALOG['1'];
@@ -259,21 +267,23 @@ elseif ($action === 'verify_payment' || $action === 'verify_signature') {
 
             $regDbId = is_numeric($regId) ? (int)$regId : 0;
 
+            $payStatus = $isTest ? 'TEST_SUCCESS' : 'paid';
+
             // 1. Update Payment Record
             $stmt = $pdo->prepare('
                 UPDATE payments 
-                SET status = "paid", razorpay_payment_id = ?, razorpay_signature = ?, paid_at = NOW() 
+                SET status = ?, razorpay_payment_id = ?, razorpay_signature = ?, paid_at = NOW() 
                 WHERE razorpay_order_id = ? OR registration_id = ?
             ');
-            $stmt->execute([$paymentId, $signature, $orderId, $regDbId]);
+            $stmt->execute([$payStatus, $paymentId, $signature, $orderId, $regDbId]);
 
             // 2. Update Payment Attempts
             $stmt = $pdo->prepare('
                 UPDATE payment_attempts 
-                SET status = "paid", razorpay_payment_id = ?, completed_at = NOW() 
+                SET status = ?, razorpay_payment_id = ?, completed_at = NOW() 
                 WHERE razorpay_order_id = ? OR registration_id = ?
             ');
-            $stmt->execute([$paymentId, $orderId, $regDbId]);
+            $stmt->execute([$payStatus, $paymentId, $orderId, $regDbId]);
 
             // 3. Confirm Registration
             if ($regDbId > 0) {
@@ -299,14 +309,16 @@ elseif ($action === 'verify_payment' || $action === 'verify_signature') {
                     $settledAmount = (float)$confirmedRow['total_amount'];
                 }
 
-                // 4. Increment registered_count on workshops
-                $stmt = $pdo->prepare('
-                    UPDATE workshops w
-                    JOIN registration_workshops rw ON rw.workshop_id = w.id
-                    SET w.registered_count = w.registered_count + 1
-                    WHERE rw.registration_id = ?
-                ');
-                $stmt->execute([$regDbId]);
+                // 4. Increment registered_count on workshops (Only for Real Registrations)
+                if (!$isTest) {
+                    $stmt = $pdo->prepare('
+                        UPDATE workshops w
+                        JOIN registration_workshops rw ON rw.workshop_id = w.id
+                        SET w.registered_count = w.registered_count + 1
+                        WHERE rw.registration_id = ?
+                    ');
+                    $stmt->execute([$regDbId]);
+                }
             }
 
             $pdo->commit();
@@ -325,7 +337,7 @@ elseif ($action === 'verify_payment' || $action === 'verify_signature') {
         'amount' => $settledAmount,
         'amount_formatted' => '₹' . number_format($settledAmount),
         'currency' => 'INR',
-        'payment_status' => 'paid',
+        'payment_status' => $payStatus ?? 'paid',
         'registration_status' => 'confirmed',
         'workshop_id' => $workshop['id'],
         'workshop_name' => $workshop['name'],

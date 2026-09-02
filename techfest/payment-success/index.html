@@ -367,13 +367,14 @@
       '11': { name: 'Student Entrepreneurship', fee: '₹250', schedule: 'Day 3 (02:00 PM - 04:30 PM)', venue: 'Seminar Hall 2' }
     };
 
-    window.addEventListener('DOMContentLoaded', async function () {
-      const params = new URLSearchParams(window.location.search);
-      const wsId = params.get('workshop') || '1';
-      let regId = params.get('registration_id') || 'TF26-00123';
-      let payId = params.get('payment_id') || 'pay_verified';
-      let orderId = params.get('order_id') || 'order_verified';
-      const isBypass = params.get('bypass') === 'true' || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
+    window.addEventListener('DOMContentLoaded', async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let regId = urlParams.get('registration_id') || 'TF-2026-UNKNOWN';
+      let payId = urlParams.get('payment_id') || 'PAY_UNKNOWN';
+      let orderId = urlParams.get('order_id') || 'ORDER_UNKNOWN';
+      let wsId = urlParams.get('workshop') || '1';
+
+      const isBypass = urlParams.get('bypass') === 'true' || sessionStorage.getItem('tf_test_secret') || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
 
       const ws = WORKSHOPS[wsId] || WORKSHOPS['1'];
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
@@ -382,8 +383,8 @@
       let wsTitle = ws.name;
       let dateStr = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 
-      // Fetch official registration from MySQL
-      if (regId && !isBypass) {
+      // Fetch official registration from MySQL (Even for test mode, since it's now server-backed!)
+      if (regId) {
         try {
           const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
           const data = await res.json();
