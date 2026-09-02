@@ -2,6 +2,7 @@
 /**
  * Vadiva Tech Fest 3.0 — Real-Time Slot and Capacity Engine
  * Reference: Specification Part E (E1, E2, E3, E4)
+ * Clean real-time architecture: 0 demo/fake data.
  */
 
 header('Content-Type: application/json');
@@ -28,7 +29,7 @@ function sendJson($success, $message, $data = [], $statusCode = 200) {
     exit;
 }
 
-// Check database connection if configured, else provide structured real-time dynamic mock/data store
+// Database Connection
 $hasDb = false;
 $pdo = null;
 
@@ -43,8 +44,8 @@ if (file_exists(__DIR__ . '/config/db.php')) {
     }
 }
 
-// Canonical Part E In-Memory Datastore / Fallback Engine
-$MOCK_PAID_WORKSHOPS = [
+// Clean Real Master Catalogue
+$BASE_PAID_WORKSHOPS = [
     [
         'id' => 1,
         'code' => 'WS-ROCKET',
@@ -59,10 +60,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1517976487541-05bf47990176?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 16, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20, 'seats_filled' => 19, 'soft_locks' => 1],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 12, 'soft_locks' => 0],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20, 'seats_filled' => 14, 'soft_locks' => 2],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20],
         ]
     ],
     [
@@ -79,10 +80,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 25, 'seats_filled' => 22, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 25, 'seats_filled' => 25, 'soft_locks' => 0],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 25, 'seats_filled' => 18, 'soft_locks' => 2],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 25, 'seats_filled' => 15, 'soft_locks' => 0],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 25],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 25],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 25],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 25],
         ]
     ],
     [
@@ -99,10 +100,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 18, 'soft_locks' => 2],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20, 'seats_filled' => 20, 'soft_locks' => 0],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 14, 'soft_locks' => 1],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20, 'seats_filled' => 11, 'soft_locks' => 0],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20],
         ]
     ],
     [
@@ -119,10 +120,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 13, 'soft_locks' => 0],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20, 'seats_filled' => 17, 'soft_locks' => 1],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 15, 'soft_locks' => 2],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20, 'seats_filled' => 10, 'soft_locks' => 0],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20],
         ]
     ],
     [
@@ -139,10 +140,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 34, 'soft_locks' => 2],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40, 'seats_filled' => 38, 'soft_locks' => 1],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 28, 'soft_locks' => 0],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40, 'seats_filled' => 22, 'soft_locks' => 1],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40],
         ]
     ],
     [
@@ -159,10 +160,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 39, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40, 'seats_filled' => 36, 'soft_locks' => 2],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 31, 'soft_locks' => 0],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40, 'seats_filled' => 26, 'soft_locks' => 1],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40],
         ]
     ],
     [
@@ -179,10 +180,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 29, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40, 'seats_filled' => 33, 'soft_locks' => 0],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 25, 'soft_locks' => 2],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40, 'seats_filled' => 18, 'soft_locks' => 0],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40],
         ]
     ],
     [
@@ -199,10 +200,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 17, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20, 'seats_filled' => 20, 'soft_locks' => 0],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20, 'seats_filled' => 12, 'soft_locks' => 0],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20, 'seats_filled' => 14, 'soft_locks' => 1],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 20],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 20],
         ]
     ],
     [
@@ -219,10 +220,10 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 25, 'seats_filled' => 21, 'soft_locks' => 2],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 25, 'seats_filled' => 24, 'soft_locks' => 0],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 25, 'seats_filled' => 16, 'soft_locks' => 1],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 25, 'seats_filled' => 13, 'soft_locks' => 0],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 25],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 25],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 25],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 25],
         ]
     ],
     [
@@ -239,23 +240,21 @@ $MOCK_PAID_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
         'batches' => [
-            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 32, 'soft_locks' => 1],
-            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40, 'seats_filled' => 37, 'soft_locks' => 2],
-            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40, 'seats_filled' => 27, 'soft_locks' => 0],
-            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40, 'seats_filled' => 21, 'soft_locks' => 1],
+            ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 40],
+            ['batch_code' => 'B-03', 'slots' => 'D2-AM + D3-AM (09:30–11:30)', 'capacity' => 40],
+            ['batch_code' => 'B-04', 'slots' => 'D2-PM (13:30) + D3-AM (09:30)', 'capacity' => 40],
         ]
     ]
 ];
 
-$MOCK_FREE_WORKSHOPS = [
+$BASE_FREE_WORKSHOPS = [
     [
         'id' => 11,
         'code' => 'FREE-DT',
         'name' => 'Design Thinking Bootcamp',
         'short_desc' => '5-stage human-centered innovation method — rapid problem framing, ideation, and paper prototyping.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -264,8 +263,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-1', 'theatre' => 'A', 'time' => 'Day 1 · 10:00–11:00', 'seats_filled' => 54, 'soft_locks' => 2],
-            ['slot_code' => 'F-D2-2', 'theatre' => 'A', 'time' => 'Day 2 · 12:00–13:00', 'seats_filled' => 68, 'soft_locks' => 3],
+            ['slot_code' => 'F-D1-1', 'theatre' => 'A', 'time' => 'Day 1 · 10:00–11:00'],
+            ['slot_code' => 'F-D2-2', 'theatre' => 'A', 'time' => 'Day 2 · 12:00–13:00'],
         ]
     ],
     [
@@ -274,8 +273,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Sketching & Visual Thinking',
         'short_desc' => 'Transform complex technical thoughts into visual frameworks, wireframe sketches, and graphic representations.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -284,8 +281,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-1', 'theatre' => 'B', 'time' => 'Day 1 · 10:00–11:00', 'seats_filled' => 41, 'soft_locks' => 1],
-            ['slot_code' => 'F-D2-2', 'theatre' => 'B', 'time' => 'Day 2 · 12:00–13:00', 'seats_filled' => 47, 'soft_locks' => 0],
+            ['slot_code' => 'F-D1-1', 'theatre' => 'B', 'time' => 'Day 1 · 10:00–11:00'],
+            ['slot_code' => 'F-D2-2', 'theatre' => 'B', 'time' => 'Day 2 · 12:00–13:00'],
         ]
     ],
     [
@@ -294,8 +291,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Public Speaking & Pitching',
         'short_desc' => 'Story arcs, vocal projection, body language, and elevator pitch structuring for young startup creators.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -304,8 +299,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-2', 'theatre' => 'A', 'time' => 'Day 1 · 12:00–13:00', 'seats_filled' => 71, 'soft_locks' => 4],
-            ['slot_code' => 'F-D2-3', 'theatre' => 'A', 'time' => 'Day 2 · 14:00–15:00', 'seats_filled' => 63, 'soft_locks' => 1],
+            ['slot_code' => 'F-D1-2', 'theatre' => 'A', 'time' => 'Day 1 · 12:00–13:00'],
+            ['slot_code' => 'F-D2-3', 'theatre' => 'A', 'time' => 'Day 2 · 14:00–15:00'],
         ]
     ],
     [
@@ -314,8 +309,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Science Demonstrations',
         'short_desc' => 'Spectacular live physics and chemistry experiments exploring cryogenics, vortex dynamics, and electromagnetism.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -324,8 +317,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-2', 'theatre' => 'B', 'time' => 'Day 1 · 12:00–13:00', 'seats_filled' => 76, 'soft_locks' => 2],
-            ['slot_code' => 'F-D2-3', 'theatre' => 'B', 'time' => 'Day 2 · 14:00–15:00', 'seats_filled' => 79, 'soft_locks' => 1],
+            ['slot_code' => 'F-D1-2', 'theatre' => 'B', 'time' => 'Day 1 · 12:00–13:00'],
+            ['slot_code' => 'F-D2-3', 'theatre' => 'B', 'time' => 'Day 2 · 14:00–15:00'],
         ]
     ],
     [
@@ -334,8 +327,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Student Entrepreneurship',
         'short_desc' => 'Validating customer pain points, unit economics, and building viable student-led venture blueprints.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -344,8 +335,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-3', 'theatre' => 'A', 'time' => 'Day 1 · 14:00–15:00', 'seats_filled' => 48, 'soft_locks' => 2],
-            ['slot_code' => 'F-D2-4', 'theatre' => 'A', 'time' => 'Day 2 · 16:00–17:00', 'seats_filled' => 38, 'soft_locks' => 0],
+            ['slot_code' => 'F-D1-3', 'theatre' => 'A', 'time' => 'Day 1 · 14:00–15:00'],
+            ['slot_code' => 'F-D2-4', 'theatre' => 'A', 'time' => 'Day 2 · 16:00–17:00'],
         ]
     ],
     [
@@ -354,8 +345,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Creative Coding with p5.js',
         'short_desc' => 'Generate generative art, interactive visualizers, and mathematical beauty through introductory JavaScript.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -364,8 +353,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-3', 'theatre' => 'B', 'time' => 'Day 1 · 14:00–15:00', 'seats_filled' => 69, 'soft_locks' => 3],
-            ['slot_code' => 'F-D2-4', 'theatre' => 'B', 'time' => 'Day 2 · 16:00–17:00', 'seats_filled' => 56, 'soft_locks' => 1],
+            ['slot_code' => 'F-D1-3', 'theatre' => 'B', 'time' => 'Day 1 · 14:00–15:00'],
+            ['slot_code' => 'F-D2-4', 'theatre' => 'B', 'time' => 'Day 2 · 16:00–17:00'],
         ]
     ],
     [
@@ -374,8 +363,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Electronics Playground',
         'short_desc' => 'Introductory circuitry, polarity, breadboard basics, and making your first light-chaser gadget.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -384,8 +371,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-4', 'theatre' => 'A', 'time' => 'Day 1 · 16:00–17:00', 'seats_filled' => 35, 'soft_locks' => 0],
-            ['slot_code' => 'F-D3-1', 'theatre' => 'A', 'time' => 'Day 3 · 10:00–11:00', 'seats_filled' => 67, 'soft_locks' => 2],
+            ['slot_code' => 'F-D1-4', 'theatre' => 'A', 'time' => 'Day 1 · 16:00–17:00'],
+            ['slot_code' => 'F-D3-1', 'theatre' => 'A', 'time' => 'Day 3 · 10:00–11:00'],
         ]
     ],
     [
@@ -394,8 +381,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'CAD & 3D Modeling Intro',
         'short_desc' => 'Beginner spatial design in Tinkercad, Boolean operations, and understanding 3D coordinate geometry.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -404,8 +389,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D1-4', 'theatre' => 'B', 'time' => 'Day 1 · 16:00–17:00', 'seats_filled' => 74, 'soft_locks' => 2],
-            ['slot_code' => 'F-D3-1', 'theatre' => 'B', 'time' => 'Day 3 · 10:00–11:00', 'seats_filled' => 58, 'soft_locks' => 1],
+            ['slot_code' => 'F-D1-4', 'theatre' => 'B', 'time' => 'Day 1 · 16:00–17:00'],
+            ['slot_code' => 'F-D3-1', 'theatre' => 'B', 'time' => 'Day 3 · 10:00–11:00'],
         ]
     ],
     [
@@ -414,8 +399,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Space Exploration Lab',
         'short_desc' => 'Astrophysics basics, orbital mechanics, planetary landers, and future lunar/Martian habitat engineering.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -424,8 +407,8 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D2-1', 'theatre' => 'A', 'time' => 'Day 2 · 10:00–11:00', 'seats_filled' => 61, 'soft_locks' => 2],
-            ['slot_code' => 'F-D3-2', 'theatre' => 'A', 'time' => 'Day 3 · 12:00–13:00', 'seats_filled' => 72, 'soft_locks' => 3],
+            ['slot_code' => 'F-D2-1', 'theatre' => 'A', 'time' => 'Day 2 · 10:00–11:00'],
+            ['slot_code' => 'F-D3-2', 'theatre' => 'A', 'time' => 'Day 3 · 12:00–13:00'],
         ]
     ],
     [
@@ -434,8 +417,6 @@ $MOCK_FREE_WORKSHOPS = [
         'name' => 'Cyber Safety & AI Ethics',
         'short_desc' => 'Protecting digital identity, understanding algorithmic bias, deepfake detection, and responsible online citizenship.',
         'is_paid' => false,
-        'price_velammal' => 0,
-        'price_other' => 0,
         'binding_constraint' => 'Theatre seat capacity',
         'capacity_per_session' => 100,
         'public_capacity' => 80,
@@ -444,15 +425,15 @@ $MOCK_FREE_WORKSHOPS = [
         'max_grade' => 12,
         'image_url' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
         'sessions' => [
-            ['slot_code' => 'F-D2-1', 'theatre' => 'B', 'time' => 'Day 2 · 10:00–11:00', 'seats_filled' => 46, 'soft_locks' => 1],
-            ['slot_code' => 'F-D3-2', 'theatre' => 'B', 'time' => 'Day 3 · 12:00–13:00', 'seats_filled' => 65, 'soft_locks' => 2],
+            ['slot_code' => 'F-D2-1', 'theatre' => 'B', 'time' => 'Day 2 · 10:00–11:00'],
+            ['slot_code' => 'F-D3-2', 'theatre' => 'B', 'time' => 'Day 3 · 12:00–13:00'],
         ]
     ]
 ];
 
-// Helper to compute live status
+// Calculate live status from real numbers
 function calculateStatus($filled, $total) {
-    if ($total <= 0) return ['status' => 'UNAVAILABLE', 'label' => 'Closed', 'class' => 'full'];
+    if ($total <= 0) return ['status' => 'UNAVAILABLE', 'label' => 'Closed', 'class' => 'full', 'percentage' => 0];
     $pct = ($filled / $total) * 100;
     if ($filled >= $total) {
         return ['status' => 'FULL', 'label' => 'Sold Out (Waitlist)', 'class' => 'full', 'percentage' => 100];
@@ -470,25 +451,53 @@ function calculateStatus($filled, $total) {
 // -------------------------------------------------------------
 if ($action === 'realtime_capacity') {
     $paidResponse = [];
-    foreach ($MOCK_PAID_WORKSHOPS as $ws) {
+
+    foreach ($BASE_PAID_WORKSHOPS as $ws) {
         $totalCap = 0;
         $totalFilled = 0;
         $batchesData = [];
 
         foreach ($ws['batches'] as $b) {
             $cap = $b['capacity'];
-            $filled = $b['seats_filled'] + $b['soft_locks'];
+            $confirmedSeats = 0;
+            $softLocks = 0;
+
+            if ($hasDb && $pdo) {
+                try {
+                    // Query confirmed bookings for this workshop batch
+                    $stmt = $pdo->prepare("SELECT seats_taken FROM workshop_batches WHERE workshop_id = ? AND batch_code = ?");
+                    $stmt->execute([$ws['id'], $b['batch_code']]);
+                    $row = $stmt->fetch();
+                    if ($row) {
+                        $confirmedSeats = intval($row['seats_taken']);
+                    }
+
+                    // Query active soft-locks
+                    $stmtLock = $pdo->prepare("SELECT COUNT(*) as locks FROM workshop_bookings WHERE workshop_id = ? AND batch_id = (SELECT id FROM workshop_batches WHERE workshop_id = ? AND batch_code = ? LIMIT 1) AND status = 'SOFT_LOCK' AND locked_until > NOW()");
+                    $stmtLock->execute([$ws['id'], $ws['id'], $b['batch_code']]);
+                    $lockRow = $stmtLock->fetch();
+                    if ($lockRow) {
+                        $softLocks = intval($lockRow['locks']);
+                    }
+                } catch (Exception $e) {
+                    // Fallback to 0 if table doesn't exist yet
+                    $confirmedSeats = 0;
+                    $softLocks = 0;
+                }
+            }
+
+            $filled = $confirmedSeats + $softLocks;
             $totalCap += $cap;
             $totalFilled += $filled;
             $statusInfo = calculateStatus($filled, $cap);
-            
+
             $batchesData[] = [
                 'batch_code' => $b['batch_code'],
                 'slots' => $b['slots'],
                 'capacity' => $cap,
                 'seats_filled' => $filled,
-                'confirmed_seats' => $b['seats_filled'],
-                'soft_locks' => $b['soft_locks'],
+                'confirmed_seats' => $confirmedSeats,
+                'soft_locks' => $softLocks,
                 'available_seats' => max(0, $cap - $filled),
                 'status' => $statusInfo['status'],
                 'status_label' => $statusInfo['label'],
@@ -523,14 +532,38 @@ if ($action === 'realtime_capacity') {
     }
 
     $freeResponse = [];
-    foreach ($MOCK_FREE_WORKSHOPS as $ws) {
+    foreach ($BASE_FREE_WORKSHOPS as $ws) {
         $totalCap = 0;
         $totalFilled = 0;
         $sessionsData = [];
 
         foreach ($ws['sessions'] as $s) {
             $cap = $ws['public_capacity']; // 80 public booking seats
-            $filled = $s['seats_filled'] + $s['soft_locks'];
+            $confirmedSeats = 0;
+            $softLocks = 0;
+
+            if ($hasDb && $pdo) {
+                try {
+                    $stmt = $pdo->prepare("SELECT seats_taken FROM free_workshop_sessions WHERE workshop_id = ? AND slot_code = ? AND theatre_code = ?");
+                    $stmt->execute([$ws['id'], $s['slot_code'], $s['theatre']]);
+                    $row = $stmt->fetch();
+                    if ($row) {
+                        $confirmedSeats = intval($row['seats_taken']);
+                    }
+
+                    $stmtLock = $pdo->prepare("SELECT COUNT(*) as locks FROM workshop_bookings WHERE workshop_id = ? AND free_session_id = (SELECT id FROM free_workshop_sessions WHERE workshop_id = ? AND slot_code = ? AND theatre_code = ? LIMIT 1) AND status = 'SOFT_LOCK' AND locked_until > NOW()");
+                    $stmtLock->execute([$ws['id'], $ws['id'], $s['slot_code'], $s['theatre']]);
+                    $lockRow = $stmtLock->fetch();
+                    if ($lockRow) {
+                        $softLocks = intval($lockRow['locks']);
+                    }
+                } catch (Exception $e) {
+                    $confirmedSeats = 0;
+                    $softLocks = 0;
+                }
+            }
+
+            $filled = $confirmedSeats + $softLocks;
             $totalCap += $cap;
             $totalFilled += $filled;
             $statusInfo = calculateStatus($filled, $cap);
@@ -544,6 +577,8 @@ if ($action === 'realtime_capacity') {
                 'public_capacity' => $cap,
                 'standby_capacity' => $ws['standby_capacity'],
                 'seats_filled' => $filled,
+                'confirmed_seats' => $confirmedSeats,
+                'soft_locks' => $softLocks,
                 'available_seats' => max(0, $cap - $filled),
                 'status' => $statusInfo['status'],
                 'status_label' => $statusInfo['label'],
@@ -634,17 +669,12 @@ elseif ($action === 'admin_update_capacity') {
         sendJson(false, 'Invalid workshop ID, batch code, or capacity value (hard floor is 0).', [], 400);
     }
 
-    // Lookup current occupancy
-    $currentOccupancy = 16; // default lookup
-    foreach ($MOCK_PAID_WORKSHOPS as $ws) {
-        if ($ws['id'] === $workshopId) {
-            foreach ($ws['batches'] as $b) {
-                if ($b['batch_code'] === $batchCode) {
-                    $currentOccupancy = $b['seats_filled'] + $b['soft_locks'];
-                    break 2;
-                }
-            }
-        }
+    $currentOccupancy = 0;
+    if ($hasDb && $pdo) {
+        $stmt = $pdo->prepare("SELECT seats_taken FROM workshop_batches WHERE workshop_id = ? AND batch_code = ?");
+        $stmt->execute([$workshopId, $batchCode]);
+        $row = $stmt->fetch();
+        if ($row) $currentOccupancy = intval($row['seats_taken']);
     }
 
     // MANDATE: An admin reducing capacity below current occupancy must be BLOCKED, not warned.
@@ -655,6 +685,11 @@ elseif ($action === 'admin_update_capacity') {
             'requested_capacity' => $newCapacity,
             'current_occupancy' => $currentOccupancy
         ], 422);
+    }
+
+    if ($hasDb && $pdo) {
+        $stmt = $pdo->prepare("UPDATE workshop_batches SET capacity = ? WHERE workshop_id = ? AND batch_code = ?");
+        $stmt->execute([$newCapacity, $workshopId, $batchCode]);
     }
 
     sendJson(true, "Capacity for batch {$batchCode} successfully updated to {$newCapacity}.", [

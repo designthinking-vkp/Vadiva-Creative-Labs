@@ -175,10 +175,10 @@ INSERT INTO workshops (id, workshop_code, name, short_desc, is_paid, price_velam
 
 -- ==========================================================================
 -- SEED DATA: WORKSHOP BATCHES (4 Batches per Paid Workshop: B-01 to B-04)
+-- Initial real occupancy: 0 seats taken
 -- ==========================================================================
 INSERT INTO workshop_batches (workshop_id, batch_code, capacity, seats_taken)
-SELECT w.id, bp.batch_code, w.default_capacity_per_batch, 
-       FLOOR(RAND() * (w.default_capacity_per_batch * 0.75)) -- initial simulated seed occupancy
+SELECT w.id, bp.batch_code, w.default_capacity_per_batch, 0
 FROM workshops w
 CROSS JOIN batch_pairings bp
 WHERE w.is_paid = TRUE;
@@ -200,25 +200,26 @@ INSERT INTO workshops (id, workshop_code, name, short_desc, is_paid, price_velam
 
 -- ==========================================================================
 -- SEED DATA: E4 20 FREE THEATRE SESSIONS (10 slots x 2 theatres, 2 repeats each)
+-- Initial real occupancy: 0 seats taken
 -- ==========================================================================
 INSERT INTO free_workshop_sessions (workshop_id, slot_code, theatre_code, total_seats, public_booking_seats, standby_holdback_seats, seats_taken) VALUES
-(11, 'F-D1-1', 'A', 100, 80, 20, 45),
-(12, 'F-D1-1', 'B', 100, 80, 20, 32),
-(13, 'F-D1-2', 'A', 100, 80, 20, 60),
-(14, 'F-D1-2', 'B', 100, 80, 20, 55),
-(15, 'F-D1-3', 'A', 100, 80, 20, 40),
-(16, 'F-D1-3', 'B', 100, 80, 20, 68),
-(17, 'F-D1-4', 'A', 100, 80, 20, 28),
-(18, 'F-D1-4', 'B', 100, 80, 20, 72),
-(19, 'F-D2-1', 'A', 100, 80, 20, 58),
-(20, 'F-D2-1', 'B', 100, 80, 20, 44),
-(11, 'F-D2-2', 'A', 100, 80, 20, 62), -- repeat topic 11
-(12, 'F-D2-2', 'B', 100, 80, 20, 39), -- repeat topic 12
-(13, 'F-D2-3', 'A', 100, 80, 20, 51), -- repeat topic 13
-(14, 'F-D2-3', 'B', 100, 80, 20, 77), -- repeat topic 14
-(15, 'F-D2-4', 'A', 100, 80, 20, 33), -- repeat topic 15
-(16, 'F-D2-4', 'B', 100, 80, 20, 48), -- repeat topic 16
-(17, 'F-D3-1', 'A', 100, 80, 20, 65), -- repeat topic 17
-(18, 'F-D3-1', 'B', 100, 80, 20, 54), -- repeat topic 18
-(19, 'F-D3-2', 'A', 100, 80, 20, 70), -- repeat topic 19
-(20, 'F-D3-2', 'B', 100, 80, 20, 64); -- repeat topic 20
+(11, 'F-D1-1', 'A', 100, 80, 20, 0),
+(12, 'F-D1-1', 'B', 100, 80, 20, 0),
+(13, 'F-D1-2', 'A', 100, 80, 20, 0),
+(14, 'F-D1-2', 'B', 100, 80, 20, 0),
+(15, 'F-D1-3', 'A', 100, 80, 20, 0),
+(16, 'F-D1-3', 'B', 100, 80, 20, 0),
+(17, 'F-D1-4', 'A', 100, 80, 20, 0),
+(18, 'F-D1-4', 'B', 100, 80, 20, 0),
+(19, 'F-D2-1', 'A', 100, 80, 20, 0),
+(20, 'F-D2-1', 'B', 100, 80, 20, 0),
+(11, 'F-D2-2', 'A', 100, 80, 20, 0), -- repeat topic 11
+(12, 'F-D2-2', 'B', 100, 80, 20, 0), -- repeat topic 12
+(13, 'F-D2-3', 'A', 100, 80, 20, 0), -- repeat topic 13
+(14, 'F-D2-3', 'B', 100, 80, 20, 0), -- repeat topic 14
+(15, 'F-D2-4', 'A', 100, 80, 20, 0), -- repeat topic 15
+(16, 'F-D2-4', 'B', 100, 80, 20, 0), -- repeat topic 16
+(17, 'F-D3-1', 'A', 100, 80, 20, 0), -- repeat topic 17
+(18, 'F-D3-1', 'B', 100, 80, 20, 0), -- repeat topic 18
+(19, 'F-D3-2', 'A', 100, 80, 20, 0), -- repeat topic 19
+(20, 'F-D3-2', 'B', 100, 80, 20, 0); -- repeat topic 20

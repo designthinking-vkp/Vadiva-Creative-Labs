@@ -357,10 +357,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1517976487541-05bf47990176?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 16, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 19, soft_locks: 1 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 12, soft_locks: 0 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 14, soft_locks: 2 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -377,10 +377,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 22, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 25, soft_locks: 0 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 18, soft_locks: 2 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 15, soft_locks: 0 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -397,10 +397,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 18, soft_locks: 2 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 20, soft_locks: 0 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 14, soft_locks: 1 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 11, soft_locks: 0 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -417,10 +417,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 13, soft_locks: 0 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 17, soft_locks: 1 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 15, soft_locks: 2 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 10, soft_locks: 0 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -437,10 +437,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 34, soft_locks: 2 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 38, soft_locks: 1 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 28, soft_locks: 0 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 22, soft_locks: 1 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -457,10 +457,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1527474305487-b87b222841cc?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 39, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 36, soft_locks: 2 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 31, soft_locks: 0 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 26, soft_locks: 1 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -477,10 +477,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 29, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 33, soft_locks: 0 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 25, soft_locks: 2 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 18, soft_locks: 0 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -497,10 +497,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 17, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 20, soft_locks: 0 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 12, soft_locks: 0 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 14, soft_locks: 1 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 20, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 20, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -517,10 +517,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 21, soft_locks: 2 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 24, soft_locks: 0 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 16, soft_locks: 1 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 13, soft_locks: 0 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 25, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 25, seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -537,10 +537,10 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
           batches: [
-            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 32, soft_locks: 1 },
-            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 37, soft_locks: 2 },
-            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 27, soft_locks: 0 },
-            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 21, soft_locks: 1 }
+            { batch_code: 'B-01', slots: 'D1-AM + D2-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-02', slots: 'D1-PM + D2-PM (13:30–15:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-03', slots: 'D2-AM + D3-AM (09:30–11:30)', capacity: 40, seats_filled: 0, soft_locks: 0 },
+            { batch_code: 'B-04', slots: 'D2-PM (13:30) + D3-AM (09:30)', capacity: 40, seats_filled: 0, soft_locks: 0 }
           ]
         }
       ],
@@ -560,8 +560,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-1', theatre: 'Theatre Alpha', time: 'Day 1 · 10:00–11:00', seats_filled: 54, soft_locks: 2 },
-            { slot_code: 'F-D2-2', theatre: 'Theatre Alpha', time: 'Day 2 · 12:00–13:00', seats_filled: 68, soft_locks: 3 }
+            { slot_code: 'F-D1-1', theatre: 'Theatre Alpha', time: 'Day 1 · 10:00–11:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-2', theatre: 'Theatre Alpha', time: 'Day 2 · 12:00–13:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -578,8 +578,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-1', theatre: 'Theatre Beta', time: 'Day 1 · 10:00–11:00', seats_filled: 41, soft_locks: 1 },
-            { slot_code: 'F-D2-2', theatre: 'Theatre Beta', time: 'Day 2 · 12:00–13:00', seats_filled: 47, soft_locks: 0 }
+            { slot_code: 'F-D1-1', theatre: 'Theatre Beta', time: 'Day 1 · 10:00–11:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-2', theatre: 'Theatre Beta', time: 'Day 2 · 12:00–13:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -596,8 +596,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-2', theatre: 'Theatre Alpha', time: 'Day 1 · 12:00–13:00', seats_filled: 71, soft_locks: 4 },
-            { slot_code: 'F-D2-3', theatre: 'Theatre Alpha', time: 'Day 2 · 14:00–15:00', seats_filled: 63, soft_locks: 1 }
+            { slot_code: 'F-D1-2', theatre: 'Theatre Alpha', time: 'Day 1 · 12:00–13:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-3', theatre: 'Theatre Alpha', time: 'Day 2 · 14:00–15:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -614,8 +614,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-2', theatre: 'Theatre Beta', time: 'Day 1 · 12:00–13:00', seats_filled: 76, soft_locks: 2 },
-            { slot_code: 'F-D2-3', theatre: 'Theatre Beta', time: 'Day 2 · 14:00–15:00', seats_filled: 79, soft_locks: 1 }
+            { slot_code: 'F-D1-2', theatre: 'Theatre Beta', time: 'Day 1 · 12:00–13:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-3', theatre: 'Theatre Beta', time: 'Day 2 · 14:00–15:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -632,8 +632,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-3', theatre: 'Theatre Alpha', time: 'Day 1 · 14:00–15:00', seats_filled: 48, soft_locks: 2 },
-            { slot_code: 'F-D2-4', theatre: 'Theatre Alpha', time: 'Day 2 · 16:00–17:00', seats_filled: 38, soft_locks: 0 }
+            { slot_code: 'F-D1-3', theatre: 'Theatre Alpha', time: 'Day 1 · 14:00–15:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-4', theatre: 'Theatre Alpha', time: 'Day 2 · 16:00–17:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -650,8 +650,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-3', theatre: 'Theatre Beta', time: 'Day 1 · 14:00–15:00', seats_filled: 69, soft_locks: 3 },
-            { slot_code: 'F-D2-4', theatre: 'Theatre Beta', time: 'Day 2 · 16:00–17:00', seats_filled: 56, soft_locks: 1 }
+            { slot_code: 'F-D1-3', theatre: 'Theatre Beta', time: 'Day 1 · 14:00–15:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D2-4', theatre: 'Theatre Beta', time: 'Day 2 · 16:00–17:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -668,8 +668,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-4', theatre: 'Theatre Alpha', time: 'Day 1 · 16:00–17:00', seats_filled: 35, soft_locks: 0 },
-            { slot_code: 'F-D3-1', theatre: 'Theatre Alpha', time: 'Day 3 · 10:00–11:00', seats_filled: 67, soft_locks: 2 }
+            { slot_code: 'F-D1-4', theatre: 'Theatre Alpha', time: 'Day 1 · 16:00–17:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D3-1', theatre: 'Theatre Alpha', time: 'Day 3 · 10:00–11:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -686,8 +686,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D1-4', theatre: 'Theatre Beta', time: 'Day 1 · 16:00–17:00', seats_filled: 74, soft_locks: 2 },
-            { slot_code: 'F-D3-1', theatre: 'Theatre Beta', time: 'Day 3 · 10:00–11:00', seats_filled: 58, soft_locks: 1 }
+            { slot_code: 'F-D1-4', theatre: 'Theatre Beta', time: 'Day 1 · 16:00–17:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D3-1', theatre: 'Theatre Beta', time: 'Day 3 · 10:00–11:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -704,8 +704,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D2-1', theatre: 'Theatre Alpha', time: 'Day 2 · 10:00–11:00', seats_filled: 61, soft_locks: 2 },
-            { slot_code: 'F-D3-2', theatre: 'Theatre Alpha', time: 'Day 3 · 12:00–13:00', seats_filled: 72, soft_locks: 3 }
+            { slot_code: 'F-D2-1', theatre: 'Theatre Alpha', time: 'Day 2 · 10:00–11:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D3-2', theatre: 'Theatre Alpha', time: 'Day 3 · 12:00–13:00', seats_filled: 0, soft_locks: 0 }
           ]
         },
         {
@@ -722,8 +722,8 @@
           max_grade: 12,
           image_url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
           sessions: [
-            { slot_code: 'F-D2-1', theatre: 'Theatre Beta', time: 'Day 2 · 10:00–11:00', seats_filled: 46, soft_locks: 1 },
-            { slot_code: 'F-D3-2', theatre: 'Theatre Beta', time: 'Day 3 · 12:00–13:00', seats_filled: 65, soft_locks: 2 }
+            { slot_code: 'F-D2-1', theatre: 'Theatre Beta', time: 'Day 2 · 10:00–11:00', seats_filled: 0, soft_locks: 0 },
+            { slot_code: 'F-D3-2', theatre: 'Theatre Beta', time: 'Day 3 · 12:00–13:00', seats_filled: 0, soft_locks: 0 }
           ]
         }
       ]
@@ -731,11 +731,10 @@
 
     init() {
       this.fetchLiveData();
-      // Start live real-time simulation / background polling every 6 seconds
+      // Regular live sync with backend API every 10 seconds
       this.pollTimer = setInterval(() => {
-        this.simulateLiveActivity();
-        this.notifySubscribers();
-      }, 6000);
+        this.fetchLiveData();
+      }, 10000);
     },
 
     subscribe(callback) {
@@ -763,23 +762,8 @@
           }
         })
         .catch(() => {
-          // Fallback gracefully to local datastore
           this.notifySubscribers();
         });
-    },
-
-    simulateLiveActivity() {
-      // Small simulated live fluctuation (+1 seat or soft lock expiration)
-      if (Math.random() > 0.4) {
-        const randomWs = this.data.paidWorkshops[Math.floor(Math.random() * this.data.paidWorkshops.length)];
-        if (randomWs && randomWs.batches && randomWs.batches.length > 0) {
-          const randomBatch = randomWs.batches[Math.floor(Math.random() * randomWs.batches.length)];
-          const currentTotal = randomBatch.seats_filled + randomBatch.soft_locks;
-          if (currentTotal < randomBatch.capacity && Math.random() > 0.3) {
-            randomBatch.seats_filled += 1;
-          }
-        }
-      }
     },
 
     getPaidWorkshops() {
