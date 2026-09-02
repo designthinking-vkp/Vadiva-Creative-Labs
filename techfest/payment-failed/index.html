@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Unsuccessful | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Payment failure recovery for Vadiva Tech Fest 3.0.">
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
+  <style>
+    /* ── Payment Failed Page Styles (prefix: fail-) ── */
+    .fail-page {
+      background: transparent !important;
+      min-height: 80vh;
+      padding: 3.5rem 1.25rem 5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .fail-card {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      border-radius: var(--glass-radius-lg) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      padding: 2.75rem 2.25rem;
+      width: 100%;
+      max-width: 540px;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fail-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .fail-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.12) !important;
+      color: var(--tf-coral);
+      border: 2px solid rgba(239, 68, 68, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);
+    }
+    .fail-header h1 {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--tf-deep);
+      margin: 0 0 0.35rem;
+    }
+    .fail-header p {
+      color: var(--tf-muted);
+      font-size: 0.92rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Failure Details Box */
+    .fail-reason-box {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1.5px solid rgba(239, 68, 68, 0.2);
+      border-radius: 12px;
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 1.75rem;
+    }
+    .fail-reason-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--tf-coral);
+      margin-bottom: 0.4rem;
+    }
+    .fail-reason-text {
+      color: var(--tf-deep);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0 0 0.75rem;
+    }
+    .fail-context-text {
+      font-size: 0.8rem;
+      color: var(--tf-muted);
+      border-top: 1px dashed rgba(239, 68, 68, 0.2);
+      padding-top: 0.5rem;
+      margin: 0;
+    }
+
+    /* Action Buttons */
+    .fail-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .fail-btn {
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fail-btn-retry {
+      background: var(--tf-coral) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+    }
+    .fail-btn-retry:hover {
+      background: #d63d3d !important;
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+    }
+    .fail-btn-secondary {
+      background: rgba(12, 184, 192, 0.1) !important;
+      color: var(--tf-teal) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.35);
+    }
+    .fail-btn-secondary:hover {
+      background: var(--tf-teal) !important;
+      color: #ffffff !important;
+      transform: translateY(-1.5px);
+    }
+    .fail-btn-outline {
+      background: #ffffff !important;
+      color: var(--tf-muted) !important;
+      border: 1px solid rgba(12, 60, 76, 0.15);
+    }
+    .fail-btn-outline:hover {
+      color: var(--tf-deep) !important;
+      border-color: var(--tf-deep);
+    }
+
+    @media (max-width: 520px) {
+      .fail-card { padding: 2rem 1.25rem; }
+    }
+  </style>
+</head>
+<body class="techfest-theme bg-light-atmosphere">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="fail-page">
+    <div class="fail-card">
+
+      <div class="fail-header">
+        <div class="fail-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <h1>Payment Unsuccessful</h1>
+        <p>
+          Your registration has not been confirmed yet. No money was deducted, or any debited amount will be refunded automatically by your bank within 3–5 business days.
+        </p>
+      </div>
+
+      <!-- Failure Reason Box -->
+      <div class="fail-reason-box">
+        <div class="fail-reason-title">Status Notice</div>
+        <p class="fail-reason-text" id="fail-reason-desc">The transaction was cancelled or could not be completed.</p>
+        <p class="fail-context-text" id="fail-context-info">Selected Workshop: Robotics &amp; Automation</p>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <div class="fail-actions">
+        <a href="#" id="fail-retry-btn" class="fail-btn fail-btn-retry">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+          Retry Payment &rarr;
+        </a>
+        <a href="../workshops/index.html" class="fail-btn fail-btn-secondary">
+          Back to Workshop Catalogue
+        </a>
+        <a href="../dashboard/index.html" class="fail-btn fail-btn-outline">
+          Go to Dashboard
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with ❤️ by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
+  <script>
+    const WORKSHOPS = {
+      '1': 'Robotics & Automation',
+      '2': 'AI & Machine Learning Basics',
+      '3': '3D Printing & Design',
+      '4': 'Game Development',
+      '5': 'Electronics & Circuits',
+      '6': 'Python for Beginners',
+      '7': 'Design Thinking Bootcamp',
+      '8': 'Sketching & Visual Thinking',
+      '9': 'Public Speaking & Pitching',
+      '10': 'Science Demonstrations',
+      '11': 'Student Entrepreneurship'
+    };
+
+    window.addEventListener('DOMContentLoaded', async function () {
+      const params = new URLSearchParams(window.location.search);
+      const wsId = params.get('workshop') || sessionStorage.getItem('tf_pending_workshop') || '1';
+      const regId = params.get('registration_id') || localStorage.getItem('tf_participant_id') || '';
+      const reason = params.get('reason') || 'Payment checkout was cancelled or incomplete.';
+
+      let wsName = WORKSHOPS[wsId] || ('Workshop #' + wsId);
+
+      document.getElementById('fail-reason-desc').textContent = reason;
+      document.getElementById('fail-context-info').textContent = 'Selected Workshop: ' + wsName;
+
+      // Check MySQL registration details if available
+      if (regId) {
+        try {
+          const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
+          const data = await res.json();
+          if (data.success && data.data) {
+            const reg = data.data;
+            if (reg.workshops && reg.workshops.length > 0) {
+              wsName = reg.workshops.map(w => w.workshop_name_snapshot).join(', ');
+            }
+            document.getElementById('fail-context-info').textContent = `Registration #${reg.registration_number || regId} • ${wsName}`;
+          }
+        } catch (e) {}
+      }
+
+      // Configure retry button to preserve registration & workshop context
+      const retryBtn = document.getElementById('fail-retry-btn');
+      retryBtn.href = `../payment/index.html?workshop=${encodeURIComponent(wsId)}&registration_id=${encodeURIComponent(regId)}`;
+    });
+  </script>
+</body>
+</html>

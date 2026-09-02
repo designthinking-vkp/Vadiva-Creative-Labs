@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Confirmed | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Registration & Payment Confirmation for Vadiva Tech Fest 3.0.">
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../assets/techfest-theme.css">
+  <style>
+    /* ── Payment Success Page Styles (prefix: suc-) ── */
+    .suc-page {
+      background: transparent !important;
+      min-height: 80vh;
+      padding: 3.5rem 1.25rem 5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .suc-card {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      border-radius: var(--glass-radius-lg) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      padding: 2.75rem 2.25rem;
+      width: 100%;
+      max-width: 580px;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .suc-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .suc-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15) !important;
+      color: #059669;
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
+    }
+    .suc-header h1 {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: var(--tf-deep);
+      margin: 0 0 0.35rem;
+    }
+    .suc-header p {
+      color: var(--tf-muted);
+      font-size: 0.92rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Official Receipt Box */
+    .suc-receipt-box {
+      background: #ffffff;
+      border: 1.5px solid rgba(12, 184, 192, 0.25);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 16px rgba(7, 25, 33, 0.04);
+    }
+    .suc-receipt-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed rgba(12, 184, 192, 0.2);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .suc-badge {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .suc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .suc-table tr {
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .suc-table tr:last-child {
+      border-bottom: none;
+    }
+    .suc-table td {
+      padding: 0.6rem 0;
+    }
+    .suc-table td.label {
+      color: #64748b;
+      font-weight: 500;
+      width: 40%;
+    }
+    .suc-table td.value {
+      color: #0f172a;
+      font-weight: 700;
+      text-align: right;
+    }
+    .suc-table td.value.highlight {
+      color: #2563eb;
+      font-family: monospace;
+      font-size: 0.95rem;
+    }
+    .suc-table td.value.green {
+      color: #059669;
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+    }
+
+    /* Action Buttons Group */
+    .suc-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .suc-btn {
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .suc-btn-primary {
+      background: var(--tf-deep) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px rgba(12, 60, 76, 0.2);
+    }
+    .suc-btn-primary:hover {
+      background: #072733 !important;
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 20px rgba(12, 60, 76, 0.3);
+    }
+    .suc-btn-secondary {
+      background: rgba(12, 184, 192, 0.1) !important;
+      color: var(--tf-teal) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.35);
+    }
+    .suc-btn-secondary:hover {
+      background: var(--tf-teal) !important;
+      color: #ffffff !important;
+      transform: translateY(-1.5px);
+    }
+    .suc-btn-print {
+      background: #f8fafc !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+    .suc-btn-print:hover {
+      background: #e2e8f0 !important;
+    }
+
+    @media (max-width: 520px) {
+      .suc-card { padding: 2rem 1.25rem; }
+    }
+  </style>
+</head>
+<body class="techfest-theme bg-light-atmosphere">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="../../index.html">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        </a>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="../../index.html">Home</a></li>
+          <li><a href="../../about.html">About Us</a></li>
+          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
+          <li><a href="../../activity-center.html">Activity Center</a></li>
+          <li><a href="../../events.html">Events &amp; Camps</a></li>
+          <li><a href="../../parents.html">Parent Hub</a></li>
+          <li><a href="../../protospark.html">Protospark</a></li>
+          <li><a href="../index.html" class="active">Tech Fest</a></li>
+          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-action">
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Success Screen Container -->
+  <div class="suc-page">
+    <div class="suc-card">
+
+      <div class="suc-header">
+        <div class="suc-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h1 id="suc-main-title">Registration Confirmed! 🎉</h1>
+        <p id="suc-main-subtitle">
+          Your payment was verified and your seat has been reserved for Vadiva Tech Fest 3.0.
+        </p>
+      </div>
+
+      <!-- Verified Receipt Details Card -->
+      <div class="suc-receipt-box" id="suc-printable-receipt">
+        <div class="suc-receipt-top">
+          <div>
+            <div style="font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:700; letter-spacing:0.06em;">Official TechFest Pass</div>
+            <strong style="font-size:1.05rem; color:var(--tf-deep);">Vadiva Creative Labs</strong>
+          </div>
+          <span class="suc-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            PAID &bull; VERIFIED
+          </span>
+        </div>
+
+        <table class="suc-table">
+          <tr>
+            <td class="label">Participant Name</td>
+            <td class="value" id="suc-participant-name">Participant</td>
+          </tr>
+          <tr>
+            <td class="label">Selected Workshop</td>
+            <td class="value" id="suc-workshop-name">Robotics &amp; Automation</td>
+          </tr>
+          <tr>
+            <td class="label">Schedule &amp; Date</td>
+            <td class="value" id="suc-workshop-schedule">Day 1 &amp; Day 2 (Nov 2026)</td>
+          </tr>
+          <tr>
+            <td class="label">Venue</td>
+            <td class="value" id="suc-workshop-venue">Robotics Lab, Hall A</td>
+          </tr>
+          <tr>
+            <td class="label">Registration ID</td>
+            <td class="value highlight" id="suc-reg-id">TF26-00123</td>
+          </tr>
+          <tr>
+            <td class="label">Payment Transaction ID</td>
+            <td class="value highlight" id="suc-pay-id">pay_XXXXXX</td>
+          </tr>
+          <tr>
+            <td class="label">Razorpay Order ID</td>
+            <td class="value" style="font-family:monospace; font-size:0.85rem;" id="suc-order-id">order_XXXXXX</td>
+          </tr>
+          <tr>
+            <td class="label">Amount Paid</td>
+            <td class="value green" id="suc-amount-paid">&#8377;550</td>
+          </tr>
+          <tr>
+            <td class="label">Transaction Date</td>
+            <td class="value" id="suc-date">—</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <div class="suc-actions">
+        <a href="../dashboard/index.html" class="suc-btn suc-btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Go to My Dashboard &rarr;
+        </a>
+        <a href="../workshops/index.html" class="suc-btn suc-btn-secondary">
+          Browse More Workshops &rarr;
+        </a>
+        <button type="button" class="suc-btn suc-btn-print" onclick="window.print()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          Print / Save Official Receipt
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Enterprise</h4>
+          <ul>
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About Us</a></li>
+            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
+            <li><a href="../../contact.html">Partner Inquiries</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Ecosystem</h4>
+          <ul>
+            <li><a href="../../activity-center.html">Activity Center</a></li>
+            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
+            <li><a href="../../parents.html">Parent Hub</a></li>
+            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>Designed with ❤️ by VKP Team</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script src="../../assets/techfest-core.js"></script>
+  <script>
+    const WORKSHOPS = {
+      '1': { name: 'Robotics & Automation', fee: '₹550', schedule: 'Day 1 & Day 2 (10:00 AM - 01:00 PM)', venue: 'Robotics Lab, Hall A' },
+      '2': { name: 'AI & Machine Learning Basics', fee: '₹550', schedule: 'Day 1 & Day 2 (02:00 PM - 05:00 PM)', venue: 'Computer Lab 1' },
+      '3': { name: '3D Printing & Design', fee: '₹500', schedule: 'Day 2 (10:00 AM - 01:00 PM)', venue: 'Makerspace Studio' },
+      '4': { name: 'Game Development', fee: '₹550', schedule: 'Day 2 & Day 3 (02:00 PM - 05:00 PM)', venue: 'Media & Coding Lab' },
+      '5': { name: 'Electronics & Circuits', fee: '₹450', schedule: 'Day 1 (10:00 AM - 01:00 PM)', venue: 'Innovation Hub' },
+      '6': { name: 'Python for Beginners', fee: '₹500', schedule: 'Day 3 (10:00 AM - 01:00 PM)', venue: 'Computer Lab 2' },
+      '7': { name: 'Design Thinking Bootcamp', fee: '₹250', schedule: 'Day 1 (11:00 AM - 01:00 PM)', venue: 'Auditorium Hall' },
+      '8': { name: 'Sketching & Visual Thinking', fee: '₹250', schedule: 'Day 2 (11:00 AM - 01:00 PM)', venue: 'Design Studio' },
+      '9': { name: 'Public Speaking & Pitching', fee: '₹250', schedule: 'Day 2 (02:00 PM - 04:00 PM)', venue: 'Seminar Hall 1' },
+      '10': { name: 'Science Demonstrations', fee: '₹250', schedule: 'Day 3 (10:00 AM - 12:00 PM)', venue: 'Main Stage' },
+      '11': { name: 'Student Entrepreneurship', fee: '₹250', schedule: 'Day 3 (02:00 PM - 04:30 PM)', venue: 'Seminar Hall 2' }
+    };
+
+    window.addEventListener('DOMContentLoaded', async function () {
+      const params = new URLSearchParams(window.location.search);
+      const wsId = params.get('workshop') || '1';
+      let regId = params.get('registration_id') || 'TF26-00123';
+      let payId = params.get('payment_id') || 'pay_verified';
+      let orderId = params.get('order_id') || 'order_verified';
+      const isBypass = params.get('bypass') === 'true' || (window.TechFestAccess && window.TechFestAccess.isBypassMode());
+
+      const ws = WORKSHOPS[wsId] || WORKSHOPS['1'];
+      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
+      let userName = currentUser ? currentUser.name : (localStorage.getItem('tf_user_name') || 'Registered Participant');
+      let amountFormatted = ws.fee;
+      let wsTitle = ws.name;
+      let dateStr = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+
+      // Fetch official registration from MySQL
+      if (regId && !isBypass) {
+        try {
+          const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
+          const data = await res.json();
+          if (data.success && data.data) {
+            const reg = data.data;
+            if (reg.student && reg.student.name) userName = reg.student.name;
+            if (reg.registration_number) regId = reg.registration_number;
+            if (reg.workshops && reg.workshops.length > 0) {
+              wsTitle = reg.workshops.map(w => w.workshop_name_snapshot).join(', ');
+            }
+            if (reg.total_amount > 0) {
+              amountFormatted = '₹' + reg.total_amount;
+            }
+            if (reg.payment) {
+              if (reg.payment.razorpay_payment_id) payId = reg.payment.razorpay_payment_id;
+              if (reg.payment.razorpay_order_id) orderId = reg.payment.razorpay_order_id;
+            }
+            if (reg.confirmed_at) {
+              dateStr = new Date(reg.confirmed_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+            }
+          }
+        } catch (e) {
+          console.warn('Could not load registration from MySQL:', e);
+        }
+      }
+
+      document.getElementById('suc-participant-name').textContent = isBypass ? 'Tech Fest Developer (TF-DEV-BYPASS-001)' : userName;
+      document.getElementById('suc-workshop-name').textContent = wsTitle;
+      document.getElementById('suc-workshop-schedule').textContent = ws.schedule;
+      document.getElementById('suc-workshop-venue').textContent = ws.venue;
+      document.getElementById('suc-reg-id').textContent = regId;
+      document.getElementById('suc-pay-id').textContent = payId;
+      document.getElementById('suc-order-id').textContent = orderId;
+      document.getElementById('suc-amount-paid').textContent = isBypass ? `${ws.fee} (Simulated)` : amountFormatted;
+      document.getElementById('suc-date').textContent = dateStr;
+
+      if (isBypass) {
+        document.getElementById('suc-main-title').textContent = '⚡ Booking Confirmed (Bypass Mode)';
+        document.getElementById('suc-main-subtitle').textContent = 'Developer Bypass Mode simulated payment & confirmed seat reservation.';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tech Fest Core - Centralized Configuration & Developer Bypass Access Control
  * Vadiva Creative Labs - Tech & Design Fest '26
  *
@@ -173,6 +173,39 @@
       } catch (e) {
         return { status: 'unpaid', isBypassPayment: false };
       }
+    },
+
+    /**
+     * Helper to get pending workshop context
+     */
+    getPendingWorkshop() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('workshop') || sessionStorage.getItem(TechFestConfig.storageKeys.pendingWorkshop) || '';
+      } catch (e) {
+        return '';
+      }
+    },
+
+    /**
+     * Helper to persist pending workshop context
+     */
+    setPendingWorkshop(workshopId) {
+      if (!workshopId) return;
+      try {
+        sessionStorage.setItem(TechFestConfig.storageKeys.pendingWorkshop, String(workshopId).trim());
+        sessionStorage.setItem(TechFestConfig.storageKeys.postLoginRedirect, '../register/index.html?workshop=' + encodeURIComponent(workshopId));
+      } catch (e) {}
+    },
+
+    /**
+     * Helper to clear pending workshop context after completion
+     */
+    clearPendingWorkshop() {
+      try {
+        sessionStorage.removeItem(TechFestConfig.storageKeys.pendingWorkshop);
+        sessionStorage.removeItem(TechFestConfig.storageKeys.postLoginRedirect);
+      } catch (e) {}
     },
 
     /**

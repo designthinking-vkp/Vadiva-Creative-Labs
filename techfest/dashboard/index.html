@@ -418,40 +418,72 @@
         const res  = await fetch(API + '?action=get_dashboard&participant_id=' + pid);
         const data = await res.json();
 
-        if (!data.success) { window.location.href = '../login/index.html'; return; }
+        if (data.success && data.participant) {
+          const p = data.participant;
+          const initials = (p.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+          document.getElementById('dash-avatar').textContent = initials;
+          document.getElementById('dash-name').textContent   = p.name || 'Participant';
+          document.getElementById('dash-pid').textContent    = 'Participant ID: ' + (p.participant_id || pid);
 
-        const p = data.participant;
-        const initials = (p.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-        document.getElementById('dash-avatar').textContent = initials;
-        document.getElementById('dash-name').textContent   = p.name || 'Participant';
-        document.getElementById('dash-pid').textContent    = 'Participant ID: ' + (p.participant_id || pid);
+          const badgesEl = document.getElementById('dash-badges');
+          badgesEl.innerHTML = '';
+          const bandBadge = document.createElement('span');
+          bandBadge.className = 'dash-badge dash-badge-band';
+          bandBadge.textContent = p.band || 'JUNIOR';
+          badgesEl.appendChild(bandBadge);
 
-        const badgesEl = document.getElementById('dash-badges');
-        badgesEl.innerHTML = '';
-        const bandBadge = document.createElement('span');
-        bandBadge.className = 'dash-badge dash-badge-band';
-        bandBadge.textContent = p.band || 'JUNIOR';
-        badgesEl.appendChild(bandBadge);
+          if (p.pass_colour) {
+            const passBadge = document.createElement('span');
+            passBadge.className = 'dash-badge ' + (PASS_CLASSES[p.pass_colour] || 'dash-badge-band');
+            passBadge.textContent = p.pass_colour + ' Pass';
+            badgesEl.appendChild(passBadge);
+          }
 
-        if (p.pass_colour) {
-          const passBadge = document.createElement('span');
-          passBadge.className = 'dash-badge ' + (PASS_CLASSES[p.pass_colour] || 'dash-badge-band');
-          passBadge.textContent = p.pass_colour + ' Pass';
-          badgesEl.appendChild(passBadge);
+          if (!p.entry_paid) {
+            document.getElementById('dash-pay-banner').style.display = 'flex';
+            document.getElementById('dash-pay-btn').href = '../payment/index.html?registration_id=' + encodeURIComponent(pid);
+          }
         }
-
-        if (!p.entry_paid) {
-          document.getElementById('dash-pay-banner').style.display = 'flex';
-          document.getElementById('dash-pay-btn').href = '#pay';
-        }
-
       } catch (err) {
-        console.warn('Dashboard load failed, activating offline demo fallback:', err);
-        document.getElementById('dash-name').textContent = 'Demo Participant';
-        document.getElementById('dash-pid').textContent  = 'Participant ID: ' + (pid || 'TF-2026-0001');
-        const b = document.getElementById('dash-badges');
-        b.innerHTML = '<span class="dash-badge dash-badge-band">JUNIOR</span><span class="dash-badge dash-badge-green">Green Pass</span>';
-        document.getElementById('dash-pay-banner').style.display = 'flex';
+        console.warn('Dashboard summary load fallback:', err);
+      }
+
+      // Load registrations from Hostinger MySQL
+      try {
+        const regRes = await fetch(`../../techfest-api/registration.php?action=my_registrations&user_id=${encodeURIComponent(pid)}&phone=${encodeURIComponent(localStorage.getItem('tf_user_mobile') || '')}&email=${encodeURIComponent(localStorage.getItem('tf_user_email') || '')}`);
+        const regData = await regRes.json();
+        if (regData.success && regData.data && regData.data.registrations && regData.data.registrations.length > 0) {
+          const wsTab = document.getElementById('tab-workshops');
+          if (wsTab) {
+            wsTab.innerHTML = regData.data.registrations.map(reg => {
+              const isPaid = reg.status === 'confirmed' || reg.payment_status === 'paid';
+              const wsNames = (reg.workshops && reg.workshops.length > 0)
+                ? reg.workshops.map(w => w.workshop_name_snapshot).join(', ')
+                : 'Workshop Registration';
+
+              return `
+                <div style="background:rgba(255,255,255,0.78); backdrop-filter:blur(12px); border:1px solid ${isPaid ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}; border-radius:14px; padding:1.5rem; margin-bottom:1rem;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+                    <span style="background:${isPaid ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isPaid ? '#059669' : '#dc2626'}; font-weight:800; font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:20px;">
+                      ${isPaid ? 'CONFIRMED' : 'PAYMENT PENDING'}
+                    </span>
+                    <span style="font-size:0.8rem; color:var(--tf-muted);">Registration #${reg.registration_number}</span>
+                  </div>
+                  <h3 style="margin:0 0 0.5rem; color:var(--tf-deep); font-size:1.15rem;">${wsNames}</h3>
+                  <p style="margin:0 0 1rem; color:var(--tf-muted); font-size:0.85rem;">Total Fee: ₹${reg.total_amount} • Registered on ${new Date(reg.created_at).toLocaleDateString()}</p>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                    ${isPaid 
+                      ? `<a href="../payment-success/index.html?registration_id=${encodeURIComponent(reg.registration_id)}" class="dash-browse-btn" style="text-decoration:none;">View Official Pass / Receipt</a>`
+                      : `<a href="../payment/index.html?registration_id=${encodeURIComponent(reg.registration_id)}" class="dash-browse-btn" style="background:var(--tf-accent); color:#fff; text-decoration:none;">Complete Payment (₹${reg.total_amount}) →</a>`
+                    }
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('MySQL registrations fetch:', err);
       }
     }
 

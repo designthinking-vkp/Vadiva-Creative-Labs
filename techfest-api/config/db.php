@@ -1,22 +1,29 @@
 <?php
 // techfest-api/config/db.php
-$host = getenv('DB_HOST') ?: 'localhost';
-$db   = getenv('DB_DATABASE') ?: 'techfest_db';
-$user = getenv('DB_USERNAME') ?: 'root';
-$pass = getenv('DB_PASSWORD') ?: '';
+require_once __DIR__ . '/env.php';
+
+$host = defined('DB_HOST') ? DB_HOST : (getenv('DB_HOST') ?: 'localhost');
+$port = defined('DB_PORT') ? DB_PORT : (getenv('DB_PORT') ?: '3306');
+$db   = defined('DB_DATABASE') ? DB_DATABASE : (getenv('DB_DATABASE') ?: 'techfest_db');
+$user = defined('DB_USERNAME') ? DB_USERNAME : (getenv('DB_USERNAME') ?: 'root');
+$pass = defined('DB_PASSWORD') ? DB_PASSWORD : (getenv('DB_PASSWORD') ?: '');
 $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
+    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
 ];
+
+$pdo = null;
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    // DO NOT echo the error in production
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    // Log error securely without exposing DB credentials
+    error_log("Database connection failed: " . $e->getMessage());
+    $pdo = null;
 }
 ?>

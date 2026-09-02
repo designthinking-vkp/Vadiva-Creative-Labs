@@ -894,22 +894,19 @@
       }
     }
 
-    function executeWorkshopBooking() {
+    async function executeWorkshopBooking() {
       if (!currentSelectedWorkshop) return;
       const btn = document.getElementById('confirm-booking-btn');
       btn.disabled = true;
-      btn.textContent = 'Reserving seat…';
+      btn.textContent = 'Saving registration…';
 
       const isBypass = window.TechFestAccess && window.TechFestAccess.isBypassMode();
-      const paymentState = window.TechFestAccess ? window.TechFestAccess.getPaymentState() : { status: 'paid', isBypassPayment: false };
+      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
+      const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
 
-      setTimeout(() => {
-        // Clear pending selection now that registration is completed
-        sessionStorage.removeItem('tf_pending_workshop');
-        sessionStorage.removeItem('tf_post_login_redirect');
-
-        if (isBypass) {
-          // Record test registration data safely in local dev storage without polluting prod DB
+      if (isBypass) {
+        const paymentState = window.TechFestAccess ? window.TechFestAccess.getPaymentState() : { status: 'paid', isBypassPayment: false };
+        setTimeout(() => {
           localStorage.setItem('tf_test_registration_data', JSON.stringify({
             workshopId: currentSelectedWorkshop.id,
             workshopName: currentSelectedWorkshop.name,
@@ -918,16 +915,34 @@
             isTestRegistration: true,
             timestamp: new Date().toISOString()
           }));
-          window.TechFestAccess.logBypass('payment', { workshop: currentSelectedWorkshop.name });
-        }
+          window.location.href = `../payment-success/index.html?bypass=true&workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=TF-DEV-BYPASS-001&payment_id=${paymentState.transactionId}`;
+        }, 500);
+        return;
+      }
 
-        document.getElementById('view-auth-booking').style.display = 'none';
-        document.getElementById('reg-ws-banner').style.display = 'none';
-        document.getElementById('success-ws-name').textContent = currentSelectedWorkshop.name + (isBypass ? ' (Simulated Order: ' + paymentState.transactionId + ')' : '');
-        document.getElementById('reg-main-title').textContent = isBypass ? '⚡ Booking Confirmed (Bypass Mode)' : 'Booking Confirmed';
-        document.getElementById('reg-main-subtitle').textContent = 'Vadiva Tech & Design Fest \'26';
-        document.getElementById('view-booking-success').style.display = 'block';
-      }, 600);
+      // Normal live flow -> Create MySQL registration record
+      try {
+        const payload = {
+          student_name: localStorage.getItem('tf_user_name') || currentUser?.name || 'Participant',
+          student_phone: currentUser?.mobile || localStorage.getItem('tf_user_mobile') || '9876543210',
+          student_email: currentUser?.email || localStorage.getItem('tf_user_email') || 'reach@vadivacreativelabs.com',
+          user_id: pid,
+          workshop_id: currentSelectedWorkshop.id
+        };
+
+        const res = await fetch('../../techfest-api/registration.php?action=create_registration', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        const regId = (data.success && data.data && data.data.registration_id) ? data.data.registration_id : pid;
+        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(regId)}`;
+      } catch (err) {
+        // Fallback with pid
+        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(pid || '1')}`;
+      }
     }
 
     function logoutAndSwitch() {
