@@ -272,7 +272,7 @@
 
       banner.innerHTML = `
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-          <span>&#9888; DEVELOPER TEST MODE &mdash; NO REAL PAYMENT / OTP</span>
+          <span>&#9888; DEVELOPER TEST MODE &mdash; SIMULATED ACCESS</span>
           <span style="opacity:0.85; font-weight:400; font-size:11px;">| Auth &amp; Payment Simulated | Identity: TF-DEV-BYPASS-001</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">

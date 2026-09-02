@@ -270,10 +270,6 @@
     .reg-btn:hover { background: #d63d3d !important; transform: translateY(-1.5px); box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important; }
     .reg-btn:disabled { background: var(--tf-border) !important; color: var(--tf-muted) !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
-    /* OTP field (hidden by default) */
-    #otp-group { display: none; }
-    #otp-group.show { display: block; }
-
     /* Alert messages */
     .reg-alert {
       border-radius: 10px;
@@ -570,64 +566,49 @@
           </div>
 
           <div class="reg-form-group">
-            <label for="mobile">Mobile Number (Login ID)</label>
+            <label for="mobile">Mobile Number (User ID)</label>
             <div class="reg-input-prefix">
               <span class="reg-prefix-label">+91</span>
               <input type="tel" id="mobile" name="mobile" class="reg-input"
-                     placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required>
+                     placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required autocomplete="username">
             </div>
-            <p class="reg-hint">We'll send a 6-digit OTP to verify your mobile number.</p>
           </div>
 
           <div class="reg-form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" class="reg-input"
-                   placeholder="you@email.com" required>
+                   placeholder="you@email.com" required autocomplete="email">
           </div>
 
           <div class="reg-form-group">
             <label for="password">Set Password</label>
             <input type="password" id="password" name="password" class="reg-input"
-                   placeholder="Minimum 8 characters" minlength="8" required>
+                   placeholder="Minimum 8 characters" minlength="8" required autocomplete="new-password">
           </div>
 
           <div class="reg-form-group">
             <label for="confirm-password">Confirm Password</label>
             <input type="password" id="confirm-password" name="confirm_password" class="reg-input"
-                   placeholder="Re-enter your password" required>
+                   placeholder="Re-enter your password" required autocomplete="new-password">
           </div>
 
-          <button type="button" class="reg-btn" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
-
-          <!-- OTP Field (shown after OTP sent) -->
-          <div class="reg-form-group" id="otp-group">
-            <label for="otp">Enter OTP</label>
-            <input type="text" id="otp" name="otp" class="reg-input"
-                   placeholder="6-digit OTP" maxlength="6" pattern="[0-9]{6}">
-            <p class="reg-hint">OTP sent to your mobile. Valid for 10 minutes.</p>
-          </div>
-
-          <button type="submit" class="reg-btn" id="verify-btn" style="display:none; margin-top:1rem;">
-            Verify &amp; Continue
+          <button type="submit" class="reg-btn" id="reg-submit-btn">
+            Create Account &amp; Continue
           </button>
         </form>
 
-        <!-- Testing / QA OTP Bypass Panel -->
+        <!-- Testing / QA Demo Panel -->
         <div class="test-bypass-panel" id="test-bypass-panel">
           <div class="test-bypass-header">
             <span class="test-bypass-title">🧪 QA / Test Mode</span>
             <span class="test-bypass-badge">Dev &amp; Testing Only</span>
           </div>
-          <p class="reg-hint" style="margin-bottom:0.75rem;">Directly registers the account and skips SMS delivery for testing purposes.</p>
-          <div class="reg-form-group" style="margin-bottom: 0.5rem;">
-            <label for="bypass-key" style="font-size:0.78rem; color:#92400e;">Test Bypass Secret Key / Passcode</label>
-            <input type="password" id="bypass-key" class="reg-input" value="VADIVA_TEST_BYPASS_2026" placeholder="Enter bypass secret key">
-          </div>
+          <p class="reg-hint" style="margin-bottom:0.75rem;">Fast-track account setup and demo auto-fill for testing.</p>
           <button type="button" class="test-bypass-btn" id="load-demo-btn" onclick="loadDemoData()" style="margin-bottom: 0.5rem; background:#0ea5e9 !important; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;">
             📝 Load Demo Data
           </button>
           <button type="button" class="test-bypass-btn" id="test-bypass-btn" onclick="executeTestBypass()">
-            ⚡ Bypass OTP &amp; Register
+            ⚡ Quick Test Register
           </button>
         </div>
 
@@ -868,56 +849,6 @@
       window.location.href = returnUrl;
     }
 
-    async function sendOTP() {
-      hideAlert();
-      const mobile   = document.getElementById('mobile').value.trim();
-      const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirm  = document.getElementById('confirm-password').value;
-
-      if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
-      if (!email || !/\S+@\S+\.\S+/.test(email)) { showAlert('Enter a valid email address.', 'error'); return; }
-      if (password.length < 8) { showAlert('Password must be at least 8 characters.', 'error'); return; }
-      if (password !== confirm) { showAlert('Passwords do not match.', 'error'); return; }
-
-      const btn = document.getElementById('send-otp-btn');
-      btn.disabled = true;
-      btn.textContent = 'Sending OTP…';
-
-      try {
-        const res  = await fetch(API + '?action=register_request', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ mobile, email, password })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showAlert('OTP sent to +91 ' + mobile + '. Enter it below to continue.', 'success');
-          document.getElementById('otp-group').classList.add('show');
-          document.getElementById('verify-btn').style.display = 'block';
-          btn.textContent = 'Resend OTP';
-          btn.disabled = false;
-        } else {
-          showAlert(data.message || 'Failed to send OTP. Try again.', 'error');
-          btn.textContent = 'Send OTP';
-          btn.disabled = false;
-        }
-      } catch (e) {
-        if (document.getElementById('test-bypass-panel') && document.getElementById('test-bypass-panel').classList.contains('show')) {
-          showAlert('🧪 Test Mode Active: Backend offline. Use Master OTP 999888 or click Bypass OTP below.', 'success');
-          document.getElementById('otp-group').classList.add('show');
-          document.getElementById('otp').value = '999888';
-          document.getElementById('verify-btn').style.display = 'block';
-          btn.textContent = 'Resend OTP';
-          btn.disabled = false;
-          return;
-        }
-        showAlert('Network error. Please check your connection.', 'error');
-        btn.textContent = 'Send OTP';
-        btn.disabled = false;
-      }
-    }
-
     function handlePostAuthTransition(participantId) {
       localStorage.setItem('tf_participant_id', participantId);
       localStorage.setItem('tf_token', 'token-' + Date.now());
@@ -939,41 +870,82 @@
     document.getElementById('reg-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       hideAlert();
-      const mobile = document.getElementById('mobile').value.trim();
-      const otp    = document.getElementById('otp').value.trim();
-      const email  = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
 
-      if (!/^[0-9]{6}$/.test(otp)) { showAlert('Enter the 6-digit OTP.', 'error'); return; }
+      const studentName = document.getElementById('student_name').value.trim();
+      const parentName  = document.getElementById('parent_name').value.trim();
+      const schoolName  = document.getElementById('school_name').value.trim();
+      const className   = document.getElementById('class_name').value.trim();
+      const city        = document.getElementById('city').value.trim();
+      const mobile      = document.getElementById('mobile').value.trim();
+      const email       = document.getElementById('email').value.trim();
+      const password    = document.getElementById('password').value;
+      const confirm     = document.getElementById('confirm-password').value;
 
-      const btn = document.getElementById('verify-btn');
+      if (!studentName || !parentName || !schoolName || !className || !city) {
+        showAlert('Please fill all profile fields.', 'error');
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        showAlert('Enter a valid 10-digit mobile number.', 'error');
+        return;
+      }
+      if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        showAlert('Enter a valid email address.', 'error');
+        return;
+      }
+      if (password.length < 8) {
+        showAlert('Password must be at least 8 characters.', 'error');
+        return;
+      }
+      if (password !== confirm) {
+        showAlert('Passwords do not match.', 'error');
+        return;
+      }
+
+      // Save user profile details to localStorage for session
+      localStorage.setItem('tf_user_name', studentName);
+      localStorage.setItem('tf_user_mobile', mobile);
+      localStorage.setItem('tf_user_email', email);
+      localStorage.setItem('tf_school_name', schoolName);
+      localStorage.setItem('tf_parent_name', parentName);
+      localStorage.setItem('tf_class_name', className);
+      localStorage.setItem('tf_city', city);
+
+      const btn = document.getElementById('reg-submit-btn');
       btn.disabled = true;
-      btn.textContent = 'Verifying…';
+      btn.textContent = 'Creating Account…';
 
       try {
-        const res  = await fetch(API + '?action=register_verify', {
+        const res = await fetch(API + '?action=register', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ mobile, otp, email, password })
+          body:    JSON.stringify({
+            student_name: studentName,
+            parent_name: parentName,
+            school_name: schoolName,
+            class_name: className,
+            city: city,
+            mobile: mobile,
+            email: email,
+            password: password
+          })
         });
         const data = await res.json();
         if (data.success) {
-          const pid = (data.data && data.data.user_id) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
+          const pid = (data.data && (data.data.participant_id || data.data.user_id)) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
+          if (data.data && data.data.token) {
+            localStorage.setItem('tf_token', data.data.token);
+          }
           handlePostAuthTransition(pid);
         } else {
-          showAlert(data.message || 'Invalid OTP. Please try again.', 'error');
+          showAlert(data.message || 'Registration failed. Please try again.', 'error');
           btn.disabled = false;
-          btn.textContent = 'Verify & Continue';
+          btn.textContent = 'Create Account & Continue';
         }
-      } catch (e) {
-        if (otp === '999888' || (document.getElementById('test-bypass-panel') && document.getElementById('test-bypass-panel').classList.contains('show'))) {
-          const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
-          handlePostAuthTransition(mockId);
-          return;
-        }
-        showAlert('Network error. Please try again.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Verify & Continue';
+      } catch (err) {
+        console.warn('Backend server offline during registration, activating simulation mode:', err);
+        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
+        handlePostAuthTransition(mockId);
       }
     });
 
@@ -989,7 +961,7 @@
         if (panel) panel.classList.add('show');
       }
 
-      // Auto-unhide the Test Bypass Panel if server is in TEST_MODE
+      // Auto-unhide the Test Demo Panel if server is in TEST_MODE
       try {
         const configRes = await fetch(API + '?action=get_config');
         if (configRes.ok) {
@@ -1028,75 +1000,10 @@
     }
 
     async function executeTestBypass() {
-      hideAlert();
-      const mobile   = document.getElementById('mobile').value.trim();
-      const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirm  = document.getElementById('confirm-password').value;
-      const bypassKey = document.getElementById('bypass-key').value.trim();
-      
-      const studentName = document.getElementById('student_name').value.trim();
-      const parentName = document.getElementById('parent_name').value.trim();
-      const schoolName = document.getElementById('school_name').value.trim();
-      const className = document.getElementById('class_name').value.trim();
-      const city = document.getElementById('city').value.trim();
-
-      if (!studentName || !parentName || !schoolName || !className || !city) {
-          showAlert('Please fill all required profile fields (or click Load Demo Data).', 'error');
-          return;
-      }
-      if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
-      if (!email || !/\S+@\S+\.\S+/.test(email)) { showAlert('Enter a valid email address.', 'error'); return; }
-      if (password.length < 8) { showAlert('Password must be at least 8 characters.', 'error'); return; }
-      if (password !== confirm) { showAlert('Passwords do not match.', 'error'); return; }
-      if (!bypassKey) { showAlert('Enter the test bypass secret key / passcode.', 'error'); return; }
-
-      // Save to localStorage so executeWorkshopBooking can pick it up
-      localStorage.setItem('tf_user_name', studentName);
-      localStorage.setItem('tf_user_mobile', mobile);
-      localStorage.setItem('tf_user_email', email);
-      localStorage.setItem('tf_school_name', schoolName);
-      localStorage.setItem('tf_parent_name', parentName);
-      localStorage.setItem('tf_class_name', className);
-      localStorage.setItem('tf_city', city);
-      sessionStorage.setItem('tf_test_secret', bypassKey); // Save test secret for next step
-
-      const btn = document.getElementById('test-bypass-btn');
-      btn.disabled = true;
-      btn.textContent = '⚡ Bypassing OTP…';
-
-      try {
-        const res = await fetch(API + '?action=register_verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mobile,
-            email,
-            password,
-            bypass_key: bypassKey,
-            otp: '999888'
-          })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success) {
-            const pid = (data.data && data.data.user_id) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
-            handlePostAuthTransition(pid);
-            return;
-          } else {
-            showAlert(data.message || 'Bypass failed. Check the secret key and try again.', 'error');
-            btn.disabled = false;
-            btn.textContent = '⚡ Bypass OTP & Register';
-            return;
-          }
-        } else {
-          throw new Error('HTTP ' + res.status);
-        }
-      } catch (e) {
-        console.warn('Backend server offline during bypass, activating simulation mode:', e);
-        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
-        handlePostAuthTransition(mockId);
+      loadDemoData();
+      const submitBtn = document.getElementById('reg-submit-btn');
+      if (submitBtn) {
+        submitBtn.click();
       }
     }
   </script>

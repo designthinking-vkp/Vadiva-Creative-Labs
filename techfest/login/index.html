@@ -194,12 +194,9 @@
 
       <form id="lgn-form" novalidate>
         <div class="lgn-form-group">
-          <label for="mobile">Mobile Number</label>
-          <div class="lgn-input-prefix">
-            <span class="lgn-prefix-label">+91</span>
-            <input type="tel" id="mobile" name="mobile" class="lgn-input"
-                   placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required>
-          </div>
+          <label for="login_id">User ID / Mobile / Email</label>
+          <input type="text" id="login_id" name="login_id" class="lgn-input"
+                 placeholder="Enter User ID, Mobile Number, or Email" required autocomplete="username">
         </div>
 
         <div class="lgn-form-group">
@@ -381,11 +378,11 @@
         return;
       }
 
-      const mobile   = document.getElementById('mobile').value.trim();
+      const loginId  = document.getElementById('login_id').value.trim();
       const password = document.getElementById('password').value;
 
-      if (!/^[0-9]{10}$/.test(mobile)) { showAlert('Enter a valid 10-digit mobile number.', 'error'); return; }
-      if (!password) { showAlert('Enter your password.', 'error'); return; }
+      if (!loginId) { showAlert('Please enter your User ID, Mobile Number, or Email.', 'error'); return; }
+      if (!password) { showAlert('Please enter your password.', 'error'); return; }
 
       const btn = document.getElementById('lgn-btn');
       btn.disabled = true;
@@ -395,13 +392,16 @@
         const res  = await fetch(API + '?action=login', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ mobile, password })
+          body:    JSON.stringify({ login_id: loginId, mobile: loginId, password })
         });
         const data = await res.json();
         if (data.success) {
           showAlert('Login successful! Redirecting…', 'success');
-          localStorage.setItem('tf_token', data.token || '');
-          localStorage.setItem('tf_participant_id', data.participant_id || '');
+          const token = (data.data && data.data.token) ? data.data.token : (data.token || '');
+          const pid = (data.data && data.data.participant_id) || data.participant_id || loginId;
+          localStorage.setItem('tf_token', token);
+          localStorage.setItem('tf_participant_id', pid);
+          if (data.data && data.data.name) localStorage.setItem('tf_user_name', data.data.name);
           setTimeout(handlePostLoginRedirect, 800);
         } else {
           showAlert(data.message || 'Invalid credentials. Please try again.', 'error');
@@ -411,7 +411,7 @@
       } catch (err) {
         console.warn('Backend unavailable during login, activating dev simulation fallback:', err);
         showAlert('Login successful (Offline Simulation Mode)! Redirecting…', 'success');
-        const mockId = 'TF-2026-' + Math.floor(1000 + Math.random() * 9000);
+        const mockId = loginId.startsWith('TF-') ? loginId : ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
         localStorage.setItem('tf_token', 'sim-token-' + Date.now());
         localStorage.setItem('tf_participant_id', mockId);
         setTimeout(handlePostLoginRedirect, 800);
