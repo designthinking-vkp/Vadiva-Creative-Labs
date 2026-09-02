@@ -130,9 +130,9 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: var(--tf-space-4) !important;
+  gap: clamp(0.5rem, 1.2vw, 1.5rem) !important;
   height: 68px !important;
-  padding: 0 var(--tf-space-6) !important;
+  padding: 0 clamp(0.875rem, 2vw, 1.5rem) !important;
   width: 100% !important;
 }
 
@@ -145,14 +145,15 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  flex: 1 !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
 }
 
 .techfest-theme nav.main-nav ul {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: clamp(8px, 1.2vw, 20px) !important;
+  gap: clamp(4px, 0.65vw, 14px) !important;
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -161,13 +162,14 @@
 .techfest-theme nav.main-nav a {
   color: var(--tf-muted) !important;
   font-family: var(--font-body) !important;
-  font-size: 0.875rem !important;
+  font-size: clamp(0.72rem, 0.78vw, 0.86rem) !important;
   font-weight: 500 !important;
-  padding: var(--tf-space-2) var(--tf-space-1) !important;
+  padding: 0.4rem clamp(2px, 0.25vw, 6px) !important;
   text-decoration: none !important;
   position: relative !important;
   transition: var(--tf-transition) !important;
   white-space: nowrap !important;
+  letter-spacing: -0.01em !important;
 }
 
 .techfest-theme nav.main-nav a:hover,
@@ -190,15 +192,16 @@
 .techfest-theme .header-action {
   display: flex !important;
   align-items: center !important;
-  gap: var(--tf-space-3) !important;
+  gap: clamp(0.3rem, 0.5vw, 0.6rem) !important;
+  flex-shrink: 0 !important;
 }
 
 .techfest-theme .header-action .btn {
-  height: 40px !important;
-  padding: 0 var(--tf-space-4) !important;
+  height: 36px !important;
+  padding: 0 clamp(0.6rem, 0.75vw, 0.95rem) !important;
   border-radius: var(--tf-radius-md) !important;
   font-family: var(--font-heading) !important;
-  font-size: 0.85rem !important;
+  font-size: clamp(0.72rem, 0.78vw, 0.82rem) !important;
   font-weight: 700 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -206,6 +209,7 @@
   text-decoration: none !important;
   transition: var(--tf-transition) !important;
   white-space: nowrap !important;
+  box-sizing: border-box !important;
 }
 
 .techfest-theme .header-action .header-cta {
