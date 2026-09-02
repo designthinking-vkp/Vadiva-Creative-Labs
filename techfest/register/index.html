@@ -766,7 +766,7 @@
       localStorage.setItem('tf_token', 'token-' + Date.now());
 
       const wsId = getSelectedWorkshopId();
-      if (wsId && WORKSHOP_CATALOG[wsId]) {
+      if (wsId) {
         // Seamlessly transition to workshop confirmation without sending to dashboard!
         showAlert('Account created successfully! Proceeding to workshop confirmation…', 'success');
         setTimeout(() => {
