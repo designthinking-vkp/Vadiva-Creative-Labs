@@ -726,9 +726,54 @@
           // Authenticated or Developer Bypass -> go straight to workshop registration
           window.location.href = '../register/index.html?workshop=' + encodeURIComponent(wsId);
         } else {
-          // Not logged in -> go to login / signup with context preserved
-          window.location.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId);
+          // Not logged in -> show popup message
+          showLoginPopup(wsId);
         }
+      }
+
+      function showLoginPopup(wsId) {
+        // Create modal overlay
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); opacity:0; transition:opacity 0.3s ease;';
+        
+        // Create modal box
+        const modal = document.createElement('div');
+        modal.style.cssText = 'background:#fff; padding:2rem; border-radius:12px; max-width:400px; width:90%; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); transform:translateY(20px); transition:transform 0.3s ease;';
+        
+        modal.innerHTML = `
+          <div style="width:50px; height:50px; border-radius:50%; background:rgba(12, 184, 192, 0.1); color:var(--tf-teal); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          </div>
+          <h3 style="font-family:var(--font-heading); color:var(--tf-deep); font-size:1.25rem; margin-bottom:0.5rem;">Authentication Required</h3>
+          <p style="color:var(--tf-muted); font-size:0.95rem; margin-bottom:1.5rem; line-height:1.5;">Please login or create an account to select and reserve your workshop seat.</p>
+          <div style="display:flex; gap:0.75rem; justify-content:center;">
+            <button id="popup-cancel-btn" style="padding:0.6rem 1.2rem; border:1px solid #cbd5e1; background:transparent; border-radius:6px; color:#475569; font-weight:600; cursor:pointer;">Cancel</button>
+            <button id="popup-login-btn" style="padding:0.6rem 1.2rem; border:none; background:var(--tf-teal); border-radius:6px; color:#fff; font-weight:700; cursor:pointer; box-shadow:0 4px 10px rgba(12, 184, 192, 0.25);">Login / Register</button>
+          </div>
+        `;
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+          overlay.style.opacity = '1';
+          modal.style.transform = 'translateY(0)';
+        });
+        
+        // Handle clicks
+        document.getElementById('popup-cancel-btn').addEventListener('click', () => {
+          overlay.style.opacity = '0';
+          modal.style.transform = 'translateY(20px)';
+          setTimeout(() => overlay.remove(), 300);
+        });
+        
+        document.getElementById('popup-login-btn').addEventListener('click', () => {
+          overlay.style.opacity = '0';
+          setTimeout(() => {
+            window.location.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId);
+          }, 200);
+        });
       }
 
       // Update button text and styles based on auth state
