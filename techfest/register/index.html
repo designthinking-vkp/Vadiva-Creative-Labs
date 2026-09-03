@@ -366,28 +366,32 @@
           <a href="../workshops/index.html" style="color:var(--tf-teal); font-weight:700; text-decoration:none; font-size:0.8rem;">Browse Catalog</a>
         </div>
 
-        <div style="background:rgba(255,255,255,0.4); border-radius:10px; padding:1.25rem; margin-bottom:1.5rem; font-size:0.88rem; line-height:1.6;">
-          <h4 style="margin:0 0 0.5rem; font-size:0.95rem; color:var(--tf-deep); font-family:var(--font-heading);">Registration Summary</h4>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+        <div style="background:rgba(255,255,255,0.7); border:1px solid rgba(12,184,192,0.22); border-radius:12px; padding:1.25rem 1.4rem; margin-bottom:1.5rem; font-size:0.88rem; line-height:1.6;">
+          <h4 style="margin:0 0 0.6rem; font-size:0.98rem; color:var(--tf-deep); font-family:var(--font-heading); font-weight:800;">Order &amp; Seat Summary</h4>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
             <span style="color:var(--tf-muted);">Selected Workshop:</span>
             <strong id="auth-summary-ws-name" style="color:var(--tf-deep);">—</strong>
           </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
             <span style="color:var(--tf-muted);">Eligibility:</span>
-            <span id="auth-summary-eligibility">Grades 4–12</span>
+            <span id="auth-summary-eligibility" style="font-weight:600;">Grades 4–12</span>
           </div>
-          <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(12,184,192,0.2); padding-top:0.5rem; margin-top:0.5rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+            <span style="color:var(--tf-muted);">Workshop Fee:</span>
+            <strong id="auth-summary-fee" style="color:var(--tf-deep);">&#8377;550</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(12,184,192,0.2); padding-top:0.5rem; margin-top:0.5rem; margin-bottom:0.35rem;">
             <span style="color:var(--tf-deep); font-weight:700;">Festival Entry Pass:</span>
-            <span style="color:var(--tf-muted);" id="auth-summary-fest-fee">&#8377;250 (Mandatory Entry)</span>
+            <span style="color:var(--tf-deep); font-weight:700;" id="auth-summary-fest-fee">&#8377;250 (Mandatory Entry)</span>
           </div>
-          <div style="display:flex; justify-content:space-between; margin-top:0.35rem;">
-            <span style="color:var(--tf-deep); font-weight:800;">Estimated Total at Checkout:</span>
-            <strong id="auth-summary-total" style="color:#059669; font-size:1.05rem;">&#8377;800</strong>
+          <div style="display:flex; justify-content:space-between; border-top:1.5px solid rgba(12,184,192,0.3); padding-top:0.6rem; margin-top:0.5rem;">
+            <span style="color:var(--tf-deep); font-weight:800; font-size:0.95rem;">Total Payable Amount:</span>
+            <strong id="auth-summary-total" style="color:#059669; font-size:1.25rem; font-family:var(--font-heading);">&#8377;800</strong>
           </div>
         </div>
 
-        <button type="button" class="reg-btn" id="confirm-booking-btn" onclick="executeWorkshopBooking()">
-          Confirm Workshop Registration &rarr;
+        <button type="button" class="reg-btn" id="confirm-booking-btn" onclick="executeWorkshopBooking()" style="display:flex; align-items:center; justify-content:center; gap:8px; height:50px; font-size:1.02rem;">
+          <span>Proceed to Payment Checkout &rarr;</span>
         </button>
 
         <div class="reg-footer-link">
@@ -677,11 +681,16 @@
 
         if (authenticated) {
           // Scenario: Authenticated user with workshop selected -> show Booking / Confirmation
-          document.getElementById('reg-main-title').textContent = 'Confirm Registration';
-          document.getElementById('reg-main-subtitle').textContent = 'Complete your workshop seat reservation';
-          document.getElementById('auth-pid-display').textContent = pid;
-          document.getElementById('auth-summary-ws-name').textContent = workshop.name;
-          document.getElementById('auth-summary-eligibility').textContent = workshop.grades;
+          const titleEl = document.getElementById('reg-main-title');
+          if (titleEl) titleEl.textContent = 'Confirm Registration';
+          const subtitleEl = document.getElementById('reg-main-subtitle');
+          if (subtitleEl) subtitleEl.textContent = 'Complete your workshop seat reservation';
+          const pidEl = document.getElementById('auth-pid-display');
+          if (pidEl) pidEl.textContent = pid;
+          const wsNameEl = document.getElementById('auth-summary-ws-name');
+          if (wsNameEl) wsNameEl.textContent = workshop.name;
+          const eligEl = document.getElementById('auth-summary-eligibility');
+          if (eligEl) eligEl.textContent = workshop.grades;
           
           const params = new URLSearchParams(window.location.search);
           const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee');
@@ -691,29 +700,43 @@
           let baseFee = workshop.is_paid ? 550 : 0;
           let totalEst = baseFee + (willIncludeFestFee ? 250 : 0);
 
-          document.getElementById('auth-summary-fee').textContent = workshop.fee_label;
-          document.getElementById('auth-summary-fest-fee').textContent = willIncludeFestFee ? '₹250 (Mandatory Entry)' : 'Already Paid / Excluded (₹0)';
-          document.getElementById('auth-summary-total').textContent = `₹${totalEst}`;
-          document.getElementById('confirm-booking-btn').textContent = totalEst > 0 ? `Confirm & Proceed to Payment (₹${totalEst}) \u2192` : 'Confirm Free Workshop Seat \u2192';
-          document.getElementById('view-auth-booking').style.display = 'block';
+          const feeEl = document.getElementById('auth-summary-fee');
+          if (feeEl) feeEl.textContent = workshop.is_paid ? (workshop.fee_label || `₹${baseFee}`) : 'FREE';
+          const festFeeEl = document.getElementById('auth-summary-fest-fee');
+          if (festFeeEl) festFeeEl.textContent = willIncludeFestFee ? '₹250 (Mandatory Entry)' : 'Already Paid / Excluded (₹0)';
+          const totalEl = document.getElementById('auth-summary-total');
+          if (totalEl) totalEl.textContent = `₹${totalEst}`;
+          const confirmBtn = document.getElementById('confirm-booking-btn');
+          if (confirmBtn) confirmBtn.innerHTML = `<span>Proceed to Payment Checkout (₹${totalEst}) &rarr;</span>`;
+          const authView = document.getElementById('view-auth-booking');
+          if (authView) authView.style.display = 'block';
         } else {
           // Scenario: Unauthenticated user with workshop selected -> show Account Creation with preserved workshop context
-          document.getElementById('reg-main-title').textContent = 'Create Participant Account';
-          document.getElementById('reg-main-subtitle').textContent = 'Register to reserve your seat in ' + workshop.name;
-          document.getElementById('view-unauth-registration').style.display = 'block';
+          const titleEl = document.getElementById('reg-main-title');
+          if (titleEl) titleEl.textContent = 'Create Participant Account';
+          const subtitleEl = document.getElementById('reg-main-subtitle');
+          if (subtitleEl) subtitleEl.textContent = 'Register to reserve your seat in ' + workshop.name;
+          const unauthView = document.getElementById('view-unauth-registration');
+          if (unauthView) unauthView.style.display = 'block';
         }
       } else {
         // No workshop selected
         if (authenticated) {
           // Scenario: Authenticated user navigated directly to register without workshop
-          document.getElementById('reg-main-title').textContent = 'Vadiva Tech Fest 3.0';
-          document.getElementById('reg-main-subtitle').textContent = 'Select a workshop to continue';
-          document.getElementById('view-no-workshop-auth').style.display = 'block';
+          const titleEl = document.getElementById('reg-main-title');
+          if (titleEl) titleEl.textContent = 'Vadiva Tech Fest 3.0';
+          const subtitleEl = document.getElementById('reg-main-subtitle');
+          if (subtitleEl) subtitleEl.textContent = 'Select a workshop to continue';
+          const noWsView = document.getElementById('view-no-workshop-auth');
+          if (noWsView) noWsView.style.display = 'block';
         } else {
           // Scenario: Unauthenticated user navigated directly to register
-          document.getElementById('reg-main-title').textContent = 'Tech & Design Fest \'26';
-          document.getElementById('reg-main-subtitle').textContent = 'Create your participant account';
-          document.getElementById('view-unauth-registration').style.display = 'block';
+          const titleEl = document.getElementById('reg-main-title');
+          if (titleEl) titleEl.textContent = 'Tech & Design Fest \'26';
+          const subtitleEl = document.getElementById('reg-main-subtitle');
+          if (subtitleEl) subtitleEl.textContent = 'Create your participant account';
+          const unauthView = document.getElementById('view-unauth-registration');
+          if (unauthView) unauthView.style.display = 'block';
         }
       }
     }

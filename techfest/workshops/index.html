@@ -1028,29 +1028,21 @@
 
       sessionStorage.setItem('tf_pending_workshop', workshopId);
       sessionStorage.setItem('tf_pending_batch', batchCode);
-
-      let targetUrl = '';
-      if (option === 'entry_first') {
-        // Option 1: Pay Fest Entry ₹250 First
-        sessionStorage.setItem('tf_include_fest_fee', '1');
-        targetUrl = `../register/index.html?type=entry&workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}`;
-      } else if (option === 'workshop_only') {
-        // Option 3: Already Paid Entry Fee
-        sessionStorage.setItem('tf_include_fest_fee', '0');
-        targetUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=0`;
-      } else {
-        // Option 2 (bundle): Pay Registration Fee + Workshop Fee Together at Checkout
-        sessionStorage.setItem('tf_include_fest_fee', '1');
-        targetUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=1`;
-      }
-
-      sessionStorage.setItem('tf_post_login_redirect', targetUrl);
+      const festFeeVal = option === 'workshop_only' ? '0' : '1';
+      sessionStorage.setItem('tf_include_fest_fee', festFeeVal);
 
       const isAuth = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
+
       if (isAuth) {
-        window.location.href = targetUrl;
+        // Authenticated users go directly to payment checkout
+        const payUrl = `../payment/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${festFeeVal}`;
+        sessionStorage.setItem('tf_post_login_redirect', payUrl);
+        window.location.href = payUrl;
       } else {
-        window.location.href = `../login/index.html?redirect=register&workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${option === 'workshop_only' ? '0' : '1'}`;
+        // New participants register account first, then flow to payment
+        const regUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${festFeeVal}`;
+        sessionStorage.setItem('tf_post_login_redirect', regUrl);
+        window.location.href = regUrl;
       }
     }
 
