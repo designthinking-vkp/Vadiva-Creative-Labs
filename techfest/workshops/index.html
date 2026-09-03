@@ -364,14 +364,200 @@
       box-shadow: none;
     }
 
-    @media (max-width: 1080px) {
-      .ws-tab-content.active { grid-template-columns: repeat(2, 1fr); }
+    /* ── Fest Registration Pop-up Modal ── */
+    .ws-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 25, 33, 0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      box-sizing: border-box;
     }
-    @media (max-width: 640px) {
-      .ws-tab-content.active { grid-template-columns: 1fr; }
-      .ws-tabs-container { flex-direction: column; align-items: stretch; }
-      .ws-filters { justify-content: stretch; }
-      .ws-filter-select { width: 100% !important; }
+    .ws-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .ws-modal-box {
+      background: #ffffff;
+      border: 1.5px solid rgba(12, 184, 192, 0.28);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 2.25rem 2rem;
+      box-shadow: 0 25px 50px -12px rgba(7, 25, 33, 0.35);
+      position: relative;
+      transform: scale(0.94) translateY(10px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
+    }
+    .ws-modal-overlay.active .ws-modal-box {
+      transform: scale(1) translateY(0);
+    }
+    .ws-modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(12, 184, 192, 0.2);
+      background: rgba(12, 60, 76, 0.05);
+      color: var(--tf-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .ws-modal-close:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .ws-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--tf-coral);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .ws-modal-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--tf-deep);
+      margin: 0 0 0.4rem;
+      line-height: 1.25;
+    }
+    .ws-modal-note {
+      font-size: 0.88rem;
+      color: var(--tf-muted);
+      line-height: 1.55;
+      margin: 0 0 1.25rem;
+    }
+    .ws-modal-note strong {
+      color: var(--tf-deep);
+    }
+    .ws-modal-summary {
+      background: rgba(12, 60, 76, 0.04);
+      border: 1.5px solid rgba(12, 184, 192, 0.2);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .ws-modal-ws-name {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--tf-deep);
+      margin: 0 0 0.35rem;
+    }
+    .ws-modal-ws-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--tf-muted);
+    }
+    .ws-modal-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .ws-modal-opt-card {
+      background: #ffffff;
+      border: 1.5px solid rgba(12, 184, 192, 0.25);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      text-decoration: none;
+    }
+    .ws-modal-opt-card:hover {
+      border-color: var(--tf-teal);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(12, 184, 192, 0.15);
+    }
+    .ws-modal-opt-card.primary {
+      background: linear-gradient(135deg, rgba(12, 184, 192, 0.08) 0%, rgba(12, 60, 76, 0.04) 100%);
+      border: 2px solid var(--tf-teal);
+    }
+    .ws-modal-opt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ws-modal-opt-title {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--tf-deep);
+    }
+    .ws-modal-opt-price {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #059669;
+    }
+    .ws-modal-opt-desc {
+      font-size: 0.8rem;
+      color: var(--tf-muted);
+      line-height: 1.4;
+      margin: 0;
+    }
+    .ws-modal-opt-btn {
+      margin-top: 0.35rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--tf-teal);
+    }
+    .ws-modal-opt-card.primary .ws-modal-opt-btn {
+      color: var(--tf-deep);
+    }
+    .ws-modal-sublink {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.82rem;
+    }
+    .ws-modal-sublink a {
+      color: var(--tf-teal);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .ws-modal-sublink a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 540px) {
+      .ws-modal-box {
+        padding: 1.75rem 1.25rem;
+      }
     }
   </style>
 </head>
@@ -520,11 +706,69 @@
     </div>
   </footer>
 
+  <!-- Fest Entry Requirement Modal Overlay -->
+  <div class="ws-modal-overlay" id="festEntryModal" onclick="if(event.target===this)closeFestModal()">
+    <div class="ws-modal-box">
+      <button class="ws-modal-close" onclick="closeFestModal()" aria-label="Close">&times;</button>
+      
+      <div class="ws-modal-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Fest Entry Notice</span>
+      </div>
+
+      <h3 class="ws-modal-title">Festival Registration Required</h3>
+      <p class="ws-modal-note">
+        All workshop participants must pay the <strong>&#8377;250 Festival Registration Fee</strong> for Vadiva Tech Fest 3.0. Choose your registration option below:
+      </p>
+
+      <div class="ws-modal-summary" id="modalWsSummary">
+        <div class="ws-modal-ws-name" id="modalWsTitle">Robotics &amp; Automation</div>
+        <div class="ws-modal-ws-meta">
+          <span id="modalWsBatch">Batch: B-01</span>
+          <span id="modalWsFee">Workshop Fee: &#8377;550</span>
+        </div>
+      </div>
+
+      <div class="ws-modal-options">
+        <!-- Option 1: Combined at checkout -->
+        <a href="javascript:void(0)" class="ws-modal-opt-card primary" onclick="routeFromModal('bundle')">
+          <div class="ws-modal-opt-header">
+            <span class="ws-modal-opt-title">1. Pay Fest Fee + Workshop at Checkout</span>
+            <span class="ws-modal-opt-price" id="modalBundlePrice">Total: &#8377;800</span>
+          </div>
+          <p class="ws-modal-opt-desc">Bundle the &#8377;250 registration fee and pay together on checkout (&#8377;250 Registration + Workshop fee).</p>
+          <span class="ws-modal-opt-btn">Continue to Combined Checkout &rarr;</span>
+        </a>
+
+        <!-- Option 2: Pay entry fee first -->
+        <a href="javascript:void(0)" class="ws-modal-opt-card" onclick="routeFromModal('entry_first')">
+          <div class="ws-modal-opt-header">
+            <span class="ws-modal-opt-title">2. Pay &#8377;250 Registration Fee First</span>
+            <span class="ws-modal-opt-price">&#8377;250</span>
+          </div>
+          <p class="ws-modal-opt-desc">Pay your mandatory &#8377;250 festival registration fee first to secure festival entry pass.</p>
+          <span class="ws-modal-opt-btn">Pay &#8377;250 Fest Fee First &rarr;</span>
+        </a>
+
+        <!-- Option 3: Already paid entry fee -->
+        <a href="javascript:void(0)" class="ws-modal-opt-card" onclick="routeFromModal('workshop_only')">
+          <div class="ws-modal-opt-header">
+            <span class="ws-modal-opt-title">3. Already Paid &#8377;250 Entry Fee?</span>
+            <span class="ws-modal-opt-price" id="modalSoloPrice">Workshop Fee Only</span>
+          </div>
+          <p class="ws-modal-opt-desc">If you already paid the &#8377;250 festival entry fee, proceed to pay only the workshop fee.</p>
+          <span class="ws-modal-opt-btn">Continue with Workshop Fee &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
     let currentTab = 'paid';
     let selectedBatches = {}; // workshopId -> batch_code
+    let modalPendingData = null; // Stores workshopId, batchCode, isPaid, price
 
     function switchCatalogueTab(tab) {
       currentTab = tab;
@@ -629,11 +873,11 @@
               </div>
 
               <div class="ws-card-action">
-                <a href="../register/index.html?workshop=${ws.id}&batch=${currentBatchCode}" 
+                <button type="button"
                    class="ws-book-btn ${available <= 0 ? 'disabled' : ''}" 
                    onclick="handleWorkshopSelect(event, ${ws.id}, '${currentBatchCode}')">
                   ${available <= 0 ? 'Join Waitlist &rarr;' : 'Select Masterclass &rarr;'}
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -709,11 +953,11 @@
               </div>
 
               <div class="ws-card-action">
-                <a href="../register/index.html?workshop=${ws.id}" 
+                <button type="button" 
                    class="ws-book-btn" 
                    onclick="handleWorkshopSelect(event, ${ws.id}, 'FREE')">
                   Select Free Session &rarr;
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -738,17 +982,75 @@
       const wsId = String(workshopId).trim();
       if (!wsId) return;
 
-      sessionStorage.setItem('tf_pending_workshop', wsId);
-      sessionStorage.setItem('tf_pending_batch', batchCode);
+      const currentBatch = batchCode || selectedBatches[wsId] || 'B-01';
+      let wsName = 'Workshop';
+      let wsFee = 550;
+      let isPaid = true;
+
+      if (window.TechFestCapacity) {
+        const ws = window.TechFestCapacity.getWorkshopById(wsId);
+        if (ws) {
+          wsName = ws.name;
+          isPaid = ws.is_paid;
+          wsFee = ws.is_paid ? (ws.price_other || 550) : 0;
+        }
+      }
+
+      modalPendingData = {
+        workshopId: wsId,
+        batchCode: currentBatch,
+        wsName: wsName,
+        wsFee: wsFee,
+        isPaid: isPaid
+      };
+
+      // Populate pop-up modal
+      document.getElementById('modalWsTitle').textContent = wsName;
+      document.getElementById('modalWsBatch').textContent = currentBatch === 'FREE' ? 'Session: 2 Repeats' : `Batch: ${currentBatch}`;
+      document.getElementById('modalWsFee').textContent = isPaid ? `Workshop Fee: ₹${wsFee}` : 'Workshop Fee: FREE';
       
-      const targetUrl = '../register/index.html?workshop=' + encodeURIComponent(wsId) + '&batch=' + encodeURIComponent(batchCode);
+      const totalBundle = 250 + wsFee;
+      document.getElementById('modalBundlePrice').textContent = `Total: ₹${totalBundle}`;
+      document.getElementById('modalSoloPrice').textContent = isPaid ? `₹${wsFee} (Workshop Only)` : 'FREE Session';
+
+      // Open Modal
+      document.getElementById('festEntryModal').classList.add('active');
+    }
+
+    function closeFestModal() {
+      document.getElementById('festEntryModal').classList.remove('active');
+    }
+
+    function routeFromModal(option) {
+      if (!modalPendingData) return;
+      const { workshopId, batchCode } = modalPendingData;
+      closeFestModal();
+
+      sessionStorage.setItem('tf_pending_workshop', workshopId);
+      sessionStorage.setItem('tf_pending_batch', batchCode);
+
+      let targetUrl = '';
+      if (option === 'entry_first') {
+        // Option 1: Pay Fest Entry ₹250 First
+        sessionStorage.setItem('tf_include_fest_fee', '1');
+        targetUrl = `../register/index.html?type=entry&workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}`;
+      } else if (option === 'workshop_only') {
+        // Option 3: Already Paid Entry Fee
+        sessionStorage.setItem('tf_include_fest_fee', '0');
+        targetUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=0`;
+      } else {
+        // Option 2 (bundle): Pay Registration Fee + Workshop Fee Together at Checkout
+        sessionStorage.setItem('tf_include_fest_fee', '1');
+        targetUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=1`;
+      }
+
       sessionStorage.setItem('tf_post_login_redirect', targetUrl);
 
       const isAuth = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
       if (isAuth) {
         window.location.href = targetUrl;
       } else {
-        window.location.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId) + '&batch=' + encodeURIComponent(batchCode);
+        window.location.href = `../login/index.html?redirect=register&workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${option === 'workshop_only' ? '0' : '1'}`;
       }
     }
 

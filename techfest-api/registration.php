@@ -133,6 +133,10 @@ if ($action === 'create_registration') {
                 'is_paid' => $wsData['is_paid'] ?? 1
             ];
         }
+        $includeFestFee = isset($input['include_fest_fee']) ? ((int)$input['include_fest_fee'] === 1) : true;
+        if ($includeFestFee) {
+            $totalAmount += 250.00;
+        }
     } catch (Exception $wsErr) {
         sendApiResponse(false, 'Error retrieving workshop pricing.', [], 500);
     }

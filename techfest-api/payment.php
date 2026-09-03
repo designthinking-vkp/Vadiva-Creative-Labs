@@ -89,9 +89,21 @@ if ($action === 'create_order' || $action === 'create_entry_payment') {
         sendApiResponse(false, 'Invalid workshop selected.', [], 400);
     }
 
-    $amountInRupees = ($tier === 'VELAMMAL') ? $workshop['price_velammal'] : $workshop['price_other'];
-    if ($amountInRupees <= 0) {
-        $amountInRupees = 250;
+    $baseWorkshopPrice = ($tier === 'VELAMMAL') ? ($workshop['price_velammal'] ?? 400) : ($workshop['price_other'] ?? 550);
+    if (isset($workshop['is_paid']) && !$workshop['is_paid']) {
+        $baseWorkshopPrice = 0;
+    }
+
+    $includeFestFee = isset($input['include_fest_fee']) ? ((int)$input['include_fest_fee'] === 1) : true;
+    $festFeeAmount = $includeFestFee ? 250 : 0;
+
+    if (isset($input['amount']) && is_numeric($input['amount']) && (float)$input['amount'] > 0) {
+        $amountInRupees = (float)$input['amount'];
+    } else {
+        $amountInRupees = $baseWorkshopPrice + $festFeeAmount;
+        if ($amountInRupees <= 0) {
+            $amountInRupees = 250;
+        }
     }
     $amountInPaise = (int)round($amountInRupees * 100);
 

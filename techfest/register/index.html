@@ -376,13 +376,13 @@
             <span style="color:var(--tf-muted);">Eligibility:</span>
             <span id="auth-summary-eligibility">Grades 4–12</span>
           </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-            <span style="color:var(--tf-muted);">Workshop Fee:</span>
-            <strong id="auth-summary-fee">₹400 (Velammal) / ₹550 (Others)</strong>
-          </div>
           <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(12,184,192,0.2); padding-top:0.5rem; margin-top:0.5rem;">
-            <span style="color:var(--tf-deep); font-weight:700;">Festival Entry:</span>
-            <span style="color:var(--tf-muted);">₹250 (All Participants)</span>
+            <span style="color:var(--tf-deep); font-weight:700;">Festival Entry Pass:</span>
+            <span style="color:var(--tf-muted);" id="auth-summary-fest-fee">&#8377;250 (Mandatory Entry)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:0.35rem;">
+            <span style="color:var(--tf-deep); font-weight:800;">Estimated Total at Checkout:</span>
+            <strong id="auth-summary-total" style="color:#059669; font-size:1.05rem;">&#8377;800</strong>
           </div>
         </div>
 
@@ -682,8 +682,19 @@
           document.getElementById('auth-pid-display').textContent = pid;
           document.getElementById('auth-summary-ws-name').textContent = workshop.name;
           document.getElementById('auth-summary-eligibility').textContent = workshop.grades;
+          
+          const params = new URLSearchParams(window.location.search);
+          const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee');
+          const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
+          const willIncludeFestFee = festFeeParam === '0' ? false : (festFeeParam === '1' ? true : !isEntryPaid);
+
+          let baseFee = workshop.is_paid ? 550 : 0;
+          let totalEst = baseFee + (willIncludeFestFee ? 250 : 0);
+
           document.getElementById('auth-summary-fee').textContent = workshop.fee_label;
-          document.getElementById('confirm-booking-btn').textContent = workshop.is_paid ? 'Confirm & Proceed to Payment \u2192' : 'Confirm Free Workshop Seat \u2192';
+          document.getElementById('auth-summary-fest-fee').textContent = willIncludeFestFee ? '₹250 (Mandatory Entry)' : 'Already Paid / Excluded (₹0)';
+          document.getElementById('auth-summary-total').textContent = `₹${totalEst}`;
+          document.getElementById('confirm-booking-btn').textContent = totalEst > 0 ? `Confirm & Proceed to Payment (₹${totalEst}) \u2192` : 'Confirm Free Workshop Seat \u2192';
           document.getElementById('view-auth-booking').style.display = 'block';
         } else {
           // Scenario: Unauthenticated user with workshop selected -> show Account Creation with preserved workshop context
@@ -715,6 +726,8 @@
 
       const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
       const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
+      const params = new URLSearchParams(window.location.search);
+      const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee') || '1';
 
       try {
         const payload = {
@@ -726,7 +739,8 @@
           class_name: localStorage.getItem('tf_class_name') || '',
           city: localStorage.getItem('tf_city') || 'Chennai',
           user_id: pid,
-          workshop_id: currentSelectedWorkshop.id
+          workshop_id: currentSelectedWorkshop.id,
+          include_fest_fee: festFeeParam === '0' ? 0 : 1
         };
 
         const res = await fetch('../../techfest-api/registration.php?action=create_registration', {
@@ -737,10 +751,10 @@
 
         const data = await res.json();
         const regId = (data.success && data.data && data.data.registration_id) ? data.data.registration_id : pid;
-        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(regId)}`;
+        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(regId)}&include_fest_fee=${encodeURIComponent(festFeeParam)}`;
       } catch (err) {
         // Fallback with pid
-        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(pid || '1')}`;
+        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(pid || '1')}&include_fest_fee=${encodeURIComponent(festFeeParam)}`;
       }
     }
 
