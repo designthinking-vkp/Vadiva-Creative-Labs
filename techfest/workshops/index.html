@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workshops | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Explore 10 Paid Masterclasses and 10 Free Hands-on Workshops with real-time live seat tracking for Vadiva Tech Fest 3.0.">
+  <title>Workshops &amp; Masterclasses | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Explore 10 Paid Masterclasses and 10 Free Hands-on Workshops with live seat tracking and interactive details for Vadiva Tech Fest 3.0.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
-    /* ── Workshops Catalogue Specific Styles ── */
+    /* ── Workshops Catalogue Page Styles ── */
     .ws-page {
       background: transparent;
       min-height: 75vh;
@@ -20,14 +20,14 @@
     }
     
     .ws-page-header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       text-align: left;
     }
     .ws-breadcrumbs {
       font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.12em;
-      color: var(--tf-teal);
+      color: var(--tf-teal, #0cb8c0);
       text-transform: uppercase;
       margin-bottom: 0.5rem;
       display: flex;
@@ -35,24 +35,24 @@
       gap: 0.5rem;
     }
     .ws-breadcrumbs a {
-      color: var(--tf-muted);
+      color: var(--tf-muted, #64748b);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .ws-breadcrumbs a:hover { color: var(--tf-teal); }
+    .ws-breadcrumbs a:hover { color: var(--tf-teal, #0cb8c0); }
     
     .ws-page-header h1 {
-      font-family: var(--font-heading);
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 900;
-      color: var(--tf-deep);
+      color: var(--tf-deep, #0c3c4c);
       margin: 0 0 0.5rem;
       line-height: 1.15;
     }
     .ws-page-header p { 
-      color: var(--tf-muted); 
+      color: var(--tf-muted, #64748b); 
       font-size: 1.05rem; 
-      max-width: 680px;
+      max-width: 720px;
       margin: 0;
       line-height: 1.6;
     }
@@ -63,7 +63,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 1.5rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
     }
     .ws-tabs {
@@ -80,11 +80,11 @@
       background: transparent !important;
       border: none !important;
       border-radius: 9px !important;
-      padding: 0.6rem 1.4rem !important;
-      font-family: var(--font-heading) !important;
+      padding: 0.65rem 1.4rem !important;
+      font-family: var(--font-heading, 'Outfit', sans-serif) !important;
       font-weight: 700 !important;
       font-size: 0.9rem !important;
-      color: var(--tf-muted) !important;
+      color: var(--tf-muted, #64748b) !important;
       cursor: pointer !important;
       transition: all 0.2s ease !important;
       outline: none !important;
@@ -92,7 +92,7 @@
     }
     .ws-tab.active { 
       background: rgba(255, 255, 255, 0.98) !important;
-      color: var(--tf-deep) !important;
+      color: var(--tf-deep, #0c3c4c) !important;
       box-shadow: 0 3px 12px rgba(7, 25, 33, 0.08) !important;
     }
     
@@ -112,16 +112,16 @@
       border: 1.5px solid rgba(12, 184, 192, 0.22) !important;
       background-color: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(8px) !important;
-      font-family: var(--font-heading) !important;
+      font-family: var(--font-heading, 'Outfit', sans-serif) !important;
       font-size: 0.85rem !important;
       font-weight: 700 !important;
-      color: var(--tf-deep) !important;
+      color: var(--tf-deep, #0c3c4c) !important;
       cursor: pointer !important;
       outline: none !important;
       transition: all 0.2s ease !important;
     }
     .ws-filter-select:focus {
-      border-color: var(--tf-teal) !important;
+      border-color: var(--tf-teal, #0cb8c0) !important;
       box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15) !important;
     }
 
@@ -132,32 +132,39 @@
       grid-template-columns: repeat(3, minmax(0, 1fr)); 
       gap: 24px; 
     }
+    @media (max-width: 1024px) {
+      .ws-tab-content.active { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .ws-tab-content.active { grid-template-columns: 1fr; }
+    }
 
-    /* Workshop Card */
+    /* ── Streamlined Workshop Card ── */
     .ws-card {
-      background: rgba(255, 255, 255, 0.88) !important;
+      background: rgba(255, 255, 255, 0.9) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
       border: 1px solid rgba(226, 232, 240, 0.9) !important;
-      border-radius: var(--tf-radius-xl) !important;
+      border-radius: 18px !important;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: var(--tf-shadow-md) !important;
-      transition: var(--tf-transition);
+      box-shadow: 0 4px 20px rgba(12, 60, 76, 0.06) !important;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
+      cursor: pointer;
     }
     .ws-card:hover { 
       transform: translateY(-6px) !important;
-      border-color: rgba(12, 184, 192, 0.35) !important;
-      box-shadow: var(--tf-shadow-lg) !important;
+      border-color: rgba(12, 184, 192, 0.4) !important;
+      box-shadow: 0 16px 36px rgba(12, 60, 76, 0.12) !important;
       background: #ffffff !important;
     }
     
     .ws-card-image-wrap {
       position: relative;
       width: 100%;
-      height: 190px;
+      height: 195px;
       overflow: hidden;
       background: #0f172a;
     }
@@ -166,9 +173,10 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.4s ease;
+      display: block;
     }
     .ws-card:hover .ws-card-image {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
     
     .ws-card-badge-row {
@@ -182,198 +190,148 @@
       z-index: 2;
     }
     .ws-badge-type {
-      font-family: var(--font-heading);
-      font-size: 0.72rem;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 0.7rem;
       font-weight: 800;
-      padding: 0.25rem 0.65rem;
+      padding: 0.28rem 0.7rem;
       border-radius: 999px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       backdrop-filter: blur(8px);
     }
     .ws-badge-type.paid {
-      background: rgba(239, 68, 68, 0.9);
+      background: rgba(239, 68, 68, 0.92);
       color: #ffffff;
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
     }
     .ws-badge-type.free {
-      background: rgba(16, 185, 129, 0.9);
+      background: rgba(16, 185, 129, 0.92);
       color: #ffffff;
       box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
     }
     .ws-grade-badge {
       font-size: 0.72rem;
       font-weight: 700;
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.8);
       color: #ffffff;
-      padding: 0.25rem 0.65rem;
+      padding: 0.28rem 0.7rem;
       border-radius: 999px;
       backdrop-filter: blur(8px);
     }
 
     .ws-card-content {
-      padding: 1.5rem;
+      padding: 1.25rem 1.35rem;
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .ws-card-content h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--tf-deep);
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
       margin: 0;
       line-height: 1.3;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
     }
     .ws-card-desc {
-      font-size: 0.88rem;
-      color: var(--tf-text-secondary);
-      line-height: 1.55;
+      font-size: 0.86rem;
+      color: #64748b;
+      line-height: 1.5;
       margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
       flex: 1;
     }
 
-    /* Binding Constraint Chip */
-    .ws-constraint-chip {
+    /* Clean Card Info Bar */
+    .ws-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(12, 60, 76, 0.035);
+      border: 1px solid rgba(12, 184, 192, 0.12);
+      border-radius: 10px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.82rem;
+      color: var(--tf-deep, #0c3c4c);
+    }
+    .ws-card-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+    .ws-card-meta-price {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-weight: 800;
+      color: #059669;
+      font-size: 0.92rem;
+    }
+    .ws-card-meta-price.paid {
+      color: var(--tf-deep, #0c3c4c);
+    }
+
+    /* Card Action Footer */
+    .ws-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding-top: 0.4rem;
+    }
+    .ws-live-status {
+      font-size: 0.76rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
-      color: var(--tf-muted);
-      background: rgba(12, 60, 76, 0.04);
-      border: 1px dashed rgba(12, 60, 76, 0.15);
-      border-radius: 6px;
-      padding: 0.35rem 0.65rem;
+    }
+    .ws-live-status.available { color: #059669; }
+    .ws-live-status.fast { color: #d97706; }
+    .ws-live-status.full { color: #dc2626; }
+    .ws-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
     }
 
-    /* Pricing Row */
-    .ws-prices {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid var(--tf-border);
-    }
-    .ws-price-item {
-      font-size: 0.82rem;
-      color: var(--tf-text-secondary);
-    }
-    .ws-price-item strong {
-      font-size: 0.95rem;
-      color: var(--tf-deep);
-      margin-left: 2px;
-    }
-
-    /* Batch Selector Dropdown */
-    .ws-batch-select-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .ws-batch-select-lbl {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--tf-muted);
-    }
-    .ws-batch-select {
-      width: 100% !important;
-      padding: 0.45rem 0.75rem !important;
-      border-radius: 8px !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.2) !important;
-      background: #f8fafc !important;
-      font-size: 0.82rem !important;
-      font-family: var(--font-body) !important;
-      color: var(--tf-text) !important;
-      outline: none !important;
-      cursor: pointer;
-    }
-
-    /* Real-Time Capacity Bar */
-    .ws-capacity {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .ws-cap-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--tf-text);
-    }
-    .ws-cap-status {
-      font-weight: 700;
-      font-size: 0.75rem;
-    }
-    .ws-cap-status.available { color: #059669; }
-    .ws-cap-status.getting-full { color: #0284c7; }
-    .ws-cap-status.near-full { color: #d97706; }
-    .ws-cap-status.full { color: #dc2626; }
-
-    .ws-cap-bar {
-      width: 100%;
-      height: 8px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-    .ws-cap-fill {
-      height: 100%;
-      background: #10b981;
-      border-radius: 999px;
-      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
-    }
-    .ws-cap-fill.getting-full { background: #0ea5e9; }
-    .ws-cap-fill.near-full { background: #f59e0b; }
-    .ws-cap-fill.full { background: #ef4444; }
-
-    .ws-card-action {
-      margin-top: auto;
-      padding-top: 0.5rem;
-    }
-    .ws-book-btn {
-      display: flex;
+    .ws-view-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--tf-deep);
+      gap: 6px;
+      padding: 0.55rem 1.1rem;
+      background: var(--tf-deep, #0c3c4c);
       color: #ffffff !important;
-      font-family: var(--font-heading);
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-weight: 700;
-      font-size: 0.9rem;
-      border-radius: var(--tf-radius-md);
-      text-decoration: none;
-      transition: var(--tf-transition);
+      font-size: 0.85rem;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
+      transition: all 0.2s ease;
+      margin-left: auto;
     }
-    .ws-book-btn:hover {
-      background: var(--tf-teal);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(12, 184, 192, 0.3);
-    }
-    .ws-book-btn:disabled, .ws-book-btn.disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
+    .ws-card:hover .ws-view-btn {
+      background: var(--tf-teal, #0cb8c0);
+      transform: translateX(2px);
+      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.3);
     }
 
-    /* ── Fest Registration Pop-up Modal ── */
+    /* ── Workshop Details Pop-up Modal ── */
     .ws-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(7, 25, 33, 0.78);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(7, 25, 33, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       z-index: 99999;
       display: flex;
       align-items: center;
@@ -388,184 +346,290 @@
       opacity: 1;
       visibility: visible;
     }
+    
     .ws-modal-box {
       background: #ffffff;
-      border: 1.5px solid rgba(12, 184, 192, 0.28);
-      border-radius: 20px;
-      max-width: 540px;
+      border: 1.5px solid rgba(12, 184, 192, 0.25);
+      border-radius: 22px;
+      max-width: 820px;
       width: 100%;
-      padding: 2.25rem 2rem;
-      box-shadow: 0 25px 50px -12px rgba(7, 25, 33, 0.35);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 60px -15px rgba(7, 25, 33, 0.4);
       position: relative;
-      transform: scale(0.94) translateY(10px);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.95) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     .ws-modal-overlay.active .ws-modal-box {
       transform: scale(1) translateY(0);
     }
+    
+    .ws-modal-hero {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #0f172a;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+    .ws-modal-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .ws-modal-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 25, 33, 0.2) 0%, rgba(7, 25, 33, 0.85) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem 1.75rem;
+    }
+    .ws-modal-badges {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .ws-modal-hero h2 {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
     .ws-modal-close {
       position: absolute;
-      top: 1.25rem;
-      right: 1.25rem;
-      width: 34px;
-      height: 34px;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 1px solid rgba(12, 184, 192, 0.2);
-      background: rgba(12, 60, 76, 0.05);
-      color: var(--tf-deep);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.45);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 700;
       transition: all 0.2s;
+      z-index: 10;
+      backdrop-filter: blur(8px);
     }
     .ws-modal-close:hover {
-      background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
-      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.9);
+      border-color: #ef4444;
+      transform: rotate(90deg);
     }
-    .ws-modal-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--tf-coral);
-      border: 1px solid rgba(239, 68, 68, 0.25);
-      padding: 0.3rem 0.8rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
+
+    .ws-modal-body {
+      padding: 1.75rem;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 1.75rem;
+    }
+    @media (max-width: 768px) {
+      .ws-modal-body { grid-template-columns: 1fr; padding: 1.25rem; gap: 1.25rem; }
+    }
+
+    .ws-modal-section-title {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 0.95rem;
       font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0 0 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
     }
-    .ws-modal-title {
-      font-family: var(--font-heading);
-      font-size: 1.45rem;
-      font-weight: 900;
-      color: var(--tf-deep);
-      margin: 0 0 0.4rem;
-      line-height: 1.25;
-    }
-    .ws-modal-note {
-      font-size: 0.88rem;
-      color: var(--tf-muted);
-      line-height: 1.55;
+    .ws-modal-desc-full {
+      font-size: 0.92rem;
+      color: #334155;
+      line-height: 1.6;
       margin: 0 0 1.25rem;
     }
-    .ws-modal-note strong {
-      color: var(--tf-deep);
-    }
-    .ws-modal-summary {
-      background: rgba(12, 60, 76, 0.04);
-      border: 1.5px solid rgba(12, 184, 192, 0.2);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-    .ws-modal-ws-name {
-      font-family: var(--font-heading);
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--tf-deep);
-      margin: 0 0 0.35rem;
-    }
-    .ws-modal-ws-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      color: var(--tf-muted);
-    }
-    .ws-modal-options {
+    .ws-modal-highlights {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 0.5rem;
     }
-    .ws-modal-opt-card {
+    .ws-modal-highlights li {
+      font-size: 0.88rem;
+      color: #475569;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.45;
+    }
+    .ws-modal-highlights li svg {
+      color: var(--tf-teal, #0cb8c0);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .ws-modal-details-grid {
+      background: rgba(12, 60, 76, 0.035);
+      border: 1px solid rgba(12, 184, 192, 0.15);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    .ws-modal-detail-row {
+      display: flex;
+      gap: 8px;
+    }
+    .ws-modal-detail-lbl {
+      font-weight: 700;
+      color: var(--tf-deep, #0c3c4c);
+      min-width: 100px;
+    }
+    .ws-modal-detail-val {
+      color: #475569;
+      flex: 1;
+    }
+
+    /* Batch Selection Container in Modal */
+    .ws-batch-card-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .ws-batch-option-card {
       background: #ffffff;
-      border: 1.5px solid rgba(12, 184, 192, 0.25);
-      border-radius: 14px;
-      padding: 1rem 1.2rem;
-      text-align: left;
+      border: 1.5px solid rgba(12, 184, 192, 0.22);
+      border-radius: 12px;
+      padding: 0.75rem 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+    .ws-batch-option-card:hover {
+      border-color: var(--tf-teal, #0cb8c0);
+      background: rgba(12, 184, 192, 0.04);
+    }
+    .ws-batch-option-card.selected {
+      border-color: var(--tf-teal, #0cb8c0);
+      background: rgba(12, 184, 192, 0.08);
+      box-shadow: 0 0 0 2px rgba(12, 184, 192, 0.25);
+    }
+    .ws-batch-opt-left {
       display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      text-decoration: none;
+      align-items: center;
+      gap: 10px;
     }
-    .ws-modal-opt-card:hover {
-      border-color: var(--tf-teal);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(12, 184, 192, 0.15);
+    .ws-batch-radio {
+      accent-color: var(--tf-teal, #0cb8c0);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
     }
-    .ws-modal-opt-card.primary {
-      background: linear-gradient(135deg, rgba(12, 184, 192, 0.08) 0%, rgba(12, 60, 76, 0.04) 100%);
-      border: 2px solid var(--tf-teal);
+    .ws-batch-opt-title {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
     }
-    .ws-modal-opt-header {
+    .ws-batch-opt-time {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+    .ws-batch-opt-seats {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #059669;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+    }
+
+    /* Modal Pricing Box */
+    .ws-modal-price-box {
+      background: linear-gradient(135deg, rgba(12, 60, 76, 0.04) 0%, rgba(12, 184, 192, 0.08) 100%);
+      border: 1.5px solid rgba(12, 184, 192, 0.25);
+      border-radius: 14px;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .ws-modal-price-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.4rem;
+      font-size: 0.88rem;
     }
-    .ws-modal-opt-title {
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--tf-deep);
+    .ws-modal-price-val {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--tf-deep, #0c3c4c);
     }
-    .ws-modal-opt-price {
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #059669;
-    }
-    .ws-modal-opt-desc {
-      font-size: 0.8rem;
-      color: var(--tf-muted);
+    .ws-modal-price-val.free { color: #059669; }
+    .ws-modal-fest-note {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 0.4rem;
       line-height: 1.4;
-      margin: 0;
+      border-top: 1px dashed rgba(12, 184, 192, 0.2);
+      padding-top: 0.4rem;
     }
-    .ws-modal-opt-btn {
-      margin-top: 0.35rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
+
+    .ws-modal-action-btn {
+      width: 100%;
+      height: 48px;
+      background: var(--tf-deep, #0c3c4c);
+      color: #ffffff !important;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-weight: 800;
-      color: var(--tf-teal);
+      font-size: 0.95rem;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(12, 60, 76, 0.2);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .ws-modal-opt-card.primary .ws-modal-opt-btn {
-      color: var(--tf-deep);
+    .ws-modal-action-btn:hover {
+      background: var(--tf-teal, #0cb8c0);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(12, 184, 192, 0.35);
     }
-    .ws-modal-sublink {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.82rem;
-    }
-    .ws-modal-sublink a {
-      color: var(--tf-teal);
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .ws-modal-sublink a:hover {
-      text-decoration: underline;
-    }
-    @media (max-width: 540px) {
-      .ws-modal-box {
-        padding: 1.75rem 1.25rem;
-      }
+    .ws-modal-action-btn:disabled, .ws-modal-action-btn.disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
   </style>
 </head>
 <body class="techfest-theme">
 
-  <!-- ============================================================
-       FLOATING FROSTED NAVIGATION
-       ============================================================ -->
+  <!-- Floating Navigation -->
   <header class="site-header">
     <div class="header-container">
       <div class="logo">
@@ -585,14 +649,14 @@
           <li><a href="../../protospark.html">Protospark</a></li>
           <li><a href="../index.html">Tech Fest</a></li>
           <li><a href="./index.html" class="active">Workshops</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
+          <li class="mobile-only-nav-item"><a href="../login/index.html">Sign In</a></li>
           <li class="mobile-only-nav-item"><a href="../register/index.html">Register</a></li>
           <li><a href="../../contact.html">Contact</a></li>
         </ul>
       </nav>
 
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn header-payment-btn">Sign In</a>
+        <a href="../login/index.html" class="btn header-payment-btn">Sign In</a>
         <a href="../register/index.html" class="btn header-cta">Register Now</a>
         <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle Navigation">
           <span></span>
@@ -603,9 +667,7 @@
     </div>
   </header>
 
-  <!-- ============================================================
-       WORKSHOPS CATALOGUE & REAL-TIME CAPACITY MATRIX
-       ============================================================ -->
+  <!-- Catalogue Section -->
   <main class="ws-page">
     <div class="container">
       
@@ -618,7 +680,7 @@
         </div>
         <h1>Workshops &amp; Masterclasses</h1>
         <p>
-          Explore hands-on masterclasses across robotics, AI, aerospace, coding, and design. Choose your batch track and reserve seats in real time.
+          Click on any workshop to view full project details, curriculum highlights, venue, and reserve your 2-Day batch track in real time.
         </p>
       </div>
 
@@ -649,22 +711,102 @@
         </div>
       </div>
 
-      <!-- Paid Workshops Catalogue Grid (Dynamic Live Container) -->
+      <!-- Paid Workshops Catalogue Grid -->
       <div class="ws-tab-content active" id="ws-paid-grid">
-        <!-- Rendered dynamically by TechFestCapacity real-time engine -->
+        <!-- Rendered dynamically by JavaScript -->
       </div>
 
-      <!-- Free Workshops Catalogue Grid (Dynamic Live Container) -->
+      <!-- Free Workshops Catalogue Grid -->
       <div class="ws-tab-content" id="ws-free-grid">
-        <!-- Rendered dynamically by TechFestCapacity real-time engine -->
+        <!-- Rendered dynamically by JavaScript -->
       </div>
 
     </div>
   </main>
 
   <!-- ============================================================
-       SITE FOOTER
+       WORKSHOP DETAILS POP-UP MODAL
        ============================================================ -->
+  <div class="ws-modal-overlay" id="workshopDetailsModal" onclick="if(event.target===this)closeWorkshopModal()">
+    <div class="ws-modal-box" role="dialog" aria-modal="true" aria-labelledby="modalWsTitle">
+      <button class="ws-modal-close" onclick="closeWorkshopModal()" aria-label="Close Modal">&times;</button>
+      
+      <!-- Modal Hero Header with Image -->
+      <div class="ws-modal-hero">
+        <img id="modalHeroImg" src="" alt="Workshop Banner">
+        <div class="ws-modal-hero-overlay">
+          <div class="ws-modal-badges">
+            <span class="ws-badge-type" id="modalBadgeType">PAID MASTERCLASS</span>
+            <span class="ws-grade-badge" id="modalBadgeGrade">Grades 5–12</span>
+            <span class="ws-grade-badge" id="modalBadgeDuration" style="background:rgba(12,184,192,0.85); color:#fff;">2 Days · 2 Sessions</span>
+          </div>
+          <h2 id="modalWsTitle">Rocket Lab</h2>
+        </div>
+      </div>
+
+      <!-- Modal Body Content -->
+      <div class="ws-modal-body">
+        <!-- Left Column: Details & Curriculum -->
+        <div class="ws-modal-left">
+          <div class="ws-modal-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Overview &amp; Experience</span>
+          </div>
+          <p class="ws-modal-desc-full" id="modalFullDesc"></p>
+
+          <div class="ws-modal-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>What You'll Learn &amp; Build</span>
+          </div>
+          <ul class="ws-modal-highlights" id="modalHighlightsList"></ul>
+
+          <div class="ws-modal-details-grid">
+            <div class="ws-modal-detail-row">
+              <span class="ws-modal-detail-lbl">Studio / Venue:</span>
+              <span class="ws-modal-detail-val" id="modalVenue">Aero &amp; Space Arena</span>
+            </div>
+            <div class="ws-modal-detail-row">
+              <span class="ws-modal-detail-lbl">Tools Used:</span>
+              <span class="ws-modal-detail-val" id="modalTools">Lab Kits &amp; Hardware</span>
+            </div>
+            <div class="ws-modal-detail-row">
+              <span class="ws-modal-detail-lbl">What to Bring:</span>
+              <span class="ws-modal-detail-val" id="modalWhatToBring">All materials provided.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Batch Track & Action -->
+        <div class="ws-modal-right">
+          <div class="ws-modal-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="modalBatchSectionTitle">Select 2-Day Batch Slot</span>
+          </div>
+
+          <div class="ws-batch-card-group" id="modalBatchOptionsContainer">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Price & Pass Summary -->
+          <div class="ws-modal-price-box">
+            <div class="ws-modal-price-row">
+              <span style="font-weight:700; color:var(--tf-deep);">Workshop Fee:</span>
+              <span class="ws-modal-price-val" id="modalPriceDisplay">&#8377;400</span>
+            </div>
+            <div class="ws-modal-fest-note" id="modalTierNote">
+              Festival Entry Fee (&#8377;250) mandatory to unlock festival pass.
+            </div>
+          </div>
+
+          <button type="button" class="ws-modal-action-btn" id="modalActionBtn" onclick="submitModalSelection()">
+            <span>Reserve Batch &amp; Proceed &rarr;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
@@ -706,69 +848,236 @@
     </div>
   </footer>
 
-  <!-- Fest Entry Requirement Modal Overlay -->
-  <div class="ws-modal-overlay" id="festEntryModal" onclick="if(event.target===this)closeFestModal()">
-    <div class="ws-modal-box">
-      <button class="ws-modal-close" onclick="closeFestModal()" aria-label="Close">&times;</button>
-      
-      <div class="ws-modal-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span>Fest Entry Notice</span>
-      </div>
-
-      <h3 class="ws-modal-title">Festival Registration Required</h3>
-      <p class="ws-modal-note">
-        All workshop participants must pay the <strong>&#8377;250 Festival Registration Fee</strong> for Vadiva Tech Fest 3.0. Choose your registration option below:
-      </p>
-
-      <div class="ws-modal-summary" id="modalWsSummary">
-        <div class="ws-modal-ws-name" id="modalWsTitle">Robotics &amp; Automation</div>
-        <div class="ws-modal-ws-meta">
-          <span id="modalWsBatch">Batch: B-01</span>
-          <span id="modalWsFee">Workshop Fee: &#8377;550</span>
-        </div>
-      </div>
-
-      <div class="ws-modal-options">
-        <!-- Option 1: Combined at checkout -->
-        <a href="javascript:void(0)" class="ws-modal-opt-card primary" onclick="routeFromModal('bundle')">
-          <div class="ws-modal-opt-header">
-            <span class="ws-modal-opt-title">1. Pay Fest Fee + Workshop at Checkout</span>
-            <span class="ws-modal-opt-price" id="modalBundlePrice">Total: &#8377;800</span>
-          </div>
-          <p class="ws-modal-opt-desc">Bundle the &#8377;250 registration fee and pay together on checkout (&#8377;250 Registration + Workshop fee).</p>
-          <span class="ws-modal-opt-btn">Continue to Combined Checkout &rarr;</span>
-        </a>
-
-        <!-- Option 2: Pay entry fee first -->
-        <a href="javascript:void(0)" class="ws-modal-opt-card" onclick="routeFromModal('entry_first')">
-          <div class="ws-modal-opt-header">
-            <span class="ws-modal-opt-title">2. Pay &#8377;250 Registration Fee First</span>
-            <span class="ws-modal-opt-price">&#8377;250</span>
-          </div>
-          <p class="ws-modal-opt-desc">Pay your mandatory &#8377;250 festival registration fee first to secure festival entry pass.</p>
-          <span class="ws-modal-opt-btn">Pay &#8377;250 Fest Fee First &rarr;</span>
-        </a>
-
-        <!-- Option 3: Already paid entry fee -->
-        <a href="javascript:void(0)" class="ws-modal-opt-card" onclick="routeFromModal('workshop_only')">
-          <div class="ws-modal-opt-header">
-            <span class="ws-modal-opt-title">3. Already Paid &#8377;250 Entry Fee?</span>
-            <span class="ws-modal-opt-price" id="modalSoloPrice">Workshop Fee Only</span>
-          </div>
-          <p class="ws-modal-opt-desc">If you already paid the &#8377;250 festival entry fee, proceed to pay only the workshop fee.</p>
-          <span class="ws-modal-opt-btn">Continue with Workshop Fee &rarr;</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
     let currentTab = 'paid';
-    let selectedBatches = {}; // workshopId -> batch_code
-    let modalPendingData = null; // Stores workshopId, batchCode, isPaid, price
+    let activeModalWs = null;
+    let selectedBatchCode = 'B-01';
+
+    // Comprehensive Workshop Rich Data Store
+    const WORKSHOP_METADATA = {
+      1: {
+        highlights: [
+          'Master solid-propellant & pneumatic rocket propulsion principles',
+          'Calibrate center-of-mass, fins, and aerodynamic flight stability',
+          'Perform outdoor launch tests with digital apogee altimeter tracking'
+        ],
+        tools: 'Pneumatic launch rigs, digital altimeters, composite rocket bodies, parachutes',
+        venue: 'Aero & Space Field (Outdoor Launch Arena)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'No laptop needed. All safety gear, rocket assemblies, and launch hardware provided.'
+      },
+      2: {
+        highlights: [
+          'Assemble a functioning 1U CubeSat payload architecture with sensors',
+          'Wire environmental telemetry (temperature, barometric pressure, gyro)',
+          'Decode real-time radio telemetry at the mock ground station'
+        ],
+        tools: 'CubeSat sensor chassis, RF transceiver modules, telemetry decoder software',
+        venue: 'Orbital Payload Lab (Studio 3)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop recommended (Windows/Mac) with Google Chrome.'
+      },
+      3: {
+        highlights: [
+          'Understand quadcopter aerodynamics, lift mechanics, and prop thrust',
+          'Calibrate transmitter pitch/roll trims and optical-flow auto-hover',
+          'Execute precision manual obstacle navigation inside the safety flight cage'
+        ],
+        tools: 'Micro quadcopters, dual-stick 2.4GHz transmitters, indoor flight arena',
+        venue: 'Indoor Flight Cage (Arena 1)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'No laptop needed. Certified drones and transmitters provided.'
+      },
+      4: {
+        highlights: [
+          'Fabricate high-lift RC foam-board and carbon composite glider airframes',
+          'Learn aerodynamic control surfaces (elevators, ailerons, and rudder trims)',
+          'Execute arena launch trials, thermal glides, and stall recovery physics'
+        ],
+        tools: 'Carbon spars, hot-wire cutters, RC servo linkages, transmitters',
+        venue: 'Aero Engineering Hangar (Studio 2)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'No laptop needed. All modeling tools and materials provided.'
+      },
+      5: {
+        highlights: [
+          'Build spatial 3D WebXR environments and interactive holographic models',
+          'Code gaze triggers, 6-DoF controllers, and spatial 3D audio effects',
+          'Deploy and preview interactive virtual worlds directly on VR headsets'
+        ],
+        tools: 'WebXR studio, Three.js 3D models, standalone VR headsets',
+        venue: 'Immersive Spatial Studio (Lab 4)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop required (Windows / Mac / Chromebook).'
+      },
+      6: {
+        highlights: [
+          'Train real-time computer vision models on edge accelerator hardware',
+          'Build neural-network gesture controllers and voice classification models',
+          'Connect ML models to interactive games and physical hardware actuators'
+        ],
+        tools: 'Edge neural accelerators, webcams, Python/Block ML environment',
+        venue: 'Neural Computing Lab (Lab 2)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop required (Windows / Mac / Chromebook).'
+      },
+      7: {
+        highlights: [
+          'Design 2D physics arcade mechanics, collision layers, and velocity loops',
+          'Animate custom sprite sheets and code finite state machines for heroes',
+          'Script smart enemy AI pathfinding and publish a playable web game'
+        ],
+        tools: 'Game engine suite, 2D sprite editor, sound FX synthesizer',
+        venue: 'Interactive Media Studio (Lab 1)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop required (Windows / Mac / Chromebook).'
+      },
+      8: {
+        highlights: [
+          'Model mechanical parts using parametric 3D CAD software and constraints',
+          'Master slicer optimization: infill density, supports, and layer heights',
+          'Operate multi-filament 3D printers and take home your fabricated prototype'
+        ],
+        tools: 'Parametric CAD suite, Cura slicer, 3D printers, digital calipers',
+        venue: 'Rapid Prototyping FabLab (Makerspace)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop recommended for 3D modeling.'
+      },
+      9: {
+        highlights: [
+          'Wire digital/analog sensor circuits on solderless breadboards',
+          'Program PWM motor drivers, ultrasonic sonar radar, and I2C LCD displays',
+          'Build and calibrate an autonomous smart-sensing hardware gadget'
+        ],
+        tools: 'Arduino Uno R4 / Nano kits, ultrasonic sensors, servos, multimeters',
+        venue: 'Hardware & IoT Electronics Lab (Studio 1)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop recommended for Arduino IDE programming.'
+      },
+      10: {
+        highlights: [
+          'Learn traditional 12 principles of animation: squash, stretch, and anticipation',
+          'Rig digital 2D character puppets and set keyframe easing curves',
+          'Synchronize voice tracks and produce an export-ready short film'
+        ],
+        tools: 'Vector animation software, graphics tablets, audio editor',
+        venue: 'Digital Arts & Animation Studio (Media Lab)',
+        duration: '2 Days · 2 Sessions (4 Hours Total)',
+        what_to_bring: 'Laptop recommended.'
+      },
+      11: {
+        highlights: [
+          '5-stage human-centered design method: Empathize, Define, Ideate, Prototype, Test',
+          'Rapid problem framing, user interview frameworks, and empathy mapping',
+          'Paper prototyping and presenting actionable innovative solutions'
+        ],
+        tools: 'Design canvases, rapid prototyping materials, sticky sprint boards',
+        venue: 'Main Auditorium (Theatre Alpha)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Notebook and pen. Materials provided.'
+      },
+      12: {
+        highlights: [
+          'Transform abstract technical concepts into visual architecture diagrams',
+          'Rapid UI wireframing, icon sketching, and graphical storytelling',
+          'Learn visual synthesis for pitch decks and technical proposals'
+        ],
+        tools: 'Visual thinking workbooks, fine-liner pens, UI stencil grids',
+        venue: 'Design Hall (Theatre Beta)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Notebook and sketch pens.'
+      },
+      13: {
+        highlights: [
+          'Master vocal projection, posture, eye contact, and stage presence',
+          'Structure 60-second and 3-minute elevator pitches for startup ideas',
+          'Handle live jury Q&A and articulate unique value propositions'
+        ],
+        tools: 'Wireless lapel mics, pitch timers, slide presentation templates',
+        venue: 'Main Auditorium (Theatre Alpha)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Notebook.'
+      },
+      14: {
+        highlights: [
+          'Spectacular live demonstrations of cryogenics and liquid nitrogen physics',
+          'Electromagnetic levitation, vortex rings, and chemical luminescence',
+          'Interactive Q&A breaking down the fundamental laws of nature'
+        ],
+        tools: 'Cryogenic dewars, Tesla coils, smoke vortex cannons, safety shields',
+        venue: 'Spectacle Arena (Theatre Beta)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Curiosity and questions.'
+      },
+      15: {
+        highlights: [
+          'Validate customer pain points and formulate product-market fit hypotheses',
+          'Calculate basic unit economics: CAC, LTV, pricing models, and gross margins',
+          'Draft a 1-page Lean Canvas for your next student-led venture'
+        ],
+        tools: 'Lean Canvas worksheets, business model generator tools',
+        venue: 'Startup Amphitheatre (Theatre Alpha)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Laptop or notebook.'
+      },
+      16: {
+        highlights: [
+          'Introductory JavaScript with p5.js for generative visual art',
+          'Create interactive canvas particles that react to mouse movements',
+          'Export code-generated artwork and algorithmic wallpaper designs'
+        ],
+        tools: 'p5.js Web Editor, modern web browser',
+        venue: 'Code Theatre (Theatre Beta)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Laptop recommended (or follow along live on big screen).'
+      },
+      17: {
+        highlights: [
+          'Basic electron flow, component polarity, resistors, and LEDs',
+          'Assemble breadboard circuits without soldering or complex equations',
+          'Build a functioning multi-LED light chaser circuit'
+        ],
+        tools: 'Breadboards, LEDs, 555 timers, battery clips, jumper wires',
+        venue: 'Hardware Arena (Theatre Alpha)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'All electronic components provided.'
+      },
+      18: {
+        highlights: [
+          'Introduction to 3D spatial thinking and coordinate navigation',
+          'Construct custom 3D models in Tinkercad using Boolean groupings',
+          'Prepare and export 3D STL files for slicing and printing'
+        ],
+        tools: 'Tinkercad 3D Web Suite',
+        venue: 'Digital Design Hub (Theatre Beta)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Laptop recommended.'
+      },
+      19: {
+        highlights: [
+          'Explore planetary orbits, Hohmann transfer orbits, and gravity assists',
+          'Analyse lunar and Martian atmospheric entry, descent, and landing (EDL)',
+          'Design a future deep-space human habitat capsule architecture'
+        ],
+        tools: 'Orbit simulation software, planetary charts',
+        venue: 'Cosmos Theatre (Theatre Alpha)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Notebook.'
+      },
+      20: {
+        highlights: [
+          'Spot deepfakes, phishing attacks, and AI-generated social engineering',
+          'Protect digital footprints, passwords, and personal identity',
+          'Understand algorithmic fairness and ethical AI technology adoption'
+        ],
+        tools: 'Cyber threat simulator, deepfake detection test suite',
+        venue: 'Cyber Hall (Theatre Beta)',
+        duration: '1-Hour Interactive Master Session',
+        what_to_bring: 'Notebook.'
+      }
+    };
 
     function switchCatalogueTab(tab) {
       currentTab = tab;
@@ -779,62 +1088,44 @@
       applyFilters();
     }
 
-    function onBatchChange(workshopId, batchCode) {
-      selectedBatches[workshopId] = batchCode;
-      if (window.TechFestCapacity) {
-        renderPaidWorkshops(window.TechFestCapacity.getPaidWorkshops());
-      }
-    }
-
     function renderPaidWorkshops(workshops) {
       const container = document.getElementById('ws-paid-grid');
       if (!container || !workshops) return;
 
-      const gradeVal = document.getElementById('gradeFilter') ? document.getElementById('gradeFilter').value : 'all';
-      const availVal = document.getElementById('availabilityFilter') ? document.getElementById('availabilityFilter').value : 'all';
+      const gradeVal = document.getElementById('gradeFilter')?.value || 'all';
+      const availVal = document.getElementById('availabilityFilter')?.value || 'all';
+      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
 
       let html = '';
       workshops.forEach(ws => {
-        // Filter checks
         if (gradeVal === 'junior' && ws.max_grade < 4) return;
         if (gradeVal === 'senior' && ws.min_grade > 10) return;
 
-        const currentBatchCode = selectedBatches[ws.id] || (ws.batches[0] ? ws.batches[0].batch_code : 'B-01');
-        const activeBatch = ws.batches.find(b => b.batch_code === currentBatchCode) || ws.batches[0];
-
-        const cap = activeBatch.capacity;
-        const filled = activeBatch.seats_filled + (activeBatch.soft_locks || 0);
-        const available = Math.max(0, cap - filled);
-        const pct = Math.min(100, Math.round((filled / cap) * 100));
+        const firstBatch = ws.batches[0] || { capacity: 20, seats_filled: 0 };
+        const totalCap = ws.batches.reduce((sum, b) => sum + b.capacity, 0);
+        const totalFilled = ws.batches.reduce((sum, b) => sum + b.seats_filled + (b.soft_locks || 0), 0);
+        const available = Math.max(0, totalCap - totalFilled);
+        const pct = Math.min(100, Math.round((totalFilled / totalCap) * 100));
 
         let statusClass = 'available';
         let statusLabel = 'Seats Available';
-        if (filled >= cap) {
+        if (available <= 0) {
           statusClass = 'full';
-          statusLabel = 'Sold Out (Waitlist)';
-        } else if (pct >= 80) {
-          statusClass = 'near-full';
+          statusLabel = 'Waitlist Only';
+        } else if (pct >= 75) {
+          statusClass = 'fast';
           statusLabel = 'Filling Fast';
-        } else if (pct >= 50) {
-          statusClass = 'getting-full';
-          statusLabel = 'Active Booking';
         }
 
         if (availVal === 'available' && statusClass === 'full') return;
-        if (availVal === 'fast' && statusClass !== 'near-full') return;
+        if (availVal === 'fast' && statusClass !== 'fast') return;
 
-        let batchOptionsHtml = '';
-        ws.batches.forEach(b => {
-          const bFilled = b.seats_filled + (b.soft_locks || 0);
-          const bAvail = Math.max(0, b.capacity - bFilled);
-          const isSelected = b.batch_code === currentBatchCode ? 'selected' : '';
-          batchOptionsHtml += `<option value="${b.batch_code}" ${isSelected}>${b.batch_code}: ${b.slots} (${bAvail} left)</option>`;
-        });
+        const displayPrice = (userTier === 'VELAMMAL') ? ws.price_velammal : ws.price_other;
 
         html += `
-          <div class="ws-card" data-workshop-id="${ws.id}">
+          <div class="ws-card" onclick="openWorkshopDetailsModal(${ws.id})">
             <div class="ws-card-image-wrap">
-              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy">
+              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1517976487541-d5a01e5d9e18?auto=format&fit=crop&w=600&q=80'">
               <div class="ws-card-badge-row">
                 <span class="ws-badge-type paid">PAID MASTERCLASS</span>
                 <span class="ws-grade-badge">Grades ${ws.min_grade}–${ws.max_grade}</span>
@@ -845,38 +1136,23 @@
               <h3>${ws.name}</h3>
               <p class="ws-card-desc">${ws.short_desc}</p>
               
-              <div class="ws-constraint-chip" title="Capacity Binding Constraint">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span>Constraint: ${ws.binding_constraint}</span>
-              </div>
-
-              <div class="ws-prices">
-                <div class="ws-price-item" style="${(localStorage.getItem('tf_tier')==='VELAMMAL')?'color:#059669; font-weight:800;':''}">Velammal: <strong>&#8377;${ws.price_velammal}</strong></div>
-                <div class="ws-price-item" style="${(localStorage.getItem('tf_tier')!=='VELAMMAL')?'color:var(--tf-deep); font-weight:800;':''}">Others: <strong>&#8377;${ws.price_other}</strong></div>
-              </div>
-
-              <div class="ws-batch-select-wrap">
-                <label class="ws-batch-select-lbl">Select 2-Day Batch Slot (Indivisible Pair):</label>
-                <select class="ws-batch-select" onchange="onBatchChange(${ws.id}, this.value)">
-                  ${batchOptionsHtml}
-                </select>
-              </div>
-
-              <div class="ws-capacity">
-                <div class="ws-cap-label">
-                  <span>Live Seats Filled: <strong>${filled} / ${cap}</strong></span>
-                  <span class="ws-cap-status ${statusClass}">${statusLabel}</span>
+              <div class="ws-card-meta">
+                <div class="ws-card-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>2-Day Track (2 Sessions)</span>
                 </div>
-                <div class="ws-cap-bar">
-                  <div class="ws-cap-fill ${statusClass}" style="width: ${pct}%"></div>
+                <div class="ws-card-meta-price paid">
+                  &#8377;${displayPrice}
                 </div>
               </div>
 
-              <div class="ws-card-action">
-                <button type="button"
-                   class="ws-book-btn ${available <= 0 ? 'disabled' : ''}" 
-                   onclick="handleWorkshopSelect(event, ${ws.id}, '${currentBatchCode}')">
-                  ${available <= 0 ? 'Join Waitlist &rarr;' : 'Select Masterclass &rarr;'}
+              <div class="ws-card-footer">
+                <div class="ws-live-status ${statusClass}">
+                  <span class="ws-live-dot"></span>
+                  <span>${statusLabel}</span>
+                </div>
+                <button type="button" class="ws-view-btn">
+                  <span>View Details &amp; Book &rarr;</span>
                 </button>
               </div>
             </div>
@@ -884,39 +1160,45 @@
         `;
       });
 
-      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: var(--tf-muted); padding: 3rem;">No workshops matching criteria.</p>';
+      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 3rem;">No masterclasses matching criteria.</p>';
     }
 
     function renderFreeWorkshops(workshops) {
       const container = document.getElementById('ws-free-grid');
       if (!container || !workshops) return;
 
+      const gradeVal = document.getElementById('gradeFilter')?.value || 'all';
+      const availVal = document.getElementById('availabilityFilter')?.value || 'all';
+
       let html = '';
       workshops.forEach(ws => {
+        if (gradeVal === 'junior' && ws.max_grade < 4) return;
+        if (gradeVal === 'senior' && ws.min_grade > 10) return;
+
         const s1 = ws.sessions[0];
         const s2 = ws.sessions[1];
-
         const totalCap = ws.public_capacity * 2;
         const totalFilled = (s1.seats_filled + (s1.soft_locks || 0)) + (s2.seats_filled + (s2.soft_locks || 0));
+        const available = Math.max(0, totalCap - totalFilled);
         const pct = Math.min(100, Math.round((totalFilled / totalCap) * 100));
 
         let statusClass = 'available';
         let statusLabel = 'Seats Available';
-        if (totalFilled >= totalCap) {
+        if (available <= 0) {
           statusClass = 'full';
           statusLabel = 'Full';
-        } else if (pct >= 80) {
-          statusClass = 'near-full';
+        } else if (pct >= 75) {
+          statusClass = 'fast';
           statusLabel = 'Filling Fast';
-        } else if (pct >= 50) {
-          statusClass = 'getting-full';
-          statusLabel = 'Active';
         }
 
+        if (availVal === 'available' && statusClass === 'full') return;
+        if (availVal === 'fast' && statusClass !== 'fast') return;
+
         html += `
-          <div class="ws-card" data-workshop-id="${ws.id}">
+          <div class="ws-card" onclick="openWorkshopDetailsModal(${ws.id})">
             <div class="ws-card-image-wrap">
-              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy">
+              <img src="${ws.image_url}" alt="${ws.name}" class="ws-card-image" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80'">
               <div class="ws-card-badge-row">
                 <span class="ws-badge-type free">FREE WITH PASS</span>
                 <span class="ws-grade-badge">Grades ${ws.min_grade}–${ws.max_grade}</span>
@@ -927,36 +1209,23 @@
               <h3>${ws.name}</h3>
               <p class="ws-card-desc">${ws.short_desc}</p>
               
-              <div class="ws-constraint-chip">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                <span>2 Repeats &middot; ${s1.theatre_name || s1.theatre} &amp; ${s2.theatre_name || s2.theatre}</span>
-              </div>
-
-              <div class="ws-prices">
-                <div class="ws-price-item">Workshop Fee: <strong>FREE</strong></div>
-                <div class="ws-price-item">Festival Pass: <strong>&#8377;250 Required</strong></div>
-              </div>
-
-              <div style="font-size: 0.8rem; color: var(--tf-text); background: #f1f5f9; padding: 0.5rem 0.75rem; border-radius: 8px;">
-                <div>&bull; Session 1: <strong>${s1.time}</strong> (${s1.theatre_name || s1.theatre})</div>
-                <div>&bull; Session 2: <strong>${s2.time}</strong> (${s2.theatre_name || s2.theatre})</div>
-              </div>
-
-              <div class="ws-capacity">
-                <div class="ws-cap-label">
-                  <span>Live Theatre Seats: <strong>${totalFilled} / ${totalCap}</strong></span>
-                  <span class="ws-cap-status ${statusClass}">${statusLabel}</span>
+              <div class="ws-card-meta">
+                <div class="ws-card-meta-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  <span>1-Hour Interactive Session</span>
                 </div>
-                <div class="ws-cap-bar">
-                  <div class="ws-cap-fill ${statusClass}" style="width: ${pct}%"></div>
+                <div class="ws-card-meta-price">
+                  FREE
                 </div>
               </div>
 
-              <div class="ws-card-action">
-                <button type="button" 
-                   class="ws-book-btn" 
-                   onclick="handleWorkshopSelect(event, ${ws.id}, 'FREE')">
-                  Select Free Session &rarr;
+              <div class="ws-card-footer">
+                <div class="ws-live-status ${statusClass}">
+                  <span class="ws-live-dot"></span>
+                  <span>${statusLabel}</span>
+                </div>
+                <button type="button" class="ws-view-btn">
+                  <span>View Details &rarr;</span>
                 </button>
               </div>
             </div>
@@ -964,7 +1233,7 @@
         `;
       });
 
-      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: var(--tf-muted); padding: 3rem;">No workshops matching criteria.</p>';
+      container.innerHTML = html || '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 3rem;">No workshops matching criteria.</p>';
     }
 
     function applyFilters() {
@@ -977,15 +1246,168 @@
       }
     }
 
+    // Open Interactive Workshop Details Modal
+    function openWorkshopDetailsModal(workshopId) {
+      const wsId = parseInt(workshopId, 10);
+      if (!window.TechFestCapacity) return;
+
+      const ws = window.TechFestCapacity.getWorkshopById(wsId);
+      if (!ws) return;
+
+      activeModalWs = ws;
+      const meta = WORKSHOP_METADATA[wsId] || {};
+      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
+
+      // Populate Hero & Badges
+      const imgEl = document.getElementById('modalHeroImg');
+      imgEl.src = ws.image_url;
+      imgEl.onerror = () => { imgEl.src = 'https://images.unsplash.com/photo-1517976487541-d5a01e5d9e18?auto=format&fit=crop&w=800&q=80'; };
+      
+      document.getElementById('modalWsTitle').textContent = ws.name;
+      
+      const badgeType = document.getElementById('modalBadgeType');
+      badgeType.textContent = ws.is_paid ? 'PAID MASTERCLASS' : 'FREE WITH PASS';
+      badgeType.className = 'ws-badge-type ' + (ws.is_paid ? 'paid' : 'free');
+
+      document.getElementById('modalBadgeGrade').textContent = `Grades ${ws.min_grade}–${ws.max_grade}`;
+      document.getElementById('modalBadgeDuration').textContent = meta.duration || (ws.is_paid ? '2 Days · 2 Sessions' : '1-Hour Master Session');
+
+      // Populate Description & Highlights
+      document.getElementById('modalFullDesc').textContent = ws.short_desc + ' Experience deep dive hands-on learning with expert mentors and industry tools.';
+      
+      const hlList = document.getElementById('modalHighlightsList');
+      hlList.innerHTML = '';
+      (meta.highlights || ['Practical hands-on lab experiments', 'Interactive problem solving and tool usage', 'Take-home projects and verified certificate']).forEach(h => {
+        const li = document.createElement('li');
+        li.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>${h}</span>`;
+        hlList.appendChild(li);
+      });
+
+      // Populate Meta Details
+      document.getElementById('modalVenue').textContent = meta.venue || 'Tech Fest Innovation Lab';
+      document.getElementById('modalTools').textContent = meta.tools || 'All required kits & software provided';
+      document.getElementById('modalWhatToBring').textContent = meta.what_to_bring || 'All materials and project gear supplied.';
+
+      // Populate Batch Slot Options
+      const batchContainer = document.getElementById('modalBatchOptionsContainer');
+      batchContainer.innerHTML = '';
+
+      if (ws.is_paid && ws.batches) {
+        document.getElementById('modalBatchSectionTitle').textContent = 'Select 2-Day Batch Slot (Indivisible Pair):';
+        selectedBatchCode = ws.batches[0] ? ws.batches[0].batch_code : 'B-01';
+
+        ws.batches.forEach((b, idx) => {
+          const bFilled = b.seats_filled + (b.soft_locks || 0);
+          const bAvail = Math.max(0, b.capacity - bFilled);
+          const isSelected = (idx === 0);
+
+          const card = document.createElement('div');
+          card.className = 'ws-batch-option-card' + (isSelected ? ' selected' : '');
+          card.id = 'batch-card-' + b.batch_code;
+          card.onclick = () => selectModalBatch(b.batch_code);
+
+          card.innerHTML = `
+            <div class="ws-batch-opt-left">
+              <input type="radio" name="modal_batch" class="ws-batch-radio" value="${b.batch_code}" ${isSelected ? 'checked' : ''}>
+              <div>
+                <div class="ws-batch-opt-title">Batch ${b.batch_code}</div>
+                <div class="ws-batch-opt-time">${b.slots}</div>
+              </div>
+            </div>
+            <div class="ws-batch-opt-seats">${bAvail} seats left</div>
+          `;
+          batchContainer.appendChild(card);
+        });
+
+        // Price display
+        const price = (userTier === 'VELAMMAL') ? ws.price_velammal : ws.price_other;
+        document.getElementById('modalPriceDisplay').innerHTML = `&#8377;${price}`;
+        document.getElementById('modalTierNote').innerHTML = (userTier === 'VELAMMAL') 
+          ? '<strong>✓ Velammal Student Discount Active</strong> (&#8377;' + ws.price_velammal + ' vs General &#8377;' + ws.price_other + ').'
+          : 'Standard Tier (&#8377;' + ws.price_other + '). Mandatory &#8377;250 entry pass required.';
+        document.getElementById('modalActionBtn').innerHTML = '<span>Reserve Batch &amp; Proceed &rarr;</span>';
+
+      } else if (ws.sessions) {
+        document.getElementById('modalBatchSectionTitle').textContent = 'Choose Session Timing:';
+        selectedBatchCode = 'FREE';
+
+        ws.sessions.forEach((s, idx) => {
+          const isSelected = (idx === 0);
+          const card = document.createElement('div');
+          card.className = 'ws-batch-option-card' + (isSelected ? ' selected' : '');
+          card.id = 'free-session-card-' + idx;
+          card.onclick = () => {
+            document.querySelectorAll('.ws-batch-option-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            card.querySelector('input').checked = true;
+          };
+
+          card.innerHTML = `
+            <div class="ws-batch-opt-left">
+              <input type="radio" name="modal_session" class="ws-batch-radio" value="${s.slot_code}" ${isSelected ? 'checked' : ''}>
+              <div>
+                <div class="ws-batch-opt-title">Session ${idx + 1} (${s.theatre_name || s.theatre || 'Theatre Alpha'})</div>
+                <div class="ws-batch-opt-time">${s.time}</div>
+              </div>
+            </div>
+            <div class="ws-batch-opt-seats">Free Session</div>
+          `;
+          batchContainer.appendChild(card);
+        });
+
+        document.getElementById('modalPriceDisplay').innerHTML = '<span class="ws-modal-price-val free">FREE</span>';
+        document.getElementById('modalTierNote').innerHTML = 'Included at <strong>&#8377;0</strong> with your mandatory &#8377;250 Festival Entry Pass.';
+        document.getElementById('modalActionBtn').innerHTML = '<span>Book Free Session &rarr;</span>';
+      }
+
+      // Show Modal
+      document.getElementById('workshopDetailsModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function selectModalBatch(batchCode) {
+      selectedBatchCode = batchCode;
+      document.querySelectorAll('.ws-batch-option-card').forEach(c => c.classList.remove('selected'));
+      const activeCard = document.getElementById('batch-card-' + batchCode);
+      if (activeCard) {
+        activeCard.classList.add('selected');
+        const radio = activeCard.querySelector('input');
+        if (radio) radio.checked = true;
+      }
+    }
+
+    function closeWorkshopModal() {
+      document.getElementById('workshopDetailsModal').classList.remove('active');
+      document.body.style.overflow = '';
+      activeModalWs = null;
+    }
+
+    // Keyboard ESC listener for modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeWorkshopModal();
+      }
+    });
+
+    // Modal Action Submit Handler
+    function submitModalSelection() {
+      if (!activeModalWs) return;
+      const wsId = activeModalWs.id;
+      const currentBatch = selectedBatchCode || 'B-01';
+
+      closeWorkshopModal();
+      handleWorkshopSelect(null, wsId, currentBatch);
+    }
+
+    // Central Workshop Selection & Routing Engine
     function handleWorkshopSelect(event, workshopId, batchCode) {
       if (event) event.preventDefault();
       const wsId = String(workshopId).trim();
       if (!wsId) return;
 
-      const currentBatch = batchCode || selectedBatches[wsId] || 'B-01';
+      const currentBatch = batchCode || selectedBatchCode || 'B-01';
       let wsName = 'Workshop';
       let isPaid = (currentBatch !== 'FREE');
-      let userTier = localStorage.getItem('tf_tier') || 'OTHER';
 
       if (window.TechFestCapacity) {
         const ws = window.TechFestCapacity.getWorkshopById(wsId);
@@ -1007,29 +1429,34 @@
       }
 
       if (!isEntryPaid) {
-        // Enforce mandatory ₹250 entry fee flow
-        alert('Please complete your ₹250 Festival Entry Fee to unlock workshop bookings and pass.');
+        alert('Please complete your ₹250 Festival Entry Fee to unlock workshop bookings and generate your QR Pass.');
         window.location.href = `../register/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
         return;
       }
 
-      // Proceed to checkout
+      // Proceed to checkout or schedule
       if (isPaid) {
         window.location.href = `../payment/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
       } else {
-        // Free workshop direct booking
-        alert(`Your free workshop session for "${wsName}" has been booked and added to My Schedule!`);
+        alert(`Your free session for "${wsName}" has been booked and added to My Schedule!`);
         window.location.href = '../dashboard/index.html';
       }
     }
 
-    // Subscribe to real-time capacity engine
+    // Initialize Page & Real-Time Engine Subscription
     document.addEventListener('DOMContentLoaded', () => {
       if (window.TechFestCapacity) {
         window.TechFestCapacity.subscribe((data) => {
           renderPaidWorkshops(data.paidWorkshops);
           renderFreeWorkshops(data.freeWorkshops);
         });
+      }
+
+      // Check if URL specifies workshop popup directly
+      const urlParams = new URLSearchParams(window.location.search);
+      const wsParam = urlParams.get('id') || urlParams.get('workshop');
+      if (wsParam) {
+        setTimeout(() => openWorkshopDetailsModal(wsParam), 300);
       }
 
       // Mobile Menu setup

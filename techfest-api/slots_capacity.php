@@ -58,7 +58,7 @@ $BASE_PAID_WORKSHOPS = [
         'capacity_per_batch' => 20,
         'min_grade' => 5,
         'max_grade' => 12,
-        'image_url' => 'https://images.unsplash.com/photo-1517976487541-05bf47990176?auto=format&fit=crop&w=600&q=80',
+        'image_url' => 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?auto=format&fit=crop&w=800&q=80',
         'batches' => [
             ['batch_code' => 'B-01', 'slots' => 'D1-AM + D2-AM (09:30–11:30)', 'capacity' => 20],
             ['batch_code' => 'B-02', 'slots' => 'D1-PM + D2-PM (13:30–15:30)', 'capacity' => 20],
