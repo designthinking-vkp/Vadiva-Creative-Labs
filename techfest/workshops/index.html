@@ -851,12 +851,12 @@
               </div>
 
               <div class="ws-prices">
-                <div class="ws-price-item">Velammal: <strong>&#8377;${ws.price_velammal}</strong></div>
-                <div class="ws-price-item">Others: <strong>&#8377;${ws.price_other}</strong></div>
+                <div class="ws-price-item" style="${(localStorage.getItem('tf_tier')==='VELAMMAL')?'color:#059669; font-weight:800;':''}">Velammal: <strong>&#8377;${ws.price_velammal}</strong></div>
+                <div class="ws-price-item" style="${(localStorage.getItem('tf_tier')!=='VELAMMAL')?'color:var(--tf-deep); font-weight:800;':''}">Others: <strong>&#8377;${ws.price_other}</strong></div>
               </div>
 
               <div class="ws-batch-select-wrap">
-                <label class="ws-batch-select-lbl">Select 2-Day Batch Slot:</label>
+                <label class="ws-batch-select-lbl">Select 2-Day Batch Slot (Indivisible Pair):</label>
                 <select class="ws-batch-select" onchange="onBatchChange(${ws.id}, this.value)">
                   ${batchOptionsHtml}
                 </select>
@@ -934,7 +934,7 @@
 
               <div class="ws-prices">
                 <div class="ws-price-item">Workshop Fee: <strong>FREE</strong></div>
-                <div class="ws-price-item">Festival Entry: <strong>&#8377;250</strong></div>
+                <div class="ws-price-item">Festival Pass: <strong>&#8377;250 Required</strong></div>
               </div>
 
               <div style="font-size: 0.8rem; color: var(--tf-text); background: #f1f5f9; padding: 0.5rem 0.75rem; border-radius: 8px;">
@@ -984,65 +984,42 @@
 
       const currentBatch = batchCode || selectedBatches[wsId] || 'B-01';
       let wsName = 'Workshop';
-      let wsFee = 550;
-      let isPaid = true;
+      let isPaid = (currentBatch !== 'FREE');
+      let userTier = localStorage.getItem('tf_tier') || 'OTHER';
 
       if (window.TechFestCapacity) {
         const ws = window.TechFestCapacity.getWorkshopById(wsId);
         if (ws) {
           wsName = ws.name;
           isPaid = ws.is_paid;
-          wsFee = ws.is_paid ? (ws.price_other || 550) : 0;
         }
       }
 
-      modalPendingData = {
-        workshopId: wsId,
-        batchCode: currentBatch,
-        wsName: wsName,
-        wsFee: wsFee,
-        isPaid: isPaid
-      };
+      sessionStorage.setItem('tf_pending_workshop', wsId);
+      sessionStorage.setItem('tf_pending_batch', currentBatch);
 
-      // Populate pop-up modal
-      document.getElementById('modalWsTitle').textContent = wsName;
-      document.getElementById('modalWsBatch').textContent = currentBatch === 'FREE' ? 'Session: 2 Repeats' : `Batch: ${currentBatch}`;
-      document.getElementById('modalWsFee').textContent = isPaid ? `Workshop Fee: ₹${wsFee}` : 'Workshop Fee: FREE';
-      
-      const totalBundle = 250 + wsFee;
-      document.getElementById('modalBundlePrice').textContent = `Total: ₹${totalBundle}`;
-      document.getElementById('modalSoloPrice').textContent = isPaid ? `₹${wsFee} (Workshop Only)` : 'FREE Session';
+      const isAuth = Boolean(localStorage.getItem('tf_user_id') || localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
+      const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
 
-      // Open Modal
-      document.getElementById('festEntryModal').classList.add('active');
-    }
+      if (!isAuth) {
+        window.location.href = `../login/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
+        return;
+      }
 
-    function closeFestModal() {
-      document.getElementById('festEntryModal').classList.remove('active');
-    }
+      if (!isEntryPaid) {
+        // Enforce mandatory ₹250 entry fee flow
+        alert('Please complete your ₹250 Festival Entry Fee to unlock workshop bookings and pass.');
+        window.location.href = `../register/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
+        return;
+      }
 
-    function routeFromModal(option) {
-      if (!modalPendingData) return;
-      const { workshopId, batchCode } = modalPendingData;
-      closeFestModal();
-
-      sessionStorage.setItem('tf_pending_workshop', workshopId);
-      sessionStorage.setItem('tf_pending_batch', batchCode);
-      const festFeeVal = option === 'workshop_only' ? '0' : '1';
-      sessionStorage.setItem('tf_include_fest_fee', festFeeVal);
-
-      const isAuth = window.TechFestAccess ? window.TechFestAccess.isAuthenticated() : !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
-
-      if (isAuth) {
-        // Authenticated users go directly to payment checkout
-        const payUrl = `../payment/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${festFeeVal}`;
-        sessionStorage.setItem('tf_post_login_redirect', payUrl);
-        window.location.href = payUrl;
+      // Proceed to checkout
+      if (isPaid) {
+        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
       } else {
-        // New participants register account first, then flow to payment
-        const regUrl = `../register/index.html?workshop=${encodeURIComponent(workshopId)}&batch=${encodeURIComponent(batchCode)}&include_fest_fee=${festFeeVal}`;
-        sessionStorage.setItem('tf_post_login_redirect', regUrl);
-        window.location.href = regUrl;
+        // Free workshop direct booking
+        alert(`Your free workshop session for "${wsName}" has been booked and added to My Schedule!`);
+        window.location.href = '../dashboard/index.html';
       }
     }
 

@@ -11,31 +11,43 @@
 
     // Storage Keys
     storageKeys: {
+      userId: 'tf_user_id',
       participantId: 'tf_participant_id',
       token: 'tf_token',
       userName: 'tf_user_name',
       userMobile: 'tf_user_mobile',
       userEmail: 'tf_user_email',
+      grade: 'tf_grade',
+      band: 'tf_band',
+      tier: 'tf_tier',
+      isVelammal: 'tf_is_velammal',
+      velammalVerified: 'tf_velammal_verified',
+      campusName: 'tf_campus_name',
+      admissionNumber: 'tf_admission_number',
       entryPaid: 'tf_entry_paid',
       pendingWorkshop: 'tf_pending_workshop',
+      pendingBatch: 'tf_pending_batch',
       postLoginRedirect: 'tf_post_login_redirect'
     }
   };
 
-  // 2. Centralized Access Control Layer
+  // 2. Band Derivation from Grade (Grades 4-12)
+  function deriveBandFromGrade(grade) {
+    const g = parseInt(grade, 10);
+    if (g >= 4 && g <= 6) return 'JUNIOR';
+    if (g >= 7 && g <= 9) return 'INTERMEDIATE';
+    if (g >= 10 && g <= 12) return 'SENIOR';
+    return null;
+  }
+
+  // 3. Centralized Access Control Layer
   const TechFestAccess = {
-    /**
-     * Testing mode is completely disabled
-     */
     isBypassMode() {
       return false;
     },
 
-    /**
-     * Centralized route and action guard
-     * @param {string} requirement - 'authentication' | 'registration' | 'payment' | 'workshop' | 'dashboard' | 'admin' | 'coordinator'
-     * @param {Object} context - Optional context parameters
-     */
+    deriveBandFromGrade,
+
     checkAccess(requirement, context = {}) {
       return {
         allowed: this.normalAccessValidation(requirement, context),
@@ -46,9 +58,6 @@
       };
     },
 
-    /**
-     * Normal validation logic
-     */
     normalAccessValidation(requirement, context = {}) {
       switch (requirement) {
         case 'authentication':
@@ -65,9 +74,6 @@
       }
     },
 
-    /**
-     * Returns true if user is authenticated
-     */
     isAuthenticated() {
       try {
         return Boolean(localStorage.getItem(TechFestConfig.storageKeys.participantId) || localStorage.getItem(TechFestConfig.storageKeys.token));
@@ -76,10 +82,7 @@
       }
     },
 
-    /**
-     * Returns true if entry fee / payment requirement is satisfied
-     */
-    hasCompletedPayment(participantId) {
+    hasCompletedEntryPayment(participantId) {
       try {
         return localStorage.getItem(TechFestConfig.storageKeys.entryPaid) === 'true';
       } catch (e) {
@@ -87,18 +90,23 @@
       }
     },
 
-    /**
-     * Returns current user identity object
-     */
     getCurrentUser() {
       try {
         const pid = localStorage.getItem(TechFestConfig.storageKeys.participantId);
         if (!pid) return null;
         return {
           id: pid,
+          userId: localStorage.getItem(TechFestConfig.storageKeys.userId) || pid,
           name: localStorage.getItem(TechFestConfig.storageKeys.userName) || pid,
           mobile: localStorage.getItem(TechFestConfig.storageKeys.userMobile) || '',
           email: localStorage.getItem(TechFestConfig.storageKeys.userEmail) || '',
+          grade: localStorage.getItem(TechFestConfig.storageKeys.grade) || '',
+          band: localStorage.getItem(TechFestConfig.storageKeys.band) || 'JUNIOR',
+          tier: localStorage.getItem(TechFestConfig.storageKeys.tier) || 'OTHER',
+          isVelammalVerified: localStorage.getItem(TechFestConfig.storageKeys.velammalVerified) === 'true',
+          campusName: localStorage.getItem(TechFestConfig.storageKeys.campusName) || '',
+          admissionNumber: localStorage.getItem(TechFestConfig.storageKeys.admissionNumber) || '',
+          entryPaid: localStorage.getItem(TechFestConfig.storageKeys.entryPaid) === 'true',
           role: 'participant',
           isBypassUser: false
         };
@@ -107,9 +115,6 @@
       }
     },
 
-    /**
-     * Returns current payment state
-     */
     getPaymentState() {
       try {
         const isPaid = localStorage.getItem(TechFestConfig.storageKeys.entryPaid) === 'true';
@@ -122,9 +127,6 @@
       }
     },
 
-    /**
-     * Helper to get pending workshop context
-     */
     getPendingWorkshop() {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -134,58 +136,48 @@
       }
     },
 
-    /**
-     * Helper to persist pending workshop context
-     */
-    setPendingWorkshop(workshopId) {
+    setPendingWorkshop(workshopId, batchCode = 'B-01') {
       if (!workshopId) return;
       try {
         sessionStorage.setItem(TechFestConfig.storageKeys.pendingWorkshop, String(workshopId).trim());
-        sessionStorage.setItem(TechFestConfig.storageKeys.postLoginRedirect, '../register/index.html?workshop=' + encodeURIComponent(workshopId));
+        if (batchCode) sessionStorage.setItem(TechFestConfig.storageKeys.pendingBatch, String(batchCode).trim());
+        sessionStorage.setItem(TechFestConfig.storageKeys.postLoginRedirect, '../register/index.html?workshop=' + encodeURIComponent(workshopId) + '&batch=' + encodeURIComponent(batchCode));
       } catch (e) {}
     },
 
-    /**
-     * Helper to clear pending workshop context after completion
-     */
     clearPendingWorkshop() {
       try {
         sessionStorage.removeItem(TechFestConfig.storageKeys.pendingWorkshop);
+        sessionStorage.removeItem(TechFestConfig.storageKeys.pendingBatch);
         sessionStorage.removeItem(TechFestConfig.storageKeys.postLoginRedirect);
       } catch (e) {}
     },
 
-    /**
-     * Universal robust logout handler
-     * @param {string} redirectTo - Destination URL after logout
-     */
     logout(redirectTo = '../login/index.html') {
       try {
+        localStorage.removeItem(TechFestConfig.storageKeys.userId);
         localStorage.removeItem(TechFestConfig.storageKeys.participantId);
         localStorage.removeItem(TechFestConfig.storageKeys.token);
         localStorage.removeItem(TechFestConfig.storageKeys.userName);
         localStorage.removeItem(TechFestConfig.storageKeys.userMobile);
         localStorage.removeItem(TechFestConfig.storageKeys.userEmail);
+        localStorage.removeItem(TechFestConfig.storageKeys.grade);
+        localStorage.removeItem(TechFestConfig.storageKeys.band);
+        localStorage.removeItem(TechFestConfig.storageKeys.tier);
+        localStorage.removeItem(TechFestConfig.storageKeys.isVelammal);
+        localStorage.removeItem(TechFestConfig.storageKeys.velammalVerified);
+        localStorage.removeItem(TechFestConfig.storageKeys.campusName);
+        localStorage.removeItem(TechFestConfig.storageKeys.admissionNumber);
         localStorage.removeItem(TechFestConfig.storageKeys.entryPaid);
-        localStorage.removeItem('tf_dev_bypass_active');
-        localStorage.removeItem('tf_test_registration_data');
-        localStorage.removeItem('tf_test_payment_data');
 
-        sessionStorage.removeItem(TechFestConfig.storageKeys.pendingWorkshop);
-        sessionStorage.removeItem(TechFestConfig.storageKeys.postLoginRedirect);
-        sessionStorage.removeItem('tf_test_secret');
         sessionStorage.clear();
       } catch (e) {
-        console.warn('Storage clear during logout had warning:', e);
+        console.warn('Storage clear during logout:', e);
       }
 
       if (redirectTo) {
         window.location.href = redirectTo;
       }
-    },
-
-    renderBypassBanner() {
-      // Production: No test banners
     }
   };
 

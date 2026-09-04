@@ -3,347 +3,481 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Dashboard | Vadiva Tech Fest 3.0</title>
+  <title>Participant Dashboard &amp; My Schedule | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="View your participant profile, verified tier, pass status, and single source of truth 3-day schedule for Vadiva Tech Fest 3.0.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
     /* ── Dashboard Styles (prefix: dash-) ── */
     .dash-page {
       background: transparent !important;
-      min-height: 70vh;
-      padding: 3rem 1.25rem 5rem;
+      min-height: 80vh;
+      padding: 3rem 1.25rem 6rem;
     }
-    .dash-inner { max-width: 900px; margin: 0 auto; }
+    .dash-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-    /* Participant card */
+    /* Participant Identity Card */
     .dash-participant-card {
-      background: rgba(12, 60, 76, 0.72) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(12, 184, 192, 0.3) !important;
-      color: var(--tf-white) !important;
-      border-radius: var(--glass-radius) !important;
-      padding: 1.75rem 2rem;
+      background: rgba(12, 60, 76, 0.82) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.35) !important;
+      color: #ffffff !important;
+      border-radius: var(--glass-radius-lg, 20px) !important;
+      padding: 2rem 2.25rem;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
-      box-shadow: 0 12px 40px rgba(7, 25, 33, 0.15) !important;
+      box-shadow: 0 16px 48px rgba(7, 25, 33, 0.18) !important;
     }
-    .dash-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--tf-teal) !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-heading);
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--tf-white);
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.25) !important;
-    }
-    .dash-info { flex: 1; min-width: 180px; }
-    .dash-name {
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin: 0 0 0.25rem;
-    }
-    .dash-id { font-size: 0.78rem; color: #94a3b8; margin: 0; }
-    .dash-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
-    .dash-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border: 1px solid transparent;
-    }
-    .dash-badge-band  { background: rgba(255,255,255,0.1) !important; color: #cbd5e1 !important; border-color: rgba(255,255,255,0.15) !important; }
-    .dash-badge-green  { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border-color: rgba(16, 185, 129, 0.2) !important; }
-    .dash-badge-blue   { background: rgba(6, 182, 212, 0.08) !important; color: #0891b2 !important; border-color: rgba(6, 182, 212, 0.2) !important; }
-    .dash-badge-red    { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border-color: rgba(239, 68, 68, 0.2) !important; }
-    .dash-badge-gold   { background: rgba(245, 158, 11, 0.08) !important; color: #d97706 !important; border-color: rgba(245, 158, 11, 0.2) !important; }
-
-    /* Payment banner */
-    .dash-pay-banner {
-      background: rgba(239, 68, 68, 0.05) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(239, 68, 68, 0.25) !important;
-      border-radius: 12px;
-      padding: 1.1rem 1.5rem;
+    .dash-profile-left {
       display: flex;
       align-items: center;
       gap: 1.25rem;
-      margin-bottom: 1.75rem;
-      flex-wrap: wrap;
     }
-    .dash-pay-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--tf-coral); }
-    .dash-pay-text { flex: 1; }
-    .dash-pay-text p { margin: 0; font-size: 0.9rem; color: var(--tf-text); font-weight: 600; }
-    .dash-pay-btn {
-      background: var(--tf-coral) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 0.88rem;
-      padding: 0.6rem 1.25rem;
-      border-radius: 10px;
-      text-decoration: none;
-      white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .dash-pay-btn:hover { background: #d63d3d !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
-
-    /* Tabs */
-    .dash-tabs {
-      background: rgba(12, 60, 76, 0.05) !important;
-      border: 1px solid rgba(12, 184, 192, 0.12) !important;
-      border-radius: 12px !important;
-      padding: 4px !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      backdrop-filter: blur(8px) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
-      margin-bottom: 1.75rem !important;
-    }
-    .dash-tab {
-      background: transparent !important;
-      border: none !important;
-      border-radius: 9px !important;
-      padding: 0.55rem 1.25rem !important;
-      font-family: var(--font-heading) !important;
-      font-weight: 700 !important;
-      font-size: 0.88rem !important;
-      color: var(--tf-muted) !important;
-      cursor: pointer !important;
-      transition: all 0.2s ease !important;
-      outline: none !important;
-      margin-bottom: 0 !important;
-    }
-    .dash-tab.active {
-      background: rgba(255, 255, 255, 0.95) !important;
-      color: var(--tf-deep) !important;
-      box-shadow: 0 3px 10px rgba(7, 25, 33, 0.05) !important;
-    }
-    .dash-tab-content { display: none; }
-    .dash-tab-content.active { display: block; }
-
-    /* Empty state */
-    .dash-empty {
-      text-align: center;
-      padding: 3.5rem 1.5rem;
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
-      transition: all 0.3s ease !important;
-    }
-    .dash-empty-icon { display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: var(--tf-teal); }
-    .dash-empty h3 {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--tf-deep);
-      margin-bottom: 0.5rem;
-    }
-    .dash-empty p { color: var(--tf-muted); font-size: 0.88rem; margin-bottom: 1.5rem; }
-    .dash-browse-btn {
-      display: inline-flex;
+    .dash-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--tf-teal, #0cb8c0);
+      display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--tf-coral) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      font-family: var(--font-heading);
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 14px rgba(12, 184, 192, 0.35);
+      flex-shrink: 0;
+    }
+    .dash-info h2 {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin: 0 0 0.3rem;
+      color: #ffffff;
+    }
+    .dash-id-line {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin: 0 0 0.5rem;
+      font-family: monospace;
+      letter-spacing: 0.05em;
+    }
+    .dash-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .dash-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .dash-badge-tier { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); }
+    .dash-badge-band { background: rgba(6, 182, 212, 0.2); color: #67e8f9; border: 1px solid rgba(103, 232, 249, 0.4); }
+    .dash-badge-pass { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(252, 211, 77, 0.4); }
+
+    .dash-actions-top {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .dash-action-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      padding: 0.65rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .dash-action-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-1.5px);
+    }
+    .dash-action-btn.primary {
+      background: var(--tf-teal, #0cb8c0);
+      border-color: var(--tf-teal, #0cb8c0);
+      box-shadow: 0 4px 14px rgba(12, 184, 192, 0.3);
+    }
+    .dash-action-btn.primary:hover {
+      background: #0aa5ad;
+    }
+
+    /* Unpaid Notice Banner */
+    .dash-locked-banner {
+      background: rgba(239, 68, 68, 0.08) !important;
+      border: 1.5px solid rgba(239, 68, 68, 0.3) !important;
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .dash-locked-text h3 {
+      font-size: 1.1rem;
+      color: #dc2626;
+      margin: 0 0 0.3rem;
+    }
+    .dash-locked-text p {
+      font-size: 0.88rem;
+      color: var(--tf-text, #1e293b);
+      margin: 0;
+    }
+
+    /* Tabs Bar */
+    .dash-tabs {
+      background: rgba(12, 60, 76, 0.06) !important;
+      border: 1px solid rgba(12, 184, 192, 0.15) !important;
+      border-radius: 12px;
+      padding: 4px;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .dash-tab {
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      padding: 0.6rem 1.3rem;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-weight: 700;
       font-size: 0.9rem;
-      padding: 0.7rem 1.5rem;
-      border-radius: 10px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--tf-muted, #64748b);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
     }
-    .dash-browse-btn:hover { background: #d63d3d !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
+    .dash-tab.active {
+      background: #ffffff;
+      color: var(--tf-deep, #0c3c4c);
+      box-shadow: 0 3px 12px rgba(7, 25, 33, 0.08);
+    }
+    .dash-tab-pane { display: none; }
+    .dash-tab-pane.active { display: block; }
 
-    /* Loading */
-    .dash-loading {
+    /* Timeline Day Column */
+    .dash-schedule-day {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 6px 20px rgba(7, 25, 33, 0.05);
+    }
+    .dash-day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid rgba(12, 184, 192, 0.2);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .dash-day-title {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0;
+    }
+    .dash-day-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      background: rgba(12, 184, 192, 0.12);
+      color: var(--tf-teal, #0cb8c0);
+    }
+
+    /* Schedule Item Card */
+    .dash-item-card {
+      background: #ffffff;
+      border: 1.5px solid rgba(12, 184, 192, 0.18);
+      border-left: 4px solid var(--tf-teal, #0cb8c0);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      transition: transform 0.2s ease;
+    }
+    .dash-item-card:hover {
+      transform: translateX(4px);
+    }
+    .dash-item-card.paid {
+      border-left-color: var(--tf-coral, #ef4444);
+    }
+    .dash-item-card.festival {
+      border-left-color: #059669;
+    }
+    .dash-item-left h4 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0 0 0.35rem;
+    }
+    .dash-item-meta {
+      display: flex;
+      gap: 1.25rem;
+      font-size: 0.82rem;
+      color: var(--tf-muted, #64748b);
+      flex-wrap: wrap;
+    }
+    .dash-item-meta strong {
+      color: var(--tf-deep, #0c3c4c);
+    }
+    .dash-item-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .tag-paid { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+    .tag-free { background: rgba(12, 184, 192, 0.12); color: #0891b2; }
+    .tag-event { background: rgba(16, 185, 129, 0.12); color: #059669; }
+
+    /* Pass Modal Overlay */
+    .dash-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(7, 25, 33, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.25rem;
+    }
+    .dash-modal-overlay.active { display: flex; }
+    .dash-pass-ticket {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.25rem;
+      max-width: 420px;
+      width: 100%;
       text-align: center;
-      padding: 3rem;
-      color: var(--tf-muted);
-      font-size: 0.9rem;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+      position: relative;
     }
-
-    @media (max-width: 480px) {
-      .dash-participant-card { padding: 1.25rem; gap: 1rem; }
-      .dash-name { font-size: 1rem; }
+    .dash-pass-close {
+      position: absolute;
+      top: 15px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--tf-muted);
+      cursor: pointer;
+    }
+    .dash-qr-placeholder {
+      width: 180px;
+      height: 180px;
+      margin: 1.25rem auto;
+      background: #f8fafc;
+      border: 2px dashed rgba(12, 184, 192, 0.4);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--tf-deep);
+      font-size: 0.85rem;
+      font-weight: 700;
     }
   </style>
 </head>
-<body class="techfest-theme bg-light-atmosphere">
+<body class="techfest-theme bg-dark-atmosphere">
 
   <!-- Header -->
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech &amp; Design Fest Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
         </a>
       </div>
       <nav class="main-nav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
-          <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="../../contact.html">Contact</a></li>
+          <li><a href="../workshops/index.html">Workshops</a></li>
+          <li><a href="../dashboard/index.html" class="active">Dashboard</a></li>
+          <li><a href="javascript:void(0)" onclick="logoutUser()">Logout</a></li>
         </ul>
       </nav>
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
-        </button>
+        <a href="../workshops/index.html" class="btn btn-sm btn-primary header-cta">Explore Workshops</a>
       </div>
     </div>
   </header>
 
-  <div class="dash-page">
-    <div class="dash-inner">
+  <!-- Dashboard Container -->
+  <main class="dash-page">
+    <div class="container dash-inner">
 
-      <!-- Participant Card -->
-      <div class="dash-participant-card" id="dash-participant-card">
-        <div class="dash-avatar" id="dash-avatar">?</div>
-        <div class="dash-info" style="flex: 1;">
-          <p class="dash-name" id="dash-name">Loading…</p>
-          <p class="dash-id" id="dash-pid">Participant ID: —</p>
-          <div class="dash-badges" id="dash-badges"></div>
+      <!-- Unpaid Warning Banner (Visible if entry fee is not confirmed) -->
+      <div class="dash-locked-banner" id="dash-unpaid-banner" style="display:none;">
+        <div class="dash-locked-text">
+          <h3>Festival Pass Incomplete</h3>
+          <p>The mandatory &#8377;250 Festival Entry Fee is required to unlock your QR pass, masterclasses, and schedule.</p>
         </div>
-        <div class="dash-logout-wrap">
-          <button onclick="logout()" class="btn btn-sm" style="background-color: var(--tf-coral) !important; border: none !important; border-radius: 8px !important; color: white !important; font-weight: 700; cursor: pointer; padding: 0.6rem 1.2rem; font-size: 0.85rem;">Logout</button>
+        <a href="../register/index.html" class="dash-action-btn primary" style="background:#ef4444; border-color:#ef4444;">
+          <span>Pay &#8377;250 Entry Fee &rarr;</span>
+        </a>
+      </div>
+
+      <!-- Participant Identity Card -->
+      <div class="dash-participant-card">
+        <div class="dash-profile-left">
+          <div class="dash-avatar" id="dash-avatar">U</div>
+          <div class="dash-info">
+            <h2 id="dash-name">Participant Name</h2>
+            <div class="dash-id-line" id="dash-pid">ID: TF-2026-0001</div>
+            <div class="dash-badges">
+              <span class="dash-badge dash-badge-tier" id="dash-tier">VELAMMAL TIER</span>
+              <span class="dash-badge dash-badge-band" id="dash-band">JUNIOR BAND</span>
+              <span class="dash-badge dash-badge-pass" id="dash-pass">GREEN PASS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-actions-top">
+          <button type="button" class="dash-action-btn" onclick="openPassModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"/></svg>
+            <span>View QR Pass</span>
+          </button>
+          <button type="button" class="dash-action-btn" onclick="window.print()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+            <span>Download Schedule</span>
+          </button>
+          <a href="../workshops/index.html" class="dash-action-btn primary">
+            <span>+ Book Workshop</span>
+          </a>
         </div>
       </div>
 
-      <!-- Payment banner (shown if entry not paid) -->
-      <div class="dash-pay-banner" id="dash-pay-banner" style="display:none;">
-        <div class="dash-pay-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
-        </div>
-        <div class="dash-pay-text">
-          <p>Pay &#8377;250 festival entry fee to unlock workshops and competitions.</p>
-        </div>
-        <a href="#" class="dash-pay-btn" id="dash-pay-btn">Pay Now</a>
-      </div>
-
-      <!-- Tabs -->
+      <!-- Tabs Navigation -->
       <div class="dash-tabs">
-        <button class="dash-tab active" onclick="switchTab('workshops', this)">My Workshops</button>
-        <button class="dash-tab" onclick="switchTab('competitions', this)">My Competitions</button>
-        <button class="dash-tab" onclick="switchTab('schedule', this)">My Schedule</button>
+        <button class="dash-tab active" id="tab-schedule-btn" onclick="switchDashTab('schedule')">
+          My Schedule (3-Day Timeline)
+        </button>
+        <button class="dash-tab" id="tab-workshops-btn" onclick="switchDashTab('workshops')">
+          Confirmed Bookings
+        </button>
       </div>
 
-      <!-- Workshops tab -->
-      <div class="dash-tab-content active" id="tab-workshops">
-        <div class="dash-empty">
-          <div class="dash-empty-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <!-- TAB 1: MY SCHEDULE (Single Source of Truth 3-Day Timeline) -->
+      <div class="dash-tab-pane active" id="pane-schedule">
+        
+        <!-- Day 1 Schedule -->
+        <div class="dash-schedule-day">
+          <div class="dash-day-header">
+            <h3 class="dash-day-title">Day 1 — Friday, 20 Nov 2026</h3>
+            <span class="dash-day-badge">Day 1 Timeline</span>
           </div>
-          <h3>No workshops booked yet</h3>
-          <p>Browse the workshop catalogue and book your sessions.</p>
-          <a href="../workshops/index.html" class="dash-browse-btn">Browse Workshops</a>
+          <div id="day-1-items">
+            <!-- Dynamic items rendered from DB -->
+          </div>
+        </div>
+
+        <!-- Day 2 Schedule -->
+        <div class="dash-schedule-day">
+          <div class="dash-day-header">
+            <h3 class="dash-day-title">Day 2 — Saturday, 21 Nov 2026</h3>
+            <span class="dash-day-badge">Day 2 Timeline</span>
+          </div>
+          <div id="day-2-items">
+            <!-- Dynamic items rendered from DB -->
+          </div>
+        </div>
+
+        <!-- Day 3 Schedule -->
+        <div class="dash-schedule-day">
+          <div class="dash-day-header">
+            <h3 class="dash-day-title">Day 3 — Sunday, 22 Nov 2026</h3>
+            <span class="dash-day-badge">Day 3 Grand Finale</span>
+          </div>
+          <div id="day-3-items">
+            <!-- Dynamic items rendered from DB -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: CONFIRMED BOOKINGS SUMMARY -->
+      <div class="dash-tab-pane" id="pane-workshops">
+        <div id="confirmed-bookings-list">
+          <!-- Dynamic bookings list from DB -->
         </div>
       </div>
 
-      <!-- Competitions tab -->
-      <div class="dash-tab-content" id="tab-competitions">
-        <div class="dash-empty">
-          <div class="dash-empty-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6c0 2.22-1 4.58-2.6 6H8.6C7 12.58 6 10.22 6 8a6 6 0 0 1 6-6z"/></svg>
-          </div>
-          <h3>No competitions registered</h3>
-          <p>Register for competitions and put your skills to the test.</p>
-          <a href="../workshops/index.html" class="dash-browse-btn">Browse Competitions</a>
-        </div>
+    </div>
+  </main>
+
+  <!-- Pass Modal -->
+  <div class="dash-modal-overlay" id="passModal" onclick="if(event.target===this)closePassModal()">
+    <div class="dash-pass-ticket">
+      <button class="dash-pass-close" onclick="closePassModal()">&times;</button>
+      <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Logo" style="height:38px; margin-bottom:0.75rem;">
+      <h3 style="margin:0 0 0.25rem; font-family:var(--font-heading); color:var(--tf-deep);">Official Festival Pass</h3>
+      <div id="modal-pass-pid" style="font-family:monospace; font-weight:700; color:var(--tf-teal);">TF-2026-0001</div>
+
+      <div class="dash-qr-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"/><path d="M7 12h10M12 7v10"/></svg>
+        <span id="modal-qr-code-text" style="font-size:0.72rem; margin-top:6px;">QR PASS VERIFIED</span>
       </div>
 
-      <!-- Schedule tab -->
-      <div class="dash-tab-content" id="tab-schedule">
-        <div class="dash-empty">
-          <div class="dash-empty-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-          </div>
-          <h3>Your schedule is empty</h3>
-          <p>Once you book workshops or register for competitions, your full 3-day schedule will appear here.</p>
-          <a href="../workshops/index.html" class="dash-browse-btn">Explore Sessions</a>
-        </div>
+      <div style="font-size:0.86rem; color:var(--tf-text); margin-bottom:1rem;">
+        <strong id="modal-pass-name">Student Name</strong><br>
+        <span id="modal-pass-tier" style="color:#059669; font-weight:700;">VELAMMAL TIER</span> &middot; <span id="modal-pass-band">JUNIOR BAND</span>
       </div>
 
+      <button type="button" class="dash-action-btn primary" style="width:100%; justify-content:center;" onclick="window.print()">
+        Download / Print Pass Ticket
+      </button>
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
-        </div>
-      </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with ❤️ by VKP Team</p>
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved. &middot; Vadiva Tech Fest 3.0</p>
       </div>
     </div>
   </footer>
@@ -353,118 +487,155 @@
   <script>
     const API = '../../techfest-api/dashboard.php';
 
-    function switchTab(tab, btn) {
-      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.dash-tab-content').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + tab).classList.add('active');
+    function switchDashTab(tab) {
+      document.getElementById('tab-schedule-btn').classList.toggle('active', tab === 'schedule');
+      document.getElementById('tab-workshops-btn').classList.toggle('active', tab === 'workshops');
+      document.getElementById('pane-schedule').classList.toggle('active', tab === 'schedule');
+      document.getElementById('pane-workshops').classList.toggle('active', tab === 'workshops');
     }
 
-    const PASS_CLASSES = {
-      'Green': 'dash-badge-green',
-      'Blue':  'dash-badge-blue',
-      'Red':   'dash-badge-red',
-      'Gold':  'dash-badge-gold'
-    };
+    function openPassModal() {
+      document.getElementById('passModal').classList.add('active');
+    }
+    function closePassModal() {
+      document.getElementById('passModal').classList.remove('active');
+    }
 
-    async function loadDashboard() {
-      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
-      const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
+    function renderScheduleItems(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
 
-      if (!pid) {
-        window.location.href = '../login/index.html';
+      if (!items || items.length === 0) {
+        container.innerHTML = '<p style="color:var(--tf-muted); font-size:0.88rem; margin:0.5rem 0;">No sessions scheduled for this day.</p>';
         return;
       }
 
+      container.innerHTML = items.map(it => {
+        let tagCls = 'tag-event';
+        let tagText = 'Festival Event';
+        let cardCls = 'festival';
+
+        if (it.type === 'PAID_WORKSHOP') {
+          tagCls = 'tag-paid';
+          tagText = 'Paid Masterclass (2-Day Batch)';
+          cardCls = 'paid';
+        } else if (it.type === 'FREE_WORKSHOP') {
+          tagCls = 'tag-free';
+          tagText = 'Free Workshop';
+          cardCls = 'free';
+        }
+
+        return `
+          <div class="dash-item-card ${cardCls}">
+            <div class="dash-item-left">
+              <h4>${it.title}</h4>
+              <div class="dash-item-meta">
+                <span>Time: <strong>${it.time}</strong></span>
+                <span>Venue: <strong>${it.venue}</strong></span>
+                <span>Bring: <strong>${it.what_to_bring || 'None'}</strong></span>
+              </div>
+            </div>
+            <span class="dash-item-tag ${tagCls}">${tagText}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadDashboardData() {
+      const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+
       try {
-        const res  = await fetch(API + '?action=get_dashboard&participant_id=' + pid);
+        const res = await fetch(`${API}?action=get_dashboard&participant_id=${encodeURIComponent(pid)}`);
         const data = await res.json();
 
-        if (data.success && data.participant) {
-          const p = data.participant;
-          const initials = (p.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+        if (data.success && data.data) {
+          const p = data.data.profile;
+          
+          document.getElementById('dash-name').textContent = p.name || 'Participant';
+          document.getElementById('dash-pid').textContent = 'ID: ' + p.participant_id;
+          document.getElementById('dash-tier').textContent = p.tier + ' TIER';
+          document.getElementById('dash-band').textContent = p.band + ' BAND';
+          document.getElementById('dash-pass').textContent = p.pass_colour.toUpperCase() + ' PASS';
+
+          const initials = (p.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
           document.getElementById('dash-avatar').textContent = initials;
-          document.getElementById('dash-name').textContent   = p.name || 'Participant';
-          document.getElementById('dash-pid').textContent    = 'Participant ID: ' + (p.participant_id || pid);
 
-          const badgesEl = document.getElementById('dash-badges');
-          badgesEl.innerHTML = '';
-          const bandBadge = document.createElement('span');
-          bandBadge.className = 'dash-badge dash-badge-band';
-          bandBadge.textContent = p.band || 'JUNIOR';
-          badgesEl.appendChild(bandBadge);
+          // Modal pass details
+          document.getElementById('modal-pass-name').textContent = p.name;
+          document.getElementById('modal-pass-pid').textContent = p.participant_id;
+          document.getElementById('modal-pass-tier').textContent = p.tier + ' TIER';
+          document.getElementById('modal-pass-band').textContent = p.band + ' BAND';
 
-          if (p.pass_colour) {
-            const passBadge = document.createElement('span');
-            passBadge.className = 'dash-badge ' + (PASS_CLASSES[p.pass_colour] || 'dash-badge-band');
-            passBadge.textContent = p.pass_colour + ' Pass';
-            badgesEl.appendChild(passBadge);
+          // Unpaid warning check
+          if (!p.is_entry_paid) {
+            document.getElementById('dash-unpaid-banner').style.display = 'flex';
+          } else {
+            document.getElementById('dash-unpaid-banner').style.display = 'none';
           }
 
-          if (!p.entry_paid) {
-            document.getElementById('dash-pay-banner').style.display = 'flex';
-            document.getElementById('dash-pay-btn').href = '../payment/index.html?registration_id=' + encodeURIComponent(pid);
-          }
-        }
-      } catch (err) {
-        console.warn('Dashboard summary load fallback:', err);
-      }
+          // Render 3-day schedule timeline (Single Source of Truth)
+          const sch = data.data.my_schedule;
+          renderScheduleItems('day-1-items', sch.day_1);
+          renderScheduleItems('day-2-items', sch.day_2);
+          renderScheduleItems('day-3-items', sch.day_3);
 
-      // Load registrations from Hostinger MySQL
-      try {
-        const regRes = await fetch(`../../techfest-api/registration.php?action=my_registrations&user_id=${encodeURIComponent(pid)}&phone=${encodeURIComponent(localStorage.getItem('tf_user_mobile') || '')}&email=${encodeURIComponent(localStorage.getItem('tf_user_email') || '')}`);
-        const regData = await regRes.json();
-        if (regData.success && regData.data && regData.data.registrations && regData.data.registrations.length > 0) {
-          const wsTab = document.getElementById('tab-workshops');
-          if (wsTab) {
-            wsTab.innerHTML = regData.data.registrations.map(reg => {
-              const isPaid = reg.status === 'confirmed' || reg.payment_status === 'paid';
-              const wsNames = (reg.workshops && reg.workshops.length > 0)
-                ? reg.workshops.map(w => w.workshop_name_snapshot).join(', ')
-                : 'Workshop Registration';
+          // Render confirmed bookings tab
+          const bkContainer = document.getElementById('confirmed-bookings-list');
+          const allPaid = data.data.bookings.paid_workshops || [];
+          const allFree = data.data.bookings.free_workshops || [];
 
-              return `
-                <div style="background:rgba(255,255,255,0.78); backdrop-filter:blur(12px); border:1px solid ${isPaid ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}; border-radius:14px; padding:1.5rem; margin-bottom:1rem;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
-                    <span style="background:${isPaid ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${isPaid ? '#059669' : '#dc2626'}; font-weight:800; font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:20px;">
-                      ${isPaid ? 'CONFIRMED' : 'PAYMENT PENDING'}
-                    </span>
-                    <span style="font-size:0.8rem; color:var(--tf-muted);">Registration #${reg.registration_number}</span>
+          if (allPaid.length === 0 && allFree.length === 0) {
+            bkContainer.innerHTML = `
+              <div style="text-align:center; padding:3rem; background:#fff; border-radius:16px; border:1px solid rgba(12,184,192,0.2);">
+                <p style="color:var(--tf-muted); margin-bottom:1rem;">You have not booked any workshops yet.</p>
+                <a href="../workshops/index.html" class="dash-action-btn primary" style="text-decoration:none;">Explore Workshop Catalogue &rarr;</a>
+              </div>
+            `;
+          } else {
+            let html = '';
+            allPaid.forEach(w => {
+              html += `
+                <div style="background:#fff; border-radius:14px; border:1.5px solid rgba(239,68,68,0.25); border-left:4px solid #ef4444; padding:1.25rem; margin-bottom:1rem;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                    <span style="font-size:0.75rem; font-weight:800; color:#dc2626; text-transform:uppercase;">CONFIRMED PAID BATCH</span>
+                    <span style="font-size:0.8rem; color:var(--tf-muted); font-family:monospace;">Ref: ${w.booking_reference}</span>
                   </div>
-                  <h3 style="margin:0 0 0.5rem; color:var(--tf-deep); font-size:1.15rem;">${wsNames}</h3>
-                  <p style="margin:0 0 1rem; color:var(--tf-muted); font-size:0.85rem;">Total Fee: ₹${reg.total_amount} • Registered on ${new Date(reg.created_at).toLocaleDateString()}</p>
-                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                    ${isPaid 
-                      ? `<a href="../payment-success/index.html?registration_id=${encodeURIComponent(reg.registration_id)}" class="dash-browse-btn" style="text-decoration:none;">View Official Pass / Receipt</a>`
-                      : `<a href="../payment/index.html?registration_id=${encodeURIComponent(reg.registration_id)}" class="dash-browse-btn" style="background:var(--tf-accent); color:#fff; text-decoration:none;">Complete Payment (₹${reg.total_amount}) →</a>`
-                    }
-                  </div>
+                  <h3 style="margin:0 0 0.35rem; color:var(--tf-deep); font-size:1.15rem;">${w.name}</h3>
+                  <p style="color:var(--tf-muted); font-size:0.85rem; margin:0;">${w.sessions} &middot; Both sessions linked atomically</p>
                 </div>
               `;
-            }).join('');
+            });
+            allFree.forEach(w => {
+              html += `
+                <div style="background:#fff; border-radius:14px; border:1.5px solid rgba(12,184,192,0.25); border-left:4px solid #0cb8c0; padding:1.25rem; margin-bottom:1rem;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                    <span style="font-size:0.75rem; font-weight:800; color:#0891b2; text-transform:uppercase;">CONFIRMED FREE SESSION</span>
+                    <span style="font-size:0.8rem; color:var(--tf-muted); font-family:monospace;">Ref: ${w.booking_reference}</span>
+                  </div>
+                  <h3 style="margin:0 0 0.35rem; color:var(--tf-deep); font-size:1.15rem;">${w.name}</h3>
+                  <p style="color:var(--tf-muted); font-size:0.85rem; margin:0;">${w.session}</p>
+                </div>
+              `;
+            });
+            bkContainer.innerHTML = html;
           }
         }
-      } catch (err) {
-        console.warn('MySQL registrations fetch:', err);
+      } catch (e) {
+        console.warn('Dashboard load error:', e);
       }
     }
 
-    function logout() {
+    function logoutUser() {
       if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
         window.TechFestAccess.logout('../login/index.html');
-        return;
+      } else {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '../login/index.html';
       }
-      localStorage.removeItem('tf_token');
-      localStorage.removeItem('tf_participant_id');
-      localStorage.removeItem('tf_user_name');
-      localStorage.removeItem('tf_entry_paid');
-      localStorage.removeItem('tf_dev_bypass_active');
-      localStorage.removeItem('tf_test_registration_data');
-      sessionStorage.clear();
-      window.location.href = '../login/index.html';
     }
 
-    loadDashboard();
+    document.addEventListener('DOMContentLoaded', loadDashboardData);
   </script>
 </body>
 </html>

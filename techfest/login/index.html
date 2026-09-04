@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Login to your Vadiva Tech Fest 3.0 participant account.">
+  <meta name="description" content="Sign in to your Vadiva Tech Fest 3.0 participant account using your User ID and Password.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <style>
@@ -21,15 +24,15 @@
       z-index: 1;
     }
     .lgn-card {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius-lg) !important;
-      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      background: rgba(255, 255, 255, 0.82) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      border-radius: var(--glass-radius-lg, 20px) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.14) !important;
       padding: 3rem 2.25rem;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       box-sizing: border-box;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -37,106 +40,115 @@
       text-align: center;
       margin-bottom: 2rem;
     }
-    .lgn-brand img { height: 60px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15)); }
+    .lgn-brand img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15));
+      margin-bottom: 0.5rem;
+    }
     .lgn-brand h1 {
-      font-family: var(--font-heading);
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-size: 1.55rem;
       font-weight: 800;
-      color: var(--tf-deep);
-      margin: 0.75rem 0 0.25rem;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0.25rem 0;
     }
-    .lgn-brand p { color: var(--tf-muted); font-size: 0.88rem; margin: 0; }
-    .lgn-form-group { margin-bottom: 1.25rem; }
+    .lgn-brand p {
+      color: var(--tf-muted, #64748b);
+      font-size: 0.88rem;
+      margin: 0;
+    }
+    .lgn-form-group {
+      margin-bottom: 1.35rem;
+    }
     .lgn-form-group label {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      color: var(--tf-text);
-      margin-bottom: 0.4rem;
-    }
-    .lgn-input-prefix {
-      display: flex;
-      align-items: stretch;
-    }
-    .lgn-prefix-label {
-      background: rgba(255, 255, 255, 0.35) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: var(--tf-text);
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 0 0.875rem;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
-      border-right: none !important;
-      border-radius: 10px 0 0 10px;
-      display: flex;
-      align-items: center;
+      color: var(--tf-text, #1e293b);
+      margin-bottom: 0.45rem;
     }
     .lgn-input {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid rgba(12, 184, 192, 0.22) !important;
       border-radius: 10px;
       font-size: 0.95rem;
-      color: var(--tf-text);
-      font-family: var(--font-body);
-      background: rgba(255, 255, 255, 0.6) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      color: var(--tf-text, #1e293b);
+      font-family: var(--font-body, 'Inter', sans-serif);
+      background: rgba(255, 255, 255, 0.9) !important;
       box-sizing: border-box;
-      transition: all 0.2s ease;
       outline: none;
+      transition: all 0.2s ease;
     }
     .lgn-input:focus {
-      border-color: var(--tf-teal) !important;
-      box-shadow: 0 0 0 3px rgba(12,184,192,0.15) !important;
-      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: var(--tf-teal, #0cb8c0) !important;
+      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15) !important;
+      background: #ffffff !important;
     }
-    .lgn-input-prefix .lgn-input {
-      border-radius: 0 10px 10px 0;
-      flex: 1;
+    .lgn-pwd-wrapper {
+      position: relative;
+    }
+    .lgn-toggle-pwd {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--tf-muted, #64748b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
     }
     .lgn-btn {
       width: 100%;
-      height: 46px;
-      background: var(--tf-coral) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
+      height: 48px;
+      background: var(--tf-coral, #ef4444) !important;
+      color: #fff !important;
+      border: none;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1rem;
       font-weight: 700;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25) !important;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-top: 0.5rem;
-      box-sizing: border-box;
+      margin-top: 0.75rem;
     }
-    .lgn-btn:hover { background: #d63d3d !important; transform: translateY(-1.5px); box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important; }
-    .lgn-btn:disabled { background: var(--tf-border) !important; color: var(--tf-muted) !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .lgn-btn:hover {
+      background: #d63d3d !important;
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35) !important;
+    }
+    .lgn-btn:disabled {
+      background: #94a3b8 !important;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
     .lgn-alert {
       border-radius: 10px;
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1.1rem;
       font-size: 0.88rem;
       font-weight: 600;
       margin-bottom: 1.25rem;
       display: none;
     }
     .lgn-alert.show { display: block; }
-    .lgn-alert.success { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border: 1px solid rgba(16, 185, 129, 0.25) !important; }
-    .lgn-alert.error   { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1px solid rgba(239, 68, 68, 0.25) !important; }
+    .lgn-alert.success { background: rgba(16, 185, 129, 0.1) !important; color: #059669 !important; border: 1.5px solid rgba(16, 185, 129, 0.3) !important; }
+    .lgn-alert.error   { background: rgba(239, 68, 68, 0.1) !important; color: #dc2626 !important; border: 1.5px solid rgba(239, 68, 68, 0.3) !important; }
     .lgn-footer-link {
       text-align: center;
       margin-top: 1.5rem;
-      font-size: 0.85rem;
-      color: var(--tf-muted);
+      font-size: 0.86rem;
+      color: var(--tf-muted, #64748b);
     }
-    .lgn-footer-link a { color: var(--tf-teal); font-weight: 700; text-decoration: none; }
+    .lgn-footer-link a { color: var(--tf-teal, #0cb8c0); font-weight: 700; text-decoration: none; }
     .lgn-footer-link a:hover { text-decoration: underline; }
-    @media (max-width: 480px) {
-      .lgn-card { padding: 2.25rem 1.25rem; }
-      .lgn-page { align-items: flex-start; padding-top: 2rem; }
-    }
   </style>
 </head>
 <body class="techfest-theme bg-dark-atmosphere">
@@ -146,75 +158,57 @@
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech &amp; Design Fest Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
         </a>
       </div>
       <nav class="main-nav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
-          <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="../../contact.html">Contact</a></li>
+          <li><a href="../workshops/index.html">Workshops</a></li>
+          <li><a href="../dashboard/index.html">Dashboard</a></li>
+          <li><a href="../register/index.html">Register</a></li>
         </ul>
       </nav>
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
-        </button>
+        <a href="../register/index.html" class="btn btn-sm btn-primary header-cta">Register Now</a>
       </div>
     </div>
   </header>
 
-  <!-- Login Page -->
+  <!-- Login Card -->
   <div class="lgn-page">
     <div class="lgn-card">
       <div class="lgn-brand">
-        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="max-height: 54px; width: auto; margin: 0 auto 0.75rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-        <h1>Welcome Back</h1>
-        <p>Login to your Tech Fest 3.0 account</p>
+        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech Fest Logo" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        <h1>Participant Sign In</h1>
+        <p>Log in using your User ID and Password</p>
       </div>
 
       <div class="lgn-alert" id="lgn-alert"></div>
 
-      <!-- Context notice if user came from workshop selection -->
-      <div id="lgn-context-banner" style="display:none; background:rgba(12, 184, 192, 0.08); border:1px solid rgba(12, 184, 192, 0.25); border-radius:10px; padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:var(--tf-deep); line-height:1.4;">
-        <strong id="lgn-context-title">Workshop Selected</strong><br>
-        <span id="lgn-context-desc" style="color:var(--tf-muted); font-size:0.8rem;">Login to your account to complete your registration.</span>
-      </div>
-
       <form id="lgn-form" novalidate>
         <div class="lgn-form-group">
           <label for="login_id">User ID / Mobile / Email</label>
-          <input type="text" id="login_id" name="login_id" class="lgn-input"
-                 placeholder="Enter User ID, Mobile Number, or Email" required autocomplete="username">
+          <input type="text" id="login_id" class="lgn-input" placeholder="Enter your User ID" required autocomplete="username">
         </div>
 
         <div class="lgn-form-group">
           <label for="password">Password</label>
-          <div style="position: relative;">
-            <input type="password" id="password" name="password" class="lgn-input" style="padding-right: 2.75rem;"
-                   placeholder="Your password" required>
-            <button type="button" id="toggle-password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--tf-muted); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none;" aria-label="Toggle Password Visibility">
-              <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div class="lgn-pwd-wrapper">
+            <input type="password" id="password" class="lgn-input" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="lgn-toggle-pwd" id="toggle-pwd" aria-label="Show/Hide Password">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
 
-        <button type="submit" class="lgn-btn" id="lgn-btn">Login</button>
+        <button type="submit" class="lgn-btn" id="btn-login">
+          <span>Log In &rarr;</span>
+        </button>
       </form>
 
       <div class="lgn-footer-link">
-        New to Tech Fest? <a href="../register/index.html" id="lgn-register-link">Register</a>
+        New participant? <a href="../register/index.html">Create Participant Account &rarr;</a>
       </div>
     </div>
   </div>
@@ -222,41 +216,8 @@
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
-        </div>
-      </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with ❤️ by VKP Team</p>
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved. &middot; Vadiva Tech Fest 3.0</p>
       </div>
     </div>
   </footer>
@@ -266,143 +227,17 @@
   <script>
     const API = '../../techfest-api/auth.php';
 
-    // Standard Workshop Name Mapping for UI hints
-    const WORKSHOP_NAMES = {
-      '1': 'Robotics & Automation',
-      '2': 'AI & Machine Learning Basics',
-      '3': '3D Printing & Design',
-      '4': 'Game Development',
-      '5': 'Electronics & Circuits',
-      '6': 'Python for Beginners',
-      '7': 'Design Thinking Bootcamp',
-      '8': 'Sketching & Visual Thinking',
-      '9': 'Public Speaking & Pitching',
-      '10': 'Science Demonstrations',
-      '11': 'Student Entrepreneurship'
-    };
-
     function showAlert(msg, type) {
       const el = document.getElementById('lgn-alert');
       el.textContent = msg;
       el.className = 'lgn-alert show ' + type;
     }
-
-    function isSafeInternalUrl(url) {
-      if (!url || typeof url !== 'string') return false;
-      const clean = url.trim();
-      if (clean.startsWith('//') || clean.startsWith('http:') || clean.startsWith('https:') || clean.startsWith('javascript:') || clean.startsWith('data:')) {
-        try {
-          const parsed = new URL(clean, window.location.origin);
-          return parsed.origin === window.location.origin;
-        } catch(e) {
-          return false;
-        }
-      }
-      return true;
+    function hideAlert() {
+      document.getElementById('lgn-alert').className = 'lgn-alert';
     }
 
-    function getPendingWorkshopContext() {
-      const params = new URLSearchParams(window.location.search);
-      const urlWs = params.get('workshop');
-      const sessionWs = sessionStorage.getItem('tf_pending_workshop');
-      return (urlWs || sessionWs || '').trim();
-    }
-
-    function getReturnUrlContext() {
-      const params = new URLSearchParams(window.location.search);
-      const urlReturn = params.get('return_url') || params.get('return') || params.get('redirect_url');
-      const sessionReturn = sessionStorage.getItem('tf_post_login_redirect');
-      const target = (urlReturn || sessionReturn || '').trim();
-      return isSafeInternalUrl(target) ? target : '';
-    }
-
-    function handlePostLoginRedirect() {
-      const pendingWorkshop = getPendingWorkshopContext();
-      const returnUrl = getReturnUrlContext();
-
-      // Priority 1: Requested workshop registration
-      if (pendingWorkshop) {
-        sessionStorage.removeItem('tf_pending_workshop');
-        sessionStorage.removeItem('tf_post_login_redirect');
-        window.location.href = '../register/index.html?workshop=' + encodeURIComponent(pendingWorkshop);
-        return;
-      }
-
-      // Priority 2: Requested internal return URL
-      if (returnUrl && !returnUrl.includes('login/index.html')) {
-        sessionStorage.removeItem('tf_post_login_redirect');
-        window.location.href = returnUrl;
-        return;
-      }
-
-      // Priority 3: Default normal dashboard
-      window.location.href = '../workshops/index.html';
-    }
-
-    // Initialize UI on load
-    window.addEventListener('DOMContentLoaded', function() {
-      const pendingWs = getPendingWorkshopContext();
-      const regLink = document.getElementById('lgn-register-link');
-
-      if (pendingWs) {
-        // Update Register link so user doesn't lose context if they switch to signup
-        if (regLink) {
-          regLink.href = '../register/index.html?workshop=' + encodeURIComponent(pendingWs);
-        }
-        
-        // Show context message
-        const banner = document.getElementById('lgn-context-banner');
-        const wsName = WORKSHOP_NAMES[pendingWs] || ('Workshop #' + pendingWs);
-        if (banner) {
-          document.getElementById('lgn-context-title').textContent = 'Selected: ' + wsName;
-          document.getElementById('lgn-context-desc').textContent = 'Please log in to continue registering for this workshop.';
-          banner.style.display = 'block';
-        }
-      }
-    });
-
-    document.getElementById('lgn-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const loginId  = document.getElementById('login_id').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!loginId) { showAlert('Please enter your User ID, Mobile Number, or Email.', 'error'); return; }
-      if (!password) { showAlert('Please enter your password.', 'error'); return; }
-
-      const btn = document.getElementById('lgn-btn');
-      btn.disabled = true;
-      btn.textContent = 'Logging in…';
-
-      try {
-        const res  = await fetch(API + '?action=login', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ login_id: loginId, mobile: loginId, password })
-        });
-        const data = await res.json();
-        if (data.success) {
-          showAlert('Login successful! Redirecting…', 'success');
-          const token = (data.data && data.data.token) ? data.data.token : (data.token || '');
-          const pid = (data.data && data.data.participant_id) || data.participant_id || loginId;
-          localStorage.setItem('tf_token', token);
-          localStorage.setItem('tf_participant_id', pid);
-          if (data.data && data.data.name) localStorage.setItem('tf_user_name', data.data.name);
-          setTimeout(handlePostLoginRedirect, 800);
-        } else {
-          showAlert(data.message || 'Invalid credentials. Please try again.', 'error');
-          btn.disabled = false;
-          btn.textContent = 'Login';
-        }
-      } catch (err) {
-        console.error('Error during login:', err);
-        showAlert('Unable to connect to server. Please check your network connection and try again.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Login';
-      }
-    });
-
-    document.getElementById('toggle-password').addEventListener('click', function() {
+    // Toggle password visibility
+    document.getElementById('toggle-pwd').addEventListener('click', function() {
       const pwd = document.getElementById('password');
       const icon = document.getElementById('eye-icon');
       if (pwd.type === 'password') {
@@ -411,6 +246,62 @@
       } else {
         pwd.type = 'password';
         icon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+      }
+    });
+
+    document.getElementById('lgn-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      hideAlert();
+
+      const loginId  = document.getElementById('login_id').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!loginId || !password) {
+        showAlert('Please enter both User ID and Password.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btn-login');
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
+
+      try {
+        const res = await fetch(API + '?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: loginId, password: password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showAlert('Login successful! Redirecting…', 'success');
+          
+          localStorage.setItem('tf_user_id', data.data.user_id);
+          localStorage.setItem('tf_token', data.data.token);
+          localStorage.setItem('tf_participant_id', data.data.participant_id);
+          localStorage.setItem('tf_user_name', data.data.name);
+          localStorage.setItem('tf_tier', data.data.tier || 'OTHER');
+          localStorage.setItem('tf_band', data.data.band || 'JUNIOR');
+          localStorage.setItem('tf_entry_paid', (data.data.entry_status === 'PAID') ? 'true' : 'false');
+
+          setTimeout(() => {
+            if (!data.data.has_participant_profile) {
+              window.location.href = '../register/index.html';
+            } else if (data.data.entry_status !== 'PAID') {
+              window.location.href = '../register/index.html';
+            } else {
+              window.location.href = '../dashboard/index.html';
+            }
+          }, 800);
+        } else {
+          showAlert(data.message || 'Invalid User ID or Password.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Log In &rarr;</span>';
+        }
+      } catch (err) {
+        showAlert('Network error during login. Please try again.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Log In &rarr;</span>';
       }
     });
   </script>

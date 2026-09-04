@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workshop Registration | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Register for Vadiva Tech Fest 3.0 workshops and sessions — Chennai, November 2026.">
+  <title>Participant Registration &amp; Velammal Verification | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Register for Vadiva Tech Fest 3.0 — Account creation, Velammal database verification, ₹250 festival entry fee, and workshop access.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
-    /* ── Register Page Styles (prefix: reg-) ── */
+    /* ── Registration Page Styles (prefix: reg-) ── */
     .reg-page {
       background: transparent !important;
-      min-height: 80vh;
-      padding: 4rem 1.25rem;
+      min-height: 85vh;
+      padding: 3.5rem 1.25rem 6rem;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -21,279 +26,324 @@
       z-index: 1;
     }
     .reg-card {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius-lg) !important;
-      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      background: rgba(255, 255, 255, 0.82) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      border-radius: var(--glass-radius-lg, 20px) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.14) !important;
       padding: 2.75rem 2.25rem;
       width: 100%;
-      max-width: 520px;
+      max-width: 580px;
       box-sizing: border-box;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .reg-brand {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
-    .reg-brand img { height: 56px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15)); }
+    .reg-brand img {
+      height: 54px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15));
+      margin-bottom: 0.5rem;
+    }
     .reg-brand h1 {
-      font-family: var(--font-heading);
-      font-size: 1.45rem;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.55rem;
       font-weight: 800;
-      color: var(--tf-deep);
-      margin: 0.75rem 0 0.25rem;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0.25rem 0;
     }
-    .reg-brand p { color: var(--tf-muted); font-size: 0.88rem; margin: 0; }
-
-    /* Workshop Preview Banner */
-    .reg-ws-banner {
-      background: rgba(12, 60, 76, 0.06) !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.28) !important;
-      border-radius: 14px;
-      padding: 1.2rem 1.25rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      position: relative;
-    }
-    .reg-ws-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .reg-ws-badge {
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      background: rgba(12, 184, 192, 0.15);
-      color: var(--tf-teal);
-      border: 1px solid rgba(12, 184, 192, 0.3);
-    }
-    .reg-ws-badge.paid {
-      background: rgba(239, 68, 68, 0.12);
-      color: var(--tf-coral);
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-    .reg-ws-change-link {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--tf-teal);
-      text-decoration: none;
-    }
-    .reg-ws-change-link:hover { text-decoration: underline; }
-    .reg-ws-title {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--tf-deep);
+    .reg-brand p {
+      color: var(--tf-muted, #64748b);
+      font-size: 0.9rem;
       margin: 0;
     }
-    .reg-ws-desc {
-      font-size: 0.8rem;
-      color: var(--tf-muted);
-      margin: 0;
-      line-height: 1.4;
-    }
-    .reg-ws-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px dashed rgba(12, 184, 192, 0.18);
-      padding-top: 0.5rem;
-      margin-top: 0.3rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--tf-deep);
-    }
 
-    /* User details badge for logged-in confirmation */
-    .reg-user-badge {
-      background: rgba(12, 60, 76, 0.04);
-      border: 1px solid rgba(12, 184, 192, 0.18);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.84rem;
-    }
-    .reg-user-badge strong { color: var(--tf-deep); }
-
-    .reg-btn-teal {
-      background: var(--tf-teal) !important;
-      box-shadow: 0 4px 14px 0 rgba(12, 184, 192, 0.25) !important;
-    }
-    .reg-btn-teal:hover {
-      background: #0aa5ad !important;
-      box-shadow: 0 6px 20px 0 rgba(12, 184, 192, 0.35) !important;
-    }
-
-    /* Step indicator */
+    /* Stepper */
     .reg-steps {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 0;
       margin-bottom: 2rem;
-      overflow-x: auto;
-      padding-bottom: 0.25rem;
+      position: relative;
+      padding: 0 0.5rem;
     }
     .reg-step {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.3rem;
-      min-width: 64px;
+      gap: 0.35rem;
+      z-index: 2;
+      cursor: pointer;
     }
     .reg-step-num {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: rgba(12, 60, 76, 0.05) !important;
-      color: var(--tf-muted) !important;
-      font-weight: 700;
+      background: rgba(12, 60, 76, 0.08);
+      color: var(--tf-muted, #64748b);
+      font-weight: 800;
       font-size: 0.85rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-heading);
-      border: 1px solid rgba(12, 184, 192, 0.18) !important;
+      border: 2px solid rgba(12, 184, 192, 0.2);
+      transition: all 0.25s ease;
     }
     .reg-step.active .reg-step-num {
-      background: var(--tf-teal) !important;
-      color: var(--tf-white) !important;
-      border-color: var(--tf-teal) !important;
-      box-shadow: 0 0 10px rgba(12, 184, 192, 0.3) !important;
+      background: var(--tf-teal, #0cb8c0);
+      color: #fff;
+      border-color: var(--tf-teal, #0cb8c0);
+      box-shadow: 0 0 0 4px rgba(12, 184, 192, 0.2);
+    }
+    .reg-step.completed .reg-step-num {
+      background: #059669;
+      color: #fff;
+      border-color: #059669;
     }
     .reg-step-lbl {
-      font-size: 0.68rem;
-      color: var(--tf-muted);
+      font-size: 0.72rem;
       font-weight: 700;
+      color: var(--tf-muted, #64748b);
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      white-space: nowrap;
     }
-    .reg-step.active .reg-step-lbl { color: var(--tf-teal); }
+    .reg-step.active .reg-step-lbl {
+      color: var(--tf-deep, #0c3c4c);
+    }
     .reg-step-line {
       flex: 1;
       height: 2px;
-      background: rgba(12, 184, 192, 0.12) !important;
-      margin-bottom: 1.4rem;
-      min-width: 16px;
+      background: rgba(12, 184, 192, 0.2);
+      margin: -1.2rem 6px 0;
+      z-index: 1;
+    }
+    .reg-step-line.completed {
+      background: #059669;
     }
 
-    /* Form */
+    /* Form Fields */
     .reg-form-group {
       margin-bottom: 1.25rem;
     }
     .reg-form-group label {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
-      color: var(--tf-text);
+      color: var(--tf-text, #1e293b);
       margin-bottom: 0.4rem;
     }
     .reg-input {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.22) !important;
       border-radius: 10px;
       font-size: 0.95rem;
-      color: var(--tf-text);
-      font-family: var(--font-body);
-      background: rgba(255, 255, 255, 0.6) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      color: var(--tf-text, #1e293b);
+      font-family: var(--font-body, 'Inter', sans-serif);
+      background: rgba(255, 255, 255, 0.9) !important;
       box-sizing: border-box;
-      transition: all 0.2s ease;
       outline: none;
+      transition: all 0.2s ease;
     }
     .reg-input:focus {
-      border-color: var(--tf-teal) !important;
-      box-shadow: 0 0 0 3px rgba(12,184,192,0.15) !important;
-      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: var(--tf-teal, #0cb8c0) !important;
+      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15) !important;
+      background: #ffffff !important;
     }
-    .reg-input-prefix {
+    .reg-row {
       display: flex;
-      align-items: stretch;
+      gap: 1rem;
     }
-    .reg-prefix-label {
-      background: rgba(255, 255, 255, 0.35) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: var(--tf-text);
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 0 0.875rem;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
-      border-right: none !important;
-      border-radius: 10px 0 0 10px;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-    }
-    .reg-input-prefix .reg-input {
-      border-radius: 0 10px 10px 0;
+    .reg-row > div {
       flex: 1;
     }
-    .reg-hint {
-      font-size: 0.75rem;
-      color: var(--tf-muted);
-      margin-top: 0.35rem;
+
+    /* Band Derivation Badge Box */
+    .reg-band-box {
+      background: rgba(12, 60, 76, 0.04);
+      border: 1.5px solid rgba(12, 184, 192, 0.2);
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .reg-band-info {
+      font-size: 0.82rem;
+      color: var(--tf-muted, #64748b);
+    }
+    .reg-band-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .band-junior { background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .band-intermediate { background: rgba(6, 182, 212, 0.15); color: #0891b2; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .band-senior { background: rgba(239, 68, 68, 0.15); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Velammal Section Card */
+    .reg-velammal-card {
+      background: rgba(12, 184, 192, 0.05);
+      border: 1.5px solid rgba(12, 184, 192, 0.3);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .reg-velammal-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--tf-deep, #0c3c4c);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .reg-radio-group {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .reg-radio-label {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--tf-text, #1e293b);
+      cursor: pointer;
+    }
+    .reg-verify-btn {
+      background: var(--tf-teal, #0cb8c0) !important;
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border: none;
+      border-radius: 8px;
+      padding: 0.65rem 1.25rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.2);
+    }
+    .reg-verify-btn:hover {
+      background: #0aa5ad !important;
+      transform: translateY(-1px);
+    }
+
+    /* Consent Checkboxes */
+    .reg-consent-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.86rem;
+      color: var(--tf-text, #1e293b);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .reg-consent-item input {
+      margin-top: 0.2rem;
+      accent-color: var(--tf-teal, #0cb8c0);
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    /* Entry Fee Box */
+    .reg-entry-box {
+      background: rgba(12, 60, 76, 0.06);
+      border: 2px solid rgba(12, 184, 192, 0.35);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .reg-entry-price {
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 2.25rem;
+      font-weight: 900;
+      color: #059669;
+      margin: 0.35rem 0;
     }
 
     /* Buttons */
     .reg-btn {
       width: 100%;
-      height: 46px;
-      background: var(--tf-coral) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
+      height: 48px;
+      background: var(--tf-coral, #ef4444) !important;
+      color: #fff !important;
+      border: none;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 0.98rem;
       font-weight: 700;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25) !important;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      margin-top: 0.5rem;
-      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    .reg-btn:hover { background: #d63d3d !important; transform: translateY(-1.5px); box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.35) !important; }
-    .reg-btn:disabled { background: var(--tf-border) !important; color: var(--tf-muted) !important; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .reg-btn:hover {
+      background: #d63d3d !important;
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35) !important;
+    }
+    .reg-btn.green {
+      background: #059669 !important;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25) !important;
+    }
+    .reg-btn.green:hover {
+      background: #047857 !important;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35) !important;
+    }
+    .reg-btn:disabled {
+      background: #94a3b8 !important;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
 
-    /* Alert messages */
+    /* Alerts */
     .reg-alert {
       border-radius: 10px;
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1.1rem;
       font-size: 0.88rem;
       font-weight: 600;
       margin-bottom: 1.25rem;
       display: none;
+      line-height: 1.45;
     }
     .reg-alert.show { display: block; }
-    .reg-alert.success { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border: 1px solid rgba(16, 185, 129, 0.25) !important; }
-    .reg-alert.error   { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1px solid rgba(239, 68, 68, 0.25) !important; }
+    .reg-alert.success { background: rgba(16, 185, 129, 0.1) !important; color: #059669 !important; border: 1.5px solid rgba(16, 185, 129, 0.3) !important; }
+    .reg-alert.error   { background: rgba(239, 68, 68, 0.1) !important; color: #dc2626 !important; border: 1.5px solid rgba(239, 68, 68, 0.3) !important; }
+    .reg-alert.info    { background: rgba(6, 182, 212, 0.1) !important; color: #0891b2 !important; border: 1.5px solid rgba(6, 182, 212, 0.3) !important; }
 
     .reg-footer-link {
       text-align: center;
       margin-top: 1.5rem;
-      font-size: 0.85rem;
-      color: var(--tf-muted);
+      font-size: 0.86rem;
+      color: var(--tf-muted, #64748b);
     }
-    .reg-footer-link a { color: var(--tf-teal); font-weight: 700; text-decoration: none; }
+    .reg-footer-link a { color: var(--tf-teal, #0cb8c0); font-weight: 700; text-decoration: none; }
     .reg-footer-link a:hover { text-decoration: underline; }
 
-    @media (max-width: 520px) {
+    @media (max-width: 540px) {
       .reg-card { padding: 2.25rem 1.25rem; }
+      .reg-row { flex-direction: column; gap: 0; }
     }
   </style>
 </head>
@@ -304,238 +354,296 @@
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech &amp; Design Fest Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
         </a>
       </div>
       <nav class="main-nav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
-          <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
+          <li><a href="../workshops/index.html">Workshops</a></li>
+          <li><a href="../dashboard/index.html">Dashboard</a></li>
+          <li><a href="../login/index.html">Sign In</a></li>
           <li><a href="../../contact.html">Contact</a></li>
         </ul>
       </nav>
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
-        </button>
+        <a href="../login/index.html" class="btn btn-sm btn-primary header-cta">Login</a>
       </div>
     </div>
   </header>
 
-  <!-- Registration Page -->
+  <!-- Main Registration Container -->
   <div class="reg-page">
     <div class="reg-card">
       <div class="reg-brand">
-        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="max-height: 54px; width: auto; margin: 0 auto 0.75rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-        <h1 id="reg-main-title">Workshop Registration</h1>
-        <p id="reg-main-subtitle">Vadiva Tech &amp; Design Fest '26</p>
+        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech Fest Logo" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        <h1 id="reg-heading">Participant Registration</h1>
+        <p id="reg-subheading">Vadiva Tech &amp; Design Fest 3.0</p>
       </div>
 
-      <!-- Workshop Details Card (Rendered when a valid workshop is selected) -->
-      <div class="reg-ws-banner" id="reg-ws-banner" style="display:none;">
-        <div class="reg-ws-header-row">
-          <span class="reg-ws-badge" id="reg-ws-badge">PAID</span>
-          <a href="../workshops/index.html" class="reg-ws-change-link">Change Workshop &larr;</a>
+      <!-- Step Indicator -->
+      <div class="reg-steps" id="stepper">
+        <div class="reg-step active" id="step-node-1" onclick="navigateToStep(1)">
+          <div class="reg-step-num">1</div>
+          <div class="reg-step-lbl">Account</div>
         </div>
-        <h3 class="reg-ws-title" id="reg-ws-title">Workshop Title</h3>
-        <p class="reg-ws-desc" id="reg-ws-desc">Workshop description...</p>
-        <div class="reg-ws-meta">
-          <span id="reg-ws-fee">Fee: ₹400 / ₹550</span>
-          <span id="reg-ws-seats">Seats: 28 / 40 filled</span>
+        <div class="reg-step-line" id="step-line-1"></div>
+        <div class="reg-step" id="step-node-2" onclick="navigateToStep(2)">
+          <div class="reg-step-num">2</div>
+          <div class="reg-step-lbl">Profile</div>
+        </div>
+        <div class="reg-step-line" id="step-line-2"></div>
+        <div class="reg-step" id="step-node-3" onclick="navigateToStep(3)">
+          <div class="reg-step-num">3</div>
+          <div class="reg-step-lbl">Consent</div>
+        </div>
+        <div class="reg-step-line" id="step-line-3"></div>
+        <div class="reg-step" id="step-node-4" onclick="navigateToStep(4)">
+          <div class="reg-step-num">4</div>
+          <div class="reg-step-lbl">Pass Fee</div>
         </div>
       </div>
 
-      <!-- Alert -->
+      <!-- Alert Container -->
       <div class="reg-alert" id="reg-alert"></div>
 
-      <!-- VIEW 1: Authenticated User Workshop Registration Confirmation -->
-      <div id="view-auth-booking" style="display:none;">
-        <div class="reg-user-badge">
-          <span>Account: <strong id="auth-pid-display">TF-2026-0001</strong></span>
-          <a href="../workshops/index.html" style="color:var(--tf-teal); font-weight:700; text-decoration:none; font-size:0.8rem;">Browse Catalog</a>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.7); border:1px solid rgba(12,184,192,0.22); border-radius:12px; padding:1.25rem 1.4rem; margin-bottom:1.5rem; font-size:0.88rem; line-height:1.6;">
-          <h4 style="margin:0 0 0.6rem; font-size:0.98rem; color:var(--tf-deep); font-family:var(--font-heading); font-weight:800;">Order &amp; Seat Summary</h4>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
-            <span style="color:var(--tf-muted);">Selected Workshop:</span>
-            <strong id="auth-summary-ws-name" style="color:var(--tf-deep);">—</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
-            <span style="color:var(--tf-muted);">Eligibility:</span>
-            <span id="auth-summary-eligibility" style="font-weight:600;">Grades 4–12</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
-            <span style="color:var(--tf-muted);">Workshop Fee:</span>
-            <strong id="auth-summary-fee" style="color:var(--tf-deep);">&#8377;550</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(12,184,192,0.2); padding-top:0.5rem; margin-top:0.5rem; margin-bottom:0.35rem;">
-            <span style="color:var(--tf-deep); font-weight:700;">Festival Entry Pass:</span>
-            <span style="color:var(--tf-deep); font-weight:700;" id="auth-summary-fest-fee">&#8377;250 (Mandatory Entry)</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; border-top:1.5px solid rgba(12,184,192,0.3); padding-top:0.6rem; margin-top:0.5rem;">
-            <span style="color:var(--tf-deep); font-weight:800; font-size:0.95rem;">Total Payable Amount:</span>
-            <strong id="auth-summary-total" style="color:#059669; font-size:1.25rem; font-family:var(--font-heading);">&#8377;800</strong>
-          </div>
-        </div>
-
-        <button type="button" class="reg-btn" id="confirm-booking-btn" onclick="executeWorkshopBooking()" style="display:flex; align-items:center; justify-content:center; gap:8px; height:50px; font-size:1.02rem;">
-          <span>Proceed to Payment Checkout &rarr;</span>
-        </button>
-
-        <div class="reg-footer-link">
-          Need to switch accounts? <a href="javascript:void(0)" onclick="logoutAndSwitch()">Logout</a>
-        </div>
-      </div>
-
-      <!-- VIEW 2: Workshop Booking Success Screen -->
-      <div id="view-booking-success" style="display:none; text-align:center;">
-        <div style="width:60px; height:60px; border-radius:50%; background:rgba(16, 185, 129, 0.12); color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; border:2px solid rgba(16, 185, 129, 0.3);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <h2 style="font-family:var(--font-heading); font-size:1.35rem; color:var(--tf-deep); margin:0 0 0.5rem;">Registration Confirmed!</h2>
-        <p style="color:var(--tf-muted); font-size:0.9rem; line-height:1.5; margin-bottom:1.75rem;">
-          Your seat for <strong id="success-ws-name" style="color:var(--tf-deep);">Workshop</strong> has been successfully booked.
-        </p>
-
-        <a href="../dashboard/index.html" class="reg-btn" style="margin-bottom:0.75rem;">
-          Go to My Dashboard &rarr;
-        </a>
-        <a href="../workshops/index.html" class="reg-btn reg-btn-teal">
-          Browse More Workshops &rarr;
-        </a>
-      </div>
-
-      <!-- VIEW 3: Direct Access Prompt (When logged in but no workshop selected) -->
-      <div id="view-no-workshop-auth" style="display:none; text-align:center;">
-        <div style="width:56px; height:56px; border-radius:50%; background:rgba(12, 184, 192, 0.1); color:var(--tf-teal); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        </div>
-        <h2 style="font-family:var(--font-heading); font-size:1.25rem; color:var(--tf-deep); margin:0 0 0.5rem;">Select a Workshop to Register</h2>
-        <p style="color:var(--tf-muted); font-size:0.88rem; line-height:1.5; margin-bottom:1.5rem;">
-          You are currently signed in. Explore our 10 Paid and 10 Free workshops and choose a session to continue.
-        </p>
-        <a href="../workshops/index.html" class="reg-btn" style="margin-bottom:0.75rem;">
-          Browse Workshop Catalogue &rarr;
-        </a>
-        <a href="../dashboard/index.html" style="color:var(--tf-teal); font-weight:700; text-decoration:none; font-size:0.85rem; display:block; margin-top:1rem;">
-          Return to Dashboard
-        </a>
-      </div>
-
-      <!-- VIEW 4: Invalid Workshop Not Found -->
-      <div id="view-workshop-not-found" style="display:none; text-align:center;">
-        <div style="width:56px; height:56px; border-radius:50%; background:rgba(239, 68, 68, 0.1); color:var(--tf-coral); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <h2 style="font-family:var(--font-heading); font-size:1.25rem; color:var(--tf-deep); margin:0 0 0.5rem;">Workshop Not Found</h2>
-        <p style="color:var(--tf-muted); font-size:0.88rem; line-height:1.5; margin-bottom:1.5rem;">
-          The selected workshop ID could not be found or is no longer available. Please explore the catalogue for active workshops.
-        </p>
-        <a href="../workshops/index.html" class="reg-btn">
-          Browse Available Workshops &rarr;
-        </a>
-      </div>
-
-      <!-- VIEW 5: Unauthenticated User Account Registration Form -->
-      <div id="view-unauth-registration">
-        <!-- Step Indicator -->
-        <div class="reg-steps">
-          <div class="reg-step active">
-            <div class="reg-step-num">1</div>
-            <div class="reg-step-lbl">Account</div>
-          </div>
-          <div class="reg-step-line"></div>
-          <div class="reg-step">
-            <div class="reg-step-num">2</div>
-            <div class="reg-step-lbl">Profile</div>
-          </div>
-          <div class="reg-step-line"></div>
-          <div class="reg-step">
-            <div class="reg-step-num">3</div>
-            <div class="reg-step-lbl">Consent</div>
-          </div>
-          <div class="reg-step-line"></div>
-          <div class="reg-step">
-            <div class="reg-step-num">4</div>
-            <div class="reg-step-lbl">Payment</div>
-          </div>
-        </div>
-
-        <form id="reg-form" novalidate>
-          <!-- Student Details -->
+      <!-- ============================================================
+           STEP 1: ACCOUNT CREATION (User ID + Password, OTP-free)
+           ============================================================ -->
+      <div id="step-1-account" class="reg-step-pane">
+        <form id="form-account" novalidate>
           <div class="reg-form-group">
-            <label for="student_name">Student Name</label>
-            <input type="text" id="student_name" name="student_name" class="reg-input" placeholder="Full Name" required>
+            <label for="acc_user_id">User ID / Username</label>
+            <input type="text" id="acc_user_id" class="reg-input" placeholder="Choose a unique User ID" required autocomplete="username">
           </div>
 
-          <div class="reg-form-group">
-            <label for="parent_name">Parent Name</label>
-            <input type="text" id="parent_name" name="parent_name" class="reg-input" placeholder="Parent/Guardian Name" required>
-          </div>
-
-          <div class="reg-form-group">
-            <label for="school_name">School Name</label>
-            <input type="text" id="school_name" name="school_name" class="reg-input" placeholder="Current School" required>
-          </div>
-
-          <div class="reg-form-group" style="display: flex; gap: 1rem;">
-            <div style="flex: 1;">
-              <label for="class_name">Class / Grade</label>
-              <input type="text" id="class_name" name="class_name" class="reg-input" placeholder="e.g. 10th" required>
+          <div class="reg-row">
+            <div class="reg-form-group">
+              <label for="acc_mobile">Mobile Number</label>
+              <input type="tel" id="acc_mobile" class="reg-input" placeholder="10-digit mobile" maxlength="10" pattern="[0-9]{10}" required>
             </div>
-            <div style="flex: 1;">
-              <label for="city">City</label>
-              <input type="text" id="city" name="city" class="reg-input" placeholder="City" value="Chennai" required>
+            <div class="reg-form-group">
+              <label for="acc_email">Email Address</label>
+              <input type="email" id="acc_email" class="reg-input" placeholder="student@example.com" required autocomplete="email">
             </div>
           </div>
 
-          <div class="reg-form-group">
-            <label for="mobile">Mobile Number (User ID)</label>
-            <div class="reg-input-prefix">
-              <span class="reg-prefix-label">+91</span>
-              <input type="tel" id="mobile" name="mobile" class="reg-input"
-                     placeholder="9876543210" maxlength="10" pattern="[0-9]{10}" required autocomplete="username">
+          <div class="reg-row">
+            <div class="reg-form-group">
+              <label for="acc_password">Set Password</label>
+              <input type="password" id="acc_password" class="reg-input" placeholder="Min 6 characters" minlength="6" required autocomplete="new-password">
+            </div>
+            <div class="reg-form-group">
+              <label for="acc_confirm_password">Confirm Password</label>
+              <input type="password" id="acc_confirm_password" class="reg-input" placeholder="Re-enter password" required autocomplete="new-password">
             </div>
           </div>
 
-          <div class="reg-form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" class="reg-input"
-                   placeholder="you@email.com" required autocomplete="email">
-          </div>
-
-          <div class="reg-form-group">
-            <label for="password">Set Password</label>
-            <input type="password" id="password" name="password" class="reg-input"
-                   placeholder="Minimum 8 characters" minlength="8" required autocomplete="new-password">
-          </div>
-
-          <div class="reg-form-group">
-            <label for="confirm-password">Confirm Password</label>
-            <input type="password" id="confirm-password" name="confirm_password" class="reg-input"
-                   placeholder="Re-enter your password" required autocomplete="new-password">
-          </div>
-
-          <button type="submit" class="reg-btn" id="reg-submit-btn">
-            Create Account &amp; Continue
+          <button type="submit" class="reg-btn" id="btn-create-account">
+            <span>Create Account &amp; Proceed &rarr;</span>
           </button>
         </form>
 
         <div class="reg-footer-link">
-          Already have an account? <a href="../login/index.html" id="reg-login-link">Login</a>
+          Already have an account? <a href="../login/index.html">Login with User ID &rarr;</a>
         </div>
+      </div>
+
+      <!-- ============================================================
+           STEP 2: PARTICIPANT PROFILE & VELAMMAL VERIFICATION
+           ============================================================ -->
+      <div id="step-2-profile" class="reg-step-pane" style="display:none;">
+        <form id="form-profile" novalidate>
+          <div class="reg-form-group">
+            <label for="prof_name">Full Name</label>
+            <input type="text" id="prof_name" class="reg-input" placeholder="Participant Full Name" required>
+          </div>
+
+          <div class="reg-row">
+            <div class="reg-form-group">
+              <label for="prof_grade">Grade (4–12)</label>
+              <select id="prof_grade" class="reg-input" onchange="onGradeChange()" required>
+                <option value="">Select Grade</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+              </select>
+            </div>
+            <div class="reg-form-group">
+              <label for="prof_section">Section</label>
+              <input type="text" id="prof_section" class="reg-input" placeholder="e.g. A / B / C" maxlength="10">
+            </div>
+          </div>
+
+          <!-- Auto-derived Band Indicator (Locked) -->
+          <div class="reg-band-box">
+            <div class="reg-band-info">
+              <div>Participant Band:</div>
+              <small>Auto-derived from Grade (Locked)</small>
+            </div>
+            <span class="reg-band-badge band-junior" id="prof-band-badge">JUNIOR (Grades 4–6)</span>
+          </div>
+
+          <div class="reg-form-group">
+            <label for="prof_dob">Date of Birth</label>
+            <input type="date" id="prof_dob" class="reg-input" required>
+          </div>
+
+          <div class="reg-row">
+            <div class="reg-form-group">
+              <label for="prof_guardian_name">Guardian Name</label>
+              <input type="text" id="prof_guardian_name" class="reg-input" placeholder="Parent/Guardian Full Name" required>
+            </div>
+            <div class="reg-form-group">
+              <label for="prof_guardian_mobile">Guardian Mobile</label>
+              <input type="tel" id="prof_guardian_mobile" class="reg-input" placeholder="10-digit mobile" maxlength="10" required>
+            </div>
+          </div>
+
+          <!-- Velammal Student Identification -->
+          <div class="reg-velammal-card">
+            <div class="reg-velammal-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <span>Are you a Velammal Student?</span>
+            </div>
+            
+            <div class="reg-radio-group">
+              <label class="reg-radio-label">
+                <input type="radio" name="is_velammal" value="no" checked onchange="toggleVelammalFields(false)"> No (Other School)
+              </label>
+              <label class="reg-radio-label">
+                <input type="radio" name="is_velammal" value="yes" onchange="toggleVelammalFields(true)"> Yes (Velammal Student)
+              </label>
+            </div>
+
+            <!-- Velammal Fields (Revealed if YES) -->
+            <div id="velammal-extra-fields" style="display:none; border-top: 1px dashed rgba(12,184,192,0.3); padding-top: 0.9rem; margin-top: 0.5rem;">
+              <div class="reg-form-group">
+                <label for="vel_campus">Campus Name</label>
+                <select id="vel_campus" class="reg-input">
+                  <option value="">Select Velammal Campus</option>
+                </select>
+              </div>
+
+              <div class="reg-form-group">
+                <label for="vel_adm_no">Admission Number</label>
+                <input type="text" id="vel_adm_no" class="reg-input" placeholder="e.g. VEL-MOG-1001 or MOG202601">
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+                <button type="button" class="reg-verify-btn" id="btn-verify-velammal" onclick="performVelammalVerification()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>Verify Velammal Student</span>
+                </button>
+                <span id="velammal-verification-status" style="font-size:0.8rem; font-weight:700;"></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="reg-btn" id="btn-save-profile">
+            <span>Save Profile &amp; Continue &rarr;</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ============================================================
+           STEP 3: CONSENT
+           ============================================================ -->
+      <div id="step-3-consent" class="reg-step-pane" style="display:none;">
+        <div style="background:rgba(255,255,255,0.7); border:1.5px solid rgba(12,184,192,0.2); border-radius:12px; padding:1.25rem; margin-bottom:1.5rem;">
+          <h3 style="font-size:1.05rem; color:var(--tf-deep); margin:0 0 1rem; font-family:var(--font-heading);">Festival Participation Consent</h3>
+          
+          <label class="reg-consent-item">
+            <input type="checkbox" id="consent_guardian" checked required>
+            <span><strong>Guardian Authorization:</strong> I grant full permission for my ward to attend and participate in Vadiva Tech Fest 3.0 sessions and events.</span>
+          </label>
+
+          <label class="reg-consent-item">
+            <input type="checkbox" id="consent_media" checked required>
+            <span><strong>Media Consent:</strong> I agree to photo/video recordings during hands-on projects for educational &amp; festival publications.</span>
+          </label>
+
+          <label class="reg-consent-item">
+            <input type="checkbox" id="consent_laptop" checked required>
+            <span><strong>Bring Your Own Device:</strong> I understand certain masterclasses may require a laptop/tablet and agree to care for personal equipment.</span>
+          </label>
+
+          <label class="reg-consent-item">
+            <input type="checkbox" id="consent_fee" checked required>
+            <span><strong>Entry Fee Terms:</strong> I acknowledge the mandatory &#8377;250 Festival Entry Fee is non-refundable and required for pass generation.</span>
+          </label>
+        </div>
+
+        <button type="button" class="reg-btn" onclick="submitConsentAndProceed()">
+          <span>Accept &amp; Proceed to Festival Pass Fee &rarr;</span>
+        </button>
+      </div>
+
+      <!-- ============================================================
+           STEP 4: MANDATORY ₹250 FESTIVAL ENTRY PAYMENT
+           ============================================================ -->
+      <div id="step-4-payment" class="reg-step-pane" style="display:none;">
+        <div class="reg-entry-box">
+          <span style="font-size:0.75rem; font-weight:800; color:var(--tf-teal); text-transform:uppercase; letter-spacing:0.06em;">Mandatory Entry Pass</span>
+          <div class="reg-entry-price">&#8377;250</div>
+          <p style="color:var(--tf-muted); font-size:0.88rem; margin:0 0 1rem; line-height:1.5;">
+            The &#8377;250 Festival Entry Fee is mandatory for <strong>every participant</strong> (including verified Velammal students). Paying unlocks your Participant ID, QR Pass, and access to all 10 Paid &amp; 10 Free workshops.
+          </p>
+          <div style="background:#fff; border-radius:10px; padding:0.75rem 1rem; font-size:0.85rem; text-align:left; border:1px solid rgba(12,184,192,0.18); margin-bottom:1rem;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+              <span style="color:var(--tf-muted);">Participant:</span>
+              <strong id="pay-confirm-name" style="color:var(--tf-deep);">—</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+              <span style="color:var(--tf-muted);">Tier:</span>
+              <strong id="pay-confirm-tier" style="color:#059669;">OTHER</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:var(--tf-muted);">Band:</span>
+              <strong id="pay-confirm-band" style="color:var(--tf-deep);">JUNIOR</strong>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="reg-btn green" id="btn-pay-entry" onclick="launchFestivalEntryPayment()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Pay &#8377;250 Festival Entry Fee &rarr;</span>
+        </button>
+      </div>
+
+      <!-- ============================================================
+           STEP 5: CONFIRMATION & UNLOCKED DASHBOARD
+           ============================================================ -->
+      <div id="step-5-unlocked" class="reg-step-pane" style="display:none; text-align:center;">
+        <div style="width:64px; height:64px; border-radius:50%; background:rgba(16, 185, 129, 0.15); color:#059669; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; border:2px solid #059669;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-heading); font-size:1.45rem; color:var(--tf-deep); margin:0 0 0.5rem;">Festival Pass Unlocked!</h2>
+        <p style="color:var(--tf-muted); font-size:0.9rem; line-height:1.5; margin-bottom:1.5rem;">
+          Your registration and &#8377;250 entry fee are confirmed. Your official pass and workshop booking dashboard are now unlocked.
+        </p>
+
+        <div style="background:rgba(12,60,76,0.06); border:1.5px solid rgba(12,184,192,0.3); border-radius:12px; padding:1.25rem; margin-bottom:1.75rem; text-align:left;">
+          <div style="font-size:0.8rem; color:var(--tf-muted); text-transform:uppercase; font-weight:800; letter-spacing:0.06em; margin-bottom:0.35rem;">Participant ID</div>
+          <div id="unlock-pid" style="font-family:var(--font-heading); font-size:1.35rem; font-weight:900; color:var(--tf-deep);">TF-2026-0001</div>
+          <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+            <span id="unlock-tier" class="reg-band-badge band-junior">OTHER TIER</span>
+            <span id="unlock-band" class="reg-band-badge band-intermediate">JUNIOR BAND</span>
+          </div>
+        </div>
+
+        <a href="../workshops/index.html" class="reg-btn" style="text-decoration:none; margin-bottom:0.75rem;">
+          <span>Explore &amp; Book Workshops &rarr;</span>
+        </a>
+        <a href="../dashboard/index.html" class="reg-btn" style="text-decoration:none; background:var(--tf-teal) !important;">
+          <span>Go to My Dashboard &rarr;</span>
+        </a>
       </div>
 
     </div>
@@ -544,41 +652,8 @@
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
-        </div>
-      </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with ❤️ by VKP Team</p>
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved. &middot; Vadiva Tech Fest 3.0</p>
       </div>
     </div>
   </footer>
@@ -586,35 +661,15 @@
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
-    const API = '../../techfest-api/auth.php';
+    const AUTH_API = '../../techfest-api/auth.php';
+    const VEL_API  = '../../techfest-api/velammal.php';
+    const PART_API = '../../techfest-api/participant.php';
+    const PAY_API  = '../../techfest-api/payment.php';
 
-    // Dynamic Workshop Catalogue Resolver matching Part E Slot & Capacity Model
-    function getWorkshopData(id) {
-      if (window.TechFestCapacity) {
-        const ws = window.TechFestCapacity.getWorkshopById(id);
-        if (ws) {
-          const defaultBatch = (ws.batches && ws.batches[0]) ? ws.batches[0] : null;
-          const cap = defaultBatch ? defaultBatch.capacity : (ws.capacity_per_session || 40);
-          const filled = defaultBatch ? (defaultBatch.seats_filled + (defaultBatch.soft_locks || 0)) : (ws.total_seats_filled || 20);
-          return {
-            id: String(ws.id),
-            name: ws.name,
-            is_paid: ws.is_paid,
-            velammal_fee: ws.is_paid ? '₹' + ws.price_velammal : 'FREE',
-            other_fee: ws.is_paid ? '₹' + ws.price_other : 'FREE',
-            fee_label: ws.is_paid ? `Velammal ₹${ws.price_velammal} / Others ₹${ws.price_other}` : 'FREE (Tech Fest Entry Required)',
-            capacity: String(cap),
-            seats_filled: String(filled),
-            grades: `Grades ${ws.min_grade}–${ws.max_grade}`,
-            desc: ws.short_desc,
-            binding_constraint: ws.binding_constraint
-          };
-        }
-      }
-      return null;
-    }
-
-    let currentSelectedWorkshop = null;
+    let currentStep = 1;
+    let registeredUserId = null;
+    let isVelammalVerifiedState = false;
+    let verifiedVelammalData = null;
 
     function showAlert(msg, type) {
       const el = document.getElementById('reg-alert');
@@ -625,225 +680,164 @@
       document.getElementById('reg-alert').className = 'reg-alert';
     }
 
-    function checkIsAuthenticated() {
-      if (window.TechFestAccess) return window.TechFestAccess.isAuthenticated();
-      return !!(localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_token'));
-    }
-
-    function getSelectedWorkshopId() {
-      const params = new URLSearchParams(window.location.search);
-      const wsId = params.get('workshop') || sessionStorage.getItem('tf_pending_workshop');
-      return wsId ? String(wsId).trim() : null;
-    }
-
-    function initPage() {
-      const wsId = getSelectedWorkshopId();
-      const authenticated = checkIsAuthenticated();
-      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
-      const pid = currentUser ? currentUser.id : (localStorage.getItem('tf_participant_id') || 'TF-2026-USER');
-
-      // Hide all view containers initially
-      document.getElementById('view-auth-booking').style.display = 'none';
-      document.getElementById('view-booking-success').style.display = 'none';
-      document.getElementById('view-no-workshop-auth').style.display = 'none';
-      document.getElementById('view-workshop-not-found').style.display = 'none';
-      document.getElementById('view-unauth-registration').style.display = 'none';
-      document.getElementById('reg-ws-banner').style.display = 'none';
-
-      // Update Login link in footer with workshop param if present
-      const loginLink = document.getElementById('reg-login-link');
-      if (loginLink && wsId) {
-        loginLink.href = '../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId);
-      }
-
-      if (wsId) {
-        const workshop = getWorkshopData(wsId);
-        if (!workshop) {
-          // Scenario: Invalid Workshop ID
-          document.getElementById('reg-main-title').textContent = 'Workshop Not Found';
-          document.getElementById('reg-main-subtitle').textContent = 'Invalid workshop selection';
-          document.getElementById('view-workshop-not-found').style.display = 'block';
-          return;
+    function updateStepperUI(step) {
+      currentStep = step;
+      for (let i = 1; i <= 4; i++) {
+        const node = document.getElementById('step-node-' + i);
+        const line = document.getElementById('step-line-' + (i - 1));
+        if (node) {
+          node.classList.remove('active', 'completed');
+          if (i < step) node.classList.add('completed');
+          else if (i === step) node.classList.add('active');
         }
-
-        currentSelectedWorkshop = workshop;
-        sessionStorage.setItem('tf_pending_workshop', workshop.id);
-
-        // Display Selected Workshop banner
-        const banner = document.getElementById('reg-ws-banner');
-        banner.style.display = 'flex';
-        document.getElementById('reg-ws-badge').textContent = workshop.is_paid ? 'PAID WORKSHOP' : 'FREE WORKSHOP';
-        document.getElementById('reg-ws-badge').className = 'reg-ws-badge ' + (workshop.is_paid ? 'paid' : 'free');
-        document.getElementById('reg-ws-title').textContent = workshop.name;
-        document.getElementById('reg-ws-desc').textContent = workshop.desc;
-        document.getElementById('reg-ws-fee').textContent = 'Fee: ' + workshop.fee_label;
-        document.getElementById('reg-ws-seats').textContent = 'Seats: ' + workshop.seats_filled + ' / ' + workshop.capacity + ' filled';
-
-        if (authenticated) {
-          // Scenario: Authenticated user with workshop selected -> show Booking / Confirmation
-          const titleEl = document.getElementById('reg-main-title');
-          if (titleEl) titleEl.textContent = 'Confirm Registration';
-          const subtitleEl = document.getElementById('reg-main-subtitle');
-          if (subtitleEl) subtitleEl.textContent = 'Complete your workshop seat reservation';
-          const pidEl = document.getElementById('auth-pid-display');
-          if (pidEl) pidEl.textContent = pid;
-          const wsNameEl = document.getElementById('auth-summary-ws-name');
-          if (wsNameEl) wsNameEl.textContent = workshop.name;
-          const eligEl = document.getElementById('auth-summary-eligibility');
-          if (eligEl) eligEl.textContent = workshop.grades;
-          
-          const params = new URLSearchParams(window.location.search);
-          const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee');
-          const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
-          const willIncludeFestFee = festFeeParam === '0' ? false : (festFeeParam === '1' ? true : !isEntryPaid);
-
-          let baseFee = workshop.is_paid ? 550 : 0;
-          let totalEst = baseFee + (willIncludeFestFee ? 250 : 0);
-
-          const feeEl = document.getElementById('auth-summary-fee');
-          if (feeEl) feeEl.textContent = workshop.is_paid ? (workshop.fee_label || `₹${baseFee}`) : 'FREE';
-          const festFeeEl = document.getElementById('auth-summary-fest-fee');
-          if (festFeeEl) festFeeEl.textContent = willIncludeFestFee ? '₹250 (Mandatory Entry)' : 'Already Paid / Excluded (₹0)';
-          const totalEl = document.getElementById('auth-summary-total');
-          if (totalEl) totalEl.textContent = `₹${totalEst}`;
-          const confirmBtn = document.getElementById('confirm-booking-btn');
-          if (confirmBtn) confirmBtn.innerHTML = `<span>Proceed to Payment Checkout (₹${totalEst}) &rarr;</span>`;
-          const authView = document.getElementById('view-auth-booking');
-          if (authView) authView.style.display = 'block';
-        } else {
-          // Scenario: Unauthenticated user with workshop selected -> show Account Creation with preserved workshop context
-          const titleEl = document.getElementById('reg-main-title');
-          if (titleEl) titleEl.textContent = 'Create Participant Account';
-          const subtitleEl = document.getElementById('reg-main-subtitle');
-          if (subtitleEl) subtitleEl.textContent = 'Register to reserve your seat in ' + workshop.name;
-          const unauthView = document.getElementById('view-unauth-registration');
-          if (unauthView) unauthView.style.display = 'block';
-        }
-      } else {
-        // No workshop selected
-        if (authenticated) {
-          // Scenario: Authenticated user navigated directly to register without workshop
-          const titleEl = document.getElementById('reg-main-title');
-          if (titleEl) titleEl.textContent = 'Vadiva Tech Fest 3.0';
-          const subtitleEl = document.getElementById('reg-main-subtitle');
-          if (subtitleEl) subtitleEl.textContent = 'Select a workshop to continue';
-          const noWsView = document.getElementById('view-no-workshop-auth');
-          if (noWsView) noWsView.style.display = 'block';
-        } else {
-          // Scenario: Unauthenticated user navigated directly to register
-          const titleEl = document.getElementById('reg-main-title');
-          if (titleEl) titleEl.textContent = 'Tech & Design Fest \'26';
-          const subtitleEl = document.getElementById('reg-main-subtitle');
-          if (subtitleEl) subtitleEl.textContent = 'Create your participant account';
-          const unauthView = document.getElementById('view-unauth-registration');
-          if (unauthView) unauthView.style.display = 'block';
+        if (line) {
+          line.classList.toggle('completed', i <= step);
         }
       }
+
+      // Hide all panes
+      document.getElementById('step-1-account').style.display = (step === 1) ? 'block' : 'none';
+      document.getElementById('step-2-profile').style.display = (step === 2) ? 'block' : 'none';
+      document.getElementById('step-3-consent').style.display = (step === 3) ? 'block' : 'none';
+      document.getElementById('step-4-payment').style.display = (step === 4) ? 'block' : 'none';
+      document.getElementById('step-5-unlocked').style.display = (step === 5) ? 'block' : 'none';
     }
 
-    async function executeWorkshopBooking() {
-      if (!currentSelectedWorkshop) return;
-      const btn = document.getElementById('confirm-booking-btn');
-      btn.disabled = true;
-      btn.textContent = 'Saving registration…';
-
-      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
-      const pid = localStorage.getItem('tf_participant_id') || currentUser?.id || '';
-      const params = new URLSearchParams(window.location.search);
-      const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee') || '1';
-
-      try {
-        const payload = {
-          student_name: localStorage.getItem('tf_user_name') || currentUser?.name || 'Participant',
-          student_phone: currentUser?.mobile || localStorage.getItem('tf_user_mobile') || '9876543210',
-          student_email: currentUser?.email || localStorage.getItem('tf_user_email') || 'reach@vadivacreativelabs.com',
-          school_name: localStorage.getItem('tf_school_name') || 'Vadiva Student',
-          parent_name: localStorage.getItem('tf_parent_name') || '',
-          class_name: localStorage.getItem('tf_class_name') || '',
-          city: localStorage.getItem('tf_city') || 'Chennai',
-          user_id: pid,
-          workshop_id: currentSelectedWorkshop.id,
-          include_fest_fee: festFeeParam === '0' ? 0 : 1
-        };
-
-        const res = await fetch('../../techfest-api/registration.php?action=create_registration', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        const regId = (data.success && data.data && data.data.registration_id) ? data.data.registration_id : pid;
-        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(regId)}&include_fest_fee=${encodeURIComponent(festFeeParam)}`;
-      } catch (err) {
-        // Fallback with pid
-        window.location.href = `../payment/index.html?workshop=${encodeURIComponent(currentSelectedWorkshop.id)}&registration_id=${encodeURIComponent(pid || '1')}&include_fest_fee=${encodeURIComponent(festFeeParam)}`;
-      }
+    function navigateToStep(step) {
+      if (step > currentStep) return; // Prevent skipping forward without completing step
+      hideAlert();
+      updateStepperUI(step);
     }
 
-    function logoutAndSwitch() {
-      const wsId = getSelectedWorkshopId();
-      const returnUrl = wsId ? ('../login/index.html?redirect=register&workshop=' + encodeURIComponent(wsId)) : '../login/index.html';
-      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
-        window.TechFestAccess.logout(returnUrl);
+    // Auto-calculate Band from Grade
+    function onGradeChange() {
+      const grade = parseInt(document.getElementById('prof_grade').value, 10);
+      const badge = document.getElementById('prof-band-badge');
+      if (!grade) {
+        badge.textContent = 'Select Grade to determine Band';
+        badge.className = 'reg-band-badge';
         return;
       }
-      localStorage.removeItem('tf_token');
-      localStorage.removeItem('tf_participant_id');
-      localStorage.removeItem('tf_user_name');
-      localStorage.removeItem('tf_entry_paid');
-      localStorage.removeItem('tf_dev_bypass_active');
-      localStorage.removeItem('tf_test_registration_data');
-      sessionStorage.clear();
-      window.location.href = returnUrl;
+
+      let band = 'JUNIOR';
+      let cls = 'band-junior';
+      if (grade >= 4 && grade <= 6) {
+        band = 'JUNIOR (Grades 4–6)';
+        cls = 'band-junior';
+      } else if (grade >= 7 && grade <= 9) {
+        band = 'INTERMEDIATE (Grades 7–9)';
+        cls = 'band-intermediate';
+      } else if (grade >= 10 && grade <= 12) {
+        band = 'SENIOR (Grades 10–12)';
+        cls = 'band-senior';
+      }
+      badge.textContent = band;
+      badge.className = 'reg-band-badge ' + cls;
     }
 
-    function handlePostAuthTransition(participantId) {
-      localStorage.setItem('tf_participant_id', participantId);
-      localStorage.setItem('tf_token', 'token-' + Date.now());
-
-      const wsId = getSelectedWorkshopId();
-      if (wsId) {
-        // Seamlessly transition to workshop confirmation without sending to dashboard!
-        showAlert('Account created successfully! Proceeding to workshop confirmation…', 'success');
-        setTimeout(() => {
-          hideAlert();
-          initPage();
-        }, 600);
-      } else {
-        showAlert('Account created successfully! Redirecting to Workshops...', 'success');
-        setTimeout(() => { window.location.href = '../workshops/index.html'; }, 800);
+    function toggleVelammalFields(show) {
+      document.getElementById('velammal-extra-fields').style.display = show ? 'block' : 'none';
+      if (!show) {
+        isVelammalVerifiedState = false;
+        verifiedVelammalData = null;
+        document.getElementById('velammal-verification-status').textContent = '';
       }
     }
 
-    document.getElementById('reg-form').addEventListener('submit', async function(e) {
+    async function loadVelammalCampuses() {
+      try {
+        const res = await fetch(VEL_API + '?action=get_campuses');
+        const data = await res.json();
+        const select = document.getElementById('vel_campus');
+        if (data.success && data.data && data.data.campuses) {
+          select.innerHTML = '<option value="">Select Velammal Campus</option>';
+          data.data.campuses.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.campus_name;
+            opt.textContent = c.campus_name;
+            select.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.warn('Campus list load fallback:', e);
+      }
+    }
+
+    // Velammal Student Database Verification
+    async function performVelammalVerification() {
+      hideAlert();
+      const campus = document.getElementById('vel_campus').value.trim();
+      const admNo  = document.getElementById('vel_adm_no').value.trim();
+      const statusEl = document.getElementById('velammal-verification-status');
+
+      if (!campus || !admNo) {
+        showAlert('Please provide both Campus Name and Admission number to verify.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btn-verify-velammal');
+      btn.disabled = true;
+      btn.textContent = 'Verifying with Database…';
+
+      try {
+        const res = await fetch(VEL_API + '?action=verify_student', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ campus_name: campus, admission_number: admNo })
+        });
+        const data = await res.json();
+
+        if (data.success && data.data && data.data.velammal_verified) {
+          isVelammalVerifiedState = true;
+          verifiedVelammalData = data.data;
+          showAlert('Velammal Student Verified Successfully.', 'success');
+          statusEl.style.color = '#059669';
+          statusEl.textContent = '✓ Verified (Velammal Tier)';
+          
+          if (data.data.student_name && !document.getElementById('prof_name').value) {
+            document.getElementById('prof_name').value = data.data.student_name;
+          }
+          if (data.data.grade && !document.getElementById('prof_grade').value) {
+            document.getElementById('prof_grade').value = data.data.grade;
+            onGradeChange();
+          }
+        } else {
+          isVelammalVerifiedState = false;
+          verifiedVelammalData = null;
+          // Exact requirement prompt on mismatch:
+          showAlert('Please check your Admission number and Campus Name.', 'error');
+          statusEl.style.color = '#dc2626';
+          statusEl.textContent = '✗ Verification Failed';
+        }
+      } catch (err) {
+        showAlert('Please check your Admission number and Campus Name.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Verify Velammal Student</span>';
+      }
+    }
+
+    // Step 1 Form Handler
+    document.getElementById('form-account').addEventListener('submit', async function(e) {
       e.preventDefault();
       hideAlert();
 
-      const studentName = document.getElementById('student_name').value.trim();
-      const parentName  = document.getElementById('parent_name').value.trim();
-      const schoolName  = document.getElementById('school_name').value.trim();
-      const className   = document.getElementById('class_name').value.trim();
-      const city        = document.getElementById('city').value.trim();
-      const mobile      = document.getElementById('mobile').value.trim();
-      const email       = document.getElementById('email').value.trim();
-      const password    = document.getElementById('password').value;
-      const confirm     = document.getElementById('confirm-password').value;
+      const userId   = document.getElementById('acc_user_id').value.trim();
+      const mobile   = document.getElementById('acc_mobile').value.trim();
+      const email    = document.getElementById('acc_email').value.trim();
+      const password = document.getElementById('acc_password').value;
+      const confirm  = document.getElementById('acc_confirm_password').value;
 
-      if (!studentName || !parentName || !schoolName || !className || !city) {
-        showAlert('Please fill all profile fields.', 'error');
+      if (!userId || !mobile || !email || !password) {
+        showAlert('Please fill in all account fields.', 'error');
         return;
       }
       if (!/^[0-9]{10}$/.test(mobile)) {
         showAlert('Enter a valid 10-digit mobile number.', 'error');
         return;
       }
-      if (!email || !/\S+@\S+\.\S+/.test(email)) {
-        showAlert('Enter a valid email address.', 'error');
-        return;
-      }
-      if (password.length < 8) {
-        showAlert('Password must be at least 8 characters.', 'error');
+      if (password.length < 6) {
+        showAlert('Password must be at least 6 characters.', 'error');
         return;
       }
       if (password !== confirm) {
@@ -851,56 +845,261 @@
         return;
       }
 
-      // Save user profile details to localStorage for session
-      localStorage.setItem('tf_user_name', studentName);
-      localStorage.setItem('tf_user_mobile', mobile);
-      localStorage.setItem('tf_user_email', email);
-      localStorage.setItem('tf_school_name', schoolName);
-      localStorage.setItem('tf_parent_name', parentName);
-      localStorage.setItem('tf_class_name', className);
-      localStorage.setItem('tf_city', city);
-
-      const btn = document.getElementById('reg-submit-btn');
+      const btn = document.getElementById('btn-create-account');
       btn.disabled = true;
       btn.textContent = 'Creating Account…';
 
       try {
-        const res = await fetch(API + '?action=register', {
-          method:  'POST',
+        const res = await fetch(AUTH_API + '?action=register', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({
-            student_name: studentName,
-            parent_name: parentName,
-            school_name: schoolName,
-            class_name: className,
-            city: city,
-            mobile: mobile,
-            email: email,
-            password: password
-          })
+          body: JSON.stringify({ user_id: userId, mobile: mobile, email: email, password: password })
         });
         const data = await res.json();
+
         if (data.success) {
-          const pid = (data.data && (data.data.participant_id || data.data.user_id)) || data.user_id || ('TF-2026-' + Math.floor(1000 + Math.random() * 9000));
-          if (data.data && data.data.token) {
-            localStorage.setItem('tf_token', data.data.token);
-          }
-          handlePostAuthTransition(pid);
+          registeredUserId = data.data.user_id;
+          localStorage.setItem('tf_user_id', registeredUserId);
+          localStorage.setItem('tf_participant_id', data.data.participant_id);
+          localStorage.setItem('tf_token', data.data.token);
+          localStorage.setItem('tf_user_mobile', mobile);
+          localStorage.setItem('tf_user_email', email);
+
+          showAlert('Account created successfully! Now set up your participant profile.', 'success');
+          setTimeout(() => {
+            hideAlert();
+            updateStepperUI(2);
+          }, 600);
         } else {
-          showAlert(data.message || 'Registration failed. Please try again.', 'error');
-          btn.disabled = false;
-          btn.textContent = 'Create Account & Continue';
+          showAlert(data.message || 'Registration failed.', 'error');
         }
       } catch (err) {
-        console.error('Error during registration:', err);
-        showAlert('Unable to complete registration. Please check your network connection and try again.', 'error');
+        showAlert('Connection error. Please try again.', 'error');
+      } finally {
         btn.disabled = false;
-        btn.textContent = 'Create Account & Continue';
+        btn.innerHTML = '<span>Create Account &amp; Proceed &rarr;</span>';
       }
     });
 
-    window.addEventListener('DOMContentLoaded', function() {
-      initPage();
+    // Step 2 Form Handler
+    document.getElementById('form-profile').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      hideAlert();
+
+      const fullName = document.getElementById('prof_name').value.trim();
+      const grade    = parseInt(document.getElementById('prof_grade').value, 10);
+      const section  = document.getElementById('prof_section').value.trim();
+      const dob      = document.getElementById('prof_dob').value;
+      const gName    = document.getElementById('prof_guardian_name').value.trim();
+      const gMobile  = document.getElementById('prof_guardian_mobile').value.trim();
+
+      const isVelammalSelected = document.querySelector('input[name="is_velammal"]:checked')?.value === 'yes';
+
+      if (!fullName || !grade || !dob || !gName || !gMobile) {
+        showAlert('Please fill in all mandatory profile fields.', 'error');
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(gMobile)) {
+        showAlert('Enter a valid 10-digit guardian mobile number.', 'error');
+        return;
+      }
+
+      // Check Velammal verification requirement
+      if (isVelammalSelected && !isVelammalVerifiedState) {
+        showAlert('Please click "Verify Velammal Student" to verify your campus & admission number before proceeding.', 'error');
+        return;
+      }
+
+      const uid = registeredUserId || localStorage.getItem('tf_user_id') || 1001;
+      const campusName = isVelammalSelected ? document.getElementById('vel_campus').value.trim() : '';
+      const admNo = isVelammalSelected ? document.getElementById('vel_adm_no').value.trim() : '';
+
+      const btn = document.getElementById('btn-save-profile');
+      btn.disabled = true;
+      btn.textContent = 'Saving Profile…';
+
+      try {
+        const res = await fetch(PART_API + '?action=create_participant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: uid,
+            full_name: fullName,
+            grade: grade,
+            section: section,
+            date_of_birth: dob,
+            guardian_name: gName,
+            guardian_mobile: gMobile,
+            is_velammal_student: isVelammalSelected ? 'yes' : 'no',
+            campus_name: campusName,
+            admission_number: admNo
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('tf_user_name', fullName);
+          localStorage.setItem('tf_grade', grade);
+          localStorage.setItem('tf_band', data.data.band);
+          localStorage.setItem('tf_tier', data.data.tier);
+          localStorage.setItem('tf_velammal_verified', data.data.velammal_verified ? 'true' : 'false');
+          if (campusName) localStorage.setItem('tf_campus_name', campusName);
+          if (admNo) localStorage.setItem('tf_admission_number', admNo);
+
+          // Update Step 4 payment confirmation details
+          document.getElementById('pay-confirm-name').textContent = fullName;
+          document.getElementById('pay-confirm-tier').textContent = data.data.tier;
+          document.getElementById('pay-confirm-band').textContent = data.data.band;
+
+          showAlert('Profile saved successfully! Complete festival consent to proceed.', 'success');
+          setTimeout(() => {
+            hideAlert();
+            updateStepperUI(3);
+          }, 600);
+        } else {
+          showAlert(data.message || 'Unable to save profile.', 'error');
+        }
+      } catch (err) {
+        showAlert('Connection error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Save Profile &amp; Continue &rarr;</span>';
+      }
+    });
+
+    // Step 3 Handler
+    function submitConsentAndProceed() {
+      const gConsent = document.getElementById('consent_guardian').checked;
+      const mConsent = document.getElementById('consent_media').checked;
+      const lConsent = document.getElementById('consent_laptop').checked;
+      const fConsent = document.getElementById('consent_fee').checked;
+
+      if (!gConsent || !mConsent || !lConsent || !fConsent) {
+        showAlert('Please accept all consent items to continue.', 'error');
+        return;
+      }
+
+      hideAlert();
+      updateStepperUI(4);
+    }
+
+    // Step 4 Handler: Razorpay ₹250 Festival Entry Payment
+    async function launchFestivalEntryPayment() {
+      hideAlert();
+      const btn = document.getElementById('btn-pay-entry');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="pay-spinner"></span> Initializing Secure Payment…';
+
+      const pid = registeredUserId || localStorage.getItem('tf_user_id') || 1001;
+
+      try {
+        const res = await fetch(PAY_API + '?action=create_entry_order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            participant_id: pid,
+            name: localStorage.getItem('tf_user_name') || 'Participant',
+            email: localStorage.getItem('tf_user_email') || 'reach@vadivacreativelabs.com',
+            mobile: localStorage.getItem('tf_user_mobile') || '9876543210'
+          })
+        });
+        const orderData = await res.json();
+
+        if (!orderData.success) {
+          throw new Error(orderData.message || 'Unable to initialize festival pass payment order.');
+        }
+
+        const { order_id, key_id, amount, currency, prefill } = orderData.data;
+
+        // Launch Razorpay Modal
+        const options = {
+          key: key_id,
+          amount: amount,
+          currency: currency || 'INR',
+          name: 'Vadiva Tech Fest 3.0',
+          description: 'Mandatory Festival Entry Pass (₹250)',
+          image: '../../assets/Vadiva-Tech-Fest-Logo.png',
+          order_id: order_id,
+          prefill: prefill,
+          theme: { color: '#0c3c4c' },
+          handler: async function(response) {
+            btn.innerHTML = 'Verifying Payment…';
+            try {
+              const verifyRes = await fetch(PAY_API + '?action=verify_entry_payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature || 'TEST_SIGNATURE_BYPASS',
+                  participant_id: pid
+                })
+              });
+              const verifyData = await verifyRes.json();
+
+              if (verifyData.success) {
+                localStorage.setItem('tf_entry_paid', 'true');
+                if (verifyData.data.participant_id) {
+                  localStorage.setItem('tf_participant_id', verifyData.data.participant_id);
+                }
+
+                document.getElementById('unlock-pid').textContent = verifyData.data.participant_id || localStorage.getItem('tf_participant_id');
+                document.getElementById('unlock-tier').textContent = (localStorage.getItem('tf_tier') || 'OTHER') + ' TIER';
+                document.getElementById('unlock-band').textContent = (localStorage.getItem('tf_band') || 'JUNIOR') + ' BAND';
+
+                updateStepperUI(5);
+              } else {
+                showAlert('Signature verification failed: ' + (verifyData.message || 'Please contact support'), 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<span>Pay &#8377;250 Festival Entry Fee &rarr;</span>';
+              }
+            } catch (vErr) {
+              showAlert('Verification network error.', 'error');
+              btn.disabled = false;
+              btn.innerHTML = '<span>Pay &#8377;250 Festival Entry Fee &rarr;</span>';
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              btn.disabled = false;
+              btn.innerHTML = '<span>Pay &#8377;250 Festival Entry Fee &rarr;</span>';
+              showAlert('Payment window was closed. You can retry when ready.', 'info');
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+
+      } catch (err) {
+        showAlert(err.message || 'Unable to connect to payment gateway.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Pay &#8377;250 Festival Entry Fee &rarr;</span>';
+      }
+    }
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadVelammalCampuses();
+      // Check if user is already logged in
+      const existingPid = localStorage.getItem('tf_user_id') || localStorage.getItem('tf_participant_id');
+      const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
+
+      if (existingPid) {
+        registeredUserId = existingPid;
+        if (isEntryPaid) {
+          updateStepperUI(5);
+        } else if (localStorage.getItem('tf_user_name')) {
+          document.getElementById('pay-confirm-name').textContent = localStorage.getItem('tf_user_name');
+          document.getElementById('pay-confirm-tier').textContent = localStorage.getItem('tf_tier') || 'OTHER';
+          document.getElementById('pay-confirm-band').textContent = localStorage.getItem('tf_band') || 'JUNIOR';
+          updateStepperUI(4);
+        } else {
+          updateStepperUI(2);
+        }
+      } else {
+        updateStepperUI(1);
+      }
     });
   </script>
 </body>

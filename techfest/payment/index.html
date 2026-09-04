@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure Payment | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Secure Razorpay Payment for Vadiva Tech Fest 3.0 Workshop Registration.">
+  <title>Workshop Checkout &amp; Payment | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Secure Razorpay Payment for Vadiva Tech Fest 3.0 Workshop Batch Registration.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
   <!-- Razorpay Standard Checkout SDK -->
@@ -14,8 +17,8 @@
     /* ── Payment Page Styles (prefix: pay-) ── */
     .pay-page {
       background: transparent !important;
-      min-height: 80vh;
-      padding: 3.5rem 1.25rem 5rem;
+      min-height: 85vh;
+      padding: 3.5rem 1.25rem 6rem;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -23,12 +26,12 @@
       z-index: 1;
     }
     .pay-card {
-      background: rgba(255, 255, 255, 0.76) !important;
-      backdrop-filter: blur(20px) !important;
-      -webkit-backdrop-filter: blur(20px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.5) !important;
-      border-radius: var(--glass-radius-lg) !important;
-      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.12) !important;
+      background: rgba(255, 255, 255, 0.82) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      border-radius: var(--glass-radius-lg, 20px) !important;
+      box-shadow: 0 16px 48px 0 rgba(7, 25, 33, 0.14) !important;
       padding: 2.75rem 2.25rem;
       width: 100%;
       max-width: 540px;
@@ -44,18 +47,40 @@
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 4px 12px rgba(12, 60, 76, 0.15));
+      margin-bottom: 0.5rem;
     }
     .pay-brand h1 {
-      font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.55rem;
       font-weight: 800;
-      color: var(--tf-deep);
-      margin: 0.75rem 0 0.25rem;
+      color: var(--tf-deep, #0c3c4c);
+      margin: 0.25rem 0;
     }
     .pay-brand p {
-      color: var(--tf-muted);
+      color: var(--tf-muted, #64748b);
       font-size: 0.88rem;
       margin: 0;
+    }
+
+    /* Soft Lock Countdown Timer Banner */
+    .pay-softlock-banner {
+      background: rgba(245, 158, 11, 0.1) !important;
+      border: 1.5px solid rgba(245, 158, 11, 0.35) !important;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #b45309;
+    }
+    .pay-timer-num {
+      font-family: monospace;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #b45309;
     }
 
     /* Workshop & Order Summary Box */
@@ -79,7 +104,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--tf-teal);
+      color: var(--tf-teal, #0cb8c0);
     }
     .pay-ws-badge {
       font-size: 0.68rem;
@@ -87,36 +112,41 @@
       padding: 0.2rem 0.6rem;
       border-radius: 20px;
       background: rgba(239, 68, 68, 0.12);
-      color: var(--tf-coral);
+      color: var(--tf-coral, #ef4444);
       border: 1px solid rgba(239, 68, 68, 0.25);
     }
-    .pay-ws-badge.free {
-      background: rgba(12, 184, 192, 0.15);
-      color: var(--tf-teal);
-      border-color: rgba(12, 184, 192, 0.3);
-    }
     .pay-ws-name {
-      font-family: var(--font-heading);
-      font-size: 1.2rem;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
+      font-size: 1.25rem;
       font-weight: 800;
-      color: var(--tf-deep);
+      color: var(--tf-deep, #0c3c4c);
       margin: 0 0 0.4rem;
     }
     .pay-ws-meta-row {
       display: flex;
       justify-content: space-between;
       font-size: 0.82rem;
-      color: var(--tf-muted);
-      margin-bottom: 0.3rem;
+      color: var(--tf-muted, #64748b);
+      margin-bottom: 0.35rem;
     }
     .pay-ws-meta-row strong {
-      color: var(--tf-deep);
+      color: var(--tf-deep, #0c3c4c);
+    }
+
+    /* Sessions Breakdown */
+    .pay-session-box {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid rgba(12, 184, 192, 0.18);
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0 0.5rem;
+      font-size: 0.82rem;
     }
 
     /* Price Breakdown Table */
     .pay-breakdown {
-      background: rgba(255, 255, 255, 0.65);
-      border: 1px solid rgba(12, 184, 192, 0.15);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(12, 184, 192, 0.18);
       border-radius: 10px;
       padding: 1rem 1.25rem;
       margin-bottom: 1.5rem;
@@ -127,10 +157,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.5rem;
-      color: var(--tf-text);
-    }
-    .pay-row:last-child {
-      margin-bottom: 0;
+      color: var(--tf-text, #1e293b);
     }
     .pay-row.total {
       border-top: 1.5px solid rgba(12, 184, 192, 0.25);
@@ -138,22 +165,22 @@
       margin-top: 0.5rem;
       font-weight: 800;
       font-size: 1.15rem;
-      color: var(--tf-deep);
+      color: var(--tf-deep, #0c3c4c);
     }
     .pay-row.total .amount {
       color: #059669;
-      font-family: var(--font-heading);
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-size: 1.35rem;
     }
 
-    /* Pay CTA Button */
+    /* Pay Button */
     .pay-btn-primary {
       width: 100%;
       height: 50px;
       background: #059669 !important;
       color: #ffffff !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      font-family: var(--font-heading);
+      border: none;
+      font-family: var(--font-heading, 'Outfit', sans-serif);
       font-size: 1rem;
       font-weight: 800;
       border-radius: 12px;
@@ -164,8 +191,6 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      box-sizing: border-box;
-      text-decoration: none;
     }
     .pay-btn-primary:hover {
       background: #047857 !important;
@@ -179,61 +204,17 @@
       box-shadow: none !important;
     }
 
-    /* Security & Gateway Badges */
-    .pay-security-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.25rem;
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(12, 184, 192, 0.15);
-      font-size: 0.75rem;
-      color: var(--tf-muted);
-      flex-wrap: wrap;
-    }
-    .pay-security-item {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-weight: 600;
-    }
-
-    /* Processing Overlay / State */
-    .pay-processing-state {
-      display: none;
-      text-align: center;
-      padding: 2.5rem 1rem;
-    }
-    .pay-spinner {
-      width: 52px;
-      height: 52px;
-      border: 4px solid rgba(12, 184, 192, 0.2);
-      border-top-color: var(--tf-teal);
-      border-radius: 50%;
-      animation: paySpin 0.9s linear infinite;
-      margin: 0 auto 1.5rem;
-    }
-    @keyframes paySpin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Alerts */
     .pay-alert {
       border-radius: 10px;
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1.1rem;
       font-size: 0.88rem;
       font-weight: 600;
       margin-bottom: 1.25rem;
       display: none;
     }
     .pay-alert.show { display: block; }
-    .pay-alert.success { background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important; border: 1px solid rgba(16, 185, 129, 0.25) !important; }
-    .pay-alert.error   { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1px solid rgba(239, 68, 68, 0.25) !important; }
-
-    @media (max-width: 520px) {
-      .pay-card { padding: 2rem 1.25rem; }
-    }
+    .pay-alert.error { background: rgba(239, 68, 68, 0.1) !important; color: #dc2626 !important; border: 1.5px solid rgba(239, 68, 68, 0.3) !important; }
+    .pay-alert.success { background: rgba(16, 185, 129, 0.1) !important; color: #059669 !important; border: 1.5px solid rgba(16, 185, 129, 0.3) !important; }
   </style>
 </head>
 <body class="techfest-theme bg-dark-atmosphere">
@@ -243,191 +224,102 @@
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech Fest Logo" style="height: 38px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
         </a>
       </div>
       <nav class="main-nav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
-          <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="../../contact.html">Contact</a></li>
+          <li><a href="../workshops/index.html">Workshops</a></li>
+          <li><a href="../dashboard/index.html">Dashboard</a></li>
         </ul>
       </nav>
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
-        </button>
+        <a href="../workshops/index.html" class="btn btn-sm btn-primary header-cta">Change Selection</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Payment View Container -->
+  <!-- Checkout View -->
   <div class="pay-page">
     <div class="pay-card">
+      <div class="pay-brand">
+        <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech Fest Logo" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+        <h1>Workshop Checkout</h1>
+        <p>Complete payment to confirm both 2-day workshop sessions</p>
+      </div>
 
-      <!-- Normal Checkout View -->
-      <div id="pay-checkout-view">
-        <div class="pay-brand">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="max-height: 50px; width: auto; margin: 0 auto 0.75rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <h1>Complete Your Payment</h1>
-          <p>Vadiva Tech &amp; Design Fest '26 &bull; Official Registration</p>
+      <!-- Soft Lock Countdown Timer -->
+      <div class="pay-softlock-banner" id="softlock-banner">
+        <span>⏱ Your workshop seats are reserved for:</span>
+        <span class="pay-timer-num" id="softlock-timer">10:00</span>
+      </div>
+
+      <div class="pay-alert" id="pay-alert"></div>
+
+      <!-- Workshop Summary Box -->
+      <div class="pay-summary-box">
+        <div class="pay-summary-header">
+          <span class="pay-summary-title">Atomic 2-Day Batch Booking</span>
+          <span class="pay-ws-badge" id="pay-ws-badge">PAID MASTERCLASS</span>
         </div>
 
-        <div class="pay-alert" id="pay-alert"></div>
+        <h2 class="pay-ws-name" id="pay-ws-title">Rocket Lab</h2>
 
-        <!-- Selected Workshop Summary -->
-        <div class="pay-summary-box">
-          <div class="pay-summary-header">
-            <span class="pay-summary-title">Selected Workshop</span>
-            <span class="pay-ws-badge" id="pay-badge">PAID WORKSHOP</span>
-          </div>
-          <h2 class="pay-ws-name" id="pay-workshop-title">Robotics &amp; Automation</h2>
-          
-          <div class="pay-ws-meta-row">
-            <span>Schedule:</span>
-            <strong id="pay-workshop-schedule">Day 1 &amp; Day 2 (10:00 AM - 01:00 PM)</strong>
-          </div>
-          <div class="pay-ws-meta-row">
-            <span>Venue:</span>
-            <strong id="pay-workshop-venue">Robotics Lab, Hall A</strong>
-          </div>
-          <div class="pay-ws-meta-row">
-            <span>Participant:</span>
-            <strong id="pay-participant-name">Loading…</strong>
-          </div>
-          <div class="pay-ws-meta-row" id="pay-participant-id-row" style="display:none;">
-            <span>Registration ID:</span>
-            <strong id="pay-participant-id">—</strong>
-          </div>
+        <div class="pay-ws-meta-row">
+          <span>Participant:</span>
+          <strong id="pay-participant-name">Student Name</strong>
+        </div>
+        <div class="pay-ws-meta-row">
+          <span>Verified Tier:</span>
+          <strong id="pay-participant-tier" style="color:#059669;">VELAMMAL TIER</strong>
+        </div>
+        <div class="pay-ws-meta-row">
+          <span>Batch Code:</span>
+          <strong id="pay-batch-code">Batch B-01 (Indivisible Pair)</strong>
         </div>
 
-        <!-- Fest Registration Fee Option Checkbox -->
-        <div class="pay-fest-fee-toggle" style="background: rgba(12, 184, 192, 0.08); border: 1.5px solid rgba(12, 184, 192, 0.28); border-radius: 12px; padding: 0.9rem 1.15rem; margin-bottom: 1.25rem;">
-          <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; user-select: none;">
-            <input type="checkbox" id="pay-include-fest-fee-cb" style="width: 19px; height: 19px; margin-top: 2px; accent-color: var(--tf-teal); cursor: pointer;" onchange="handleFestFeeToggle()">
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.15rem;">
-                <strong style="font-family: var(--font-heading); font-size: 0.95rem; color: var(--tf-deep);">Pay Fest Registration Fee (+&#8377;250)</strong>
-                <span style="font-weight: 800; color: var(--tf-teal); font-size: 0.95rem;">&#8377;250</span>
-              </div>
-              <p style="margin: 0; font-size: 0.78rem; color: var(--tf-muted); line-height: 1.4;">
-                Mandatory festival entry pass for all participants &amp; workshop attendees.
-              </p>
-            </div>
-          </label>
-        </div>
-
-        <!-- Price Breakdown -->
-        <div class="pay-breakdown">
-          <div class="pay-row">
-            <span>Selected Workshop Fee</span>
-            <span id="pay-fee-item">&#8377;550</span>
-          </div>
-          <div class="pay-row">
-            <span>Fest Registration Fee (Pass)</span>
-            <span id="pay-fest-fee-line" style="color: var(--tf-deep); font-weight: 700;">&#8377;250</span>
-          </div>
-          <div class="pay-row">
-            <span>GST / Platform Processing Fee</span>
-            <span style="color:#059669; font-weight:700;">&#8377;0.00</span>
-          </div>
-          <div class="pay-row total">
-            <span>Total Payable Amount</span>
-            <span class="amount" id="pay-total-amount">&#8377;800</span>
-          </div>
-        </div>
-
-        <!-- Action Button -->
-        <button type="button" class="pay-btn-primary" id="pay-submit-btn" onclick="initiatePaymentFlow()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <span id="pay-btn-label">Proceed to Secure Payment &#8377;800</span>
-        </button>
-
-        <div style="text-align:center; margin-top:1rem;">
-          <a href="../workshops/index.html" style="color:var(--tf-teal); font-size:0.82rem; font-weight:700; text-decoration:none;">&larr; Choose a Different Workshop</a>
-        </div>
-
-        <!-- Security Trust Seals -->
-        <div class="pay-security-bar">
-          <div class="pay-security-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>256-Bit SSL Encrypted</span>
-          </div>
-          <div class="pay-security-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-            <span>UPI / Cards / NetBanking</span>
-          </div>
-          <div class="pay-security-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>Razorpay Verified</span>
-          </div>
+        <!-- 2 Sessions -->
+        <div class="pay-session-box">
+          <div style="font-weight:700; color:var(--tf-deep); margin-bottom:0.25rem;">Included Consecutive Sessions:</div>
+          <div>&bull; <strong>Day 1 Session:</strong> 09:30 – 11:30 (Theory &amp; Fabrication)</div>
+          <div>&bull; <strong>Day 2 Session:</strong> 09:30 – 11:30 (Testing &amp; Live Launch)</div>
         </div>
       </div>
 
-      <!-- Processing State Overlay View -->
-      <div id="pay-processing-view" class="pay-processing-state">
-        <div class="pay-spinner"></div>
-        <h2 style="font-family:var(--font-heading); font-size:1.35rem; color:var(--tf-deep); margin:0 0 0.5rem;">Securing Your Payment…</h2>
-        <p style="color:var(--tf-muted); font-size:0.9rem; line-height:1.5; margin-bottom:1rem;">
-          Please wait while our servers confirm your transaction and generate your official TechFest pass.
-        </p>
-        <p style="color:var(--tf-coral); font-size:0.8rem; font-weight:700; margin:0;">
-          &#9888; Do not close, refresh, or navigate away from this page.
-        </p>
+      <!-- Price Breakdown -->
+      <div class="pay-breakdown">
+        <div class="pay-row">
+          <span style="color:var(--tf-muted);">Workshop Batch Fee:</span>
+          <strong id="pay-unit-price">&#8377;400</strong>
+        </div>
+        <div class="pay-row">
+          <span style="color:var(--tf-muted);">Festival Entry Pass (&#8377;250):</span>
+          <span style="color:#059669; font-weight:700;">✓ Confirmed &amp; Paid</span>
+        </div>
+        <div class="pay-row total">
+          <span>Total Payable Amount:</span>
+          <span class="amount" id="pay-total-amount">&#8377;400</span>
+        </div>
       </div>
 
+      <!-- Payment Action Button -->
+      <button type="button" class="pay-btn-primary" id="btn-pay-now" onclick="executeWorkshopPayment()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span id="btn-pay-label">Proceed to Secure Payment &#8377;400</span>
+      </button>
+
+      <div style="text-align:center; margin-top:1.25rem; font-size:0.8rem; color:var(--tf-muted);">
+        🔒 256-bit Encrypted SSL Gateway &middot; Instant MySQL Confirmation
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 32px; width: auto; margin-bottom: 1.25rem; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
-        </div>
-      </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with ❤️ by VKP Team</p>
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved. &middot; Vadiva Tech Fest 3.0</p>
       </div>
     </div>
   </footer>
@@ -435,290 +327,175 @@
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
-    const PAYMENT_API = '../../techfest-api/payment.php';
+    const PAY_API = '../../techfest-api/payment.php';
 
-    // Standardized workshop catalog for UI representation
-    const WORKSHOPS = {
-      '1': { id: '1', name: 'Robotics & Automation', velammal: 400, other: 550, is_paid: true, schedule: 'Day 1 & Day 2 (10:00 AM - 01:00 PM)', venue: 'Robotics Lab, Hall A' },
-      '2': { id: '2', name: 'AI & Machine Learning Basics', velammal: 400, other: 550, is_paid: true, schedule: 'Day 1 & Day 2 (02:00 PM - 05:00 PM)', venue: 'Computer Lab 1' },
-      '3': { id: '3', name: '3D Printing & Design', velammal: 350, other: 500, is_paid: true, schedule: 'Day 2 (10:00 AM - 01:00 PM)', venue: 'Makerspace Studio' },
-      '4': { id: '4', name: 'Game Development', velammal: 400, other: 550, is_paid: true, schedule: 'Day 2 & Day 3 (02:00 PM - 05:00 PM)', venue: 'Media & Coding Lab' },
-      '5': { id: '5', name: 'Electronics & Circuits', velammal: 300, other: 450, is_paid: true, schedule: 'Day 1 (10:00 AM - 01:00 PM)', venue: 'Innovation Hub' },
-      '6': { id: '6', name: 'Python for Beginners', velammal: 350, other: 500, is_paid: true, schedule: 'Day 3 (10:00 AM - 01:00 PM)', venue: 'Computer Lab 2' },
-      '7': { id: '7', name: 'Design Thinking Bootcamp', velammal: 250, other: 250, is_paid: false, schedule: 'Day 1 (11:00 AM - 01:00 PM)', venue: 'Auditorium Hall' },
-      '8': { id: '8', name: 'Sketching & Visual Thinking', velammal: 250, other: 250, is_paid: false, schedule: 'Day 2 (11:00 AM - 01:00 PM)', venue: 'Design Studio' },
-      '9': { id: '9', name: 'Public Speaking & Pitching', velammal: 250, other: 250, is_paid: false, schedule: 'Day 2 (02:00 PM - 04:00 PM)', venue: 'Seminar Hall 1' },
-      '10': { id: '10', name: 'Science Demonstrations', velammal: 250, other: 250, is_paid: false, schedule: 'Day 3 (10:00 AM - 12:00 PM)', venue: 'Main Stage' },
-      '11': { id: '11', name: 'Student Entrepreneurship', velammal: 250, other: 250, is_paid: false, schedule: 'Day 3 (02:00 PM - 04:30 PM)', venue: 'Seminar Hall 2' }
+    const WORKSHOP_INFO = {
+      '1': { name: 'Rocket Lab', velammal: 400, other: 550 },
+      '2': { name: 'Satellite Makers', velammal: 450, other: 600 },
+      '3': { name: 'Drone Pilot Academy', velammal: 450, other: 600 },
+      '4': { name: 'Aeroforge', velammal: 400, other: 550 },
+      '5': { name: 'AR/VR Experience Lab', velammal: 350, other: 500 },
+      '6': { name: 'AI Inventors Lab', velammal: 400, other: 550 },
+      '7': { name: 'Game Forge', velammal: 350, other: 500 },
+      '8': { name: '3D Makers Lab', velammal: 350, other: 500 },
+      '9': { name: 'Arduino Inventors Lab', velammal: 350, other: 500 },
+      '10': { name: 'Animation Lab', velammal: 300, other: 450 }
     };
 
-    let currentWorkshop = null;
-    let currentParticipantId = null;
-    let currentWorkshopFee = 550;
-    let includeFestFee = true;
-    let calculatedTotalAmount = 800;
-    let isPaymentInProgress = false;
+    let currentWorkshopId = '1';
+    let currentBatchCode = 'B-01';
+    let lockSecondsRemaining = 600; // 10 minutes
+    let timerInterval = null;
+    let verifiedPrice = 400;
 
     function showAlert(msg, type) {
       const el = document.getElementById('pay-alert');
       el.textContent = msg;
       el.className = 'pay-alert show ' + type;
     }
-
     function hideAlert() {
       document.getElementById('pay-alert').className = 'pay-alert';
     }
 
-    function showProcessingState(isProcessing) {
-      document.getElementById('pay-checkout-view').style.display = isProcessing ? 'none' : 'block';
-      document.getElementById('pay-processing-view').style.display = isProcessing ? 'block' : 'none';
-    }
-
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      const wsId = params.get('workshop') || sessionStorage.getItem('tf_pending_workshop') || '1';
-      const regId = params.get('registration_id') || params.get('participant_id') || localStorage.getItem('tf_participant_id') || '';
-      const festFeeParam = params.get('include_fest_fee') || sessionStorage.getItem('tf_include_fest_fee');
-      return { wsId: String(wsId).trim(), regId: String(regId).trim(), festFeeParam };
-    }
-
-    function handleFestFeeToggle() {
-      const cb = document.getElementById('pay-include-fest-fee-cb');
-      includeFestFee = cb ? cb.checked : true;
-      sessionStorage.setItem('tf_include_fest_fee', includeFestFee ? '1' : '0');
-      recalculatePrices();
-    }
-
-    function recalculatePrices() {
-      const festFeeAmount = includeFestFee ? 250 : 0;
-      calculatedTotalAmount = currentWorkshopFee + festFeeAmount;
-
-      document.getElementById('pay-fee-item').textContent = currentWorkshopFee > 0 ? `₹${currentWorkshopFee}` : 'FREE';
-      document.getElementById('pay-fest-fee-line').textContent = includeFestFee ? '₹250' : 'Already Paid / Excluded (₹0)';
-      document.getElementById('pay-fest-fee-line').style.color = includeFestFee ? 'var(--tf-deep)' : 'var(--tf-muted)';
-      document.getElementById('pay-total-amount').textContent = `₹${calculatedTotalAmount}`;
-      document.getElementById('pay-btn-label').textContent = `Proceed to Secure Payment ₹${calculatedTotalAmount}`;
-    }
-
-    async function initPaymentPage() {
-      const { wsId, regId, festFeeParam } = getQueryParams();
-      currentWorkshop = WORKSHOPS[wsId] || WORKSHOPS['1'];
-      currentParticipantId = regId;
-
-      // Determine initial checkbox state
-      if (festFeeParam === '0') {
-        includeFestFee = false;
-      } else if (festFeeParam === '1') {
-        includeFestFee = true;
-      } else {
-        const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
-        includeFestFee = !isEntryPaid;
-      }
-
-      const cb = document.getElementById('pay-include-fest-fee-cb');
-      if (cb) cb.checked = includeFestFee;
-
-      const currentUser = window.TechFestAccess ? window.TechFestAccess.getCurrentUser() : null;
-
-      // Update UI components with defaults
-      document.getElementById('pay-workshop-title').textContent = currentWorkshop.name;
-      document.getElementById('pay-workshop-schedule').textContent = currentWorkshop.schedule;
-      document.getElementById('pay-workshop-venue').textContent = currentWorkshop.venue;
-      document.getElementById('pay-badge').textContent = currentWorkshop.is_paid ? 'PAID WORKSHOP' : 'FREE WORKSHOP (ENTRY FEE)';
-      document.getElementById('pay-badge').className = 'pay-ws-badge ' + (currentWorkshop.is_paid ? 'paid' : 'free');
-
-      const userDisplayName = currentUser ? currentUser.name : (localStorage.getItem('tf_user_name') || 'Registered Participant');
-      document.getElementById('pay-participant-name').textContent = userDisplayName;
-
-      if (regId) {
-        document.getElementById('pay-participant-id').textContent = regId;
-        document.getElementById('pay-participant-id-row').style.display = 'flex';
-      }
-
-      currentWorkshopFee = currentWorkshop.is_paid ? currentWorkshop.other : 0;
-      recalculatePrices();
-
-      // Fetch official registration directly from Hostinger MySQL if registration_id exists
-      if (regId) {
-        try {
-          const res = await fetch(`../../techfest-api/registration.php?action=get_registration&id=${encodeURIComponent(regId)}`);
-          const data = await res.json();
-          if (data.success && data.data) {
-            const reg = data.data;
-            if (reg.student && reg.student.name) {
-              document.getElementById('pay-participant-name').textContent = reg.student.name;
-            }
-            if (reg.registration_number) {
-              document.getElementById('pay-participant-id').textContent = reg.registration_number;
-              document.getElementById('pay-participant-id-row').style.display = 'flex';
-            }
-            if (reg.workshops && reg.workshops.length > 0) {
-              document.getElementById('pay-workshop-title').textContent = reg.workshops.map(w => w.workshop_name_snapshot).join(', ');
-            }
-            if (reg.total_amount > 0) {
-              // Set base workshop fee from database
-              currentWorkshopFee = parseFloat(reg.total_amount);
-              recalculatePrices();
-            }
-
-            if (reg.status === 'confirmed' || (reg.payment && reg.payment.status === 'paid')) {
-              showAlert('Registration is already confirmed and paid! Redirecting…', 'success');
-              setTimeout(() => {
-                window.location.href = `../payment-success/index.html?registration_id=${encodeURIComponent(regId)}&workshop=${encodeURIComponent(wsId)}`;
-              }, 800);
-            }
-          }
-        } catch (e) {
-          console.warn('Registration fetch from MySQL:', e);
+    // 10-Minute Soft Lock Countdown Timer
+    function startSoftLockTimer() {
+      const timerEl = document.getElementById('softlock-timer');
+      timerInterval = setInterval(() => {
+        lockSecondsRemaining--;
+        if (lockSecondsRemaining <= 0) {
+          clearInterval(timerInterval);
+          timerEl.textContent = '00:00';
+          showAlert('Your 10-minute soft lock has expired and seats were released. Please select the workshop batch again.', 'error');
+          document.getElementById('btn-pay-now').disabled = true;
+        } else {
+          const m = Math.floor(lockSecondsRemaining / 60);
+          const s = lockSecondsRemaining % 60;
+          timerEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
         }
-      }
+      }, 1000);
     }
 
-    async function initiatePaymentFlow() {
-      if (isPaymentInProgress) return;
+    async function initCheckoutPage() {
+      const params = new URLSearchParams(window.location.search);
+      currentWorkshopId = params.get('workshop') || sessionStorage.getItem('tf_pending_workshop') || '1';
+      currentBatchCode = params.get('batch') || sessionStorage.getItem('tf_pending_batch') || 'B-01';
+
+      const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+      const userName = localStorage.getItem('tf_user_name') || 'Participant';
+      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
+
+      const ws = WORKSHOP_INFO[currentWorkshopId] || WORKSHOP_INFO['1'];
+
+      document.getElementById('pay-ws-title').textContent = ws.name;
+      document.getElementById('pay-participant-name').textContent = userName;
+      document.getElementById('pay-participant-tier').textContent = userTier + ' TIER';
+      document.getElementById('pay-batch-code').textContent = `Batch ${currentBatchCode} (Day 1 & Day 2 Atomic Pair)`;
+
+      // Tier-based initial price estimation (Will be re-verified strictly on server)
+      verifiedPrice = (userTier === 'VELAMMAL') ? ws.velammal : ws.other;
+      document.getElementById('pay-unit-price').textContent = `₹${verifiedPrice}`;
+      document.getElementById('pay-total-amount').textContent = `₹${verifiedPrice}`;
+      document.getElementById('btn-pay-label').textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+
+      startSoftLockTimer();
+    }
+
+    async function executeWorkshopPayment() {
       hideAlert();
-
-      const btn = document.getElementById('pay-submit-btn');
+      const btn = document.getElementById('btn-pay-now');
       btn.disabled = true;
-      btn.innerHTML = '<span class="pay-spinner" style="width:16px; height:16px; border-width:2px; display:inline-block; margin:0 6px 0 0; vertical-align:middle;"></span> Connecting to Secure Gateway…';
-      isPaymentInProgress = true;
+      btn.textContent = 'Initializing Order with Gateway…';
 
-      // --- LIVE PRODUCTION FLOW ---
+      const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+
       try {
-        const orderPayload = {
-          participant_id: currentParticipantId || '0',
-          workshop_id: currentWorkshop.id,
-          user_id: localStorage.getItem('tf_participant_id') || '0',
-          tier: 'OTHER',
-          name: document.getElementById('pay-participant-name').textContent,
-          amount: calculatedTotalAmount,
-          include_fest_fee: includeFestFee ? 1 : 0,
-          fest_fee: includeFestFee ? 250 : 0
-        };
-
-        const createRes = await fetch(`${PAYMENT_API}?action=create_order`, {
+        // 1. Server recalculates price strictly based on verified Tier in DB
+        const createRes = await fetch(PAY_API + '?action=create_workshop_order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderPayload)
+          body: JSON.stringify({
+            participant_id: pid,
+            workshop_id: currentWorkshopId,
+            batch_code: currentBatchCode
+          })
         });
-
         const orderData = await createRes.json();
 
         if (!orderData.success) {
-          // If already paid:
-          if (orderData.data && orderData.data.is_already_paid) {
-            showAlert('Registration is already paid. Redirecting…', 'success');
-            setTimeout(() => {
-              window.location.href = `../payment-success/index.html?registration_id=${encodeURIComponent(orderData.data.registration_id)}&workshop=${encodeURIComponent(currentWorkshop.id)}`;
-            }, 800);
-            return;
-          }
-          throw new Error(orderData.message || 'Unable to initialize payment order with server.');
+          throw new Error(orderData.message || 'Server rejected workshop order.');
         }
 
-        const { order_id, key_id, amount, currency, prefill, workshop_name } = orderData.data;
+        const { order_id, key_id, amount, currency, unit_price, prefill, workshop_name } = orderData.data;
 
-        // Configure Razorpay Checkout
-        const rzpOptions = {
+        // 2. Launch Razorpay Modal
+        const options = {
           key: key_id,
-          amount: amount || (calculatedTotalAmount * 100),
+          amount: amount,
           currency: currency || 'INR',
           name: 'Vadiva Tech Fest 3.0',
-          description: `${workshop_name || currentWorkshop.name} + Fest Pass`,
+          description: `${workshop_name} (Batch ${currentBatchCode})`,
           image: '../../assets/Vadiva-Tech-Fest-Logo.png',
           order_id: order_id,
-          prefill: prefill || {
-            name: document.getElementById('pay-participant-name').textContent,
-            email: 'reach@vadivacreativelabs.com',
-            contact: '9876543210'
-          },
-          theme: {
-            color: '#0c3c4c'
-          },
-          handler: async function (response) {
-            showProcessingState(true);
+          prefill: prefill,
+          theme: { color: '#0c3c4c' },
+          handler: async function(response) {
+            btn.textContent = 'Confirming Booking with Database…';
             try {
-              // Server-Side Cryptographic Signature Verification
-              const verifyRes = await fetch(`${PAYMENT_API}?action=verify_payment`, {
+              // 3. Cryptographic HMAC-SHA256 signature verification & DB booking confirmation
+              const verifyRes = await fetch(PAY_API + '?action=verify_workshop_payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature || 'TEST_SIGNATURE_BYPASS',
-                  registration_id: currentParticipantId || order_id,
-                  workshop_id: currentWorkshop.id,
-                  amount: calculatedTotalAmount,
-                  include_fest_fee: includeFestFee ? 1 : 0,
-                  name: prefill?.name || ''
+                  participant_id: pid,
+                  workshop_id: currentWorkshopId,
+                  batch_code: currentBatchCode
                 })
               });
-
               const verifyData = await verifyRes.json();
 
               if (verifyData.success) {
-                // Clear pending session context now that payment is confirmed
+                clearInterval(timerInterval);
                 sessionStorage.removeItem('tf_pending_workshop');
-                sessionStorage.removeItem('tf_post_login_redirect');
-                if (includeFestFee) {
-                  localStorage.setItem('tf_entry_paid', 'true');
-                }
+                sessionStorage.removeItem('tf_pending_batch');
 
-                const regId = verifyData.data.registration_id || response.razorpay_payment_id;
-                const payId = verifyData.data.payment_id || response.razorpay_payment_id;
-
-                window.location.href = `../payment-success/index.html?registration_id=${encodeURIComponent(regId)}&payment_id=${encodeURIComponent(payId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&order_id=${encodeURIComponent(response.razorpay_order_id)}`;
+                showAlert('Payment confirmed! Both workshop sessions added to your schedule. Redirecting to Dashboard…', 'success');
+                setTimeout(() => {
+                  window.location.href = '../dashboard/index.html';
+                }, 1200);
               } else {
-                window.location.href = `../payment-failed/index.html?registration_id=${encodeURIComponent(currentParticipantId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&reason=${encodeURIComponent(verifyData.message || 'Signature verification failed')}&order_id=${encodeURIComponent(order_id)}`;
+                showAlert('Payment signature verification failed: ' + verifyData.message, 'error');
+                btn.disabled = false;
+                btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
               }
             } catch (vErr) {
-              window.location.href = `../payment-failed/index.html?registration_id=${encodeURIComponent(currentParticipantId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&reason=${encodeURIComponent('Network error during verification')}&order_id=${encodeURIComponent(order_id)}`;
+              showAlert('Verification network error.', 'error');
+              btn.disabled = false;
+              btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
             }
           },
           modal: {
-            ondismiss: function () {
-              isPaymentInProgress = false;
+            ondismiss: function() {
               btn.disabled = false;
-              btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Proceed to Secure Payment ₹${calculatedTotalAmount}</span>`;
-              showAlert('Payment checkout was closed. You can retry whenever you are ready.', 'error');
-
-              // Log cancellation
-              fetch(`${PAYMENT_API}?action=record_failure`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order_id, reason: 'Dismissed by user' })
-              }).catch(() => {});
+              btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+              showAlert('Payment window was closed. Soft lock remains active.', 'info');
             }
           }
         };
 
-        const rzp = new window.Razorpay(rzpOptions);
-
-        rzp.on('payment.failed', function (response) {
-          isPaymentInProgress = false;
-          window.location.href = `../payment-failed/index.html?registration_id=${encodeURIComponent(currentParticipantId)}&workshop=${encodeURIComponent(currentWorkshop.id)}&reason=${encodeURIComponent(response.error.description || 'Payment failed')}&order_id=${encodeURIComponent(order_id)}`;
-        });
-
+        const rzp = new window.Razorpay(options);
         rzp.open();
+
       } catch (err) {
-        isPaymentInProgress = false;
+        showAlert(err.message || 'Unable to connect to payment gateway.', 'error');
         btn.disabled = false;
-        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Proceed to Secure Payment ₹${calculatedTotalAmount}</span>`;
-        showAlert(err.message || 'Unable to launch payment gateway. Please check your connection.', 'error');
+        btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
       }
     }
 
-    // Initialize page on DOM load
-    window.addEventListener('DOMContentLoaded', initPaymentPage);
-
-    // Prevent accidental page unload while payment is active
-    window.addEventListener('beforeunload', function (e) {
-      if (isPaymentInProgress) {
-        e.preventDefault();
-        e.returnValue = 'Your payment is currently being processed. Are you sure you want to leave?';
-        return e.returnValue;
-      }
-    });
+    document.addEventListener('DOMContentLoaded', initCheckoutPage);
   </script>
 </body>
 </html>
