@@ -162,104 +162,119 @@ if ($action === 'create_participant' || $action === 'save_profile') {
 
     // 4. Save to Database
     if (isset($pdo) && $pdo instanceof PDO) {
-        try {
-            $pdo->beginTransaction();
+        $saveSuccess = false;
+        $retryCount = 0;
 
-            // Check if participant already exists for this user
-            $checkStmt = $pdo->prepare("SELECT id, participant_id, entry_status FROM participants WHERE user_id = ? LIMIT 1");
-            $checkStmt->execute([$userId]);
-            $existing = $checkStmt->fetch(PDO::FETCH_ASSOC);
+        while (!$saveSuccess && $retryCount < 2) {
+            $retryCount++;
+            try {
+                $pdo->beginTransaction();
 
-            if ($existing) {
-                $participantId = $existing['id'];
-                $publicParticipantId = $existing['participant_id'] ?: $publicParticipantId;
+                // Check if participant already exists for this user
+                $checkStmt = $pdo->prepare("SELECT id, participant_id, entry_status FROM participants WHERE user_id = ? LIMIT 1");
+                $checkStmt->execute([$userId]);
+                $existing = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
-                $updateStmt = $pdo->prepare("
-                    UPDATE participants SET
-                        full_name = ?,
-                        grade = ?,
-                        section = ?,
-                        date_of_birth = ?,
-                        guardian_name = ?,
-                        guardian_mobile = ?,
-                        band = ?,
-                        is_velammal_student = ?,
-                        velammal_verified = ?,
-                        campus_id = ?,
-                        campus_name = ?,
-                        admission_number = ?,
-                        velammal_verified_at = ?,
-                        tier = ?,
-                        updated_at = NOW()
-                    WHERE id = ?
-                ");
-                $updateStmt->execute([
-                    $fullName,
-                    $grade,
-                    $section,
-                    $dob,
-                    $guardianName,
-                    $cleanGuardianMobile,
-                    $band,
-                    $isVelammal ? 1 : 0,
-                    $velammalVerified ? 1 : 0,
-                    $campusId ?: null,
-                    $campusName ?: null,
-                    $admissionNumber ?: null,
-                    $verifiedTimestamp,
-                    $tier,
-                    $participantId
-                ]);
-            } else {
-                $insertStmt = $pdo->prepare("
-                    INSERT INTO participants (
-                        user_id, participant_id, full_name, grade, section, date_of_birth,
-                        guardian_name, guardian_mobile, band, is_velammal_student, velammal_verified,
-                        campus_id, campus_name, admission_number, velammal_verified_at,
-                        tier, entry_status, qr_token
-                    ) VALUES (
-                        ?, ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?,
-                        ?, 'PENDING', ?
-                    )
-                ");
-                $insertStmt->execute([
-                    $userId,
-                    $publicParticipantId,
-                    $fullName,
-                    $grade,
-                    $section,
-                    $dob,
-                    $guardianName,
-                    $cleanGuardianMobile,
-                    $band,
-                    $isVelammal ? 1 : 0,
-                    $velammalVerified ? 1 : 0,
-                    $campusId ?: null,
-                    $campusName ?: null,
-                    $admissionNumber ?: null,
-                    $verifiedTimestamp,
-                    $tier,
-                    $qrToken
-                ]);
-                $participantId = (int)$pdo->lastInsertId();
+                if ($existing) {
+                    $participantId = $existing['id'];
+                    $publicParticipantId = $existing['participant_id'] ?: $publicParticipantId;
+
+                    $updateStmt = $pdo->prepare("
+                        UPDATE participants SET
+                            full_name = ?,
+                            grade = ?,
+                            section = ?,
+                            date_of_birth = ?,
+                            guardian_name = ?,
+                            guardian_mobile = ?,
+                            band = ?,
+                            is_velammal_student = ?,
+                            velammal_verified = ?,
+                            campus_id = ?,
+                            campus_name = ?,
+                            admission_number = ?,
+                            velammal_verified_at = ?,
+                            tier = ?,
+                            updated_at = NOW()
+                        WHERE id = ?
+                    ");
+                    $updateStmt->execute([
+                        $fullName,
+                        $grade,
+                        $section,
+                        $dob,
+                        $guardianName,
+                        $cleanGuardianMobile,
+                        $band,
+                        $isVelammal ? 1 : 0,
+                        $velammalVerified ? 1 : 0,
+                        $campusId ?: null,
+                        $campusName ?: null,
+                        $admissionNumber ?: null,
+                        $verifiedTimestamp,
+                        $tier,
+                        $participantId
+                    ]);
+                } else {
+                    $insertStmt = $pdo->prepare("
+                        INSERT INTO participants (
+                            user_id, participant_id, full_name, grade, section, date_of_birth,
+                            guardian_name, guardian_mobile, band, is_velammal_student, velammal_verified,
+                            campus_id, campus_name, admission_number, velammal_verified_at,
+                            tier, entry_status, qr_token
+                        ) VALUES (
+                            ?, ?, ?, ?, ?, ?,
+                            ?, ?, ?, ?, ?,
+                            ?, ?, ?, ?,
+                            ?, 'PENDING', ?
+                        )
+                    ");
+                    $insertStmt->execute([
+                        $userId,
+                        $publicParticipantId,
+                        $fullName,
+                        $grade,
+                        $section,
+                        $dob,
+                        $guardianName,
+                        $cleanGuardianMobile,
+                        $band,
+                        $isVelammal ? 1 : 0,
+                        $velammalVerified ? 1 : 0,
+                        $campusId ?: null,
+                        $campusName ?: null,
+                        $admissionNumber ?: null,
+                        $verifiedTimestamp,
+                        $tier,
+                        $qrToken
+                    ]);
+                    $participantId = (int)$pdo->lastInsertId();
+                }
+
+                // Record initial consents
+                $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+                $consentTypes = ['GUARDIAN', 'MEDIA', 'LAPTOP', 'NON_REFUNDABLE'];
+                $cStmt = $pdo->prepare("INSERT INTO consents (participant_id, consent_type, is_given, ip_address) VALUES (?, ?, TRUE, ?)");
+                foreach ($consentTypes as $cType) {
+                    try {
+                        $cStmt->execute([$participantId, $cType, $ipAddress]);
+                    } catch (Exception $ce) {}
+                }
+
+                $pdo->commit();
+                $saveSuccess = true;
+            } catch (PDOException $e) {
+                if ($pdo->inTransaction()) $pdo->rollBack();
+                
+                // If table missing (error 1146 or 42S02), auto-create schema and retry once
+                if ($retryCount === 1 && (strpos($e->getMessage(), "doesn't exist") !== false || strpos($e->getMessage(), "1146") !== false)) {
+                    require_once __DIR__ . '/config/schema_init.php';
+                    ensureSchemaTables($pdo);
+                    continue;
+                }
+                
+                sendResponse(false, 'Database error while creating participant profile: ' . $e->getMessage(), [], 500);
             }
-
-            // Record initial consents
-            $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-            $consentTypes = ['GUARDIAN', 'MEDIA', 'LAPTOP', 'NON_REFUNDABLE'];
-            $cStmt = $pdo->prepare("INSERT INTO consents (participant_id, consent_type, is_given, ip_address) VALUES (?, ?, TRUE, ?)");
-            foreach ($consentTypes as $cType) {
-                try {
-                    $cStmt->execute([$participantId, $cType, $ipAddress]);
-                } catch (Exception $ce) {}
-            }
-
-            $pdo->commit();
-        } catch (PDOException $e) {
-            if ($pdo->inTransaction()) $pdo->rollBack();
-            sendResponse(false, 'Database error while creating participant profile: ' . $e->getMessage(), [], 500);
         }
     } else {
         $participantId = $userId;

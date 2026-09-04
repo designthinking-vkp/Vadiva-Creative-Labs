@@ -673,7 +673,7 @@
 
     function showAlert(msg, type) {
       const el = document.getElementById('reg-alert');
-      el.textContent = msg;
+      el.innerHTML = msg;
       el.className = 'reg-alert show ' + type;
     }
     function hideAlert() {
@@ -871,7 +871,11 @@
             updateStepperUI(2);
           }, 600);
         } else {
-          showAlert(data.message || 'Registration failed.', 'error');
+          if (res.status === 409 || (data.message && data.message.includes('already exists'))) {
+            showAlert(data.message + ' <a href="../login/index.html" style="color:#0cb8c0; text-decoration:underline; font-weight:700; margin-left:4px;">Log In Here &rarr;</a>', 'error');
+          } else {
+            showAlert(data.message || 'Registration failed.', 'error');
+          }
         }
       } catch (err) {
         showAlert('Connection error. Please try again.', 'error');

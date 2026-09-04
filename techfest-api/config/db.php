@@ -21,6 +21,11 @@ $pdo = null;
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
+    
+    // Auto-create any missing tables & seed data seamlessly
+    require_once __DIR__ . '/schema_init.php';
+    ensureSchemaTables($pdo);
+
 } catch (\PDOException $e) {
     // Log error securely without exposing DB credentials
     error_log("Database connection failed: " . $e->getMessage());
