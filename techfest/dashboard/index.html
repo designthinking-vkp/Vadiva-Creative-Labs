@@ -369,7 +369,7 @@
             <h2 id="dash-name">Participant Name</h2>
             <div class="dash-id-line" id="dash-pid">ID: TF-2026-0001</div>
             <div class="dash-badges">
-              <span class="dash-badge dash-badge-tier" id="dash-tier">VELAMMAL TIER</span>
+              <span class="dash-badge dash-badge-tier" id="dash-school" style="max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">SCHOOL NAME</span>
               <span class="dash-badge dash-badge-band" id="dash-band">JUNIOR BAND</span>
               <span class="dash-badge dash-badge-pass" id="dash-pass">GREEN PASS</span>
             </div>
@@ -464,7 +464,7 @@
 
       <div style="font-size:0.86rem; color:var(--tf-text); margin-bottom:1rem;">
         <strong id="modal-pass-name">Student Name</strong><br>
-        <span id="modal-pass-tier" style="color:#059669; font-weight:700;">VELAMMAL TIER</span> &middot; <span id="modal-pass-band">JUNIOR BAND</span>
+        <span id="modal-pass-school" style="color:#059669; font-weight:700;">SCHOOL</span> &middot; <span id="modal-pass-band">JUNIOR BAND</span>
       </div>
 
       <button type="button" class="dash-action-btn primary" style="width:100%; justify-content:center;" onclick="window.print()">
@@ -549,11 +549,10 @@
         const data = await res.json();
 
         if (data.success && data.data) {
-          const p = data.data.profile;
-          
+          const userSchool = p.school || localStorage.getItem('tf_school') || 'School';
           document.getElementById('dash-name').textContent = p.name || 'Participant';
           document.getElementById('dash-pid').textContent = 'ID: ' + p.participant_id;
-          document.getElementById('dash-tier').textContent = p.tier + ' TIER';
+          document.getElementById('dash-school').textContent = userSchool;
           document.getElementById('dash-band').textContent = p.band + ' BAND';
           document.getElementById('dash-pass').textContent = p.pass_colour.toUpperCase() + ' PASS';
 
@@ -563,7 +562,7 @@
           // Modal pass details
           document.getElementById('modal-pass-name').textContent = p.name;
           document.getElementById('modal-pass-pid').textContent = p.participant_id;
-          document.getElementById('modal-pass-tier').textContent = p.tier + ' TIER';
+          document.getElementById('modal-pass-school').textContent = userSchool;
           document.getElementById('modal-pass-band').textContent = p.band + ' BAND';
 
           // Unpaid warning check

@@ -791,11 +791,19 @@
           <div class="ws-modal-price-box">
             <div class="ws-modal-price-row">
               <span style="font-weight:700; color:var(--tf-deep);">Workshop Fee:</span>
-              <span class="ws-modal-price-val" id="modalPriceDisplay">&#8377;400</span>
+              <span class="ws-modal-price-val" id="modalPriceDisplay">&#8377;750</span>
             </div>
             <div class="ws-modal-fest-note" id="modalTierNote">
-              Festival Entry Fee (&#8377;250) mandatory to unlock festival pass.
+              Standard Masterclass Track (2 Consecutive Sessions).
             </div>
+          </div>
+
+          <!-- Laptop Requirement Acknowledgement Box -->
+          <div id="modalLaptopAckBox" style="display:none; background:rgba(245,158,11,0.08); border:1.5px solid rgba(245,158,11,0.3); border-radius:10px; padding:0.75rem 0.9rem; margin-bottom:1rem; font-size:0.84rem;">
+            <label style="display:flex; align-items:flex-start; gap:0.55rem; cursor:pointer; color:var(--tf-text);">
+              <input type="checkbox" id="modalLaptopAckCheckbox" style="margin-top:0.2rem; accent-color:var(--tf-teal); width:16px; height:16px; flex-shrink:0;">
+              <span><strong>Laptop Requirement:</strong> I acknowledge that bringing a laptop (Windows / Mac / Chromebook) is required for this hands-on masterclass.</span>
+            </label>
           </div>
 
           <button type="button" class="ws-modal-action-btn" id="modalActionBtn" onclick="submitModalSelection()">
@@ -1094,7 +1102,6 @@
 
       const gradeVal = document.getElementById('gradeFilter')?.value || 'all';
       const availVal = document.getElementById('availabilityFilter')?.value || 'all';
-      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
 
       let html = '';
       workshops.forEach(ws => {
@@ -1120,7 +1127,7 @@
         if (availVal === 'available' && statusClass === 'full') return;
         if (availVal === 'fast' && statusClass !== 'fast') return;
 
-        const displayPrice = (userTier === 'VELAMMAL') ? ws.price_velammal : ws.price_other;
+        const displayPrice = ws.price || ws.price_other || 750;
 
         html += `
           <div class="ws-card" onclick="openWorkshopDetailsModal(${ws.id})">
@@ -1256,7 +1263,6 @@
 
       activeModalWs = ws;
       const meta = WORKSHOP_METADATA[wsId] || {};
-      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
 
       // Populate Hero & Badges
       const imgEl = document.getElementById('modalHeroImg');
@@ -1287,6 +1293,18 @@
       document.getElementById('modalVenue').textContent = meta.venue || 'Tech Fest Innovation Lab';
       document.getElementById('modalTools').textContent = meta.tools || 'All required kits & software provided';
       document.getElementById('modalWhatToBring').textContent = meta.what_to_bring || 'All materials and project gear supplied.';
+
+      // Laptop requirement check
+      const requiresLaptop = Boolean(ws.laptop_required || (meta.what_to_bring && meta.what_to_bring.toLowerCase().includes('laptop required')));
+      const ackBox = document.getElementById('modalLaptopAckBox');
+      const ackCheckbox = document.getElementById('modalLaptopAckCheckbox');
+      if (requiresLaptop) {
+        ackBox.style.display = 'block';
+        ackCheckbox.checked = false;
+      } else {
+        ackBox.style.display = 'none';
+        ackCheckbox.checked = true;
+      }
 
       // Populate Batch Slot Options
       const batchContainer = document.getElementById('modalBatchOptionsContainer');
@@ -1319,12 +1337,10 @@
           batchContainer.appendChild(card);
         });
 
-        // Price display
-        const price = (userTier === 'VELAMMAL') ? ws.price_velammal : ws.price_other;
+        // Universal Price display
+        const price = ws.price || ws.price_other || 750;
         document.getElementById('modalPriceDisplay').innerHTML = `&#8377;${price}`;
-        document.getElementById('modalTierNote').innerHTML = (userTier === 'VELAMMAL') 
-          ? '<strong>✓ Velammal Student Discount Active</strong> (&#8377;' + ws.price_velammal + ' vs General &#8377;' + ws.price_other + ').'
-          : 'Standard Tier (&#8377;' + ws.price_other + '). Mandatory &#8377;250 entry pass required.';
+        document.getElementById('modalTierNote').innerHTML = 'Standard Masterclass Track (2 Consecutive Sessions). Mandatory &#8377;250 Entry Pass required.';
         document.getElementById('modalActionBtn').innerHTML = '<span>Reserve Batch &amp; Proceed &rarr;</span>';
 
       } else if (ws.sessions) {
@@ -1394,6 +1410,13 @@
       if (!activeModalWs) return;
       const wsId = activeModalWs.id;
       const currentBatch = selectedBatchCode || 'B-01';
+
+      const ackBox = document.getElementById('modalLaptopAckBox');
+      const ackCheckbox = document.getElementById('modalLaptopAckCheckbox');
+      if (ackBox && ackBox.style.display !== 'none' && !ackCheckbox.checked) {
+        alert('Please acknowledge the laptop requirement before reserving your batch.');
+        return;
+      }
 
       closeWorkshopModal();
       handleWorkshopSelect(null, wsId, currentBatch);

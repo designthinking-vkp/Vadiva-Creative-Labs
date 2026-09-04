@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Participant Registration &amp; Velammal Verification | Vadiva Tech Fest 3.0</title>
-  <meta name="description" content="Register for Vadiva Tech Fest 3.0 — Account creation, Velammal database verification, ₹250 festival entry fee, and workshop access.">
+  <title>Participant Registration | Vadiva Tech Fest 3.0</title>
+  <meta name="description" content="Register for Vadiva Tech Fest 3.0 — Account creation, school details, ₹250 festival entry fee, and workshop access.">
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -506,44 +506,19 @@
             </div>
           </div>
 
-          <!-- Velammal Student Identification -->
-          <div class="reg-velammal-card">
-            <div class="reg-velammal-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              <span>Are you a Velammal Student?</span>
-            </div>
-            
-            <div class="reg-radio-group">
-              <label class="reg-radio-label">
-                <input type="radio" name="is_velammal" value="no" checked onchange="toggleVelammalFields(false)"> No (Other School)
-              </label>
-              <label class="reg-radio-label">
-                <input type="radio" name="is_velammal" value="yes" onchange="toggleVelammalFields(true)"> Yes (Velammal Student)
-              </label>
-            </div>
+          <!-- School Selection -->
+          <div class="reg-form-group">
+            <label for="prof_school_select">School Name</label>
+            <select id="prof_school_select" class="reg-input" onchange="onSchoolSelectChange()" required>
+              <option value="">Select your School</option>
+              <option value="__custom__">+ My school is not listed</option>
+            </select>
+          </div>
 
-            <!-- Velammal Fields (Revealed if YES) -->
-            <div id="velammal-extra-fields" style="display:none; border-top: 1px dashed rgba(12,184,192,0.3); padding-top: 0.9rem; margin-top: 0.5rem;">
-              <div class="reg-form-group">
-                <label for="vel_campus">Campus Name</label>
-                <select id="vel_campus" class="reg-input">
-                  <option value="">Select Velammal Campus</option>
-                </select>
-              </div>
-
-              <div class="reg-form-group">
-                <label for="vel_adm_no">Admission Number</label>
-                <input type="text" id="vel_adm_no" class="reg-input" placeholder="e.g. VEL-MOG-1001 or MOG202601">
-              </div>
-
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
-                <button type="button" class="reg-verify-btn" id="btn-verify-velammal" onclick="performVelammalVerification()">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>Verify Velammal Student</span>
-                </button>
-                <span id="velammal-verification-status" style="font-size:0.8rem; font-weight:700;"></span>
-              </div>
-            </div>
+          <!-- Custom School Entry (Shown if not listed) -->
+          <div class="reg-form-group" id="custom-school-group" style="display:none;">
+            <label for="prof_custom_school">Enter School Name</label>
+            <input type="text" id="prof_custom_school" class="reg-input" placeholder="Type your school name">
           </div>
 
           <button type="submit" class="reg-btn" id="btn-save-profile">
@@ -593,7 +568,7 @@
           <span style="font-size:0.75rem; font-weight:800; color:var(--tf-teal); text-transform:uppercase; letter-spacing:0.06em;">Mandatory Entry Pass</span>
           <div class="reg-entry-price">&#8377;250</div>
           <p style="color:var(--tf-muted); font-size:0.88rem; margin:0 0 1rem; line-height:1.5;">
-            The &#8377;250 Festival Entry Fee is mandatory for <strong>every participant</strong> (including verified Velammal students). Paying unlocks your Participant ID, QR Pass, and access to all 10 Paid &amp; 10 Free workshops.
+            The &#8377;250 Festival Entry Fee is mandatory for <strong>every participant</strong>. Paying unlocks your Participant ID, QR Pass, and access to all 10 Paid &amp; 10 Free workshops.
           </p>
           <div style="background:#fff; border-radius:10px; padding:0.75rem 1rem; font-size:0.85rem; text-align:left; border:1px solid rgba(12,184,192,0.18); margin-bottom:1rem;">
             <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
@@ -601,12 +576,12 @@
               <strong id="pay-confirm-name" style="color:var(--tf-deep);">—</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
-              <span style="color:var(--tf-muted);">Tier:</span>
-              <strong id="pay-confirm-tier" style="color:#059669;">OTHER</strong>
+              <span style="color:var(--tf-muted);">School:</span>
+              <strong id="pay-confirm-school" style="color:var(--tf-deep); max-width:260px; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">—</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
               <span style="color:var(--tf-muted);">Band:</span>
-              <strong id="pay-confirm-band" style="color:var(--tf-deep);">JUNIOR</strong>
+              <strong id="pay-confirm-band" style="color:#059669;">JUNIOR</strong>
             </div>
           </div>
         </div>
@@ -632,8 +607,8 @@
         <div style="background:rgba(12,60,76,0.06); border:1.5px solid rgba(12,184,192,0.3); border-radius:12px; padding:1.25rem; margin-bottom:1.75rem; text-align:left;">
           <div style="font-size:0.8rem; color:var(--tf-muted); text-transform:uppercase; font-weight:800; letter-spacing:0.06em; margin-bottom:0.35rem;">Participant ID</div>
           <div id="unlock-pid" style="font-family:var(--font-heading); font-size:1.35rem; font-weight:900; color:var(--tf-deep);">TF-2026-0001</div>
-          <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-            <span id="unlock-tier" class="reg-band-badge band-junior">OTHER TIER</span>
+          <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+            <span id="unlock-school" class="reg-band-badge band-junior" style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">SCHOOL</span>
             <span id="unlock-band" class="reg-band-badge band-intermediate">JUNIOR BAND</span>
           </div>
         </div>
@@ -662,14 +637,11 @@
   <script src="../../assets/techfest-core.js"></script>
   <script>
     const AUTH_API = '../../techfest-api/auth.php';
-    const VEL_API  = '../../techfest-api/velammal.php';
     const PART_API = '../../techfest-api/participant.php';
     const PAY_API  = '../../techfest-api/payment.php';
 
     let currentStep = 1;
     let registeredUserId = null;
-    let isVelammalVerifiedState = false;
-    let verifiedVelammalData = null;
 
     function showAlert(msg, type) {
       const el = document.getElementById('reg-alert');
@@ -704,7 +676,7 @@
     }
 
     function navigateToStep(step) {
-      if (step > currentStep) return; // Prevent skipping forward without completing step
+      if (step > currentStep) return;
       hideAlert();
       updateStepperUI(step);
     }
@@ -735,85 +707,39 @@
       badge.className = 'reg-band-badge ' + cls;
     }
 
-    function toggleVelammalFields(show) {
-      document.getElementById('velammal-extra-fields').style.display = show ? 'block' : 'none';
-      if (!show) {
-        isVelammalVerifiedState = false;
-        verifiedVelammalData = null;
-        document.getElementById('velammal-verification-status').textContent = '';
+    function onSchoolSelectChange() {
+      const val = document.getElementById('prof_school_select').value;
+      const customGroup = document.getElementById('custom-school-group');
+      const customInput = document.getElementById('prof_custom_school');
+      if (val === '__custom__') {
+        customGroup.style.display = 'block';
+        customInput.focus();
+      } else {
+        customGroup.style.display = 'none';
+        customInput.value = '';
       }
     }
 
-    async function loadVelammalCampuses() {
+    async function loadSchools() {
       try {
-        const res = await fetch(VEL_API + '?action=get_campuses');
+        const res = await fetch(PART_API + '?action=get_schools');
         const data = await res.json();
-        const select = document.getElementById('vel_campus');
-        if (data.success && data.data && data.data.campuses) {
-          select.innerHTML = '<option value="">Select Velammal Campus</option>';
-          data.data.campuses.forEach(c => {
+        const select = document.getElementById('prof_school_select');
+        if (data.success && data.data && data.data.schools) {
+          select.innerHTML = '<option value="">Select your School</option>';
+          data.data.schools.forEach(s => {
             const opt = document.createElement('option');
-            opt.value = c.campus_name;
-            opt.textContent = c.campus_name;
+            opt.value = s.school_name;
+            opt.textContent = s.school_name + (s.city ? ` (${s.city})` : '');
             select.appendChild(opt);
           });
+          const customOpt = document.createElement('option');
+          customOpt.value = '__custom__';
+          customOpt.textContent = '+ My school is not listed';
+          select.appendChild(customOpt);
         }
       } catch (e) {
-        console.warn('Campus list load fallback:', e);
-      }
-    }
-
-    // Velammal Student Database Verification
-    async function performVelammalVerification() {
-      hideAlert();
-      const campus = document.getElementById('vel_campus').value.trim();
-      const admNo  = document.getElementById('vel_adm_no').value.trim();
-      const statusEl = document.getElementById('velammal-verification-status');
-
-      if (!campus || !admNo) {
-        showAlert('Please provide both Campus Name and Admission number to verify.', 'error');
-        return;
-      }
-
-      const btn = document.getElementById('btn-verify-velammal');
-      btn.disabled = true;
-      btn.textContent = 'Verifying with Database…';
-
-      try {
-        const res = await fetch(VEL_API + '?action=verify_student', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ campus_name: campus, admission_number: admNo })
-        });
-        const data = await res.json();
-
-        if (data.success && data.data && data.data.velammal_verified) {
-          isVelammalVerifiedState = true;
-          verifiedVelammalData = data.data;
-          showAlert('Velammal Student Verified Successfully.', 'success');
-          statusEl.style.color = '#059669';
-          statusEl.textContent = '✓ Verified (Velammal Tier)';
-          
-          if (data.data.student_name && !document.getElementById('prof_name').value) {
-            document.getElementById('prof_name').value = data.data.student_name;
-          }
-          if (data.data.grade && !document.getElementById('prof_grade').value) {
-            document.getElementById('prof_grade').value = data.data.grade;
-            onGradeChange();
-          }
-        } else {
-          isVelammalVerifiedState = false;
-          verifiedVelammalData = null;
-          // Exact requirement prompt on mismatch:
-          showAlert('Please check your Admission number and Campus Name.', 'error');
-          statusEl.style.color = '#dc2626';
-          statusEl.textContent = '✗ Verification Failed';
-        }
-      } catch (err) {
-        showAlert('Please check your Admission number and Campus Name.', 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Verify Velammal Student</span>';
+        console.warn('School list load fallback:', e);
       }
     }
 
@@ -897,10 +823,14 @@
       const gName    = document.getElementById('prof_guardian_name').value.trim();
       const gMobile  = document.getElementById('prof_guardian_mobile').value.trim();
 
-      const isVelammalSelected = document.querySelector('input[name="is_velammal"]:checked')?.value === 'yes';
+      const schoolSelect = document.getElementById('prof_school_select').value;
+      let finalSchool = schoolSelect;
+      if (schoolSelect === '__custom__') {
+        finalSchool = document.getElementById('prof_custom_school').value.trim();
+      }
 
-      if (!fullName || !grade || !dob || !gName || !gMobile) {
-        showAlert('Please fill in all mandatory profile fields.', 'error');
+      if (!fullName || !grade || !dob || !gName || !gMobile || !finalSchool) {
+        showAlert('Please fill in all mandatory profile fields including your school name.', 'error');
         return;
       }
       if (!/^[0-9]{10}$/.test(gMobile)) {
@@ -908,15 +838,7 @@
         return;
       }
 
-      // Check Velammal verification requirement
-      if (isVelammalSelected && !isVelammalVerifiedState) {
-        showAlert('Please click "Verify Velammal Student" to verify your campus & admission number before proceeding.', 'error');
-        return;
-      }
-
       const uid = registeredUserId || localStorage.getItem('tf_user_id') || 1001;
-      const campusName = isVelammalSelected ? document.getElementById('vel_campus').value.trim() : '';
-      const admNo = isVelammalSelected ? document.getElementById('vel_adm_no').value.trim() : '';
 
       const btn = document.getElementById('btn-save-profile');
       btn.disabled = true;
@@ -934,9 +856,7 @@
             date_of_birth: dob,
             guardian_name: gName,
             guardian_mobile: gMobile,
-            is_velammal_student: isVelammalSelected ? 'yes' : 'no',
-            campus_name: campusName,
-            admission_number: admNo
+            school: finalSchool
           })
         });
         const data = await res.json();
@@ -945,14 +865,11 @@
           localStorage.setItem('tf_user_name', fullName);
           localStorage.setItem('tf_grade', grade);
           localStorage.setItem('tf_band', data.data.band);
-          localStorage.setItem('tf_tier', data.data.tier);
-          localStorage.setItem('tf_velammal_verified', data.data.velammal_verified ? 'true' : 'false');
-          if (campusName) localStorage.setItem('tf_campus_name', campusName);
-          if (admNo) localStorage.setItem('tf_admission_number', admNo);
+          localStorage.setItem('tf_school', data.data.school || finalSchool);
 
           // Update Step 4 payment confirmation details
           document.getElementById('pay-confirm-name').textContent = fullName;
-          document.getElementById('pay-confirm-tier').textContent = data.data.tier;
+          document.getElementById('pay-confirm-school').textContent = data.data.school || finalSchool;
           document.getElementById('pay-confirm-band').textContent = data.data.band;
 
           showAlert('Profile saved successfully! Complete festival consent to proceed.', 'success');
@@ -1048,7 +965,7 @@
                 }
 
                 document.getElementById('unlock-pid').textContent = verifyData.data.participant_id || localStorage.getItem('tf_participant_id');
-                document.getElementById('unlock-tier').textContent = (localStorage.getItem('tf_tier') || 'OTHER') + ' TIER';
+                document.getElementById('unlock-school').textContent = localStorage.getItem('tf_school') || 'SCHOOL';
                 document.getElementById('unlock-band').textContent = (localStorage.getItem('tf_band') || 'JUNIOR') + ' BAND';
 
                 updateStepperUI(5);
@@ -1084,7 +1001,7 @@
 
     // Initialize Page
     document.addEventListener('DOMContentLoaded', () => {
-      loadVelammalCampuses();
+      loadSchools();
       // Check if user is already logged in
       const existingPid = localStorage.getItem('tf_user_id') || localStorage.getItem('tf_participant_id');
       const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
@@ -1095,7 +1012,7 @@
           updateStepperUI(5);
         } else if (localStorage.getItem('tf_user_name')) {
           document.getElementById('pay-confirm-name').textContent = localStorage.getItem('tf_user_name');
-          document.getElementById('pay-confirm-tier').textContent = localStorage.getItem('tf_tier') || 'OTHER';
+          document.getElementById('pay-confirm-school').textContent = localStorage.getItem('tf_school') || '—';
           document.getElementById('pay-confirm-band').textContent = localStorage.getItem('tf_band') || 'JUNIOR';
           updateStepperUI(4);
         } else {

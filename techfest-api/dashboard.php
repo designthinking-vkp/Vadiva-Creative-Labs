@@ -81,21 +81,19 @@ if ($action === 'get_dashboard' || empty($action)) {
             'participant_id' => sprintf('TF-2026-%04d', $pNum),
             'full_name' => 'Registered Participant',
             'grade' => 6,
+            'section' => 'A',
+            'school' => 'Other School',
             'band' => 'JUNIOR',
-            'tier' => 'OTHER',
             'entry_status' => 'PAID',
-            'is_velammal_student' => false,
-            'velammal_verified' => false,
             'qr_token' => 'QR-TF-' . strtoupper(substr(md5((string)$pNum), 0, 16))
         ];
     }
 
     $isEntryPaid = ($participant['entry_status'] === 'PAID');
     $band = $participant['band'] ?: 'JUNIOR';
-    $tier = $participant['tier'] ?: 'OTHER';
     $publicPid = $participant['participant_id'] ?: sprintf('TF-2026-%04d', $participant['id']);
 
-    // Determine pass colour (Green for Junior, Blue for Intermediate, Red for Senior, Gold for verified VIP/Winners)
+    // Determine pass colour (Green for Junior, Blue for Intermediate, Red for Senior)
     $passColour = 'Green';
     if ($band === 'INTERMEDIATE') $passColour = 'Blue';
     elseif ($band === 'SENIOR') $passColour = 'Red';
@@ -108,12 +106,8 @@ if ($action === 'get_dashboard' || empty($action)) {
             'participant_id' => $publicPid,
             'grade' => (int)$participant['grade'],
             'section' => $participant['section'] ?? '',
+            'school' => $participant['school'] ?? 'Other School',
             'band' => $band,
-            'tier' => $tier,
-            'is_velammal_student' => (bool)$participant['is_velammal_student'],
-            'velammal_verified' => (bool)$participant['velammal_verified'],
-            'campus_name' => $participant['campus_name'] ?? '',
-            'admission_number' => $participant['admission_number'] ?? '',
             'entry_status' => $participant['entry_status'],
             'is_entry_paid' => $isEntryPaid,
             'pass_colour' => $passColour,

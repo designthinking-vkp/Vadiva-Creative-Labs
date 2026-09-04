@@ -271,8 +271,8 @@
           <strong id="pay-participant-name">Student Name</strong>
         </div>
         <div class="pay-ws-meta-row">
-          <span>Verified Tier:</span>
-          <strong id="pay-participant-tier" style="color:#059669;">VELAMMAL TIER</strong>
+          <span>School:</span>
+          <strong id="pay-participant-school" style="color:var(--tf-deep); max-width:240px; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">School Name</strong>
         </div>
         <div class="pay-ws-meta-row">
           <span>Batch Code:</span>
@@ -291,7 +291,7 @@
       <div class="pay-breakdown">
         <div class="pay-row">
           <span style="color:var(--tf-muted);">Workshop Batch Fee:</span>
-          <strong id="pay-unit-price">&#8377;400</strong>
+          <strong id="pay-unit-price">&#8377;750</strong>
         </div>
         <div class="pay-row">
           <span style="color:var(--tf-muted);">Festival Entry Pass (&#8377;250):</span>
@@ -299,14 +299,14 @@
         </div>
         <div class="pay-row total">
           <span>Total Payable Amount:</span>
-          <span class="amount" id="pay-total-amount">&#8377;400</span>
+          <span class="amount" id="pay-total-amount">&#8377;750</span>
         </div>
       </div>
 
       <!-- Payment Action Button -->
       <button type="button" class="pay-btn-primary" id="btn-pay-now" onclick="executeWorkshopPayment()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span id="btn-pay-label">Proceed to Secure Payment &#8377;400</span>
+        <span id="btn-pay-label">Proceed to Secure Payment &#8377;750</span>
       </button>
 
       <div style="text-align:center; margin-top:1.25rem; font-size:0.8rem; color:var(--tf-muted);">
@@ -330,23 +330,23 @@
     const PAY_API = '../../techfest-api/payment.php';
 
     const WORKSHOP_INFO = {
-      '1': { name: 'Rocket Lab', velammal: 400, other: 550 },
-      '2': { name: 'Satellite Makers', velammal: 450, other: 600 },
-      '3': { name: 'Drone Pilot Academy', velammal: 450, other: 600 },
-      '4': { name: 'Aeroforge', velammal: 400, other: 550 },
-      '5': { name: 'AR/VR Experience Lab', velammal: 350, other: 500 },
-      '6': { name: 'AI Inventors Lab', velammal: 400, other: 550 },
-      '7': { name: 'Game Forge', velammal: 350, other: 500 },
-      '8': { name: '3D Makers Lab', velammal: 350, other: 500 },
-      '9': { name: 'Arduino Inventors Lab', velammal: 350, other: 500 },
-      '10': { name: 'Animation Lab', velammal: 300, other: 450 }
+      '1': { name: 'Rocket Lab', price: 900 },
+      '2': { name: 'Satellite Makers', price: 1100 },
+      '3': { name: 'Drone Pilot Academy', price: 1100 },
+      '4': { name: 'Aeroforge', price: 1100 },
+      '5': { name: 'AR/VR Experience Lab', price: 900 },
+      '6': { name: 'AI Inventors Lab', price: 900 },
+      '7': { name: 'Game Forge', price: 750 },
+      '8': { name: '3D Makers Lab', price: 900 },
+      '9': { name: 'Arduino Inventors Lab', price: 900 },
+      '10': { name: 'Animation Lab', price: 750 }
     };
 
     let currentWorkshopId = '1';
     let currentBatchCode = 'B-01';
     let lockSecondsRemaining = 600; // 10 minutes
     let timerInterval = null;
-    let verifiedPrice = 400;
+    let verifiedPrice = 750;
 
     function showAlert(msg, type) {
       const el = document.getElementById('pay-alert');
@@ -382,17 +382,17 @@
 
       const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
       const userName = localStorage.getItem('tf_user_name') || 'Participant';
-      const userTier = localStorage.getItem('tf_tier') || 'OTHER';
+      const userSchool = localStorage.getItem('tf_school') || 'School';
 
       const ws = WORKSHOP_INFO[currentWorkshopId] || WORKSHOP_INFO['1'];
 
       document.getElementById('pay-ws-title').textContent = ws.name;
       document.getElementById('pay-participant-name').textContent = userName;
-      document.getElementById('pay-participant-tier').textContent = userTier + ' TIER';
+      document.getElementById('pay-participant-school').textContent = userSchool;
       document.getElementById('pay-batch-code').textContent = `Batch ${currentBatchCode} (Day 1 & Day 2 Atomic Pair)`;
 
-      // Tier-based initial price estimation (Will be re-verified strictly on server)
-      verifiedPrice = (userTier === 'VELAMMAL') ? ws.velammal : ws.other;
+      // Universal price
+      verifiedPrice = ws.price || 750;
       document.getElementById('pay-unit-price').textContent = `₹${verifiedPrice}`;
       document.getElementById('pay-total-amount').textContent = `₹${verifiedPrice}`;
       document.getElementById('btn-pay-label').textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;

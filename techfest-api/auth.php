@@ -215,8 +215,8 @@ elseif ($action === 'login') {
                     'token' => $token,
                     'participant_id' => $participant['participant_id'] ?? $publicId,
                     'name' => $participant['full_name'] ?? ($user['email'] ?? $publicId),
+                    'school' => $participant['school'] ?? 'Other School',
                     'has_participant_profile' => (bool)$participant,
-                    'tier' => $participant['tier'] ?? 'OTHER',
                     'band' => $participant['band'] ?? 'JUNIOR',
                     'entry_status' => $participant['entry_status'] ?? 'PENDING'
                 ]);
@@ -255,13 +255,10 @@ elseif ($action === 'me') {
                 $userData['participant_id'] = $participant['participant_id'];
                 $userData['name'] = $participant['full_name'];
                 $userData['grade'] = $participant['grade'];
+                $userData['section'] = $participant['section'];
+                $userData['school'] = $participant['school'] ?? 'Other School';
                 $userData['band'] = $participant['band'];
-                $userData['tier'] = $participant['tier'];
                 $userData['entry_status'] = $participant['entry_status'];
-                $userData['is_velammal_student'] = (bool)$participant['is_velammal_student'];
-                $userData['velammal_verified'] = (bool)$participant['velammal_verified'];
-                $userData['campus_name'] = $participant['campus_name'];
-                $userData['admission_number'] = $participant['admission_number'];
             }
         } catch (Exception $e) {}
     }

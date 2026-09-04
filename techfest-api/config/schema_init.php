@@ -17,17 +17,11 @@ function ensureSchemaTables($pdo) {
                 full_name VARCHAR(255) NOT NULL,
                 grade INT NOT NULL,
                 section VARCHAR(10) NULL,
+                school VARCHAR(255) NULL,
                 date_of_birth DATE NOT NULL,
                 guardian_name VARCHAR(255) NOT NULL,
                 guardian_mobile VARCHAR(20) NOT NULL,
                 band ENUM('JUNIOR', 'INTERMEDIATE', 'SENIOR') NOT NULL,
-                is_velammal_student BOOLEAN DEFAULT FALSE,
-                velammal_verified BOOLEAN DEFAULT FALSE,
-                campus_id BIGINT UNSIGNED NULL,
-                campus_name VARCHAR(255) NULL,
-                admission_number VARCHAR(100) NULL,
-                velammal_verified_at TIMESTAMP NULL,
-                tier ENUM('VELAMMAL', 'OTHER') NOT NULL DEFAULT 'OTHER',
                 entry_status ENUM('PENDING', 'PAID', 'FAILED') DEFAULT 'PENDING',
                 entry_payment_id BIGINT UNSIGNED NULL,
                 qr_token VARCHAR(255) UNIQUE,
@@ -36,18 +30,64 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // 2. VELAMMAL CAMPUSES TABLE
+        // Ensure school column exists if table already existed
+        try {
+            $pdo->exec("ALTER TABLE participants ADD COLUMN school VARCHAR(255) NULL AFTER section");
+        } catch (Exception $e) {}
+
+        // 2. SCHOOLS TABLE
         $pdo->exec("
-            CREATE TABLE IF NOT EXISTS velammal_campuses (
+            CREATE TABLE IF NOT EXISTS schools (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                campus_code VARCHAR(50) NOT NULL UNIQUE,
-                campus_name VARCHAR(255) NOT NULL,
+                school_name VARCHAR(255) NOT NULL UNIQUE,
                 city VARCHAR(100) DEFAULT 'Chennai',
                 is_active BOOLEAN DEFAULT TRUE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+
+        // Seed schools if empty
+        $checkSchools = $pdo->query("SELECT COUNT(*) as cnt FROM schools")->fetch();
+        if (($checkSchools['cnt'] ?? 0) == 0) {
+            $pdo->exec("
+                INSERT INTO schools (school_name, city) VALUES
+                ('Velammal Vidyalaya - Mogappair', 'Chennai'),
+                ('Velammal Vidyalaya - Mel Ayanambakkam', 'Chennai'),
+                ('Velammal Vidyalaya - Paruthipattu', 'Chennai'),
+                ('Velammal Vidyalaya - Avadi', 'Chennai'),
+                ('Velammal Vidyalaya - Poonamallee', 'Chennai'),
+                ('Velammal Vidyalaya - Karambakkam', 'Chennai'),
+                ('Velammal Vidyalaya - Alapakkam', 'Chennai'),
+                ('Velammal Vidyalaya - Annexure', 'Chennai'),
+                ('Velammal Vidyalaya - Madhavaram', 'Chennai'),
+                ('Velammal Bodhi Campus - Ponneri', 'Ponneri'),
+                ('Velammal Bodhi Campus - Kolapakkam', 'Chennai'),
+                ('Velammal New Gen Edu Network', 'Chennai'),
+                ('Velammal Matriculation - Mogappair', 'Chennai'),
+                ('Velammal Main School - Mogappair', 'Chennai'),
+                ('DAV Boys Senior Secondary School - Mogappair', 'Chennai'),
+                ('DAV Girls Senior Secondary School - Mogappair', 'Chennai'),
+                ('DAV Public School - Velachery', 'Chennai'),
+                ('PSBB Millennium School - Gerugambakkam', 'Chennai'),
+                ('Padma Seshadri Bala Bhavan (PSBB) - KK Nagar', 'Chennai'),
+                ('Padma Seshadri Bala Bhavan (PSBB) - Nungambakkam', 'Chennai'),
+                ('Chettinad Vidyashram - R.A. Puram', 'Chennai'),
+                ('SBOA School and Junior College - Anna Nagar', 'Chennai'),
+                ('Chennai Public School (CPS) - Anna Nagar', 'Chennai'),
+                ('Chennai Public School (CPS) - Thirumazhisai', 'Chennai'),
+                ('Bala Vidya Mandir - Adyar', 'Chennai'),
+                ('Kendriya Vidyalaya - IIT Madras', 'Chennai'),
+                ('Kendriya Vidyalaya - CLRI', 'Chennai'),
+                ('Kendriya Vidyalaya - Ashok Nagar', 'Chennai'),
+                ('National Public School (NPS) - Gopalapuram', 'Chennai'),
+                ('Chinmaya Vidyalaya - Kilpauk', 'Chennai'),
+                ('Chinmaya Vidyalaya - Taylors Road', 'Chennai'),
+                ('St. Johns International Residential School', 'Chennai'),
+                ('Don Bosco Matriculation School - Egmore', 'Chennai'),
+                ('The Schram Academy - Maduravoyal', 'Chennai'),
+                ('Maharishi Vidya Mandir - Chetpet', 'Chennai');
+            ");
+        }
 
         // 3. VELAMMAL STUDENTS TABLE
         $pdo->exec("

@@ -1,11 +1,12 @@
 <?php
 /**
- * Vadiva Tech Fest 3.0 — Participant Profile & Consent API
+ * Vadiva Tech Fest 3.0 — Participant Profile & Consent API (Single Standard Pricing)
  * Vadiva Creative Labs
  *
  * Endpoints:
- * - POST ?action=create_participant : Creates participant profile with Grade-to-Band derivation & Velammal DB verification
- * - GET  ?action=get_participant    : Retrieves participant profile, verification info, and festival entry state
+ * - GET  ?action=get_schools        : Returns searchable list of schools
+ * - POST ?action=create_participant : Creates participant profile with Grade-to-Band derivation & school info
+ * - GET  ?action=get_participant    : Retrieves participant profile and festival entry state
  * - POST ?action=save_consent       : Records required festival consents
  */
 
@@ -52,24 +53,69 @@ function deriveBandFromGrade($grade) {
 }
 
 // -----------------------------------------------------------------------------
+// 0. GET SCHOOLS LIST
+// -----------------------------------------------------------------------------
+if ($action === 'get_schools') {
+    $schools = [];
+    if (isset($pdo) && $pdo instanceof PDO) {
+        try {
+            $stmt = $pdo->query("SELECT id, school_name, city FROM schools WHERE is_active = TRUE ORDER BY school_name ASC");
+            $schools = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {}
+    }
+
+    if (empty($schools)) {
+        // High quality fallback list
+        $schools = [
+            ['id' => 1, 'school_name' => 'Velammal Vidyalaya - Mogappair', 'city' => 'Chennai'],
+            ['id' => 2, 'school_name' => 'Velammal Vidyalaya - Mel Ayanambakkam', 'city' => 'Chennai'],
+            ['id' => 3, 'school_name' => 'Velammal Vidyalaya - Paruthipattu', 'city' => 'Chennai'],
+            ['id' => 4, 'school_name' => 'Velammal Vidyalaya - Avadi', 'city' => 'Chennai'],
+            ['id' => 5, 'school_name' => 'Velammal Vidyalaya - Poonamallee', 'city' => 'Chennai'],
+            ['id' => 6, 'school_name' => 'Velammal Vidyalaya - Karambakkam', 'city' => 'Chennai'],
+            ['id' => 7, 'school_name' => 'Velammal Vidyalaya - Alapakkam', 'city' => 'Chennai'],
+            ['id' => 8, 'school_name' => 'Velammal Vidyalaya - Annexure', 'city' => 'Chennai'],
+            ['id' => 9, 'school_name' => 'Velammal Vidyalaya - Madhavaram', 'city' => 'Chennai'],
+            ['id' => 10, 'school_name' => 'Velammal Bodhi Campus - Ponneri', 'city' => 'Ponneri'],
+            ['id' => 11, 'school_name' => 'Velammal Bodhi Campus - Kolapakkam', 'city' => 'Chennai'],
+            ['id' => 12, 'school_name' => 'Velammal New Gen Edu Network', 'city' => 'Chennai'],
+            ['id' => 13, 'school_name' => 'Velammal Matriculation - Mogappair', 'city' => 'Chennai'],
+            ['id' => 14, 'school_name' => 'Velammal Main School - Mogappair', 'city' => 'Chennai'],
+            ['id' => 15, 'school_name' => 'DAV Boys Senior Secondary School - Mogappair', 'city' => 'Chennai'],
+            ['id' => 16, 'school_name' => 'DAV Girls Senior Secondary School - Mogappair', 'city' => 'Chennai'],
+            ['id' => 17, 'school_name' => 'DAV Public School - Velachery', 'city' => 'Chennai'],
+            ['id' => 18, 'school_name' => 'PSBB Millennium School - Gerugambakkam', 'city' => 'Chennai'],
+            ['id' => 19, 'school_name' => 'Padma Seshadri Bala Bhavan (PSBB) - KK Nagar', 'city' => 'Chennai'],
+            ['id' => 20, 'school_name' => 'Padma Seshadri Bala Bhavan (PSBB) - Nungambakkam', 'city' => 'Chennai'],
+            ['id' => 21, 'school_name' => 'Chettinad Vidyashram - R.A. Puram', 'city' => 'Chennai'],
+            ['id' => 22, 'school_name' => 'SBOA School and Junior College - Anna Nagar', 'city' => 'Chennai'],
+            ['id' => 23, 'school_name' => 'Chennai Public School (CPS) - Anna Nagar', 'city' => 'Chennai'],
+            ['id' => 24, 'school_name' => 'Chennai Public School (CPS) - Thirumazhisai', 'city' => 'Chennai'],
+            ['id' => 25, 'school_name' => 'Bala Vidya Mandir - Adyar', 'city' => 'Chennai'],
+            ['id' => 26, 'school_name' => 'Kendriya Vidyalaya - IIT Madras', 'city' => 'Chennai'],
+            ['id' => 27, 'school_name' => 'Kendriya Vidyalaya - CLRI', 'city' => 'Chennai'],
+            ['id' => 28, 'school_name' => 'National Public School (NPS) - Gopalapuram', 'city' => 'Chennai'],
+            ['id' => 29, 'school_name' => 'Chinmaya Vidyalaya - Kilpauk', 'city' => 'Chennai'],
+            ['id' => 30, 'school_name' => 'The Schram Academy - Maduravoyal', 'city' => 'Chennai'],
+            ['id' => 31, 'school_name' => 'Maharishi Vidya Mandir - Chetpet', 'city' => 'Chennai']
+        ];
+    }
+
+    sendResponse(true, 'Schools list retrieved successfully.', ['schools' => $schools]);
+}
+
+// -----------------------------------------------------------------------------
 // 1. CREATE PARTICIPANT PROFILE
 // -----------------------------------------------------------------------------
-if ($action === 'create_participant' || $action === 'save_profile') {
+elseif ($action === 'create_participant' || $action === 'save_profile') {
     $userId          = (int)($input['user_id'] ?? 0);
     $fullName        = trim($input['full_name'] ?? $input['name'] ?? $input['student_name'] ?? '');
     $grade           = (int)($input['grade'] ?? $input['class_name'] ?? 0);
     $section         = trim($input['section'] ?? '');
+    $school          = trim($input['school'] ?? $input['school_name'] ?? '');
     $dob             = trim($input['date_of_birth'] ?? $input['dob'] ?? '');
     $guardianName    = trim($input['guardian_name'] ?? $input['parent_name'] ?? '');
     $guardianMobile  = trim($input['guardian_mobile'] ?? $input['parent_phone'] ?? '');
-    
-    // Velammal question
-    $isVelammalParam = strtolower(trim($input['is_velammal_student'] ?? $input['is_velammal'] ?? 'no'));
-    $isVelammal      = ($isVelammalParam === 'yes' || $isVelammalParam === '1' || $isVelammalParam === 'true');
-    
-    $campusName      = trim($input['campus_name'] ?? $input['campus'] ?? '');
-    $campusId        = (int)($input['campus_id'] ?? 0);
-    $admissionNumber = trim($input['admission_number'] ?? $input['admission_no'] ?? '');
 
     // 1. Validate required participant fields
     if (!$userId) {
@@ -80,6 +126,9 @@ if ($action === 'create_participant' || $action === 'save_profile') {
     }
     if ($grade < 4 || $grade > 12) {
         sendResponse(false, 'Participant grade must be between 4 and 12.', [], 400);
+    }
+    if (empty($school)) {
+        $school = 'Other School';
     }
     if (empty($dob)) {
         sendResponse(false, 'Date of Birth is required.', [], 400);
@@ -97,62 +146,6 @@ if ($action === 'create_participant' || $action === 'save_profile') {
         sendResponse(false, 'Invalid grade. Allowed grades are 4 through 12.', [], 400);
     }
 
-    // 3. Velammal Database Verification (Server-Side Enforced)
-    $tier = 'OTHER';
-    $velammalVerified = false;
-    $verifiedTimestamp = null;
-
-    if ($isVelammal) {
-        if (empty($campusName) || empty($admissionNumber)) {
-            sendResponse(false, 'Please provide both Campus Name and Admission Number for Velammal verification.', [], 400);
-        }
-
-        $matchedStudent = null;
-
-        if (isset($pdo) && $pdo instanceof PDO) {
-            try {
-                $stmt = $pdo->prepare("
-                    SELECT vs.*, vc.id as verified_campus_id, vc.campus_name as verified_campus_name
-                    FROM velammal_students vs
-                    JOIN velammal_campuses vc ON vs.campus_id = vc.id
-                    WHERE (LOWER(TRIM(vs.campus_name)) = LOWER(?) OR LOWER(TRIM(vc.campus_name)) = LOWER(?))
-                      AND LOWER(TRIM(vs.admission_number)) = LOWER(?)
-                      AND vs.is_active = TRUE
-                    LIMIT 1
-                ");
-                $stmt->execute([$campusName, $campusName, $admissionNumber]);
-                $matchedStudent = $stmt->fetch(PDO::FETCH_ASSOC);
-            } catch (Exception $e) {}
-        }
-
-        // Fallback internal check if DB table empty
-        if (!$matchedStudent) {
-            $testAdm = strtolower(trim($admissionNumber));
-            $testCampus = strtolower(trim($campusName));
-            if (strpos($testAdm, 'vel') !== false || strpos($testAdm, 'mog') !== false || strpos($testAdm, 'ayan') !== false || strpos($testAdm, 'par') !== false || strpos($testAdm, 'avd') !== false || strpos($testAdm, 'bodhi') !== false) {
-                $matchedStudent = [
-                    'verified_campus_id' => $campusId ?: 1,
-                    'verified_campus_name' => $campusName,
-                    'admission_number' => $admissionNumber
-                ];
-            }
-        }
-
-        if ($matchedStudent) {
-            $tier = 'VELAMMAL';
-            $velammalVerified = true;
-            $verifiedTimestamp = date('Y-m-d H:i:s');
-            $campusId = $matchedStudent['verified_campus_id'] ?? $campusId;
-            $campusName = $matchedStudent['verified_campus_name'] ?? $campusName;
-        } else {
-            sendResponse(false, 'Please check your Admission number and Campus Name.', [
-                'is_velammal_student' => false,
-                'velammal_verified' => false,
-                'tier' => 'OTHER'
-            ], 422);
-        }
-    }
-
     $cleanGuardianMobile = preg_replace('/[^0-9]/', '', $guardianMobile);
     if (strlen($cleanGuardianMobile) > 10) $cleanGuardianMobile = substr($cleanGuardianMobile, -10);
 
@@ -160,7 +153,7 @@ if ($action === 'create_participant' || $action === 'save_profile') {
     $publicParticipantId = sprintf('TF-2026-%04d', $userId);
     $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
 
-    // 4. Save to Database
+    // 3. Save to Database
     if (isset($pdo) && $pdo instanceof PDO) {
         $saveSuccess = false;
         $retryCount = 0;
@@ -184,17 +177,11 @@ if ($action === 'create_participant' || $action === 'save_profile') {
                             full_name = ?,
                             grade = ?,
                             section = ?,
+                            school = ?,
                             date_of_birth = ?,
                             guardian_name = ?,
                             guardian_mobile = ?,
                             band = ?,
-                            is_velammal_student = ?,
-                            velammal_verified = ?,
-                            campus_id = ?,
-                            campus_name = ?,
-                            admission_number = ?,
-                            velammal_verified_at = ?,
-                            tier = ?,
                             updated_at = NOW()
                         WHERE id = ?
                     ");
@@ -202,31 +189,21 @@ if ($action === 'create_participant' || $action === 'save_profile') {
                         $fullName,
                         $grade,
                         $section,
+                        $school,
                         $dob,
                         $guardianName,
                         $cleanGuardianMobile,
                         $band,
-                        $isVelammal ? 1 : 0,
-                        $velammalVerified ? 1 : 0,
-                        $campusId ?: null,
-                        $campusName ?: null,
-                        $admissionNumber ?: null,
-                        $verifiedTimestamp,
-                        $tier,
                         $participantId
                     ]);
                 } else {
                     $insertStmt = $pdo->prepare("
                         INSERT INTO participants (
-                            user_id, participant_id, full_name, grade, section, date_of_birth,
-                            guardian_name, guardian_mobile, band, is_velammal_student, velammal_verified,
-                            campus_id, campus_name, admission_number, velammal_verified_at,
-                            tier, entry_status, qr_token
+                            user_id, participant_id, full_name, grade, section, school, date_of_birth,
+                            guardian_name, guardian_mobile, band, entry_status, qr_token
                         ) VALUES (
-                            ?, ?, ?, ?, ?, ?,
-                            ?, ?, ?, ?, ?,
-                            ?, ?, ?, ?,
-                            ?, 'PENDING', ?
+                            ?, ?, ?, ?, ?, ?, ?,
+                            ?, ?, ?, 'PENDING', ?
                         )
                     ");
                     $insertStmt->execute([
@@ -235,17 +212,11 @@ if ($action === 'create_participant' || $action === 'save_profile') {
                         $fullName,
                         $grade,
                         $section,
+                        $school,
                         $dob,
                         $guardianName,
                         $cleanGuardianMobile,
                         $band,
-                        $isVelammal ? 1 : 0,
-                        $velammalVerified ? 1 : 0,
-                        $campusId ?: null,
-                        $campusName ?: null,
-                        $admissionNumber ?: null,
-                        $verifiedTimestamp,
-                        $tier,
                         $qrToken
                     ]);
                     $participantId = (int)$pdo->lastInsertId();
@@ -266,8 +237,8 @@ if ($action === 'create_participant' || $action === 'save_profile') {
             } catch (PDOException $e) {
                 if ($pdo->inTransaction()) $pdo->rollBack();
                 
-                // If table missing (error 1146 or 42S02), auto-create schema and retry once
-                if ($retryCount === 1 && (strpos($e->getMessage(), "doesn't exist") !== false || strpos($e->getMessage(), "1146") !== false)) {
+                // If table missing, auto-create schema and retry once
+                if ($retryCount === 1) {
                     require_once __DIR__ . '/config/schema_init.php';
                     ensureSchemaTables($pdo);
                     continue;
@@ -287,12 +258,8 @@ if ($action === 'create_participant' || $action === 'save_profile') {
         'full_name' => $fullName,
         'grade' => $grade,
         'section' => $section,
+        'school' => $school,
         'band' => $band,
-        'tier' => $tier,
-        'is_velammal_student' => $isVelammal,
-        'velammal_verified' => $velammalVerified,
-        'campus_name' => $campusName,
-        'admission_number' => $admissionNumber,
         'entry_status' => 'PENDING',
         'entry_fee' => 250
     ]);
@@ -332,15 +299,11 @@ elseif ($action === 'get_participant' || $action === 'get_profile') {
             'full_name' => $participant['full_name'],
             'grade' => (int)$participant['grade'],
             'section' => $participant['section'],
+            'school' => $participant['school'] ?? 'Other School',
             'date_of_birth' => $participant['date_of_birth'],
             'guardian_name' => $participant['guardian_name'],
             'guardian_mobile' => $participant['guardian_mobile'],
             'band' => $participant['band'],
-            'tier' => $participant['tier'],
-            'is_velammal_student' => (bool)$participant['is_velammal_student'],
-            'velammal_verified' => (bool)$participant['velammal_verified'],
-            'campus_name' => $participant['campus_name'],
-            'admission_number' => $participant['admission_number'],
             'entry_status' => $participant['entry_status'],
             'is_entry_paid' => ($participant['entry_status'] === 'PAID'),
             'qr_token' => $participant['qr_token']

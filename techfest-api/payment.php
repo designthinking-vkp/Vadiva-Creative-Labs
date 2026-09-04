@@ -33,18 +33,18 @@ $keyId = defined('RAZORPAY_KEY_ID') ? RAZORPAY_KEY_ID : (getenv('RAZORPAY_KEY_ID
 $keySecret = defined('RAZORPAY_KEY_SECRET') ? RAZORPAY_KEY_SECRET : (getenv('RAZORPAY_KEY_SECRET') ?: 'Hwk3yDWs5Q6BBrSToRfaASd7');
 $webhookSecret = defined('RAZORPAY_WEBHOOK_SECRET') ? RAZORPAY_WEBHOOK_SECRET : (getenv('RAZORPAY_WEBHOOK_SECRET') ?: 'vadiva_tf_webhook_secret_2026');
 
-// 10 Paid Masterclasses Catalog (Source of Truth Pricing)
+// 10 Paid Masterclasses Catalog (Single Standard Pricing for All Participants)
 $PAID_WORKSHOP_CATALOG = [
-    '1' => ['id' => 1, 'code' => 'WS-ROCKET', 'name' => 'Rocket Lab', 'is_paid' => true, 'price_velammal' => 400, 'price_other' => 550, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Outdoor Launch Pad', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '2' => ['id' => 2, 'code' => 'WS-SATELLITE', 'name' => 'Satellite Makers', 'is_paid' => true, 'price_velammal' => 450, 'price_other' => 600, 'min_grade' => 6, 'max_grade' => 12, 'venue' => 'Space Sciences Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '3' => ['id' => 3, 'code' => 'WS-DRONE', 'name' => 'Drone Pilot Academy', 'is_paid' => true, 'price_velammal' => 450, 'price_other' => 600, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Safety Flight Cage', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '4' => ['id' => 4, 'code' => 'WS-AEROFORGE', 'name' => 'Aeroforge', 'is_paid' => true, 'price_velammal' => 400, 'price_other' => 550, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Air Arena & Workshop Hub', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '5' => ['id' => 5, 'code' => 'WS-ARVR', 'name' => 'AR/VR Experience Lab', 'is_paid' => true, 'price_velammal' => 350, 'price_other' => 500, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Immersive Media Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '6' => ['id' => 6, 'code' => 'WS-AI', 'name' => 'AI Inventors Lab', 'is_paid' => true, 'price_velammal' => 400, 'price_other' => 550, 'min_grade' => 6, 'max_grade' => 12, 'venue' => 'Edge AI Computing Center', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '7' => ['id' => 7, 'code' => 'WS-GAMEFORGE', 'name' => 'Game Forge', 'is_paid' => true, 'price_velammal' => 350, 'price_other' => 500, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Coding & Game Studio', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '8' => ['id' => 8, 'code' => 'WS-3DMAKERS', 'name' => '3D Makers Lab', 'is_paid' => true, 'price_velammal' => 350, 'price_other' => 500, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Digital Fabrication Studio', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '9' => ['id' => 9, 'code' => 'WS-ARDUINO', 'name' => 'Arduino Inventors Lab', 'is_paid' => true, 'price_velammal' => 350, 'price_other' => 500, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Hardware Innovation Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
-    '10' => ['id' => 10, 'code' => 'WS-ANIMATION', 'name' => 'Animation Lab', 'is_paid' => true, 'price_velammal' => 300, 'price_other' => 450, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Creative Design Studio', 'schedule' => '2 Consecutive Days (2hr/day)']
+    '1' => ['id' => 1, 'code' => 'WS-ROCKET', 'name' => 'Rocket Lab', 'is_paid' => true, 'price' => 900, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Outdoor Launch Pad', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '2' => ['id' => 2, 'code' => 'WS-SATELLITE', 'name' => 'Satellite Makers', 'is_paid' => true, 'price' => 1100, 'min_grade' => 6, 'max_grade' => 12, 'venue' => 'Space Sciences Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '3' => ['id' => 3, 'code' => 'WS-DRONE', 'name' => 'Drone Pilot Academy', 'is_paid' => true, 'price' => 1100, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Safety Flight Cage', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '4' => ['id' => 4, 'code' => 'WS-AEROFORGE', 'name' => 'Aeroforge', 'is_paid' => true, 'price' => 1100, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Air Arena & Workshop Hub', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '5' => ['id' => 5, 'code' => 'WS-ARVR', 'name' => 'AR/VR Experience Lab', 'is_paid' => true, 'price' => 900, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Immersive Media Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '6' => ['id' => 6, 'code' => 'WS-AI', 'name' => 'AI Inventors Lab', 'is_paid' => true, 'price' => 900, 'min_grade' => 6, 'max_grade' => 12, 'venue' => 'Edge AI Computing Center', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '7' => ['id' => 7, 'code' => 'WS-GAMEFORGE', 'name' => 'Game Forge', 'is_paid' => true, 'price' => 750, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Coding & Game Studio', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '8' => ['id' => 8, 'code' => 'WS-3DMAKERS', 'name' => '3D Makers Lab', 'is_paid' => true, 'price' => 900, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Digital Fabrication Studio', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '9' => ['id' => 9, 'code' => 'WS-ARDUINO', 'name' => 'Arduino Inventors Lab', 'is_paid' => true, 'price' => 900, 'min_grade' => 5, 'max_grade' => 12, 'venue' => 'Hardware Innovation Lab', 'schedule' => '2 Consecutive Days (2hr/day)'],
+    '10' => ['id' => 10, 'code' => 'WS-ANIMATION', 'name' => 'Animation Lab', 'is_paid' => true, 'price' => 750, 'min_grade' => 4, 'max_grade' => 12, 'venue' => 'Creative Design Studio', 'schedule' => '2 Consecutive Days (2hr/day)']
 ];
 
 function sendApiResponse($success, $message, $data = [], $httpCode = 200) {
@@ -244,21 +244,8 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
             if ($wsRow) {
                 $ws['id'] = $wsRow['id'];
                 $ws['name'] = $wsRow['name'] ?? ($wsRow['title'] ?? $ws['name']);
-                $ws['price_velammal'] = (float)$wsRow['price_velammal'];
-                $ws['price_other'] = (float)($wsRow['price_other'] ?? $wsRow['price']);
-            }
-        } catch (Exception $we) {}
-    }
-
-    // SERVER-SIDE TIER PRICING RE-CALCULATION (NEVER TRUST CLIENT)
-    $verifiedTier = ($participant && strtoupper($participant['tier']) === 'VELAMMAL' && (bool)$participant['velammal_verified'])
-        ? 'VELAMMAL'
-        : 'OTHER';
-
-    $serverCalculatedPrice = ($verifiedTier === 'VELAMMAL')
-        ? (float)$ws['price_velammal']
-        : (float)$ws['price_other'];
-
+    // SERVER-SIDE SINGLE STANDARD PRICING (NEVER TRUST CLIENT)
+    $serverCalculatedPrice = (float)($ws['price'] ?? ($ws['price_other'] ?? 900));
     $amountInPaise = (int)round($serverCalculatedPrice * 100);
     $receiptId = 'TF_WS_' . $participantId . '_' . $ws['id'] . '_' . time();
 
@@ -277,7 +264,6 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
             'workshop_id' => (string)$ws['id'],
             'workshop_name' => $ws['name'],
             'batch_code' => $batchCode,
-            'verified_tier' => $verifiedTier,
             'participant_id' => (string)($participant['id'] ?? $participantId)
         ]
     ]));
@@ -300,7 +286,6 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
         'workshop_name' => $ws['name'],
         'batch_code' => $batchCode,
         'batch_pairing' => 'Day 1 & Day 2 (Atomic 2-Session Batch)',
-        'verified_tier' => $verifiedTier,
         'unit_price' => $serverCalculatedPrice,
         'amount_in_rupees' => $serverCalculatedPrice,
         'amount' => $amountInPaise,
