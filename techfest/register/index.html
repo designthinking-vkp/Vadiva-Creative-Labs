@@ -838,7 +838,7 @@
         return;
       }
 
-      const uid = registeredUserId || localStorage.getItem('tf_user_id') || 1001;
+      const uid = registeredUserId || localStorage.getItem('tf_user_id') || localStorage.getItem('tf_participant_id') || '';
 
       const btn = document.getElementById('btn-save-profile');
       btn.disabled = true;
@@ -862,6 +862,13 @@
         const data = await res.json();
 
         if (data.success) {
+          if (data.data.user_id) {
+            registeredUserId = data.data.user_id;
+            localStorage.setItem('tf_user_id', data.data.user_id);
+          }
+          if (data.data.participant_id) {
+            localStorage.setItem('tf_participant_id', data.data.participant_id);
+          }
           localStorage.setItem('tf_user_name', fullName);
           localStorage.setItem('tf_grade', grade);
           localStorage.setItem('tf_band', data.data.band);
