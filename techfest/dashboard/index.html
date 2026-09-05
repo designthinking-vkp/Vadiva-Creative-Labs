@@ -456,20 +456,23 @@
       <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Logo" style="height:38px; margin-bottom:0.75rem;">
       <h3 style="margin:0 0 0.25rem; font-family:var(--font-heading); color:var(--tf-deep);">Official Festival Pass</h3>
       <div id="modal-pass-pid" style="font-family:monospace; font-weight:700; color:var(--tf-teal);">TF-2026-0001</div>
+      <div id="modal-pass-badge" style="display:inline-block; font-size:0.75rem; font-weight:800; padding:2px 10px; border-radius:12px; margin:4px 0 10px; text-transform:uppercase;">EXPLORER PASS</div>
 
-      <div class="dash-qr-placeholder">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"/><path d="M7 12h10M12 7v10"/></svg>
-        <span id="modal-qr-code-text" style="font-size:0.72rem; margin-top:6px;">QR PASS VERIFIED</span>
+      <div class="dash-qr-placeholder" style="background:#fff; padding:10px; border-radius:12px; border:1.5px solid #cbd5e1; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:140px;">
+        <div id="modal-qrcode"></div>
+        <span id="modal-qr-code-text" style="font-size:0.68rem; color:#64748b; margin-top:6px; font-family:monospace;">OPAQUE TOKEN ENCODED</span>
       </div>
 
-      <div style="font-size:0.86rem; color:var(--tf-text); margin-bottom:1rem;">
+      <div style="font-size:0.86rem; color:var(--tf-text); margin:1rem 0;">
         <strong id="modal-pass-name">Student Name</strong><br>
         <span id="modal-pass-school" style="color:#059669; font-weight:700;">SCHOOL</span> &middot; <span id="modal-pass-band">JUNIOR BAND</span>
       </div>
 
-      <button type="button" class="dash-action-btn primary" style="width:100%; justify-content:center;" onclick="window.print()">
-        Download / Print Pass Ticket
-      </button>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="dash-action-btn primary" style="flex:1; justify-content:center;" onclick="openPassPDF()">
+          Download / Print PDF Pass
+        </button>
+      </div>
     </div>
   </div>
 
@@ -482,10 +485,12 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
     const API = '../../techfest-api/dashboard.php';
+    let currentParticipantId = 1001;
 
     function switchDashTab(tab) {
       document.getElementById('tab-schedule-btn').classList.toggle('active', tab === 'schedule');
@@ -499,6 +504,11 @@
     }
     function closePassModal() {
       document.getElementById('passModal').classList.remove('active');
+    }
+
+    function openPassPDF() {
+      const pid = currentParticipantId || localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+      window.open(`../../techfest-api/pass.php?action=get_pass_html&participant_id=${encodeURIComponent(pid)}`, '_blank');
     }
 
     function renderScheduleItems(containerId, items) {
@@ -543,18 +553,20 @@
 
     async function loadDashboardData() {
       const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+      currentParticipantId = pid;
 
       try {
         const res = await fetch(`${API}?action=get_dashboard&participant_id=${encodeURIComponent(pid)}`);
         const data = await res.json();
 
         if (data.success && data.data) {
+          const p = data.data.profile;
           const userSchool = p.school || localStorage.getItem('tf_school') || 'School';
           document.getElementById('dash-name').textContent = p.name || 'Participant';
           document.getElementById('dash-pid').textContent = 'ID: ' + p.participant_id;
           document.getElementById('dash-school').textContent = userSchool;
           document.getElementById('dash-band').textContent = p.band + ' BAND';
-          document.getElementById('dash-pass').textContent = p.pass_colour.toUpperCase() + ' PASS';
+          document.getElementById('dash-pass').textContent = (p.pass_colour_text || p.pass_colour || 'EXPLORER').toUpperCase() + ' PASS';
 
           const initials = (p.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
           document.getElementById('dash-avatar').textContent = initials;
@@ -564,6 +576,25 @@
           document.getElementById('modal-pass-pid').textContent = p.participant_id;
           document.getElementById('modal-pass-school').textContent = userSchool;
           document.getElementById('modal-pass-band').textContent = p.band + ' BAND';
+
+          const badgeEl = document.getElementById('modal-pass-badge');
+          badgeEl.textContent = (p.pass_colour_text || p.pass_colour || 'EXPLORER') + ' PASS';
+          badgeEl.style.background = p.pass_colour_hex || '#10b981';
+          badgeEl.style.color = '#ffffff';
+
+          // Generate QR code with OPAQUE TOKEN ONLY
+          const qrContainer = document.getElementById('modal-qrcode');
+          qrContainer.innerHTML = '';
+          const tokenToEncode = p.qr_token || ('QR-TF-' + p.participant_id);
+          new QRCode(qrContainer, {
+            text: tokenToEncode,
+            width: 100,
+            height: 100,
+            colorDark: "#071921",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
+          document.getElementById('modal-qr-code-text').textContent = tokenToEncode.slice(0, 16) + '... (Opaque)';
 
           // Unpaid warning check
           if (!p.is_entry_paid) {

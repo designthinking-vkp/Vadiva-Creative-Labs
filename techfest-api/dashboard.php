@@ -93,10 +93,10 @@ if ($action === 'get_dashboard' || empty($action)) {
     $band = $participant['band'] ?: 'JUNIOR';
     $publicPid = $participant['participant_id'] ?: sprintf('TF-2026-%04d', $participant['id']);
 
-    // Determine pass colour (Green for Junior, Blue for Intermediate, Red for Senior)
-    $passColour = 'Green';
-    if ($band === 'INTERMEDIATE') $passColour = 'Blue';
-    elseif ($band === 'SENIOR') $passColour = 'Red';
+    // Pass colour default is Explorer (Green)
+    $passColour = 'GREEN';
+    $passColourText = 'Explorer';
+    $passColourHex = '#10b981';
 
     $dashboardData = [
         'profile' => [
@@ -111,6 +111,8 @@ if ($action === 'get_dashboard' || empty($action)) {
             'entry_status' => $participant['entry_status'],
             'is_entry_paid' => $isEntryPaid,
             'pass_colour' => $passColour,
+            'pass_colour_text' => $passColourText,
+            'pass_colour_hex' => $passColourHex,
             'qr_token' => $participant['qr_token'] ?? ('QR-TF-' . $publicPid)
         ],
         'is_locked' => !$isEntryPaid,
@@ -225,6 +227,37 @@ if ($action === 'get_dashboard' || empty($action)) {
             'venue' => 'Main Auditorium',
             'what_to_bring' => 'All Participants & Parents Welcome'
         ];
+
+        // Pass colour hierarchy (I-5 Priority: Innovator > Competitor > Maker > Explorer)
+        $hasPaidWorkshop = false;
+        $hasCompetition = false;
+        foreach ($dbBookings as $bk) {
+            if ($bk['workshop_type'] === 'PAID') $hasPaidWorkshop = true;
+        }
+        if (isset($pdo) && $pdo instanceof PDO) {
+            try {
+                $cStmt = $pdo->prepare("SELECT COUNT(*) FROM competition_entries WHERE participant_id = ?");
+                $cStmt->execute([$participant['id']]);
+                if ($cStmt->fetchColumn() > 0) $hasCompetition = true;
+            } catch (Exception $ce) {}
+        }
+        if ($hasPaidWorkshop && $hasCompetition) {
+            $dashboardData['profile']['pass_colour'] = 'GOLD';
+            $dashboardData['profile']['pass_colour_text'] = 'Innovator';
+            $dashboardData['profile']['pass_colour_hex'] = '#f59e0b';
+        } elseif ($hasCompetition) {
+            $dashboardData['profile']['pass_colour'] = 'RED';
+            $dashboardData['profile']['pass_colour_text'] = 'Competitor';
+            $dashboardData['profile']['pass_colour_hex'] = '#ef4444';
+        } elseif ($hasPaidWorkshop) {
+            $dashboardData['profile']['pass_colour'] = 'BLUE';
+            $dashboardData['profile']['pass_colour_text'] = 'Maker';
+            $dashboardData['profile']['pass_colour_hex'] = '#2563eb';
+        } else {
+            $dashboardData['profile']['pass_colour'] = 'GREEN';
+            $dashboardData['profile']['pass_colour_text'] = 'Explorer';
+            $dashboardData['profile']['pass_colour_hex'] = '#10b981';
+        }
 
         $dashboardData['my_schedule']['day_1'] = $scheduleDay1;
         $dashboardData['my_schedule']['day_2'] = $scheduleDay2;

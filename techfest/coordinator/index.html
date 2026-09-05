@@ -3,129 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coordinator Portal | Vadiva Tech Fest 3.0</title>
+  <title>School Coordinator Console | Vadiva Tech Fest 3.0</title>
   <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
-    /* Coordinator Styles (prefix: coord-) */
-    .coord-page { background:transparent !important; min-height:70vh; padding:3rem 1.25rem 5rem; }
-    .coord-inner { max-width:1100px; margin:0 auto; }
+    /* Coordinator Console Styles (coord-) */
+    .coord-page { background: transparent !important; min-height: 80vh; padding: 2.5rem 1.25rem 5rem; }
+    .coord-inner { max-width: 1140px; margin: 0 auto; }
+
     .coord-school-header {
-      background: rgba(12, 60, 76, 0.72) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(12, 184, 192, 0.3) !important;
-      color:#fff; border-radius:var(--glass-radius) !important;
-      padding:1.75rem 2rem; margin-bottom:1.5rem;
-      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
-      box-shadow: 0 12px 40px rgba(7, 25, 33, 0.12) !important;
+      background: rgba(12, 60, 76, 0.85) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1.5px solid rgba(12, 184, 192, 0.35) !important;
+      color: #fff; border-radius: var(--glass-radius, 16px) !important;
+      padding: 1.75rem 2rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;
+      box-shadow: 0 16px 40px rgba(7, 25, 33, 0.16) !important;
     }
-    .coord-school-header h1 { font-family:var(--font-heading); font-size:1.35rem; font-weight:800; margin:0; }
-    .coord-school-header p { color:#94a3b8; margin:0; font-size:0.85rem; }
-    .coord-header-actions { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .coord-school-header h1 { font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin: 0 0 4px; color: #fff; }
+    .coord-school-header p { color: #94a3b8; margin: 0; font-size: 0.88rem; }
+    
+    .coord-header-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; }
     .coord-btn {
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:0.6rem 1.25rem; border-radius:10px !important;
-      font-family:var(--font-heading); font-weight:700; font-size:0.85rem;
-      text-decoration:none; cursor:pointer; border:1px solid transparent;
-      transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1); white-space:nowrap;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.55rem 1.15rem; border-radius: 10px !important;
+      font-family: var(--font-heading); font-weight: 700; font-size: 0.84rem;
+      text-decoration: none; cursor: pointer; border: 1.5px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; gap: 6px;
     }
     .coord-btn-primary {
-      background:var(--tf-coral) !important; color:var(--tf-white) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
+      background: var(--tf-teal, #0cb8c0) !important; color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 4px 14px rgba(12, 184, 192, 0.3) !important;
     }
-    .coord-btn-primary:hover { background:#d63d3d !important; transform:translateY(-1.5px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
+    .coord-btn-primary:hover { background: #0aa5ad !important; transform: translateY(-1.5px); }
+    .coord-btn-coral {
+      background: var(--tf-coral, #ef4444) !important; color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25) !important;
+    }
+    .coord-btn-coral:hover { background: #dc2626 !important; transform: translateY(-1.5px); }
     .coord-btn-outline {
-      background: rgba(255, 255, 255, 0.12) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color:#ffffff !important; border:1.5px solid rgba(255,255,255,0.25) !important;
+      background: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
     }
-    .coord-btn-outline:hover { border-color:#ffffff !important; background:rgba(255,255,255,0.22) !important; transform:translateY(-1.5px); }
+    .coord-btn-outline:hover { background: rgba(255, 255, 255, 0.22) !important; transform: translateY(-1.5px); }
+
+    /* Escort Ratio Warning (I-8) */
     .coord-warning {
-      background: rgba(245, 158, 11, 0.05) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(245, 158, 11, 0.22) !important;
-      border-radius: 12px;
-      padding:1.1rem 1.5rem; display:flex; align-items:flex-start;
-      gap:0.75rem; margin-bottom:1.5rem; font-size:0.875rem; color:#b45309 !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+      border: 1.5px solid rgba(239, 68, 68, 0.35) !important;
+      border-radius: 14px; padding: 1.1rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #dc2626 !important;
+      flex-wrap: wrap;
     }
-    .coord-warning.hidden { display:none; }
-    .coord-stats-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+    .coord-warning.compliant {
+      background: rgba(16, 185, 129, 0.08) !important;
+      border-color: rgba(16, 185, 129, 0.3) !important;
+      color: #059669 !important;
+    }
+
+    /* Stats Grid */
+    .coord-stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .coord-stat-chip {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      padding:1.1rem 1.5rem; min-width:120px; flex:1;
-      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px); border: 1px solid rgba(12, 184, 192, 0.2) !important;
+      border-radius: var(--glass-radius, 14px) !important;
+      padding: 1.1rem 1.4rem; min-width: 140px; flex: 1;
+      box-shadow: 0 8px 24px 0 rgba(7, 25, 33, 0.04) !important;
     }
-    .coord-stat-chip strong { font-family:var(--font-heading); font-size:1.65rem; font-weight:800; color:var(--tf-deep); display:block; }
-    .coord-stat-chip span { font-size:0.78rem; color:var(--tf-muted); text-transform:uppercase; letter-spacing:0.04em; font-weight: 600; }
+    .coord-stat-chip strong { font-family: var(--font-heading); font-size: 1.65rem; font-weight: 800; color: var(--tf-deep, #071921); display: block; }
+    .coord-stat-chip span { font-size: 0.76rem; color: var(--tf-muted, #64748b); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+
+    /* Table Container */
     .coord-table-wrap {
-      background: rgba(255, 255, 255, 0.72) !important;
+      background: rgba(255, 255, 255, 0.9) !important;
       backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      overflow:hidden;
-      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
+      border: 1px solid rgba(12, 184, 192, 0.25) !important;
+      border-radius: var(--glass-radius, 16px) !important;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.05) !important;
+      margin-bottom: 2rem;
     }
     .coord-table-header {
-      padding:1.25rem 1.5rem; border-bottom:1px solid rgba(12, 184, 192, 0.12) !important;
-      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
-      background: transparent;
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(12, 184, 192, 0.12) !important;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
     }
-    .coord-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:var(--tf-deep); margin:0; }
+    .coord-table-header h2 { font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: var(--tf-deep); margin: 0; }
+    
+    .coord-filter-box { display: flex; gap: 0.65rem; flex-wrap: wrap; align-items: center; }
     .coord-search {
-      padding:0.55rem 1.1rem !important;
-      border:1.5px solid rgba(12, 184, 192, 0.18) !important;
-      border-radius:10px !important;
-      font-size:0.85rem; color:var(--tf-text); outline:none;
-      background: rgba(255, 255, 255, 0.6) !important;
-      backdrop-filter: blur(8px) !important;
-      transition: all 0.2s ease; min-width:200px;
+      padding: 0.5rem 1rem !important; border: 1.5px solid rgba(12, 184, 192, 0.25) !important;
+      border-radius: 8px !important; font-size: 0.85rem; color: var(--tf-text); outline: none;
+      background: #ffffff; min-width: 220px;
     }
-    .coord-search:focus {
-      border-color:var(--tf-teal) !important;
-      background: rgba(255, 255, 255, 0.92) !important;
-      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.12) !important;
+    .coord-select {
+      padding: 0.5rem 0.85rem; border: 1.5px solid rgba(12, 184, 192, 0.25);
+      border-radius: 8px; font-size: 0.85rem; background: #fff; color: var(--tf-text); outline: none;
     }
-    .coord-table-scroll { overflow-x:auto; }
-    table.coord-table { width:100%; border-collapse:collapse; min-width:620px; }
-    .coord-table th { background: rgba(12, 60, 76, 0.04) !important; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--tf-muted); font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1.5px solid rgba(12, 184, 192, 0.15) !important; }
-    .coord-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:var(--tf-text); border-bottom:1px solid rgba(12, 184, 192, 0.08) !important; }
-    .coord-table tr:last-child td { border-bottom:none; }
+
+    table.coord-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    .coord-table th { background: rgba(12, 60, 76, 0.05) !important; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--tf-muted); font-weight: 800; padding: 0.85rem 1.25rem; text-align: left; border-bottom: 1.5px solid rgba(12, 184, 192, 0.15) !important; }
+    .coord-table td { padding: 0.85rem 1.25rem; font-size: 0.88rem; color: var(--tf-text); border-bottom: 1px solid rgba(12, 184, 192, 0.08) !important; }
     .coord-table tr:hover td { background: rgba(12, 184, 192, 0.03) !important; }
+
     .coord-status-paid {
-      background: rgba(16, 185, 129, 0.08) !important; color: #059669 !important;
-      border: 1px solid rgba(16, 185, 129, 0.25) !important;
-      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      background: rgba(16, 185, 129, 0.12) !important; color: #059669 !important;
+      border: 1px solid rgba(16, 185, 129, 0.3) !important;
+      padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
     }
     .coord-status-pending {
-      background: rgba(245, 158, 11, 0.08) !important; color: #d97706 !important;
-      border: 1px solid rgba(245, 158, 11, 0.25) !important;
-      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      background: rgba(245, 158, 11, 0.12) !important; color: #d97706 !important;
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+      padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
     }
-    .coord-action-btn {
-      padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:600;
-      border:1.5px solid rgba(12, 184, 192, 0.2) !important;
-      background: rgba(12, 184, 192, 0.05) !important;
-      color:var(--tf-muted); cursor:pointer; transition:all 0.15s;
+
+    /* Modals */
+    .coord-modal-overlay {
+      position: fixed; inset: 0; background: rgba(7, 25, 33, 0.75);
+      backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center;
+      z-index: 999; padding: 20px;
     }
-    .coord-action-btn:hover { border-color:var(--tf-teal) !important; color:var(--tf-teal) !important; background: rgba(12, 184, 192, 0.1) !important; }
-    .coord-upload-area {
-      border:2px dashed rgba(12, 184, 192, 0.25) !important;
-      background: rgba(12, 184, 192, 0.03) !important;
-      border-radius:12px; padding:2.25rem 2rem; text-align:center; margin-top:1.5rem; color:var(--tf-muted); font-size:0.88rem; cursor:pointer; transition:all 0.2s; display:none;
+    .coord-modal-overlay.active { display: flex; }
+    .coord-modal-card {
+      background: #ffffff; border-radius: 16px; width: 100%; max-width: 780px;
+      max-height: 90vh; overflow-y: auto; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      position: relative;
     }
-    .coord-upload-area.show { display:block; }
-    .coord-upload-area:hover { border-color:var(--tf-teal) !important; color:var(--tf-teal) !important; background: rgba(12, 184, 192, 0.08) !important; }
-    @media (max-width:480px) { .coord-school-header { padding:1.25rem; } .coord-stat-chip { min-width:100px; padding:0.875rem 1rem; } }
+    .coord-modal-close {
+      position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;
+    }
+    .val-error-row { background: rgba(239, 68, 68, 0.08); color: #dc2626; }
+    .val-valid-row { background: rgba(16, 185, 129, 0.05); color: #059669; }
   </style>
 </head>
 <body class="techfest-theme bg-light-atmosphere">
@@ -134,30 +151,20 @@
     <div class="container header-container">
       <div class="logo">
         <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height:38px;width:auto;display:block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
+          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height:38px;width:auto;display:block;">
         </a>
       </div>
       <nav class="main-nav">
         <ul>
           <li><a href="../../index.html">Home</a></li>
           <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
           <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="../../contact.html">Contact</a></li>
+          <li><a href="../dashboard/index.html">My Pass &amp; Schedule</a></li>
         </ul>
       </nav>
       <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
+        <button class="coord-btn coord-btn-outline" onclick="logout()" style="color:#ef4444; border-color:rgba(239,68,68,0.3);">
+          Log Out
         </button>
       </div>
     </div>
@@ -166,236 +173,553 @@
   <div class="coord-page">
     <div class="coord-inner">
 
+      <!-- Header Banner (Strict School Scoping) -->
       <div class="coord-school-header">
         <div>
-          <h1 id="coord-school-name">Velammal Matriculation School</h1>
-          <p>Coordinator Portal &mdash; Vadiva Tech Fest 3.0</p>
+          <span style="font-size:0.75rem; font-weight:800; color:var(--tf-teal); letter-spacing:0.08em; text-transform:uppercase;">OFFICIAL CONTINGENT CONSOLE</span>
+          <h1 id="coord-school-name">Velammal Vidyalaya - Mogappair</h1>
+          <p>School Coordinator Portal &middot; Isolated Contingent Access Only</p>
         </div>
         <div class="coord-header-actions">
-          <button class="coord-btn coord-btn-outline" onclick="toggleUpload()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload-cloud" style="margin-right:6px;"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
-            Upload CSV
+          <button class="coord-btn coord-btn-outline" onclick="downloadSampleCSV()">
+            📥 Sample CSV Template
           </button>
-          <a href="#" class="coord-btn coord-btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            Download QR Pack
-          </a>
-          <button class="coord-btn coord-btn-outline" onclick="logout()" style="color:var(--tf-coral); border-color:rgba(239,68,68,0.2);">
-            Logout
+          <button class="coord-btn coord-btn-primary" onclick="openUploadModal()">
+            📤 Bulk Upload (CSV)
+          </button>
+          <button class="coord-btn coord-btn-primary" onclick="downloadConsolidatedQR()">
+            🪪 Download QR Pack (PDF)
+          </button>
+          <button class="coord-btn coord-btn-outline" onclick="downloadManifestCSV()">
+            📊 CSV Manifest
+          </button>
+          <button class="coord-btn coord-btn-outline" onclick="exportScheduleMatrix()">
+            🗓️ Contingent Schedule
           </button>
         </div>
       </div>
 
-      <div class="coord-warning" id="escort-warning">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
-        <strong>Escort Ratio Warning:</strong>&nbsp;
-        You have more than 20 students registered per escort. Please assign additional teachers to ensure a 1:20 escort ratio.
+      <!-- Escort Ratio Compliance Banner (1:20 Rule) -->
+      <div class="coord-warning" id="escort-warning-banner">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.2rem;">⚠️</span>
+          <div>
+            <strong id="escort-warning-title">Escort Ratio Check:</strong>
+            <span id="escort-warning-text">Checking teacher-to-student escort ratio...</span>
+          </div>
+        </div>
+        <button class="coord-btn coord-btn-outline" style="background:#fff !important; color:#0f172a !important; padding:4px 12px; font-size:0.78rem;" onclick="openEscortModal()">
+          Manage Escorting Teachers
+        </button>
       </div>
 
+      <!-- Key Metrics Row -->
       <div class="coord-stats-row">
-        <div class="coord-stat-chip"><strong id="stat-total">24</strong><span>Total Students</span></div>
-        <div class="coord-stat-chip"><strong id="stat-paid" style="color:var(--tf-teal);">18</strong><span>Entry Paid</span></div>
-        <div class="coord-stat-chip"><strong id="stat-pending" style="color:var(--tf-yellow);">6</strong><span>Pending Payment</span></div>
-        <div class="coord-stat-chip"><strong id="stat-escorts">1</strong><span>Escorts</span></div>
+        <div class="coord-stat-chip">
+          <strong id="stat-total">0</strong>
+          <span>Total Students</span>
+        </div>
+        <div class="coord-stat-chip">
+          <strong id="stat-paid" style="color:#059669;">0</strong>
+          <span>Entry Confirmed</span>
+        </div>
+        <div class="coord-stat-chip">
+          <strong id="stat-pending" style="color:#d97706;">0</strong>
+          <span>Pending Payment</span>
+        </div>
+        <div class="coord-stat-chip">
+          <strong id="stat-outstanding" style="color:#dc2626;">₹0</strong>
+          <span>Outstanding Amount</span>
+        </div>
+        <div class="coord-stat-chip">
+          <strong id="stat-escorts" style="color:var(--tf-deep);">0 / 0</strong>
+          <span>Escorts (Reg / Req)</span>
+        </div>
       </div>
 
-      <div class="coord-upload-area" id="upload-area">
-        <input type="file" id="csv-file" accept=".csv" style="display:none" onchange="handleCSV(this)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal); margin-bottom: 0.5rem;"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
-        <p>Click to select a CSV file or drag and drop here.</p>
-        <p style="font-size:0.75rem;margin-top:0.5rem;">Format: Name, Grade, Section, Mobile</p>
-        <button onclick="document.getElementById('csv-file').click()" class="coord-btn coord-btn-primary" style="margin-top:1rem;">Choose File</button>
-      </div>
-
+      <!-- Roster View -->
       <div class="coord-table-wrap">
         <div class="coord-table-header">
-          <h2>Student List</h2>
-          <input type="text" class="coord-search" placeholder="Search by name&hellip;" oninput="filterTable(this.value)">
+          <div>
+            <h2>School Contingent Roster</h2>
+            <span style="font-size:0.8rem; color:#64748b;">Single source of truth for your institution</span>
+          </div>
+          <div class="coord-filter-box">
+            <input type="text" id="roster-search" class="coord-search" placeholder="Search student name or ID..." oninput="filterRoster()">
+            <select id="grade-filter" class="coord-select" onchange="filterRoster()">
+              <option value="ALL">All Grades</option>
+              <option value="4">Grade 4</option>
+              <option value="5">Grade 5</option>
+              <option value="6">Grade 6</option>
+              <option value="7">Grade 7</option>
+              <option value="8">Grade 8</option>
+              <option value="9">Grade 9</option>
+              <option value="10">Grade 10</option>
+              <option value="11">Grade 11</option>
+              <option value="12">Grade 12</option>
+            </select>
+            <select id="status-filter" class="coord-select" onchange="filterRoster()">
+              <option value="ALL">All Statuses</option>
+              <option value="PAID">Paid Only</option>
+              <option value="PENDING">Pending Only</option>
+            </select>
+            <button id="btn-pay-contingent" class="coord-btn coord-btn-coral" onclick="payContingentEntryFees()">
+              💳 Pay All Unpaid (₹0)
+            </button>
+          </div>
         </div>
-        <div class="coord-table-scroll">
-          <table class="coord-table" id="coord-table">
+
+        <div style="overflow-x:auto;">
+          <table class="coord-table" id="roster-table">
             <thead>
               <tr>
-                <th>#</th><th>Name</th><th>Grade</th><th>Section</th><th>Entry Status</th><th>Actions</th>
+                <th>#</th>
+                <th>Participant ID</th>
+                <th>Full Name</th>
+                <th>Grade / Section</th>
+                <th>Band</th>
+                <th>Pass Colour</th>
+                <th>Entry Status</th>
+                <th>QR Token</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="coord-tbody">
-              <tr><td>1</td><td>Aanya Sharma</td><td>8</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
-              <tr><td>2</td><td>Rithvik Kumar</td><td>9</td><td>B</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
-              <tr><td>3</td><td>Priya Nair</td><td>7</td><td>C</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn">Send Reminder</button></td></tr>
-              <tr><td>4</td><td>Vikram Iyer</td><td>10</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
-              <tr><td>5</td><td>Sneha Rajendran</td><td>8</td><td>B</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn">Send Reminder</button></td></tr>
-              <tr><td>6</td><td>Arjun Balaji</td><td>9</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn">View QR</button></td></tr>
+            <tbody id="roster-tbody">
+              <tr><td colspan="9" style="text-align:center; padding:2rem; color:#94a3b8;">Loading contingent roster...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
+
     </div>
   </div>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height:32px;width:auto;margin-bottom:1.25rem;display:block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+  <!-- 1. BULK CSV UPLOAD & PRE-COMMIT VALIDATION MODAL -->
+  <div class="coord-modal-overlay" id="uploadModal" onclick="if(event.target===this)closeUploadModal()">
+    <div class="coord-modal-card">
+      <button class="coord-modal-close" onclick="closeUploadModal()">&times;</button>
+      <h2 style="font-family:'Outfit'; font-size:1.35rem; margin-bottom:6px;">Bulk Participant Upload (CSV)</h2>
+      <p style="font-size:0.85rem; color:#64748b; margin-bottom:16px;">
+        Upload your contingent CSV. All rows will be validated row-by-row before committing to the database.
+      </p>
+
+      <div style="border:2px dashed #0cb8c0; border-radius:12px; padding:24px; text-align:center; background:#f8fafc; margin-bottom:16px;">
+        <input type="file" id="csv-input-file" accept=".csv" style="display:none;" onchange="handleFileSelect(this)">
+        <button class="coord-btn coord-btn-primary" onclick="document.getElementById('csv-input-file').click()">
+          Select CSV File
+        </button>
+        <p id="selected-file-name" style="font-size:0.82rem; color:#64748b; margin-top:8px;">No file chosen yet.</p>
+      </div>
+
+      <!-- Validation Results Table -->
+      <div id="validation-report-container" style="display:none; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="font-size:0.95rem; font-weight:800;">Validation Summary</h4>
+          <span id="val-summary-counts" style="font-size:0.82rem; font-weight:700;"></span>
         </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
+        <div style="max-height:240px; overflow-y:auto; border:1px solid #cbd5e1; border-radius:8px;">
+          <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+            <thead>
+              <tr style="background:#f1f5f9; text-align:left;">
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Row</th>
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Student Name</th>
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Grade</th>
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Mobile</th>
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Status</th>
+                <th style="padding:6px 10px; border-bottom:1px solid #cbd5e1;">Errors / Notes</th>
+              </tr>
+            </thead>
+            <tbody id="val-report-tbody"></tbody>
+          </table>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with &#10084;&#65039; by VKP Team</p>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="coord-btn coord-btn-outline" style="color:#64748b;" onclick="closeUploadModal()">Cancel</button>
+        <button id="btn-commit-upload" class="coord-btn coord-btn-primary" style="display:none;" onclick="commitValidatedCSV()">
+          Commit Validated Participants
+        </button>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- 2. ESCORTING TEACHERS MANAGEMENT MODAL -->
+  <div class="coord-modal-overlay" id="escortModal" onclick="if(event.target===this)closeEscortModal()">
+    <div class="coord-modal-card" style="max-width:580px;">
+      <button class="coord-modal-close" onclick="closeEscortModal()">&times;</button>
+      <h2 style="font-family:'Outfit'; font-size:1.35rem; margin-bottom:6px;">Escorting Teachers (1:20 Ratio)</h2>
+      <p style="font-size:0.85rem; color:#64748b; margin-bottom:16px;">
+        Register accompanying teachers to satisfy the required 1 escort per 20 students safety threshold.
+      </p>
+
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:16px;">
+        <h4 style="font-size:0.85rem; text-transform:uppercase; color:#64748b; margin-bottom:8px;">Add Escorting Teacher</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <input type="text" id="escort-name-input" class="coord-search" style="min-width:auto;" placeholder="Teacher Name">
+          <input type="tel" id="escort-phone-input" class="coord-search" style="min-width:auto;" placeholder="Mobile (10 digits)">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <input type="email" id="escort-email-input" class="coord-search" style="min-width:auto;" placeholder="Email (optional)">
+          <input type="text" id="escort-desig-input" class="coord-search" style="min-width:auto;" placeholder="Designation" value="Escorting Teacher">
+        </div>
+        <button class="coord-btn coord-btn-primary" style="width:100%;" onclick="addEscortTeacher()">
+          + Register Escort
+        </button>
+      </div>
+
+      <h4 style="font-size:0.85rem; text-transform:uppercase; color:#64748b; margin-bottom:8px;">Registered Teachers</h4>
+      <div id="escorts-list-container" style="max-height:180px; overflow-y:auto;">
+        <p style="color:#94a3b8; font-size:0.85rem;">No escort teachers registered.</p>
+      </div>
+    </div>
+  </div>
 
   <script src="../../main.js"></script>
   <script src="../../assets/techfest-core.js"></script>
   <script>
-    const API = '../../techfest-api/coordinator.php';
-    const cid = localStorage.getItem('tf_participant_id');
+    const API_COORD = '../../techfest-api/coordinator.php';
+    const cid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
 
-    function toggleUpload() { document.getElementById('upload-area').classList.toggle('show'); }
-    function handleCSV(input) {
-      if (input.files && input.files[0]) {
-        alert('CSV "' + input.files[0].name + '" selected. Upload will connect to the API.');
-      }
-    }
-    function filterTable(q) {
-      document.querySelectorAll('#coord-tbody tr').forEach(row => {
-        row.style.display = row.cells[1].textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-      });
-    }
-
-    function viewQR(pId) {
-      alert('Unique QR Entry Pass for Participant ID: ' + pId + '\nVerified mapping to database entry.');
-    }
-
-    function sendReminder(sId) {
-      alert('Payment reminder notification has been triggered for student ID: ' + sId);
-    }
+    let globalDashboardData = null;
+    let validatedRowsCache = [];
 
     async function loadCoordinatorData() {
-      if (!cid) {
-        window.location.href = '../login/index.html';
-        return;
-      }
       try {
-        const res = await fetch(API + '?action=get_students&coordinator_id=' + cid);
+        const res = await fetch(`${API_COORD}?action=get_dashboard&coordinator_id=${encodeURIComponent(cid)}`);
         const json = await res.json();
-        if (json.success) {
-          const data = json.data;
-          
-          document.getElementById('coord-school-name').textContent = data.school_name || 'Coordinator Dashboard';
-          
-          const students = data.students || [];
-          const total = students.length;
-          const paid = students.filter(s => s.entry_status === 'PAID').length;
-          const pending = total - paid;
-          const escorts = Math.max(1, Math.ceil(total / 20));
-          
-          document.getElementById('stat-total').textContent = total;
-          document.getElementById('stat-paid').textContent = paid;
-          document.getElementById('stat-pending').textContent = pending;
-          document.getElementById('stat-escorts').textContent = escorts;
-          
-          const escortWarning = document.getElementById('escort-warning');
-          if (total / escorts <= 20) {
-            escortWarning.classList.add('hidden');
-          } else {
-            escortWarning.classList.remove('hidden');
-          }
-          
-          const tbody = document.getElementById('coord-tbody');
-          if (total === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No students registered yet.</td></tr>';
-          } else {
-            tbody.innerHTML = students.map((s, index) => {
-              const statusClass = s.entry_status === 'PAID' ? 'coord-status-paid' : 'coord-status-pending';
-              const statusLabel = s.entry_status === 'PAID' ? 'Paid' : 'Pending';
-              const actionBtn = s.entry_status === 'PAID' 
-                ? `<button class="coord-action-btn" onclick="viewQR('${s.participant_id}')">View QR</button>`
-                : `<button class="coord-action-btn" onclick="sendReminder('${s.id}')">Send Reminder</button>`;
-              return `
-                <tr>
-                  <td>${index + 1}</td>
-                  <td>${s.full_name}</td>
-                  <td>${s.grade}</td>
-                  <td>${s.section || '-'}</td>
-                  <td><span class="${statusClass}">${statusLabel}</span></td>
-                  <td>${actionBtn}</td>
-                </tr>
-              `;
-            }).join('');
-          }
+
+        if (json.success && json.data) {
+          globalDashboardData = json.data;
+          renderDashboard(json.data);
         } else {
-          loadDemoData();
+          console.warn('Coordinator API error:', json.message);
         }
-      } catch (err) {
-        loadDemoData();
+      } catch (e) {
+        console.error('Failed to load coordinator data:', e);
       }
     }
 
-    function loadDemoData() {
-      document.getElementById('stat-total').textContent = '24';
-      document.getElementById('stat-paid').textContent = '18';
-      document.getElementById('stat-pending').textContent = '6';
-      document.getElementById('stat-escorts').textContent = '1';
-      
-      const escortWarning = document.getElementById('escort-warning');
-      const tot = 24, esc = 1;
-      if (tot / esc <= 20) { escortWarning.classList.add('hidden'); } else { escortWarning.classList.remove('hidden'); }
-      
-      document.getElementById('coord-tbody').innerHTML = `
-        <tr><td>1</td><td>Aanya Sharma</td><td>8</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0012')">View QR</button></td></tr>
-        <tr><td>2</td><td>Rithvik Kumar</td><td>9</td><td>B</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0015')">View QR</button></td></tr>
-        <tr><td>3</td><td>Priya Nair</td><td>7</td><td>C</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn" onclick="sendReminder('3')">Send Reminder</button></td></tr>
-        <tr><td>4</td><td>Vikram Iyer</td><td>10</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0019')">View QR</button></td></tr>
-        <tr><td>5</td><td>Sneha Rajendran</td><td>8</td><td>B</td><td><span class="coord-status-pending">Pending</span></td><td><button class="coord-action-btn" onclick="sendReminder('5')">Send Reminder</button></td></tr>
-        <tr><td>6</td><td>Arjun Balaji</td><td>9</td><td>A</td><td><span class="coord-status-paid">Paid</span></td><td><button class="coord-action-btn" onclick="viewQR('TF-2026-0022')">View QR</button></td></tr>
-      `;
+    function renderDashboard(data) {
+      document.getElementById('coord-school-name').textContent = data.school.name;
+
+      // Metrics
+      const m = data.metrics;
+      document.getElementById('stat-total').textContent = m.total_students;
+      document.getElementById('stat-paid').textContent = m.paid_students;
+      document.getElementById('stat-pending').textContent = m.unpaid_students;
+      document.getElementById('stat-outstanding').textContent = '₹' + m.outstanding_amount;
+
+      // Escort ratio
+      const esc = data.escort_compliance;
+      document.getElementById('stat-escorts').textContent = `${esc.registered_escorts} / ${esc.required_escorts}`;
+
+      const banner = document.getElementById('escort-warning-banner');
+      const bannerText = document.getElementById('escort-warning-text');
+      if (esc.is_ratio_exceeded) {
+        banner.className = 'coord-warning';
+        bannerText.textContent = esc.warning_message;
+      } else {
+        banner.className = 'coord-warning compliant';
+        bannerText.textContent = esc.warning_message;
+      }
+
+      // Contingent payment button
+      const payBtn = document.getElementById('btn-pay-contingent');
+      if (m.unpaid_students > 0) {
+        payBtn.style.display = 'inline-flex';
+        payBtn.textContent = `💳 Pay All Unpaid (₹${m.outstanding_amount})`;
+      } else {
+        payBtn.style.display = 'none';
+      }
+
+      renderRosterTable(data.students);
+      renderEscortsList(data.escorts);
+    }
+
+    function renderRosterTable(students) {
+      const tbody = document.getElementById('roster-tbody');
+      if (!students || students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:2rem; color:#94a3b8;">No students registered for this school yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = students.map((s, idx) => {
+        const isPaid = (s.entry_status === 'PAID');
+        const statusClass = isPaid ? 'coord-status-paid' : 'coord-status-pending';
+        const passBadge = isPaid ? 'MAKER' : 'EXPLORER';
+        const passColorHex = isPaid ? '#2563eb' : '#10b981';
+
+        const tokenDisplay = s.qr_token 
+          ? `<span style="font-family:monospace; font-size:0.75rem; color:#0cb8c0;">${s.qr_token.slice(0, 12)}...</span>`
+          : `<span style="color:#94a3b8; font-size:0.75rem;">Pending Payment</span>`;
+
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong style="font-family:monospace; color:#071921;">${s.participant_id || 'TF-2026-XXXX'}</strong></td>
+            <td><strong>${s.full_name}</strong></td>
+            <td>Grade ${s.grade} (${s.section || 'A'})</td>
+            <td><span style="font-size:0.75rem; font-weight:700;">${s.band}</span></td>
+            <td><span style="background:${passColorHex}; color:#fff; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:10px;">${passBadge}</span></td>
+            <td><span class="${statusClass}">${s.entry_status}</span></td>
+            <td>${tokenDisplay}</td>
+            <td>
+              ${isPaid 
+                ? `<a href="../../techfest-api/pass.php?action=get_pass_html&participant_id=${s.id}" target="_blank" class="coord-btn coord-btn-outline" style="padding:2px 8px; font-size:0.72rem; color:#0cb8c0; border-color:rgba(12,184,192,0.3);">View Pass</a>`
+                : `<button class="coord-btn coord-btn-coral" style="padding:2px 8px; font-size:0.72rem;" onclick="paySingleParticipant(${s.id})">Pay ₹250</button>`
+              }
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterRoster() {
+      if (!globalDashboardData) return;
+      const q = document.getElementById('roster-search').value.toLowerCase();
+      const grade = document.getElementById('grade-filter').value;
+      const status = document.getElementById('status-filter').value;
+
+      const filtered = globalDashboardData.students.filter(s => {
+        const matchesName = (s.full_name.toLowerCase().includes(q) || (s.participant_id && s.participant_id.toLowerCase().includes(q)));
+        const matchesGrade = (grade === 'ALL' || String(s.grade) === grade);
+        const matchesStatus = (status === 'ALL' || s.entry_status === status);
+        return matchesName && matchesGrade && matchesStatus;
+      });
+
+      renderRosterTable(filtered);
+    }
+
+    function renderEscortsList(escorts) {
+      const container = document.getElementById('escorts-list-container');
+      if (!escorts || escorts.length === 0) {
+        container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">No escorting teachers registered yet.</p>';
+        return;
+      }
+      container.innerHTML = escorts.map(e => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; font-size:0.85rem;">
+          <div>
+            <strong>${e.escort_name}</strong> (${e.designation || 'Teacher'})<br>
+            <span style="color:#64748b; font-size:0.78rem;">📞 ${e.phone} ${e.email ? '&middot; ' + e.email : ''}</span>
+          </div>
+          <button class="coord-btn coord-btn-outline" style="color:#dc2626; border-color:rgba(239,68,68,0.2); padding:2px 8px; font-size:0.72rem;" onclick="deleteEscort(${e.id})">
+            Remove
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Modal Triggers
+    function openUploadModal() { document.getElementById('uploadModal').classList.add('active'); }
+    function closeUploadModal() { document.getElementById('uploadModal').classList.remove('active'); }
+
+    function openEscortModal() { document.getElementById('escortModal').classList.add('active'); }
+    function closeEscortModal() { document.getElementById('escortModal').classList.remove('active'); }
+
+    // CSV Pre-Commit Validation Flow
+    async function handleFileSelect(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      document.getElementById('selected-file-name').textContent = `Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+
+      const text = await file.text();
+      validateCSVContent(text);
+    }
+
+    async function validateCSVContent(csvText) {
+      try {
+        const res = await fetch(`${API_COORD}?action=validate_csv&coordinator_id=${encodeURIComponent(cid)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ csv_content: csvText })
+        });
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          const d = json.data;
+          validatedRowsCache = d.rows;
+
+          document.getElementById('validation-report-container').style.display = 'block';
+          document.getElementById('val-summary-counts').innerHTML = `
+            <span style="color:#059669;">${d.valid_count} Valid</span> &middot; 
+            <span style="color:#dc2626;">${d.invalid_count} Errors</span>
+          `;
+
+          const tbody = document.getElementById('val-report-tbody');
+          tbody.innerHTML = d.rows.map(r => `
+            <tr class="${r.is_valid ? 'val-valid-row' : 'val-error-row'}">
+              <td style="padding:6px 10px; font-weight:700;">${r.row_number}</td>
+              <td style="padding:6px 10px;">${r.name || '-'}</td>
+              <td style="padding:6px 10px;">${r.grade || '-'}</td>
+              <td style="padding:6px 10px;">${r.guardian_mobile || '-'}</td>
+              <td style="padding:6px 10px; font-weight:700;">${r.is_valid ? 'VALID' : 'ERROR'}</td>
+              <td style="padding:6px 10px;">${r.errors.length > 0 ? r.errors.join('; ') : 'Ready to commit'}</td>
+            </tr>
+          `).join('');
+
+          const commitBtn = document.getElementById('btn-commit-upload');
+          if (d.valid_count > 0) {
+            commitBtn.style.display = 'inline-flex';
+            commitBtn.textContent = `Commit ${d.valid_count} Valid Row(s)`;
+          } else {
+            commitBtn.style.display = 'none';
+          }
+        } else {
+          alert('Validation failed: ' + json.message);
+        }
+      } catch (e) {
+        alert('CSV validation error: ' + e.message);
+      }
+    }
+
+    async function commitValidatedCSV() {
+      const validRows = validatedRowsCache.filter(r => r.is_valid);
+      if (validRows.length === 0) return;
+
+      try {
+        const res = await fetch(`${API_COORD}?action=commit_bulk_upload&coordinator_id=${encodeURIComponent(cid)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rows: validRows })
+        });
+        const json = await res.json();
+        if (json.success) {
+          alert(json.message);
+          closeUploadModal();
+          loadCoordinatorData();
+        } else {
+          alert('Commit error: ' + json.message);
+        }
+      } catch (e) {
+        alert('Failed to commit participants: ' + e.message);
+      }
+    }
+
+    // Escorting Teachers Actions
+    async function addEscortTeacher() {
+      const name = document.getElementById('escort-name-input').value.trim();
+      const phone = document.getElementById('escort-phone-input').value.trim();
+      const email = document.getElementById('escort-email-input').value.trim();
+      const desig = document.getElementById('escort-desig-input').value.trim();
+
+      if (!name || !phone) {
+        alert('Please provide Teacher Name and Phone Number.');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_COORD}?action=manage_escorts&coordinator_id=${encodeURIComponent(cid)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sub_action: 'add',
+            escort_name: name,
+            phone: phone,
+            email: email,
+            designation: desig
+          })
+        });
+        const json = await res.json();
+        if (json.success) {
+          document.getElementById('escort-name-input').value = '';
+          document.getElementById('escort-phone-input').value = '';
+          loadCoordinatorData();
+        } else {
+          alert(json.message);
+        }
+      } catch (e) {
+        alert('Failed to add escort: ' + e.message);
+      }
+    }
+
+    async function deleteEscort(id) {
+      if (!confirm('Remove this escorting teacher?')) return;
+      try {
+        await fetch(`${API_COORD}?action=manage_escorts&coordinator_id=${encodeURIComponent(cid)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sub_action: 'delete', escort_id: id })
+        });
+        loadCoordinatorData();
+      } catch (e) {}
+    }
+
+    // One-Transaction Contingent Payment (Razorpay Checkout)
+    async function payContingentEntryFees() {
+      try {
+        const res = await fetch(`${API_COORD}?action=create_contingent_order&coordinator_id=${encodeURIComponent(cid)}`, {
+          method: 'POST'
+        });
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          const order = json.data;
+          if (order.is_already_paid) {
+            alert('All participants in this contingent are already paid!');
+            return;
+          }
+
+          // Open Razorpay Standard Checkout
+          const options = {
+            key: order.key_id,
+            amount: order.amount_in_paise,
+            currency: 'INR',
+            name: 'Vadiva Tech Fest 3.0',
+            description: `Contingent Entry Fee (${order.student_count} students) - ${order.school_name}`,
+            order_id: order.order_id,
+            handler: async function(response) {
+              const verifyRes = await fetch(`${API_COORD}?action=verify_contingent_payment&coordinator_id=${encodeURIComponent(cid)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+              const verifyJson = await verifyRes.json();
+              if (verifyJson.success) {
+                alert(verifyJson.message);
+                loadCoordinatorData();
+              } else {
+                alert('Payment verification error: ' + verifyJson.message);
+              }
+            },
+            theme: { color: '#0cb8c0' }
+          };
+
+          const rzp = new Razorpay(options);
+          rzp.open();
+        } else {
+          alert('Failed to initiate order: ' + json.message);
+        }
+      } catch (e) {
+        alert('Payment initiation failed: ' + e.message);
+      }
+    }
+
+    // Export Helpers
+    function downloadSampleCSV() {
+      window.location.href = `${API_COORD}?action=download_template`;
+    }
+    function downloadConsolidatedQR() {
+      window.open(`${API_COORD}?action=download_qr_pack&coordinator_id=${encodeURIComponent(cid)}`, '_blank');
+    }
+    function downloadManifestCSV() {
+      window.location.href = `${API_COORD}?action=download_manifest_csv&coordinator_id=${encodeURIComponent(cid)}`;
+    }
+    function exportScheduleMatrix() {
+      window.open(`${API_COORD}?action=export_contingent_schedule&coordinator_id=${encodeURIComponent(cid)}`, '_blank');
     }
 
     function logout() {
-      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
-        window.TechFestAccess.logout('../login/index.html');
-        return;
-      }
-      localStorage.removeItem('tf_token');
-      localStorage.removeItem('tf_participant_id');
-      localStorage.removeItem('tf_user_name');
-      localStorage.removeItem('tf_entry_paid');
-      localStorage.removeItem('tf_dev_bypass_active');
+      localStorage.clear();
       sessionStorage.clear();
       window.location.href = '../login/index.html';
     }
 
-    loadCoordinatorData();
+    document.addEventListener('DOMContentLoaded', loadCoordinatorData);
   </script>
 </body>
 </html>
+

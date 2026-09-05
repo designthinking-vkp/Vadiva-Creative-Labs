@@ -165,19 +165,44 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
     }
 
     $publicPid = sprintf('TF-2026-%04d', $participantId);
-    $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
+    $qrToken = '';
 
-    // Update participant entry status in MySQL
+    // Update participant entry status in MySQL and ensure opaque QR token exists
     if (isset($pdo) && $pdo instanceof PDO) {
         try {
             $pdo->beginTransaction();
 
+            // Check if participant already has a token
+            $tokStmt = $pdo->prepare("
+                SELECT token FROM qr_tokens 
+                WHERE participant_id = (SELECT id FROM participants WHERE id = ? OR user_id = ? LIMIT 1) 
+                AND is_active = TRUE LIMIT 1
+            ");
+            $tokStmt->execute([$participantId, $participantId]);
+            $existingTok = $tokStmt->fetchColumn();
+
+            if ($existingTok) {
+                $qrToken = $existingTok;
+            } else {
+                // Generate secure unguessable 32-character opaque token
+                $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
+            }
+
+            // Update participant
             $stmt = $pdo->prepare("
                 UPDATE participants 
-                SET entry_status = 'PAID', updated_at = NOW() 
+                SET entry_status = 'PAID', qr_token = ?, updated_at = NOW() 
                 WHERE id = ? OR user_id = ?
             ");
-            $stmt->execute([$participantId, $participantId]);
+            $stmt->execute([$qrToken, $participantId, $participantId]);
+
+            // Ensure token is recorded in qr_tokens table
+            $insTok = $pdo->prepare("
+                INSERT INTO qr_tokens (participant_id, token, is_active)
+                SELECT id, ?, TRUE FROM participants WHERE id = ? OR user_id = ? LIMIT 1
+                ON DUPLICATE KEY UPDATE is_active = TRUE
+            ");
+            $insTok->execute([$qrToken, $participantId, $participantId]);
 
             // Record payment entry
             try {
@@ -193,7 +218,12 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
             $pdo->commit();
         } catch (Exception $e) {
             if ($pdo->inTransaction()) $pdo->rollBack();
+            if (empty($qrToken)) {
+                $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
+            }
         }
+    } else {
+        $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
     }
 
     sendApiResponse(true, 'Festival Entry Fee confirmed successfully! Dashboard unlocked.', [

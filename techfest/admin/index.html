@@ -3,697 +3,1345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Portal | Vadiva Tech Fest 3.0</title>
+  <title>Festival Admin Console | Vadiva Tech & Design Fest '26</title>
   <link rel="icon" type="image/png" href="../../assets/logo.png">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../assets/techfest-theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Admin Styles (prefix: adm-) */
-    .adm-page { background:transparent !important; min-height:70vh; padding:3rem 1.25rem 5rem; }
-    .adm-inner { max-width:1100px; margin:0 auto; }
-    .adm-top-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:2rem; flex-wrap:wrap; gap:1rem;
+    :root {
+      --adm-primary: #0cb8c0;
+      --adm-deep: #071921;
+      --adm-coral: #ff5e3a;
+      --adm-gold: #f59e0b;
+      --adm-green: #10b981;
+      --adm-bg-glass: rgba(255, 255, 255, 0.85);
     }
-    .adm-top-bar h1 {
-      font-family:var(--font-heading); font-size:clamp(1.4rem,3vw,1.9rem);
-      font-weight:800; color:var(--tf-deep); margin:0;
-    }
-    .adm-logout {
-      background: rgba(12, 184, 192, 0.05) !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.25) !important;
-      color: var(--tf-teal) !important;
-      padding:0.55rem 1.25rem; border-radius:10px !important; font-size:0.85rem; font-weight:700;
-      cursor:pointer; transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .adm-logout:hover {
-      background: var(--tf-teal) !important;
-      color: #ffffff !important;
-      border-color: var(--tf-teal) !important;
-      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.2) !important;
-      transform: translateY(-1px);
-    }
-
-    /* Stat cards */
-    .adm-stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.25rem; margin-bottom:2.5rem; }
-    .adm-stat-card {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      padding:1.5rem; box-shadow:0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
-    }
-    .adm-stat-card .adm-stat-icon { font-size:1.4rem; margin-bottom:0.75rem; color: var(--tf-teal); }
-    .adm-stat-card strong {
-      font-family:var(--font-heading); font-size:2rem; font-weight:900;
-      color:var(--tf-deep); display:block; line-height:1;
-    }
-    .adm-stat-card span { font-size:0.8rem; color:var(--tf-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
-
-    /* Quick links */
-    .adm-section-title {
-      font-family:var(--font-heading); font-size:1rem; font-weight:700;
-      color:var(--tf-deep); margin-bottom:1rem; text-transform:uppercase; letter-spacing:0.05em;
-    }
-    .adm-quick-links { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin-bottom:2.5rem; }
-    .adm-ql-card {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      padding:1.25rem 1.5rem; display:flex; align-items:center; gap:1rem;
-      text-decoration:none; color:var(--tf-text);
-      box-shadow:0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
-      transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .adm-ql-card:hover {
-      box-shadow: 0 16px 40px rgba(7, 25, 33, 0.08) !important;
-      transform:translateY(-3px) !important;
-      border-color: rgba(12, 184, 192, 0.3) !important;
-    }
-    .adm-ql-icon { font-size:1.6rem; flex-shrink:0; color: var(--tf-teal); }
-    .adm-ql-label { font-family:var(--font-heading); font-size:0.92rem; font-weight:700; color: var(--tf-deep); }
-    .adm-ql-desc { font-size:0.75rem; color:var(--tf-muted); margin-top:0.15rem; }
-
-    /* Recent activity table */
-    .adm-table-wrap {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: var(--glass-radius) !important;
-      overflow:hidden;
-      box-shadow: 0 8px 32px 0 rgba(7, 25, 33, 0.04) !important;
-    }
-    .adm-table-header { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(12, 184, 192, 0.12) !important; background: transparent; }
-    .adm-table-header h2 { font-family:var(--font-heading); font-size:1.05rem; font-weight:700; color:var(--tf-deep); margin:0; }
-    .adm-table-scroll { overflow-x:auto; }
-    table.adm-table { width:100%; border-collapse:collapse; min-width:550px; }
-    .adm-table th { background: rgba(12, 60, 76, 0.04) !important; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--tf-muted); font-weight:700; padding:0.75rem 1.25rem; text-align:left; border-bottom:1.5px solid rgba(12, 184, 192, 0.15) !important; }
-    .adm-table td { padding:0.875rem 1.25rem; font-size:0.88rem; color:var(--tf-text); border-bottom:1px solid rgba(12, 184, 192, 0.08) !important; }
-    .adm-table tr:last-child td { border-bottom:none; }
-    .adm-table tr:hover td { background: rgba(12, 184, 192, 0.03) !important; }
-    .adm-badge-paid {
-      background: rgba(16, 185, 129, 0.08) !important; color:#059669 !important;
-      border: 1px solid rgba(16, 185, 129, 0.25) !important;
-      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700;
-    }
-    .adm-badge-reg  {
-      background: rgba(6, 182, 212, 0.08) !important; color:#0891b2 !important;
-      border: 1px solid rgba(6, 182, 212, 0.25) !important;
-      padding:0.25rem 0.75rem !important; border-radius:20px; font-size:0.72rem; font-weight:700;
-    }
-
-    @media (max-width:480px) { .adm-stats { grid-template-columns:1fr 1fr; } }
-
-    /* ── Admin Workshops Modal Styles ── */
-    .adm-modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(7, 25, 33, 0.5) !important;
-      backdrop-filter: blur(8px) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .adm-modal.show {
-      opacity: 1; pointer-events: auto;
-    }
-    .adm-modal-content {
-      background: rgba(255, 255, 255, 0.88) !important;
-      backdrop-filter: blur(25px) !important;
-      -webkit-backdrop-filter: blur(25px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    body { background: #f0f7f9; min-height: 100vh; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    .adm-container { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+    
+    /* Top Header */
+    .adm-header {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(12, 184, 192, 0.2);
       border-radius: 16px;
-      width: 90%;
-      max-width: 750px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 64px rgba(7, 25, 33, 0.15) !important;
-      animation: admModalSlide 0.3s ease-out;
-    }
-    @keyframes admModalSlide {
-      from { transform: translateY(20px); }
-      to { transform: translateY(0); }
-    }
-    .adm-modal-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid rgba(12, 184, 192, 0.12) !important;
+      padding: 1.25rem 1.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(7, 25, 33, 0.04);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    .adm-modal-header h2 { margin: 0; font-size: 1.3rem; color: var(--tf-deep); }
-    .adm-modal-close {
-      background: none; border: none; font-size: 1.75rem; color: var(--tf-muted); cursor: pointer; line-height: 1;
-    }
-    .adm-modal-body {
-      padding: 1.5rem;
-      overflow-y: auto;
-      flex: 1;
-    }
-    .adm-btn-add {
-      background: var(--tf-teal) !important;
-      color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      padding: 0.6rem 1.25rem;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(12, 184, 192, 0.25) !important;
-      margin-bottom: 1rem;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .adm-btn-add:hover { background: #0aa5ad !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(12, 184, 192, 0.35) !important; }
-    .adm-form {
-      background: rgba(12, 60, 76, 0.03) !important;
-      border: 1px solid rgba(12, 184, 192, 0.12) !important;
-      border-radius: 12px;
-      padding: 1.25rem;
+    .adm-brand { display: flex; align-items: center; gap: 0.85rem; }
+    .adm-brand-logo { width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #0cb8c0, #071921); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; font-weight: 900; }
+    .adm-title h1 { margin: 0; font-size: 1.4rem; font-weight: 800; color: #071921; letter-spacing: -0.02em; }
+    .adm-title p { margin: 0.15rem 0 0; font-size: 0.8rem; color: #64748b; font-weight: 600; }
+    
+    /* Top Stats Pills */
+    .adm-stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
       margin-bottom: 1.5rem;
     }
-    .adm-form-group { margin-bottom: 1rem; }
-    .adm-form-group label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--tf-text); margin-bottom: 0.4rem; }
-    .adm-form-group input, .adm-form-group textarea, .adm-form-group select {
-      width: 100%; padding: 0.65rem 0.9rem !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.18) !important;
-      border-radius: 10px !important;
-      font-family: var(--font-body); outline: none; box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.6) !important;
-      backdrop-filter: blur(8px);
+    .adm-stat-pill {
+      background: var(--adm-bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(12, 184, 192, 0.18);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 20px rgba(7, 25, 33, 0.03);
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .adm-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .adm-stat-val { font-size: 1.7rem; font-weight: 800; color: #071921; line-height: 1; }
+    .adm-stat-lbl { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #64748b; margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+    /* Tab Navigation */
+    .adm-tabs-nav {
+      display: flex;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(12, 184, 192, 0.15);
+      border-radius: 14px;
+      padding: 0.4rem;
+      gap: 0.35rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      scrollbar-width: thin;
+    }
+    .adm-tab-btn {
+      padding: 0.65rem 1.1rem;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
       transition: all 0.2s ease;
     }
-    .adm-form-group input:focus, .adm-form-group textarea:focus, .adm-form-group select:focus {
-      border-color: var(--tf-teal) !important;
-      background: rgba(255, 255, 255, 0.92) !important;
-      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.12) !important;
+    .adm-tab-btn:hover { background: rgba(12, 184, 192, 0.08); color: var(--adm-primary); }
+    .adm-tab-btn.active {
+      background: #071921;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(7, 25, 33, 0.15);
     }
-    .adm-form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
-    .adm-btn-submit {
-      background: var(--tf-coral) !important; color: var(--tf-white) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
+    .adm-tab-btn.active i { color: var(--adm-primary); }
+
+    /* Content Area */
+    .adm-panel {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(12, 184, 192, 0.18);
+      border-radius: 16px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 32px rgba(7, 25, 33, 0.04);
+      display: none;
+    }
+    .adm-panel.active { display: block; animation: admFadeIn 0.25s ease; }
+    @keyframes admFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Card & Table Component Styles */
+    .adm-table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(12, 184, 192, 0.15);
+      margin-top: 1rem;
+      background: #fff;
+    }
+    table.adm-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.adm-table th {
+      background: #f8fafc;
+      padding: 0.85rem 1.1rem;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1.5px solid #e2e8f0;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    table.adm-table td {
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+    table.adm-table tr:hover td { background: rgba(12, 184, 192, 0.02); }
+
+    /* Badges */
+    .adm-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .adm-badge-green { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .adm-badge-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .adm-badge-amber { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .adm-badge-red { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .adm-badge-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+
+    /* Buttons */
+    .adm-btn {
+      padding: 0.55rem 1.1rem;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
       transition: all 0.2s;
+      border: 1px solid transparent;
     }
-    .adm-btn-submit:hover { background: #d63d3d !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35) !important; }
-    .adm-btn-cancel {
-      background: rgba(12, 60, 76, 0.05) !important;
-      border: 1.5px solid rgba(12, 184, 192, 0.2) !important;
-      padding: 0.6rem 1.25rem; border-radius: 10px; color: var(--tf-text) !important; cursor: pointer;
-      transition: all 0.2s;
+    .adm-btn-primary { background: #0cb8c0; color: #fff; }
+    .adm-btn-primary:hover { background: #0aa2a9; transform: translateY(-1px); }
+    .adm-btn-dark { background: #071921; color: #fff; }
+    .adm-btn-dark:hover { background: #0f2c38; }
+    .adm-btn-outline { background: transparent; border-color: #cbd5e1; color: #475569; }
+    .adm-btn-outline:hover { background: #f8fafc; border-color: #94a3b8; }
+    .adm-btn-danger { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
+    .adm-btn-danger:hover { background: #dc2626; color: #fff; }
+    .adm-btn-sm { padding: 0.35rem 0.75rem; font-size: 0.75rem; border-radius: 7px; }
+
+    /* Modals */
+    .adm-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(7, 25, 33, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
     }
-    .adm-btn-cancel:hover { background: rgba(12, 60, 76, 0.1) !important; }
-    .adm-action-btn-sm {
-      padding: 0.35rem 0.65rem !important; border-radius: 6px; border: none; font-size: 0.78rem; font-weight: 700; cursor: pointer; margin-right: 0.4rem;
-      transition: all 0.2s;
+    .adm-modal.show { opacity: 1; pointer-events: auto; }
+    .adm-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid #e2e8f0;
+      padding: 1.75rem;
     }
-    .adm-edit-btn { background: rgba(6, 182, 212, 0.08) !important; color: #0891b2 !important; border: 1.5px solid rgba(6, 182, 212, 0.18) !important; }
-    .adm-edit-btn:hover { background: rgba(6, 182, 212, 0.15) !important; }
-    .adm-del-btn { background: rgba(239, 68, 68, 0.08) !important; color: #dc2626 !important; border: 1.5px solid rgba(239, 68, 68, 0.18) !important; }
-    .adm-del-btn:hover { background: rgba(239, 68, 68, 0.15) !important; }
+
+    /* Grid cards */
+    .adm-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .adm-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.35rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .adm-card:hover { border-color: #0cb8c0; box-shadow: 0 6px 20px rgba(12, 184, 192, 0.1); }
+
+    /* Forms */
+    .adm-form-group { margin-bottom: 1.1rem; }
+    .adm-form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .adm-input, .adm-select, .adm-textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border-radius: 9px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 0.9rem;
+      color: #0f172a;
+      background: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .adm-input:focus, .adm-select:focus, .adm-textarea:focus {
+      outline: none;
+      border-color: #0cb8c0;
+      box-shadow: 0 0 0 3px rgba(12, 184, 192, 0.15);
+    }
   </style>
 </head>
-<body class="techfest-theme bg-light-atmosphere">
+<body>
 
-  <header class="site-header">
-    <div class="container header-container">
-      <div class="logo">
-        <a href="../../index.html">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height: 52px; width: auto; display: block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-        </a>
-      </div>
-      <nav class="main-nav">
-        <ul>
-          <li><a href="../../index.html">Home</a></li>
-          <li><a href="../../about.html">About Us</a></li>
-          <li><a href="../../services.html">Services &amp; Partnerships</a></li>
-          <li><a href="../../activity-center.html">Activity Center</a></li>
-          <li><a href="../../events.html">Events &amp; Camps</a></li>
-          <li><a href="../../parents.html">Parent Hub</a></li>
-          <li><a href="../../protospark.html">Protospark</a></li>
-          <li><a href="../index.html" class="active">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="../../contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="header-action">
-        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
-        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
-        <a href="../../contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span><span></span><span></span>
-        </button>
+<div class="adm-container">
+  <!-- Top Bar -->
+  <div class="adm-header">
+    <div class="adm-brand">
+      <div class="adm-brand-logo"><i class="fa-solid fa-microchip"></i></div>
+      <div class="adm-title">
+        <h1>Festival Admin Console</h1>
+        <p>Vadiva Tech & Design Fest '26 • Global Operations & Governance Hub</p>
       </div>
     </div>
-  </header>
-
-  <div class="adm-page">
-    <div class="adm-inner">
-
-      <div class="adm-top-bar">
-        <h1>
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: middle; color: var(--tf-teal);"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Admin Portal &mdash; Tech Fest 3.0
-        </h1>
-        <button class="adm-logout" onclick="logout()">Logout</button>
-      </div>
-
-      <!-- Stats -->
-      <div class="adm-stats">
-        <div class="adm-stat-card">
-          <div class="adm-stat-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <strong id="adm-participants">&#8212;</strong>
-          <span>Total Participants</span>
-        </div>
-        <div class="adm-stat-card">
-          <div class="adm-stat-icon">
-            <strong>&#8377;</strong>
-          </div>
-          <strong id="adm-revenue">&#8212;</strong>
-          <span>Total Revenue</span>
-        </div>
-        <div class="adm-stat-card">
-          <div class="adm-stat-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <strong id="adm-schools">&#8212;</strong>
-          <span>Schools Registered</span>
-        </div>
-        <div class="adm-stat-card">
-          <div class="adm-stat-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--tf-teal);"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-          </div>
-          <strong id="adm-fillrate">&#8212;</strong>
-          <span>Avg. Fill Rate</span>
-        </div>
-      </div>
-
-      <!-- Quick links -->
-      <p class="adm-section-title">Quick Actions</p>
-      <div class="adm-quick-links">
-        <a href="#" class="adm-ql-card" onclick="openWsModal(event)">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <div><div class="adm-ql-label">Manage Workshops</div><div class="adm-ql-desc">Edit slots, pricing, capacity</div></div>
-        </a>
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6c0 2.22-1 4.58-2.6 6H8.6C7 12.58 6 10.22 6 8a6 6 0 0 1 6-6z"/></svg>
-          </div>
-          <div><div class="adm-ql-label">Manage Competitions</div><div class="adm-ql-desc">Results, brackets, judges</div></div>
-        </a>
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-          </div>
-          <div><div class="adm-ql-label">View Payments</div><div class="adm-ql-desc">Transactions &amp; receipts</div></div>
-        </a>
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-          </div>
-          <div><div class="adm-ql-label">Audit Log</div><div class="adm-ql-desc">System event history</div></div>
-        </a>
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          </div>
-          <div><div class="adm-ql-label">Export Data</div><div class="adm-ql-desc">Download CSV / reports</div></div>
-        </a>
-        <a href="#" class="adm-ql-card">
-          <div class="adm-ql-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div><div class="adm-ql-label">School Coordinators</div><div class="adm-ql-desc">View all school portals</div></div>
-        </a>
-      </div>
-
-      <!-- Recent activity -->
-      <div class="adm-table-wrap">
-        <div class="adm-table-header">
-          <h2>Recent Activity</h2>
-        </div>
-        <div class="adm-table-scroll">
-          <table class="adm-table">
-            <thead>
-              <tr><th>Time</th><th>Participant</th><th>School</th><th>Event</th><th>Status</th></tr>
-            </thead>
-            <tbody id="adm-activity-body">
-              <tr>
-                <td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">
-                  Loading activity&hellip;
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <span class="adm-badge adm-badge-blue"><i class="fa-solid fa-shield-halved"></i> Master Admin</span>
+      <button class="adm-btn adm-btn-outline" onclick="loadStats()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+      <button class="adm-btn adm-btn-danger" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
   </div>
 
-  <!-- Manage Workshops Modal -->
-  <div class="adm-modal" id="ws-modal">
-    <div class="adm-modal-content">
-      <div class="adm-modal-header">
-        <h2>Manage Workshops</h2>
-        <button class="adm-modal-close" onclick="closeWsModal()">&times;</button>
+  <!-- Key Metrics Row -->
+  <div class="adm-stats-row">
+    <div class="adm-stat-pill">
+      <div class="adm-stat-icon" style="background:#e0f2fe; color:#0284c7;"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="adm-stat-val" id="stat-total-students">0</div>
+        <div class="adm-stat-lbl">Registered Students</div>
       </div>
-      <div class="adm-modal-body">
-        <button class="adm-btn-add" onclick="showAddWsForm()">+ Add New Workshop</button>
-        
-        <!-- Workshop Add/Edit Form -->
-        <form id="ws-form" class="adm-form" style="display:none;" onsubmit="saveWorkshop(event)">
-          <input type="hidden" id="ws-id">
-          <div class="adm-form-group">
-            <label for="ws-name">Workshop Name</label>
-            <input type="text" id="ws-name" required placeholder="e.g. Robotics & Automation">
-          </div>
-          <div class="adm-form-group">
-            <label for="ws-desc">Description</label>
-            <textarea id="ws-desc" rows="3" required placeholder="Brief description..."></textarea>
-          </div>
-          <div style="display:flex; gap:1rem;">
-            <div class="adm-form-group" style="flex:1;">
-              <label for="ws-type">Type</label>
-              <select id="ws-type">
-                <option value="paid">Paid</option>
-                <option value="free">Free</option>
-              </select>
-            </div>
-            <div class="adm-form-group" style="flex:1;">
-              <label for="ws-capacity">Capacity</label>
-              <input type="number" id="ws-capacity" value="40" min="5" required>
-            </div>
-          </div>
-          <div style="display:flex; gap:1rem;">
-            <div class="adm-form-group" style="flex:1;">
-              <label for="ws-min-grade">Min Grade</label>
-              <input type="number" id="ws-min-grade" value="4" min="4" max="12" required>
-            </div>
-            <div class="adm-form-group" style="flex:1;">
-              <label for="ws-max-grade">Max Grade</label>
-              <input type="number" id="ws-max-grade" value="12" min="4" max="12" required>
-            </div>
-          </div>
-          <div class="adm-form-actions">
-            <button type="submit" class="adm-btn-submit">Save Workshop</button>
-            <button type="button" class="adm-btn-cancel" onclick="hideWsForm()">Cancel</button>
-          </div>
-        </form>
+    </div>
+    <div class="adm-stat-pill">
+      <div class="adm-stat-icon" style="background:#d1fae5; color:#059669;"><i class="fa-solid fa-qrcode"></i></div>
+      <div>
+        <div class="adm-stat-val" id="stat-confirmed-passes">0</div>
+        <div class="adm-stat-lbl">Active Passes Issued</div>
+      </div>
+    </div>
+    <div class="adm-stat-pill">
+      <div class="adm-stat-icon" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+      <div>
+        <div class="adm-stat-val" id="stat-total-revenue">₹0</div>
+        <div class="adm-stat-lbl">Total Reconciled Revenue</div>
+      </div>
+    </div>
+    <div class="adm-stat-pill">
+      <div class="adm-stat-icon" style="background:#f3e8ff; color:#7c3aed;"><i class="fa-solid fa-school"></i></div>
+      <div>
+        <div class="adm-stat-val" id="stat-total-schools">0</div>
+        <div class="adm-stat-lbl">Participating Schools</div>
+      </div>
+    </div>
+  </div>
 
-        <div class="adm-table-wrap" style="margin-top:1.5rem;">
-          <table class="adm-table">
-            <thead>
-              <tr>
-                <th>Name</th><th>Type</th><th>Grades</th><th>Capacity</th><th>Seats Taken</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="ws-table-body">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
+  <!-- Tab Navigation -->
+  <div class="adm-tabs-nav">
+    <button class="adm-tab-btn active" onclick="switchTab('tab-dash')"><i class="fa-solid fa-chart-pie"></i> Dashboards</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-catalogue')"><i class="fa-solid fa-book-open"></i> Catalogue</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-fees')"><i class="fa-solid fa-tags"></i> Fee Bands</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-capacity')"><i class="fa-solid fa-battery-half"></i> Capacity Guard</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-bookings')"><i class="fa-solid fa-ticket"></i> Bookings & Overrides</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-waitlists')"><i class="fa-solid fa-clock-rotate-left"></i> Waitlists</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-payments')"><i class="fa-solid fa-credit-card"></i> Payments</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-schools')"><i class="fa-solid fa-school-flag"></i> Schools & Merge</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-qualify')"><i class="fa-solid fa-trophy"></i> Qualification</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-exports')"><i class="fa-solid fa-file-export"></i> Exports</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-comms')"><i class="fa-solid fa-bullhorn"></i> Broadcasts</button>
+    <button class="adm-tab-btn" onclick="switchTab('tab-audit')"><i class="fa-solid fa-list-check"></i> Audit Trail</button>
+  </div>
+
+  <!-- 1. DASHBOARD TAB -->
+  <div id="tab-dash" class="adm-panel active">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+      <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Live Operational Metrics & Fill Rates</h2>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:1.5rem;">
+      <!-- Fill Rates -->
+      <div class="adm-card">
+        <h3 style="margin-top:0; font-size:1rem; font-weight:800; color:#071921; display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-gauge-high" style="color:#0cb8c0;"></i> Workshop Batch Occupancy
+        </h3>
+        <div id="fill-rate-bars" style="display:flex; flex-direction:column; gap:0.9rem; margin-top:1rem;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Registration Distributions -->
+      <div class="adm-card">
+        <h3 style="margin-top:0; font-size:1rem; font-weight:800; color:#071921; display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-layer-group" style="color:#7c3aed;"></i> Band & Day Distribution
+        </h3>
+        <div style="margin-top:1rem;" id="band-distribution-list">
+          <!-- Injected via JS -->
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="../../assets/Vadiva-Tech-Fest-Logo.png" alt="Vadiva Tech & Design Fest '26 Swan Logo" style="height:32px;width:auto;margin-bottom:1.25rem;display:block;" onerror="this.onerror=null; this.src='../assets/Vadiva-Tech-Fest-Logo.png';">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Enterprise</h4>
-          <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../about.html">About Us</a></li>
-            <li><a href="../../services.html">Services &amp; Frameworks</a></li>
-            <li><a href="../../contact.html">Partner Inquiries</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="../../activity-center.html">Activity Center</a></li>
-            <li><a href="../../events.html">Camps &amp; Festivals</a></li>
-            <li><a href="../../parents.html">Parent Hub</a></li>
-            <li><a href="../../terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>Designed with &#10084;&#65039; by VKP Team</p>
+  <!-- 2. CATALOGUE & DEADLINES TAB -->
+  <div id="tab-catalogue" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Catalogue & Deadlines Management</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Manage workshops, competitions, sessions, and registration open/close deadlines.</p>
       </div>
     </div>
-  </footer>
 
-  <script src="../../main.js"></script>
-  <script src="../../assets/techfest-core.js"></script>
-  <script>
-    const ADMIN_API = '../../techfest-api/admin.php';
-    const aid = localStorage.getItem('tf_participant_id');
-
-    async function loadStats() {
-      if (!aid) {
-        window.location.href = '../login/index.html';
-        return;
-      }
-      try {
-        const res  = await fetch(ADMIN_API + '?action=get_stats&admin_id=' + aid);
-        const data = await res.json();
-        if (data.success) {
-          document.getElementById('adm-participants').textContent = data.total_participants || '0';
-          document.getElementById('adm-revenue').textContent      = '\u20B9' + (data.total_revenue || '0');
-          document.getElementById('adm-schools').textContent      = data.total_schools    || '0';
-          document.getElementById('adm-fillrate').textContent     = (data.fill_rate || '0') + '%';
-
-          const tbody = document.getElementById('adm-activity-body');
-          if (data.recent_activity && data.recent_activity.length) {
-            tbody.innerHTML = data.recent_activity.map(a => `
-              <tr>
-                <td>${a.time}</td>
-                <td>${a.participant}</td>
-                <td>${a.school}</td>
-                <td>${a.event}</td>
-                <td><span class="${a.status === 'Paid' ? 'adm-badge-paid' : 'adm-badge-reg'}">${a.status}</span></td>
-              </tr>`).join('');
-          } else {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No recent activity yet.</td></tr>';
-          }
-        } else {
-          loadDemoData();
-        }
-      } catch (e) {
-        loadDemoData();
-      }
-    }
-
-    function loadDemoData() {
-      document.getElementById('adm-participants').textContent = '142';
-      document.getElementById('adm-revenue').textContent      = '₹35,500';
-      document.getElementById('adm-schools').textContent      = '12';
-      document.getElementById('adm-fillrate').textContent     = '64%';
-      document.getElementById('adm-activity-body').innerHTML = `
-        <tr><td>10:32 AM</td><td>Aanya Sharma</td><td>Velammal</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>
-        <tr><td>10:45 AM</td><td>Rithvik Kumar</td><td>Velammal</td><td>Entry Payment</td><td><span class="adm-badge-paid">Paid</span></td></tr>
-        <tr><td>11:02 AM</td><td>Priya Nair</td><td>DAV School</td><td>Registration</td><td><span class="adm-badge-reg">Registered</span></td></tr>`;
-    }
-
-    let allWorkshops = [];
-
-    function openWsModal(e) {
-      if (e) e.preventDefault();
-      document.getElementById('ws-modal').classList.add('show');
-      loadWorkshops();
-    }
-
-    function closeWsModal() {
-      document.getElementById('ws-modal').classList.remove('show');
-      hideWsForm();
-    }
-
-    function showAddWsForm() {
-      document.getElementById('ws-id').value = '';
-      document.getElementById('ws-name').value = '';
-      document.getElementById('ws-desc').value = '';
-      document.getElementById('ws-type').value = 'paid';
-      document.getElementById('ws-capacity').value = '40';
-      document.getElementById('ws-min-grade').value = '4';
-      document.getElementById('ws-max-grade').value = '12';
-      document.getElementById('ws-form').style.display = 'block';
-    }
-
-    function hideWsForm() {
-      document.getElementById('ws-form').style.display = 'none';
-      document.getElementById('ws-form').reset();
-    }
-
-    async function loadWorkshops() {
-      try {
-        const res = await fetch(ADMIN_API + '?action=list_workshops&admin_id=' + aid);
-        const data = await res.json();
-        if (data.success) {
-          allWorkshops = data.data.workshops || [];
-          renderWorkshopsTable();
-        } else {
-          loadMockWorkshops();
-        }
-      } catch (err) {
-        loadMockWorkshops();
-      }
-    }
-
-    function loadMockWorkshops() {
-      allWorkshops = [
-        { id: 1, name: 'Robotics & Automation', description: 'Build and programme your own robot using sensors...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 28 },
-        { id: 2, name: 'AI & Machine Learning Basics', description: 'Hands-on intro to ML concepts and data...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 30 },
-        { id: 3, name: 'Electronics & Circuits', description: 'Bread-board circuits, LEDs, and resistors...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 25, seats_taken: 8 },
-        { id: 4, name: 'Python for Beginners', description: 'From variables to loops to functions...', is_paid: 1, min_grade: 4, max_grade: 12, capacity: 40, seats_taken: 30 },
-        { id: 5, name: 'Game Development with Scratch', description: 'Introduction to visual coding...', is_paid: 0, min_grade: 4, max_grade: 12, capacity: 30, seats_taken: 14 }
-      ];
-      renderWorkshopsTable();
-    }
-
-    function renderWorkshopsTable() {
-      const tbody = document.getElementById('ws-table-body');
-      tbody.innerHTML = allWorkshops.map(w => {
-        const typeLabel = w.is_paid ? 'PAID' : 'FREE';
-        const typeStyle = w.is_paid ? 'color: var(--tf-coral); font-weight:700;' : 'color: var(--tf-teal); font-weight:700;';
-        return `
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
           <tr>
-            <td><strong>${w.name}</strong><br><small style="color:var(--tf-muted);">${w.description.substring(0,60)}...</small></td>
-            <td><span style="${typeStyle}">${typeLabel}</span></td>
-            <td>Grade ${w.min_grade}-${w.max_grade}</td>
-            <td>${w.capacity}</td>
-            <td>${w.seats_taken || 0}</td>
+            <th>Type</th>
+            <th>Title / Name</th>
+            <th>Price</th>
+            <th>Grade Scope</th>
+            <th>Reg Window (Open - Close)</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="catalogue-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. FEE BANDS TAB -->
+  <div id="tab-fees" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Fee Bands & Dynamic Pricing</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Configure differential tier pricing with <code style="background:#e2e8f0; padding:2px 6px; border-radius:4px;">effective_from</code> scheduling.</p>
+      </div>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Label</th>
+            <th>Velammal Price</th>
+            <th>Standard / Other Price</th>
+            <th>Effective From</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="fees-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. CAPACITY GUARDRAILS TAB -->
+  <div id="tab-capacity" class="adm-panel">
+    <div style="margin-bottom:1.25rem;">
+      <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Batch & Session Capacity Guardrails</h2>
+      <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Strict guardrail: Cannot reduce batch capacity below current occupied seat headcount.</p>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Workshop</th>
+            <th>Batch Name</th>
+            <th>Current Occupancy</th>
+            <th>Max Capacity</th>
+            <th>Fill Status</th>
+            <th>Adjust Capacity</th>
+          </tr>
+        </thead>
+        <tbody id="capacity-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5. BOOKINGS & OVERRIDES TAB -->
+  <div id="tab-bookings" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Master Bookings Hub</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Overrides require mandatory justification reason and are immutably logged to audit trail.</p>
+      </div>
+      <div style="display:flex; gap:0.5rem;">
+        <input type="text" id="booking-search-input" class="adm-input" placeholder="Search student, ref, school..." style="width:240px;" onkeyup="if(event.key==='Enter') loadBookings()">
+        <button class="adm-btn adm-btn-primary" onclick="loadBookings()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      </div>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Ref #</th>
+            <th>Student Details</th>
+            <th>School / Band</th>
+            <th>Workshop & Batch</th>
+            <th>Status</th>
+            <th>Actions & Overrides</th>
+          </tr>
+        </thead>
+        <tbody id="bookings-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. WAITLISTS TAB -->
+  <div id="tab-waitlists" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Waitlists & Standby Management</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">View waitlisted students, manually promote candidates, or trigger standby seat releases.</p>
+      </div>
+      <button class="adm-btn adm-btn-primary" onclick="triggerStandbyRelease()"><i class="fa-solid fa-bolt"></i> Release 5 Standby Seats</button>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Student Name</th>
+            <th>School</th>
+            <th>Target Workshop & Batch</th>
+            <th>State</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="waitlists-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7. PAYMENTS TAB -->
+  <div id="tab-payments" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Financial Ledger & Reconciliation</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Read-only transaction ledger. Direct price mutation is blocked; reconcile and refund only.</p>
+      </div>
+      <input type="text" id="payment-search-input" class="adm-input" placeholder="Search order ref, payer..." style="width:240px;" onkeyup="if(event.key==='Enter') loadPayments()">
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Order Ref</th>
+            <th>Gateway Ref</th>
+            <th>Payer & School</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="payments-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 8. SCHOOLS & MERGE TAB -->
+  <div id="tab-schools" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Schools, Tiers & Deduplication Merge</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Manage school registrations, assign tiers (Standard / Velammal / Partner), and merge duplicate institutions.</p>
+      </div>
+      <button class="adm-btn adm-btn-primary" onclick="openMergeSchoolsModal()"><i class="fa-solid fa-code-merge"></i> Merge Duplicate Schools</button>
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>School Name</th>
+            <th>City</th>
+            <th>Tier</th>
+            <th>Status</th>
+            <th>Students (Paid / Total)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="schools-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 9. FINALIST QUALIFICATION TAB -->
+  <div id="tab-qualify" class="adm-panel">
+    <div style="margin-bottom:1.25rem;">
+      <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Tournament Finalist Qualification</h2>
+      <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Qualify participants or teams for Championship Finals. Automated timetable clash detection will execute on submission.</p>
+    </div>
+
+    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:1.5rem; max-width:600px; margin-bottom:1.5rem;">
+      <div class="adm-form-group">
+        <label>Participant ID or DB ID</label>
+        <input type="number" id="qualify-part-id" class="adm-input" placeholder="e.g. 1" value="1">
+      </div>
+      <div class="adm-form-group">
+        <label>Championship Final Window</label>
+        <select id="qualify-window-select" class="adm-select">
+          <!-- Injected via JS -->
+        </select>
+      </div>
+      <div class="adm-form-group">
+        <label>Qualification Notes</label>
+        <input type="text" id="qualify-notes" class="adm-input" value="1st Place Prelims Winner - Qualified for Finale">
+      </div>
+      <button class="adm-btn adm-btn-primary" onclick="submitQualification()"><i class="fa-solid fa-award"></i> Qualify Finalist & Check Clashes</button>
+    </div>
+
+    <div id="qualification-clash-result" style="display:none;"></div>
+  </div>
+
+  <!-- 10. OPERATIONAL EXPORTS TAB -->
+  <div id="tab-exports" class="adm-panel">
+    <div style="margin-bottom:1.25rem;">
+      <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">6 Pre-Built Operational Exports</h2>
+      <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Download one-click CSV operational manifests for gate check-in, workshop kits, laptops, and escorts.</p>
+    </div>
+
+    <div class="adm-card-grid">
+      <!-- 1. Attendance Sheet -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#0cb8c0; margin-bottom:0.5rem;"><i class="fa-solid fa-clipboard-user"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">1. Session Attendance List</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">Door check-in manifest with student ID, photo flag, band, pass colour, and scan timestamp.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('attendance_list', {session_id: 1})"><i class="fa-solid fa-download"></i> Download Session 1 CSV</button>
+      </div>
+
+      <!-- 2. Competition Rosters -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#7c3aed; margin-bottom:0.5rem;"><i class="fa-solid fa-sitemap"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">2. Competition Rosters</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">Team members, derived bands, stage brackets, and Marshalling status.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('competition_roster')"><i class="fa-solid fa-download"></i> Download Rosters CSV</button>
+      </div>
+
+      <!-- 3. Kit Counts -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#059669; margin-bottom:0.5rem;"><i class="fa-solid fa-box-open"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">3. Workshop Kit Breakdown</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">Hardware kit quantities per workshop batch with automated 10% safety buffer.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('kit_counts')"><i class="fa-solid fa-download"></i> Download Kit Counts CSV</button>
+      </div>
+
+      <!-- 4. Laptop Requirements -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#ea580c; margin-bottom:0.5rem;"><i class="fa-solid fa-laptop-code"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">4. Laptop Requirement List</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">List of attendees registered for coding/CAD masterclasses requiring festival laptops.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('laptop_requirements')"><i class="fa-solid fa-download"></i> Download Laptop Manifest</button>
+      </div>
+
+      <!-- 5. Dietary & Medical Flags -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#dc2626; margin-bottom:0.5rem;"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">5. Dietary & Medical Flags</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">Emergency first-aid roster, allergies, and special dietary preferences.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('dietary_medical')"><i class="fa-solid fa-download"></i> Download Medical Flags</button>
+      </div>
+
+      <!-- 6. Escort Ratios -->
+      <div class="adm-card">
+        <div style="font-size:1.8rem; color:#2563eb; margin-bottom:0.5rem;"><i class="fa-solid fa-user-shield"></i></div>
+        <h3 style="margin:0 0 0.4rem; font-size:1.05rem; font-weight:800; color:#071921;">6. Escort Ratio Compliance</h3>
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:1rem;">School contingent ratio tracker checking 1 registered teacher per 20 students.</p>
+        <button class="adm-btn adm-btn-outline" onclick="downloadExport('escort_ratios')"><i class="fa-solid fa-download"></i> Download Escort Ratios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. COMMUNICATIONS TAB -->
+  <div id="tab-comms" class="adm-panel">
+    <div style="margin-bottom:1.25rem;">
+      <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Audience Segment Communications</h2>
+      <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Broadcast ad-hoc SMS or Email notices to targeted attendee groups.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+      <div class="adm-card">
+        <h3 style="margin-top:0; font-size:1rem; font-weight:800;">Compose Broadcast</h3>
+        <div class="adm-form-group">
+          <label>Target Segment</label>
+          <select id="comm-segment" class="adm-select">
+            <option value="ALL">All Registered Participants</option>
+            <option value="JUNIOR">Junior Band (Grades 4-6)</option>
+            <option value="INTERMEDIATE">Intermediate Band (Grades 7-9)</option>
+            <option value="SENIOR">Senior Band (Grades 10-12)</option>
+            <option value="PAID">Confirmed / Paid Attendees</option>
+            <option value="PENDING">Pending Payment Contingents</option>
+          </select>
+        </div>
+        <div class="adm-form-group">
+          <label>Channel</label>
+          <select id="comm-channel" class="adm-select">
+            <option value="EMAIL">Email</option>
+            <option value="SMS">SMS Notification</option>
+            <option value="BOTH">Omnichannel (Email & SMS)</option>
+          </select>
+        </div>
+        <div class="adm-form-group">
+          <label>Subject / Headline</label>
+          <input type="text" id="comm-subject" class="adm-input" value="TechFest 2026: Important Schedule Update">
+        </div>
+        <div class="adm-form-group">
+          <label>Message Body</label>
+          <textarea id="comm-message" class="adm-textarea" rows="4" placeholder="Type your broadcast message..."></textarea>
+        </div>
+        <button class="adm-btn adm-btn-primary" onclick="sendBroadcast()"><i class="fa-solid fa-paper-plane"></i> Send Broadcast</button>
+      </div>
+
+      <div class="adm-card">
+        <h3 style="margin-top:0; font-size:1rem; font-weight:800;">Recent Broadcast Logs</h3>
+        <div id="broadcast-logs-list" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. IMMUTABLE AUDIT TRAIL TAB -->
+  <div id="tab-audit" class="adm-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
+      <div>
+        <h2 style="margin:0; font-size:1.25rem; font-weight:800; color:#071921;">Immutable Audit Trail</h2>
+        <p style="margin:0.2rem 0 0; color:#64748b; font-size:0.85rem;">Full cryptographic log of administrative actions, overrides, and state changes.</p>
+      </div>
+      <input type="text" id="audit-search-input" class="adm-input" placeholder="Filter by actor, action..." style="width:240px;" onkeyup="if(event.key==='Enter') loadAuditLogs()">
+    </div>
+
+    <div class="adm-table-wrap">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Timestamp</th>
+            <th>Actor</th>
+            <th>Action</th>
+            <th>Entity</th>
+            <th>Justification Reason</th>
+          </tr>
+        </thead>
+        <tbody id="audit-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL: OVERRIDE BOOKING -->
+<div id="modal-override" class="adm-modal">
+  <div class="adm-modal-box">
+    <h3 style="margin-top:0; font-size:1.15rem; font-weight:800; color:#071921;">Mandatory Booking Override</h3>
+    <input type="hidden" id="ov-booking-id">
+    <div class="adm-form-group">
+      <label>Target Status</label>
+      <select id="ov-status" class="adm-select">
+        <option value="CONFIRMED">CONFIRMED</option>
+        <option value="CANCELLED">CANCELLED</option>
+        <option value="WAITLISTED">WAITLISTED</option>
+      </select>
+    </div>
+    <div class="adm-form-group">
+      <label>Mandatory Justification Reason <span style="color:#dc2626;">*</span></label>
+      <textarea id="ov-reason" class="adm-textarea" rows="3" placeholder="State reason for administrative override (e.g. VIP guest seat release, school coordinator manual adjustment)..." required></textarea>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+      <button class="adm-btn adm-btn-outline" onclick="closeModal('modal-override')">Cancel</button>
+      <button class="adm-btn adm-btn-primary" onclick="submitOverride()">Commit Override & Log Audit</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CAPACITY ADJUSTMENT -->
+<div id="modal-capacity" class="adm-modal">
+  <div class="adm-modal-box">
+    <h3 style="margin-top:0; font-size:1.15rem; font-weight:800; color:#071921;">Adjust Batch Capacity</h3>
+    <input type="hidden" id="cap-batch-id">
+    <div class="adm-form-group">
+      <label>Batch Name</label>
+      <input type="text" id="cap-batch-name" class="adm-input" readonly>
+    </div>
+    <div class="adm-form-group">
+      <label>Current Occupancy (Strict Lower Bound)</label>
+      <input type="number" id="cap-current-occ" class="adm-input" readonly>
+    </div>
+    <div class="adm-form-group">
+      <label>New Capacity Limit</label>
+      <input type="number" id="cap-new-limit" class="adm-input" min="1">
+    </div>
+    <div class="adm-form-group">
+      <label>Adjustment Reason</label>
+      <input type="text" id="cap-reason" class="adm-input" value="Lab bench hardware expansion">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+      <button class="adm-btn adm-btn-outline" onclick="closeModal('modal-capacity')">Cancel</button>
+      <button class="adm-btn adm-btn-primary" onclick="submitCapacity()">Update Capacity</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: REFUND PAYMENT -->
+<div id="modal-refund" class="adm-modal">
+  <div class="adm-modal-box">
+    <h3 style="margin-top:0; font-size:1.15rem; font-weight:800; color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Refund Payment Transaction</h3>
+    <input type="hidden" id="ref-payment-id">
+    <p style="font-size:0.85rem; color:#64748b;">This will register an official refund against the transaction and log the operation.</p>
+    <div class="adm-form-group">
+      <label>Mandatory Refund Reason</label>
+      <textarea id="ref-reason" class="adm-textarea" rows="3" placeholder="Provide refund rationale..."></textarea>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.5rem;">
+      <button class="adm-btn adm-btn-outline" onclick="closeModal('modal-refund')">Cancel</button>
+      <button class="adm-btn adm-btn-danger" onclick="submitRefund()">Confirm Refund</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = '../../techfest-api/admin.php';
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.adm-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    
+    // Highlight button
+    const btn = Array.from(document.querySelectorAll('.adm-tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+    if (btn) btn.classList.add('active');
+
+    // Auto-fetch data per tab
+    if (tabId === 'tab-dash') loadStats();
+    if (tabId === 'tab-catalogue') loadCatalogue();
+    if (tabId === 'tab-fees') loadFees();
+    if (tabId === 'tab-capacity') loadCapacity();
+    if (tabId === 'tab-bookings') loadBookings();
+    if (tabId === 'tab-waitlists') loadWaitlists();
+    if (tabId === 'tab-payments') loadPayments();
+    if (tabId === 'tab-schools') loadSchools();
+    if (tabId === 'tab-qualify') loadQualifyCatalogue();
+    if (tabId === 'tab-comms') loadBroadcastLogs();
+    if (tabId === 'tab-audit') loadAuditLogs();
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+  // 1. STATS & DASHBOARDS
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API}?action=get_stats`);
+      const json = await res.json();
+      if (!json.success) return;
+      const d = json.data;
+
+      document.getElementById('stat-total-students').textContent = d.total_students || 0;
+      document.getElementById('stat-confirmed-passes').textContent = d.confirmed_registrations || 0;
+      document.getElementById('stat-total-revenue').textContent = '₹' + Number(d.total_revenue || 0).toLocaleString();
+      document.getElementById('stat-total-schools').textContent = (d.by_school ? d.by_school.length : 0);
+
+      // Fill Rate Bars
+      const fillBox = document.getElementById('fill-rate-bars');
+      fillBox.innerHTML = (d.fill_rates || []).map(b => `
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:0.25rem;">
+            <span>${b.workshop_name} • ${b.batch_name}</span>
+            <span style="color:${b.fill_percentage >= 90 ? '#dc2626' : '#0cb8c0'};">${b.seats_taken} / ${b.capacity} (${b.fill_percentage}%)</span>
+          </div>
+          <div style="width:100%; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
+            <div style="width:${b.fill_percentage}%; height:100%; background:${b.fill_percentage >= 90 ? '#dc2626' : '#0cb8c0'};"></div>
+          </div>
+        </div>
+      `).join('') || '<p style="color:#64748b; font-size:0.85rem;">No active batches loaded.</p>';
+
+      // Band distributions
+      const bandBox = document.getElementById('band-distribution-list');
+      bandBox.innerHTML = (d.by_band || []).map(b => `
+        <div style="display:flex; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid #f1f5f9; font-size:0.85rem;">
+          <span style="font-weight:700;">${b.band} Band</span>
+          <span class="adm-badge adm-badge-blue">${b.count} Students</span>
+        </div>
+      `).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  // 2. CATALOGUE
+  async function loadCatalogue() {
+    try {
+      const res = await fetch(`${API}?action=get_catalogue`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('catalogue-table-body');
+      
+      let rows = '';
+      (json.data.workshops || []).forEach(w => {
+        rows += `
+          <tr>
+            <td><span class="adm-badge adm-badge-blue">Workshop</span></td>
+            <td><strong>${w.name}</strong><br><small style="color:#64748b;">${w.description ? w.description.substring(0, 50) : ''}...</small></td>
+            <td>₹${w.price}</td>
+            <td>Grades ${w.min_grade}-${w.max_grade}</td>
+            <td><small>${w.reg_open_at ? w.reg_open_at.substring(0,10) : 'Open'} → ${w.reg_close_at ? w.reg_close_at.substring(0,10) : 'Fest Eve'}</small></td>
+            <td><span class="adm-badge ${w.is_active ? 'adm-badge-green' : 'adm-badge-red'}">${w.is_active ? 'Active' : 'Inactive'}</span></td>
             <td>
-              <button class="adm-action-btn-sm adm-edit-btn" onclick="editWorkshop(${w.id})">Edit</button>
-              <button class="adm-action-btn-sm adm-del-btn" onclick="deleteWorkshop(${w.id})">Delete</button>
+              <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="toggleActive('workshop', ${w.id}, ${w.is_active ? 0 : 1})">${w.is_active ? 'Deactivate' : 'Activate'}</button>
             </td>
           </tr>
         `;
-      }).join('');
+      });
+      (json.data.competitions || []).forEach(c => {
+        rows += `
+          <tr>
+            <td><span class="adm-badge adm-badge-purple">Competition</span></td>
+            <td><strong>${c.name}</strong></td>
+            <td>₹${c.price}</td>
+            <td>${c.is_team ? `Team (${c.min_team_size}-${c.max_team_size})` : 'Individual'}</td>
+            <td><small>${c.reg_open_at ? c.reg_open_at.substring(0,10) : 'Open'} → ${c.reg_close_at ? c.reg_close_at.substring(0,10) : 'Fest Eve'}</small></td>
+            <td><span class="adm-badge ${c.is_active ? 'adm-badge-green' : 'adm-badge-red'}">${c.is_active ? 'Active' : 'Inactive'}</span></td>
+            <td>
+              <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="toggleActive('competition', ${c.id}, ${c.is_active ? 0 : 1})">${c.is_active ? 'Deactivate' : 'Activate'}</button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = rows;
+    } catch(e) { console.error(e); }
+  }
+
+  async function toggleActive(type, id, isActive) {
+    await fetch(`${API}?action=toggle_catalogue_active`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, id, is_active: isActive })
+    });
+    loadCatalogue();
+  }
+
+  // 3. FEES
+  async function loadFees() {
+    try {
+      const res = await fetch(`${API}?action=get_fees`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('fees-table-body');
+      tbody.innerHTML = (json.data || []).map(f => `
+        <tr>
+          <td><code>${f.code}</code></td>
+          <td><strong>${f.label}</strong></td>
+          <td><span style="color:#059669; font-weight:700;">₹${f.price_velammal}</span></td>
+          <td><span style="color:#0284c7; font-weight:700;">₹${f.price_other}</span></td>
+          <td><small>${f.effective_from}</small></td>
+          <td><button class="adm-btn adm-btn-outline adm-btn-sm" onclick="alert('Fee band is active and effective.')">Active</button></td>
+        </tr>
+      `).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  // 4. CAPACITY GUARDRAILS
+  async function loadCapacity() {
+    try {
+      const res = await fetch(`${API}?action=get_stats`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('capacity-table-body');
+      tbody.innerHTML = (json.data.fill_rates || []).map(b => `
+        <tr>
+          <td><strong>${b.workshop_name}</strong></td>
+          <td>${b.batch_name}</td>
+          <td><span class="adm-badge adm-badge-blue">${b.seats_taken} Seats Occupied</span></td>
+          <td><strong>${b.capacity}</strong></td>
+          <td><span class="adm-badge ${b.fill_percentage >= 90 ? 'adm-badge-red' : 'adm-badge-green'}">${b.fill_percentage}% Full</span></td>
+          <td>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="openCapacityModal(${b.batch_id}, '${b.batch_name}', ${b.seats_taken}, ${b.capacity})">
+              <i class="fa-solid fa-sliders"></i> Adjust Capacity
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  function openCapacityModal(batchId, name, occ, cap) {
+    document.getElementById('cap-batch-id').value = batchId;
+    document.getElementById('cap-batch-name').value = name;
+    document.getElementById('cap-current-occ').value = occ;
+    document.getElementById('cap-new-limit').value = cap;
+    document.getElementById('cap-new-limit').min = occ;
+    openModal('modal-capacity');
+  }
+
+  async function submitCapacity() {
+    const batchId = document.getElementById('cap-batch-id').value;
+    const capacity = parseInt(document.getElementById('cap-new-limit').value);
+    const occ = parseInt(document.getElementById('cap-current-occ').value);
+    const reason = document.getElementById('cap-reason').value;
+
+    if (capacity < occ) {
+      alert(`Capacity reduction blocked! Cannot set capacity below current occupancy of ${occ} seats.`);
+      return;
     }
 
-    function editWorkshop(id) {
-      const w = allWorkshops.find(x => x.id == id);
-      if (!w) return;
-      document.getElementById('ws-id').value = w.id;
-      document.getElementById('ws-name').value = w.name;
-      document.getElementById('ws-desc').value = w.description;
-      document.getElementById('ws-type').value = w.is_paid ? 'paid' : 'free';
-      document.getElementById('ws-capacity').value = w.capacity;
-      document.getElementById('ws-min-grade').value = w.min_grade || '4';
-      document.getElementById('ws-max-grade').value = w.max_grade || '12';
-      document.getElementById('ws-form').style.display = 'block';
+    try {
+      const res = await fetch(`${API}?action=update_batch_capacity`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ batch_id: batchId, capacity, reason })
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert(json.message);
+        closeModal('modal-capacity');
+        loadCapacity();
+      } else {
+        alert('Error: ' + json.message);
+      }
+    } catch(e) { alert(e.message); }
+  }
+
+  // 5. BOOKINGS & OVERRIDES
+  async function loadBookings() {
+    try {
+      const q = document.getElementById('booking-search-input').value;
+      const res = await fetch(`${API}?action=get_bookings&search=${encodeURIComponent(q)}`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('bookings-table-body');
+      tbody.innerHTML = (json.data.bookings || []).map(b => `
+        <tr>
+          <td><code>${b.booking_reference}</code></td>
+          <td><strong>${b.student_name || 'Student #' + b.participant_id}</strong><br><small style="color:#64748b;">${b.guardian_mobile || ''}</small></td>
+          <td>${b.school || 'Individual'}<br><span class="adm-badge adm-badge-blue">${b.band || 'BAND'}</span></td>
+          <td><strong>${b.workshop_name || 'Workshop'}</strong><br><small>${b.batch_name || 'Batch'}</small></td>
+          <td><span class="adm-badge ${b.status==='CONFIRMED'?'adm-badge-green':'adm-badge-amber'}">${b.status}</span></td>
+          <td>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="openOverrideModal(${b.id}, '${b.status}')"><i class="fa-solid fa-pen-to-square"></i> Override</button>
+            <button class="adm-btn adm-btn-danger adm-btn-sm" onclick="cancelBooking(${b.id})"><i class="fa-solid fa-xmark"></i></button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" style="text-align:center; color:#64748b;">No bookings found.</td></tr>';
+    } catch(e) { console.error(e); }
+  }
+
+  function openOverrideModal(id, status) {
+    document.getElementById('ov-booking-id').value = id;
+    document.getElementById('ov-status').value = status;
+    document.getElementById('ov-reason').value = '';
+    openModal('modal-override');
+  }
+
+  async function submitOverride() {
+    const bookingId = document.getElementById('ov-booking-id').value;
+    const status = document.getElementById('ov-status').value;
+    const reason = document.getElementById('ov-reason').value.trim();
+
+    if (!reason) {
+      alert('Administrative override rejected! A typed reason is mandatory.');
+      return;
     }
 
-    async function saveWorkshop(e) {
-      e.preventDefault();
-      const id = document.getElementById('ws-id').value;
-      const name = document.getElementById('ws-name').value.trim();
-      const description = document.getElementById('ws-desc').value.trim();
-      const is_paid = document.getElementById('ws-type').value === 'paid';
-      const capacity = parseInt(document.getElementById('ws-capacity').value);
-      const min_grade = parseInt(document.getElementById('ws-min-grade').value);
-      const max_grade = parseInt(document.getElementById('ws-max-grade').value);
+    try {
+      const res = await fetch(`${API}?action=override_booking`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ booking_id: bookingId, status, reason })
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert(json.message);
+        closeModal('modal-override');
+        loadBookings();
+      } else {
+        alert(json.message);
+      }
+    } catch(e) { alert(e.message); }
+  }
 
-      const payload = { id, name, description, is_paid, capacity, min_grade, max_grade };
+  async function cancelBooking(id) {
+    const reason = prompt('Please enter mandatory cancellation reason:');
+    if (!reason) return;
 
-      try {
-        const res = await fetch(ADMIN_API + '?action=save_workshop&admin_id=' + aid, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+    await fetch(`${API}?action=cancel_booking`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking_id: id, reason })
+    });
+    loadBookings();
+  }
+
+  // 6. WAITLISTS
+  async function loadWaitlists() {
+    try {
+      const res = await fetch(`${API}?action=get_waitlists`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('waitlists-table-body');
+      tbody.innerHTML = (json.data || []).map(w => `
+        <tr>
+          <td><span class="adm-badge adm-badge-blue">#${w.position}</span></td>
+          <td><strong>${w.student_name}</strong><br><small>${w.guardian_mobile}</small></td>
+          <td>${w.school}</td>
+          <td>${w.workshop_name} • ${w.batch_name}</td>
+          <td><span class="adm-badge adm-badge-amber">${w.state}</span></td>
+          <td>
+            <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="promoteWaitlist(${w.id})"><i class="fa-solid fa-arrow-up"></i> Promote</button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" style="text-align:center; color:#64748b;">No waitlisted participants currently in queue.</td></tr>';
+    } catch(e) { console.error(e); }
+  }
+
+  async function promoteWaitlist(id) {
+    const reason = prompt('Reason for manual promotion:', 'Admin promoted seat');
+    if (!reason) return;
+    const res = await fetch(`${API}?action=promote_waitlist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ waitlist_id: id, reason })
+    });
+    const json = await res.json();
+    alert(json.message);
+    loadWaitlists();
+  }
+
+  async function triggerStandbyRelease() {
+    const res = await fetch(`${API}?action=release_standby`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ batch_id: 1, seat_count: 5 })
+    });
+    const json = await res.json();
+    alert(json.message);
+    loadWaitlists();
+  }
+
+  // 7. PAYMENTS
+  async function loadPayments() {
+    try {
+      const q = document.getElementById('payment-search-input').value;
+      const res = await fetch(`${API}?action=get_payments&search=${encodeURIComponent(q)}`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('payments-table-body');
+      tbody.innerHTML = (json.data.payments || []).map(p => `
+        <tr>
+          <td><code>${p.order_ref}</code></td>
+          <td><small>${p.gateway_ref || 'RAZORPAY_DEMO'}</small></td>
+          <td><strong>${p.payer_name || p.school_name || 'Individual'}</strong></td>
+          <td><strong style="color:#059669;">₹${p.amount}</strong></td>
+          <td><span class="adm-badge ${p.status==='PAID'?'adm-badge-green':(p.status==='REFUNDED'?'adm-badge-red':'adm-badge-amber')}">${p.status}</span></td>
+          <td><small>${p.created_at ? p.created_at.substring(0,10) : ''}</small></td>
+          <td>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="reconcilePayment(${p.id})"><i class="fa-solid fa-sync"></i> Reconcile</button>
+            ${p.status !== 'REFUNDED' ? `<button class="adm-btn adm-btn-danger adm-btn-sm" onclick="openRefundModal(${p.id})">Refund</button>` : ''}
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="7" style="text-align:center; color:#64748b;">No payment records found.</td></tr>';
+    } catch(e) { console.error(e); }
+  }
+
+  async function reconcilePayment(id) {
+    const res = await fetch(`${API}?action=reconcile_payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payment_id: id })
+    });
+    const json = await res.json();
+    alert(json.message);
+    loadPayments();
+  }
+
+  function openRefundModal(id) {
+    document.getElementById('ref-payment-id').value = id;
+    document.getElementById('ref-reason').value = '';
+    openModal('modal-refund');
+  }
+
+  async function submitRefund() {
+    const id = document.getElementById('ref-payment-id').value;
+    const reason = document.getElementById('ref-reason').value.trim();
+    if (!reason) { alert('Mandatory refund reason required.'); return; }
+
+    const res = await fetch(`${API}?action=refund_payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payment_id: id, reason })
+    });
+    const json = await res.json();
+    alert(json.message);
+    closeModal('modal-refund');
+    loadPayments();
+  }
+
+  // 8. SCHOOLS
+  let allSchoolsList = [];
+  async function loadSchools() {
+    try {
+      const res = await fetch(`${API}?action=get_schools`);
+      const json = await res.json();
+      if (!json.success) return;
+      allSchoolsList = json.data || [];
+      const tbody = document.getElementById('schools-table-body');
+      tbody.innerHTML = allSchoolsList.map(s => `
+        <tr>
+          <td><strong>${s.school_name}</strong></td>
+          <td>${s.city || 'Chennai'}</td>
+          <td><span class="adm-badge ${s.tier==='VELAMMAL'?'adm-badge-blue':(s.tier==='PARTNER'?'adm-badge-purple':'adm-badge-amber')}">${s.tier || 'STANDARD'}</span></td>
+          <td><span class="adm-badge ${s.is_active?'adm-badge-green':'adm-badge-red'}">${s.is_active?'APPROVED':'PENDING'}</span></td>
+          <td>${s.paid_student_count || 0} / ${s.student_count || 0}</td>
+          <td>
+            <button class="adm-btn adm-btn-outline adm-btn-sm" onclick="toggleSchoolTier(${s.id}, '${s.tier}')">Switch Tier</button>
+          </td>
+        </tr>
+      `).join('');
+    } catch(e) { console.error(e); }
+  }
+
+  async function toggleSchoolTier(id, current) {
+    const next = (current === 'STANDARD') ? 'VELAMMAL' : (current === 'VELAMMAL' ? 'PARTNER' : 'STANDARD');
+    const sch = allSchoolsList.find(x => x.id == id);
+    if (!sch) return;
+    await fetch(`${API}?action=update_school`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, school_name: sch.school_name, city: sch.city, tier: next, status: 'APPROVED', is_active: 1 })
+    });
+    loadSchools();
+  }
+
+  function openMergeSchoolsModal() {
+    if (allSchoolsList.length < 2) { alert('At least 2 schools needed to merge.'); return; }
+    const sourceName = prompt('Enter duplicate SOURCE School ID to merge FROM:');
+    const targetName = prompt('Enter target canonical School ID to merge INTO:');
+    if (!sourceName || !targetName) return;
+    mergeSchools(sourceName, targetName);
+  }
+
+  async function mergeSchools(sourceId, targetId) {
+    const reason = prompt('Merge reason:', 'Deduplication consolidation');
+    const res = await fetch(`${API}?action=merge_schools`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source_school_id: sourceId, target_school_id: targetId, reason })
+    });
+    const json = await res.json();
+    alert(json.message);
+    loadSchools();
+  }
+
+  // 9. QUALIFICATION & CLASH DETECTION
+  async function loadQualifyCatalogue() {
+    try {
+      const res = await fetch(`${API}?action=get_catalogue`);
+      const json = await res.json();
+      if (!json.success) return;
+      const select = document.getElementById('qualify-window-select');
+      
+      let opts = '';
+      (json.data.competitions || []).forEach(c => {
+        (c.windows || []).forEach(w => {
+          opts += `<option value="${w.id}">[${w.stage}] ${c.name} — ${w.name} (${w.starts_at.substring(5, 16)})</option>`;
         });
-        const data = await res.json();
-        if (data.success) {
-          alert('Workshop saved successfully.');
-          hideWsForm();
-          loadWorkshops();
-        } else {
-          alert(data.message || 'Error saving workshop.');
-        }
-      } catch (err) {
-        if (id) {
-          const idx = allWorkshops.findIndex(x => x.id == id);
-          if (idx !== -1) {
-            allWorkshops[idx] = { ...allWorkshops[idx], name, description, is_paid: is_paid?1:0, capacity, min_grade, max_grade };
-          }
-        } else {
-          allWorkshops.push({
-            id: Date.now(), name, description, is_paid: is_paid?1:0, capacity, min_grade, max_grade, seats_taken: 0
-          });
-        }
-        alert('Saved successfully (Demo Mode).');
-        hideWsForm();
-        renderWorkshopsTable();
-      }
+      });
+      select.innerHTML = opts;
+    } catch(e) { console.error(e); }
+  }
+
+  async function submitQualification() {
+    const partId = document.getElementById('qualify-part-id').value;
+    const windowId = document.getElementById('qualify-window-select').value;
+    const notes = document.getElementById('qualify-notes').value;
+
+    const res = await fetch(`${API}?action=qualify_finalist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ participant_id: partId, competition_window_id: windowId, notes })
+    });
+    const json = await res.json();
+    const clashBox = document.getElementById('qualification-clash-result');
+    clashBox.style.display = 'block';
+
+    if (json.data && json.data.has_clash) {
+      clashBox.innerHTML = `
+        <div style="background:#fee2e2; border:1px solid #fecaca; border-radius:12px; padding:1.25rem; color:#991b1b;">
+          <h4 style="margin:0 0 0.5rem; font-weight:800;"><i class="fa-solid fa-triangle-exclamation"></i> TIMETABLE CLASH DETECTED!</h4>
+          <p style="margin:0 0 0.5rem; font-size:0.85rem;">Student has confirmed workshop session(s) overlapping the championship final:</p>
+          <ul>
+            ${json.data.clashes.map(c => `<li><strong>${c.workshop_name}</strong> (${c.starts_at} to ${c.ends_at}) at ${c.venue_name}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    } else {
+      clashBox.innerHTML = `
+        <div style="background:#d1fae5; border:1px solid #a7f3d0; border-radius:12px; padding:1.25rem; color:#065f46;">
+          <h4 style="margin:0 0 0.3rem; font-weight:800;"><i class="fa-solid fa-circle-check"></i> QUALIFICATION CONFIRMED (NO CLASHES)</h4>
+          <p style="margin:0; font-size:0.85rem;">Participant has been entered into the Grand Finals bracket cleanly.</p>
+        </div>
+      `;
     }
+  }
 
-    async function deleteWorkshop(id) {
-      if (!confirm('Are you sure you want to delete this workshop?')) return;
-
-      try {
-        const res = await fetch(ADMIN_API + '?action=delete_workshop&admin_id=' + aid, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('Workshop deleted successfully.');
-          loadWorkshops();
-        } else {
-          alert(data.message || 'Error deleting workshop.');
-        }
-      } catch (err) {
-        allWorkshops = allWorkshops.filter(x => x.id != id);
-        alert('Deleted successfully (Demo Mode).');
-        renderWorkshopsTable();
-      }
+  // 10. EXPORTS
+  function downloadExport(type, params = {}) {
+    let url = `${API}?action=export&type=${type}`;
+    for (const [k, v] of Object.entries(params)) {
+      url += `&${k}=${encodeURIComponent(v)}`;
     }
+    window.location.href = url;
+  }
 
-    function logout() {
-      if (window.TechFestAccess && typeof window.TechFestAccess.logout === 'function') {
-        window.TechFestAccess.logout('../login/index.html');
-        return;
-      }
-      localStorage.removeItem('tf_token');
-      localStorage.removeItem('tf_participant_id');
-      localStorage.removeItem('tf_user_name');
-      localStorage.removeItem('tf_entry_paid');
-      localStorage.removeItem('tf_dev_bypass_active');
-      sessionStorage.clear();
-      window.location.href = '../login/index.html';
-    }
+  // 11. COMMUNICATIONS
+  async function sendBroadcast() {
+    const segment = document.getElementById('comm-segment').value;
+    const channel = document.getElementById('comm-channel').value;
+    const subject = document.getElementById('comm-subject').value;
+    const message = document.getElementById('comm-message').value.trim();
 
-    loadStats();
-  </script>
+    if (!message) { alert('Message cannot be blank.'); return; }
+
+    const res = await fetch(`${API}?action=send_broadcast`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ segment, channel, subject, message })
+    });
+    const json = await res.json();
+    alert(json.message);
+    document.getElementById('comm-message').value = '';
+    loadBroadcastLogs();
+  }
+
+  async function loadBroadcastLogs() {
+    try {
+      const res = await fetch(`${API}?action=get_notifications`);
+      const json = await res.json();
+      if (!json.success) return;
+      const box = document.getElementById('broadcast-logs-list');
+      box.innerHTML = (json.data || []).map(n => `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:0.85rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#64748b; margin-bottom:0.3rem;">
+            <span><span class="adm-badge adm-badge-blue">${n.channel}</span> → ${n.segment}</span>
+            <span>${n.created_at || ''}</span>
+          </div>
+          <strong style="font-size:0.88rem; color:#071921;">${n.subject}</strong>
+          <p style="font-size:0.8rem; color:#475569; margin:0.25rem 0 0;">${n.message}</p>
+        </div>
+      `).join('') || '<p style="color:#64748b; font-size:0.85rem;">No previous broadcasts sent.</p>';
+    } catch(e) { console.error(e); }
+  }
+
+  // 12. AUDIT LOGS
+  async function loadAuditLogs() {
+    try {
+      const q = document.getElementById('audit-search-input').value;
+      const res = await fetch(`${API}?action=get_audit_logs&search=${encodeURIComponent(q)}`);
+      const json = await res.json();
+      if (!json.success) return;
+      const tbody = document.getElementById('audit-table-body');
+      tbody.innerHTML = (json.data.logs || []).map(a => `
+        <tr>
+          <td><code>#${a.id}</code></td>
+          <td><small>${a.created_at}</small></td>
+          <td><strong>${a.actor_name}</strong></td>
+          <td><span class="adm-badge adm-badge-purple">${a.action}</span></td>
+          <td>${a.entity_type} #${a.entity_id}</td>
+          <td><small style="color:#475569;">${a.reason || 'Routine operation'}</small></td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" style="text-align:center; color:#64748b;">No audit records found.</td></tr>';
+    } catch(e) { console.error(e); }
+  }
+
+  function logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = '../login/index.html';
+  }
+
+  // Initial Load
+  loadStats();
+</script>
 </body>
 </html>
