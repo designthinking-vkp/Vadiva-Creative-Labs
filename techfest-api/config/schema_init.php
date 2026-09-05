@@ -238,7 +238,9 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_escort_school (school_name)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
-        // 10. AUDIT LOGS TABLE (Immutable log)
+    } catch (Exception $e) {}
+
+    // 10. AUDIT LOGS TABLE (Immutable log)
     try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS audit_logs (
