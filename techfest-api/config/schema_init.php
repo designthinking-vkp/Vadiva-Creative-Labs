@@ -7,8 +7,8 @@
 function ensureSchemaTables($pdo) {
     if (!$pdo || !($pdo instanceof PDO)) return;
 
+    // 1. PARTICIPANTS TABLE
     try {
-        // 1. PARTICIPANTS TABLE
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS participants (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -18,10 +18,16 @@ function ensureSchemaTables($pdo) {
                 grade INT NOT NULL,
                 section VARCHAR(10) NULL,
                 school VARCHAR(255) NULL,
+                school_id BIGINT UNSIGNED NULL,
+                photo_url VARCHAR(500) NULL,
+                dietary_pref VARCHAR(100) DEFAULT 'Standard',
+                medical_info VARCHAR(255) DEFAULT 'None',
+                needs_laptop BOOLEAN DEFAULT FALSE,
                 date_of_birth DATE NOT NULL,
                 guardian_name VARCHAR(255) NOT NULL,
                 guardian_mobile VARCHAR(20) NOT NULL,
                 band ENUM('JUNIOR', 'INTERMEDIATE', 'SENIOR') NOT NULL,
+                tier VARCHAR(50) DEFAULT 'STANDARD',
                 entry_status ENUM('PENDING', 'PAID', 'FAILED') DEFAULT 'PENDING',
                 entry_payment_id BIGINT UNSIGNED NULL,
                 qr_token VARCHAR(255) UNIQUE,
@@ -29,18 +35,18 @@ function ensureSchemaTables($pdo) {
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+    } catch (Exception $e) {}
 
-        // Ensure school column exists if table already existed
-        try {
-            $pdo->exec("ALTER TABLE participants ADD COLUMN school VARCHAR(255) NULL AFTER section");
-        } catch (Exception $e) {}
-
-        // 2. SCHOOLS TABLE
+    // 2. SCHOOLS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS schools (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 school_name VARCHAR(255) NOT NULL UNIQUE,
                 city VARCHAR(100) DEFAULT 'Chennai',
+                tier ENUM('STANDARD', 'VELAMMAL', 'PARTNER') DEFAULT 'STANDARD',
+                status ENUM('APPROVED', 'PENDING') DEFAULT 'APPROVED',
+                coordinator_user_id BIGINT UNSIGNED NULL,
                 is_active BOOLEAN DEFAULT TRUE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -50,162 +56,59 @@ function ensureSchemaTables($pdo) {
         $checkSchools = $pdo->query("SELECT COUNT(*) as cnt FROM schools")->fetch();
         if (($checkSchools['cnt'] ?? 0) == 0) {
             $pdo->exec("
-                INSERT INTO schools (school_name, city) VALUES
-                ('Velammal Vidyalaya - Mogappair', 'Chennai'),
-                ('Velammal Vidyalaya - Mel Ayanambakkam', 'Chennai'),
-                ('Velammal Vidyalaya - Paruthipattu', 'Chennai'),
-                ('Velammal Vidyalaya - Avadi', 'Chennai'),
-                ('Velammal Vidyalaya - Poonamallee', 'Chennai'),
-                ('Velammal Vidyalaya - Karambakkam', 'Chennai'),
-                ('Velammal Vidyalaya - Alapakkam', 'Chennai'),
-                ('Velammal Vidyalaya - Annexure', 'Chennai'),
-                ('Velammal Vidyalaya - Madhavaram', 'Chennai'),
-                ('Velammal Bodhi Campus - Ponneri', 'Ponneri'),
-                ('Velammal Bodhi Campus - Kolapakkam', 'Chennai'),
-                ('Velammal New Gen Edu Network', 'Chennai'),
-                ('Velammal Matriculation - Mogappair', 'Chennai'),
-                ('Velammal Main School - Mogappair', 'Chennai'),
-                ('DAV Boys Senior Secondary School - Mogappair', 'Chennai'),
-                ('DAV Girls Senior Secondary School - Mogappair', 'Chennai'),
-                ('DAV Public School - Velachery', 'Chennai'),
-                ('PSBB Millennium School - Gerugambakkam', 'Chennai'),
-                ('Padma Seshadri Bala Bhavan (PSBB) - KK Nagar', 'Chennai'),
-                ('Padma Seshadri Bala Bhavan (PSBB) - Nungambakkam', 'Chennai'),
-                ('Chettinad Vidyashram - R.A. Puram', 'Chennai'),
-                ('SBOA School and Junior College - Anna Nagar', 'Chennai'),
-                ('Chennai Public School (CPS) - Anna Nagar', 'Chennai'),
-                ('Chennai Public School (CPS) - Thirumazhisai', 'Chennai'),
-                ('Bala Vidya Mandir - Adyar', 'Chennai'),
-                ('Kendriya Vidyalaya - IIT Madras', 'Chennai'),
-                ('Kendriya Vidyalaya - CLRI', 'Chennai'),
-                ('Kendriya Vidyalaya - Ashok Nagar', 'Chennai'),
-                ('National Public School (NPS) - Gopalapuram', 'Chennai'),
-                ('Chinmaya Vidyalaya - Kilpauk', 'Chennai'),
-                ('Chinmaya Vidyalaya - Taylors Road', 'Chennai'),
-                ('St. Johns International Residential School', 'Chennai'),
-                ('Don Bosco Matriculation School - Egmore', 'Chennai'),
-                ('The Schram Academy - Maduravoyal', 'Chennai'),
-                ('Maharishi Vidya Mandir - Chetpet', 'Chennai');
+                INSERT INTO schools (school_name, city, tier, status) VALUES
+                ('Velammal Vidyalaya - Mogappair', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Mel Ayanambakkam', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Paruthipattu', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Avadi', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Poonamallee', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Karambakkam', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Alapakkam', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Annexure', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Vidyalaya - Madhavaram', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Bodhi Campus - Ponneri', 'Ponneri', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Bodhi Campus - Kolapakkam', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal New Gen Edu Network', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Matriculation - Mogappair', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('Velammal Main School - Mogappair', 'Chennai', 'VELAMMAL', 'APPROVED'),
+                ('DAV Boys Senior Secondary School - Mogappair', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('DAV Girls Senior Secondary School - Mogappair', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('DAV Public School - Velachery', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('PSBB Millennium School - Gerugambakkam', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('Padma Seshadri Bala Bhavan (PSBB) - KK Nagar', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('Padma Seshadri Bala Bhavan (PSBB) - Nungambakkam', 'Chennai', 'PARTNER', 'APPROVED'),
+                ('Chettinad Vidyashram - R.A. Puram', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('SBOA School and Junior College - Anna Nagar', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Chennai Public School (CPS) - Anna Nagar', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Chennai Public School (CPS) - Thirumazhisai', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Bala Vidya Mandir - Adyar', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Kendriya Vidyalaya - IIT Madras', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Kendriya Vidyalaya - CLRI', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Kendriya Vidyalaya - Ashok Nagar', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('National Public School (NPS) - Gopalapuram', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Chinmaya Vidyalaya - Kilpauk', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Chinmaya Vidyalaya - Taylors Road', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('St. Johns International Residential School', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Don Bosco Matriculation School - Egmore', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('The Schram Academy - Maduravoyal', 'Chennai', 'STANDARD', 'APPROVED'),
+                ('Maharishi Vidya Mandir - Chetpet', 'Chennai', 'STANDARD', 'APPROVED');
             ");
         }
+    } catch (Exception $e) {}
 
-        // 3. VELAMMAL STUDENTS TABLE
+    // 3. VELAMMAL CAMPUSES TABLE
+    try {
         $pdo->exec("
-            CREATE TABLE IF NOT EXISTS velammal_students (
+            CREATE TABLE IF NOT EXISTS velammal_campuses (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                campus_id BIGINT UNSIGNED NOT NULL,
+                campus_code VARCHAR(50) UNIQUE NOT NULL,
                 campus_name VARCHAR(255) NOT NULL,
-                admission_number VARCHAR(100) NOT NULL,
-                student_name VARCHAR(255) NOT NULL,
-                grade INT NOT NULL,
-                section VARCHAR(10) NULL,
+                city VARCHAR(100) DEFAULT 'Chennai',
                 is_active BOOLEAN DEFAULT TRUE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                UNIQUE KEY uq_campus_admission (campus_name, admission_number)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
-
-        // 4. CONSENTS TABLE
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS consents (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                participant_id BIGINT UNSIGNED NOT NULL,
-                consent_type ENUM('GUARDIAN', 'MEDIA', 'LAPTOP', 'NON_REFUNDABLE') NOT NULL,
-                is_given BOOLEAN DEFAULT FALSE,
-                ip_address VARCHAR(45) NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // 5. WORKSHOP BOOKINGS TABLE
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS workshop_bookings (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                booking_reference VARCHAR(50) NOT NULL UNIQUE,
-                participant_id BIGINT UNSIGNED NULL,
-                workshop_id BIGINT UNSIGNED NOT NULL,
-                workshop_type ENUM('PAID', 'FREE') NOT NULL,
-                batch_id BIGINT UNSIGNED NULL,
-                free_session_id BIGINT UNSIGNED NULL,
-                status ENUM('SOFT_LOCK', 'CONFIRMED', 'CANCELLED', 'WAITLISTED') DEFAULT 'SOFT_LOCK',
-                is_standby BOOLEAN DEFAULT FALSE,
-                locked_until TIMESTAMP NULL,
-                confirmed_at TIMESTAMP NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
-
-        // 6. QR TOKENS TABLE (Opaque Token Source of Truth)
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS qr_tokens (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                participant_id BIGINT UNSIGNED NOT NULL,
-                token VARCHAR(255) NOT NULL UNIQUE,
-                is_active BOOLEAN DEFAULT TRUE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_qr_token (token),
-                INDEX idx_qr_participant (participant_id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
-
-        // 7. ATTENDANCE TABLE (Gate, Zone, Workshop Door, Theatre Door, Competition Marshalling)
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS attendance (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                participant_id BIGINT UNSIGNED NOT NULL,
-                checkpoint_type ENUM('GATE', 'ZONE', 'WORKSHOP', 'THEATRE', 'COMPETITION') NOT NULL DEFAULT 'GATE',
-                checkpoint_name VARCHAR(255) NOT NULL DEFAULT 'Main Gate',
-                session_id BIGINT UNSIGNED NULL,
-                competition_window_id BIGINT UNSIGNED NULL,
-                operator_name VARCHAR(255) DEFAULT 'Operator',
-                operator_user_id BIGINT UNSIGNED NULL,
-                status ENUM('VERIFIED', 'NOT_BOOKED', 'DUPLICATE_SILENT', 'DENIED') DEFAULT 'VERIFIED',
-                device_timestamp BIGINT UNSIGNED NULL,
-                scanned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_att_participant (participant_id),
-                INDEX idx_att_checkpoint (checkpoint_type, scanned_at),
-                INDEX idx_att_dup_check (participant_id, checkpoint_type, checkpoint_name, scanned_at)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
-
-        // Ensure photo_url column exists in participants
-        try {
-            $pdo->exec("ALTER TABLE participants ADD COLUMN photo_url VARCHAR(500) NULL AFTER school");
-        } catch (Exception $e) {}
-
-        // Ensure tier column exists in participants if needed
-        try {
-            $pdo->exec("ALTER TABLE participants ADD COLUMN tier VARCHAR(50) DEFAULT 'STANDARD' AFTER band");
-        } catch (Exception $e) {}
-
-        // Ensure school_id column exists in participants
-        try {
-            $pdo->exec("ALTER TABLE participants ADD COLUMN school_id BIGINT UNSIGNED NULL AFTER school");
-        } catch (Exception $e) {}
-
-        // Ensure coordinator_user_id column exists in schools
-        try {
-            $pdo->exec("ALTER TABLE schools ADD COLUMN coordinator_user_id BIGINT UNSIGNED NULL AFTER city");
-        } catch (Exception $e) {}
-
-        // 8. SCHOOL ESCORTING TEACHERS TABLE (1:20 Ratio Checker)
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS school_escorts (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                school_id BIGINT UNSIGNED NULL,
-                school_name VARCHAR(255) NOT NULL,
-                escort_name VARCHAR(255) NOT NULL,
-                phone VARCHAR(30) NOT NULL,
-                email VARCHAR(255) NULL,
-                designation VARCHAR(100) DEFAULT 'Escorting Teacher',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_escort_school (school_name)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
-
-        // 9. SEED VELAMMAL CAMPUSES IF EMPTY
         $checkCampuses = $pdo->query("SELECT COUNT(*) as cnt FROM velammal_campuses")->fetch();
         if (($checkCampuses['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -226,43 +129,117 @@ function ensureSchemaTables($pdo) {
                 (14, 'VEL-MAIN-MOG', 'Velammal Main School - Mogappair', 'Chennai', TRUE);
             ");
         }
+    } catch (Exception $e) {}
 
-        // 7. SEED VELAMMAL STUDENTS IF EMPTY
-        $checkStudents = $pdo->query("SELECT COUNT(*) as cnt FROM velammal_students")->fetch();
-        if (($checkStudents['cnt'] ?? 0) == 0) {
-            $pdo->exec("
-                INSERT INTO velammal_students (campus_id, campus_name, admission_number, student_name, grade, section) VALUES
-                (1, 'Velammal Vidyalaya - Mogappair', 'VEL-MOG-1001', 'Aarav Sharma', 5, 'A'),
-                (1, 'Velammal Vidyalaya - Mogappair', 'VEL-MOG-1002', 'Diya Ramesh', 8, 'B'),
-                (1, 'Velammal Vidyalaya - Mogappair', 'VEL-MOG-1003', 'Karthik Raja', 10, 'C'),
-                (1, 'Velammal Vidyalaya - Mogappair', 'MOG202601', 'Sanjay Kumar', 6, 'A'),
-                (1, 'Velammal Vidyalaya - Mogappair', 'MOG202602', 'Pooja Sundaram', 9, 'B'),
-                (2, 'Velammal Vidyalaya - Mel Ayanambakkam', 'VEL-MEL-2001', 'Rithanya Shree', 5, 'A'),
-                (2, 'Velammal Vidyalaya - Mel Ayanambakkam', 'VEL-MEL-2002', 'Adithya Narayanan', 7, 'C'),
-                (2, 'Velammal Vidyalaya - Mel Ayanambakkam', 'VEL-MEL-2003', 'Naveen Vignesh', 11, 'A'),
-                (2, 'Velammal Vidyalaya - Mel Ayanambakkam', 'AYAN202601', 'Harish Balaji', 8, 'B'),
-                (3, 'Velammal Vidyalaya - Paruthipattu', 'VEL-PAR-3001', 'Meenakshi Iyer', 6, 'A'),
-                (3, 'Velammal Vidyalaya - Paruthipattu', 'VEL-PAR-3002', 'Vishal Anand', 9, 'D'),
-                (3, 'Velammal Vidyalaya - Paruthipattu', 'PAR202601', 'Ananya Krishnan', 12, 'A'),
-                (4, 'Velammal Vidyalaya - Avadi', 'VEL-AVD-4001', 'Saravanan M', 4, 'B'),
-                (4, 'Velammal Vidyalaya - Avadi', 'VEL-AVD-4002', 'Keerthana R', 8, 'A'),
-                (4, 'Velammal Vidyalaya - Avadi', 'AVD202601', 'Manoj Kumar', 10, 'B'),
-                (5, 'Velammal Vidyalaya - Poonamallee', 'VEL-POO-5001', 'Akash Sundar', 5, 'C'),
-                (5, 'Velammal Vidyalaya - Poonamallee', 'VEL-POO-5002', 'Sneha Lakshmi', 7, 'B'),
-                (6, 'Velammal Vidyalaya - Karambakkam', 'VEL-KAR-6001', 'Niranjan Swamy', 6, 'A'),
-                (6, 'Velammal Vidyalaya - Karambakkam', 'VEL-KAR-6002', 'Divya Prakash', 10, 'A'),
-                (7, 'Velammal Vidyalaya - Alapakkam', 'VEL-ALA-7001', 'Kavitha Nathan', 5, 'B'),
-                (7, 'Velammal Vidyalaya - Alapakkam', 'VEL-ALA-7002', 'Siddharth V', 8, 'A'),
-                (8, 'Velammal Vidyalaya - Annexure', 'VEL-ANN-8001', 'Praveen Chandran', 7, 'A'),
-                (8, 'Velammal Vidyalaya - Annexure', 'VEL-ANN-8002', 'Shreya Mohan', 11, 'B'),
-                (9, 'Velammal Vidyalaya - Madhavaram', 'VEL-MAD-9001', 'Gowtham Raj', 6, 'A'),
-                (9, 'Velammal Vidyalaya - Madhavaram', 'VEL-MAD-9002', 'Lavanya S', 9, 'C'),
-                (10, 'Velammal Bodhi Campus - Ponneri', 'BODHI-PON-101', 'Vikramaditya S', 8, 'A'),
-                (10, 'Velammal Bodhi Campus - Ponneri', 'BODHI-PON-102', 'Tarun Verma', 11, 'A'),
-                (11, 'Velammal Bodhi Campus - Kolapakkam', 'BODHI-KOL-201', 'Sai Pranav', 7, 'B'),
-                (11, 'Velammal Bodhi Campus - Kolapakkam', 'BODHI-KOL-202', 'Swetha Ravichandran', 10, 'A');
-            ");
+    // 4. VELAMMAL STUDENTS TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS velammal_students (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                campus_id BIGINT UNSIGNED NOT NULL,
+                campus_name VARCHAR(255) NOT NULL,
+                admission_number VARCHAR(100) NOT NULL,
+                student_name VARCHAR(255) NOT NULL,
+                grade INT NOT NULL,
+                section VARCHAR(10) NULL,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY uq_campus_admission (campus_name, admission_number)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Exception $e) {}
+
+    // 5. CONSENTS TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS consents (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                participant_id BIGINT UNSIGNED NOT NULL,
+                consent_type ENUM('GUARDIAN', 'MEDIA', 'LAPTOP', 'NON_REFUNDABLE') NOT NULL,
+                is_given BOOLEAN DEFAULT FALSE,
+                ip_address VARCHAR(45) NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Exception $e) {}
+
+    // 6. WORKSHOP BOOKINGS TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS workshop_bookings (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                booking_reference VARCHAR(50) NOT NULL UNIQUE,
+                participant_id BIGINT UNSIGNED NULL,
+                workshop_id BIGINT UNSIGNED NOT NULL,
+                workshop_type ENUM('PAID', 'FREE') NOT NULL,
+                batch_id BIGINT UNSIGNED NULL,
+                free_session_id BIGINT UNSIGNED NULL,
+                status ENUM('SOFT_LOCK', 'CONFIRMED', 'CANCELLED', 'WAITLISTED') DEFAULT 'SOFT_LOCK',
+                is_standby BOOLEAN DEFAULT FALSE,
+                override_reason TEXT NULL,
+                locked_until TIMESTAMP NULL,
+                confirmed_at TIMESTAMP NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Exception $e) {}
+
+    // 7. QR TOKENS TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS qr_tokens (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                participant_id BIGINT UNSIGNED NOT NULL,
+                token VARCHAR(255) NOT NULL UNIQUE,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_qr_token (token),
+                INDEX idx_qr_participant (participant_id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Exception $e) {}
+
+    // 8. ATTENDANCE TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS attendance (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                participant_id BIGINT UNSIGNED NOT NULL,
+                checkpoint_type ENUM('GATE', 'ZONE', 'WORKSHOP', 'THEATRE', 'COMPETITION') NOT NULL DEFAULT 'GATE',
+                checkpoint_name VARCHAR(255) NOT NULL DEFAULT 'Main Gate',
+                session_id BIGINT UNSIGNED NULL,
+                competition_window_id BIGINT UNSIGNED NULL,
+                operator_name VARCHAR(255) DEFAULT 'Operator',
+                operator_user_id BIGINT UNSIGNED NULL,
+                status ENUM('VERIFIED', 'NOT_BOOKED', 'DUPLICATE_SILENT', 'DENIED') DEFAULT 'VERIFIED',
+                device_timestamp BIGINT UNSIGNED NULL,
+                scanned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_att_participant (participant_id),
+                INDEX idx_att_checkpoint (checkpoint_type, scanned_at),
+                INDEX idx_att_dup_check (participant_id, checkpoint_type, checkpoint_name, scanned_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    } catch (Exception $e) {}
+
+    // 9. SCHOOL ESCORTS TABLE
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS school_escorts (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                school_id BIGINT UNSIGNED NULL,
+                school_name VARCHAR(255) NOT NULL,
+                escort_name VARCHAR(255) NOT NULL,
+                phone VARCHAR(30) NOT NULL,
+                email VARCHAR(255) NULL,
+                designation VARCHAR(100) DEFAULT 'Escorting Teacher',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_escort_school (school_name)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
         // 10. AUDIT LOGS TABLE (Immutable log)
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS audit_logs (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -281,8 +258,10 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_audit_created (created_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+    } catch (Exception $e) {}
 
-        // 11. FEE BANDS TABLE
+    // 11. FEE BANDS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS fee_bands (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -297,7 +276,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed fee bands if empty
         $checkFee = $pdo->query("SELECT COUNT(*) as cnt FROM fee_bands")->fetch();
         if (($checkFee['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -309,8 +287,10 @@ function ensureSchemaTables($pdo) {
                 ('BAND-COMP-AI', 'AI Hackathon & Buildathon', 100.00, 300.00, NOW());
             ");
         }
+    } catch (Exception $e) {}
 
-        // 12. VENUES TABLE
+    // 12. VENUES TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS venues (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -321,7 +301,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed venues if empty
         $checkVenues = $pdo->query("SELECT COUNT(*) as cnt FROM venues")->fetch();
         if (($checkVenues['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -333,8 +312,10 @@ function ensureSchemaTables($pdo) {
                 ('Seminar Hall C', 'Block C - Ground Floor', 80);
             ");
         }
+    } catch (Exception $e) {}
 
-        // 13. WORKSHOPS TABLE
+    // 13. WORKSHOPS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS workshops (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -354,12 +335,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Ensure workshops columns
-        try { $pdo->exec("ALTER TABLE workshops ADD COLUMN reg_open_at DATETIME NULL AFTER laptop_required"); } catch (Exception $e) {}
-        try { $pdo->exec("ALTER TABLE workshops ADD COLUMN reg_close_at DATETIME NULL AFTER reg_open_at"); } catch (Exception $e) {}
-        try { $pdo->exec("ALTER TABLE workshops ADD COLUMN is_active BOOLEAN DEFAULT TRUE AFTER reg_close_at"); } catch (Exception $e) {}
-
-        // Seed workshops if empty
         $checkWs = $pdo->query("SELECT COUNT(*) as cnt FROM workshops")->fetch();
         if (($checkWs['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -371,8 +346,10 @@ function ensureSchemaTables($pdo) {
                 ('AR/VR Spatial UI with Unity', 'Craft immersive 3D spatial user experiences and holographic widgets.', FALSE, 0.00, 6, 12, TRUE, TRUE, '2026-09-01 09:00:00', '2026-10-30 23:59:59');
             ");
         }
+    } catch (Exception $e) {}
 
-        // 14. BATCHES TABLE
+    // 14. BATCHES TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS batches (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -387,7 +364,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed batches if empty
         $checkBatches = $pdo->query("SELECT COUNT(*) as cnt FROM batches")->fetch();
         if (($checkBatches['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -401,8 +377,10 @@ function ensureSchemaTables($pdo) {
                 (5, 'Batch A - Day 3 Afternoon', 45, 20);
             ");
         }
+    } catch (Exception $e) {}
 
-        // 15. SESSIONS TABLE
+    // 15. SESSIONS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS sessions (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -417,7 +395,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed sessions if empty
         $checkSessions = $pdo->query("SELECT COUNT(*) as cnt FROM sessions")->fetch();
         if (($checkSessions['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -431,8 +408,10 @@ function ensureSchemaTables($pdo) {
                 (7, 5, '2026-11-08 13:30:00', '2026-11-08 16:30:00', 45);
             ");
         }
+    } catch (Exception $e) {}
 
-        // 16. COMPETITIONS TABLE
+    // 16. COMPETITIONS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS competitions (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -452,7 +431,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed competitions if empty
         $checkComp = $pdo->query("SELECT COUNT(*) as cnt FROM competitions")->fetch();
         if (($checkComp['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -463,8 +441,10 @@ function ensureSchemaTables($pdo) {
                 ('Cyber Defend CTF Clash', 'Team offensive & defensive cybersecurity capture-the-flag showdown.', TRUE, 2, 3, TRUE, 250.00, TRUE, '2026-09-01 09:00:00', '2026-10-30 23:59:59');
             ");
         }
+    } catch (Exception $e) {}
 
-        // 17. COMPETITION WINDOWS TABLE
+    // 17. COMPETITION WINDOWS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS competition_windows (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -479,7 +459,6 @@ function ensureSchemaTables($pdo) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
 
-        // Seed competition windows if empty
         $checkWin = $pdo->query("SELECT COUNT(*) as cnt FROM competition_windows")->fetch();
         if (($checkWin['cnt'] ?? 0) == 0) {
             $pdo->exec("
@@ -492,8 +471,10 @@ function ensureSchemaTables($pdo) {
                 (3, 4, 'FINAL', 'Speed CAD Finals Sprint', '2026-11-07 10:00:00', '2026-11-07 13:00:00');
             ");
         }
+    } catch (Exception $e) {}
 
-        // 18. COMPETITION ENTRIES TABLE
+    // 18. COMPETITION ENTRIES TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS competition_entries (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -508,8 +489,10 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_entry_part (participant_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+    } catch (Exception $e) {}
 
-        // 19. WAITLISTS TABLE
+    // 19. WAITLISTS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS waitlists (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -524,8 +507,10 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_waitlist_batch (batch_id, state)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+    } catch (Exception $e) {}
 
-        // 20. PAYMENTS TABLE
+    // 20. PAYMENTS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS payments (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -547,8 +532,10 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_pay_status (status)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
+    } catch (Exception $e) {}
 
-        // 21. NOTIFICATIONS TABLE (Communications Hub)
+    // 21. NOTIFICATIONS TABLE
+    try {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS notifications (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -565,24 +552,6 @@ function ensureSchemaTables($pdo) {
                 INDEX idx_notif_seg (segment)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
-
-        // Column upgrades for participants (dietary, medical, laptop)
-        try { $pdo->exec("ALTER TABLE participants ADD COLUMN dietary_pref VARCHAR(100) DEFAULT 'Standard' AFTER photo_url"); } catch (Exception $e) {}
-        try { $pdo->exec("ALTER TABLE participants ADD COLUMN medical_info VARCHAR(255) DEFAULT 'None' AFTER dietary_pref"); } catch (Exception $e) {}
-        try { $pdo->exec("ALTER TABLE participants ADD COLUMN needs_laptop BOOLEAN DEFAULT FALSE AFTER medical_info"); } catch (Exception $e) {}
-
-        // Column upgrades for schools (tier, status)
-        try { $pdo->exec("ALTER TABLE schools ADD COLUMN tier ENUM('STANDARD', 'VELAMMAL', 'PARTNER') DEFAULT 'STANDARD' AFTER city"); } catch (Exception $e) {}
-        try { $pdo->exec("ALTER TABLE schools ADD COLUMN status ENUM('APPROVED', 'PENDING') DEFAULT 'APPROVED' AFTER tier"); } catch (Exception $e) {}
-
-        // Column upgrades for workshop_bookings (override_reason)
-        try { $pdo->exec("ALTER TABLE workshop_bookings ADD COLUMN override_reason TEXT NULL AFTER is_standby"); } catch (Exception $e) {}
-
-        // Column upgrades for bookings if using bookings table
-        try { $pdo->exec("ALTER TABLE bookings ADD COLUMN override_reason TEXT NULL"); } catch (Exception $e) {}
-
-    } catch (Exception $e) {
-        error_log("Schema auto-init error: " . $e->getMessage());
-    }
+    } catch (Exception $e) {}
 }
 ?>
