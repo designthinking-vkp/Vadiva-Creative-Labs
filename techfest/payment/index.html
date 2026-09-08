@@ -432,6 +432,7 @@
       const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
       const entryFee = isEntryPaid ? 0 : 250;
       const currentGrandTotal = verifiedPrice + entryFee;
+      const totalInPaise = Math.round(currentGrandTotal * 100);
 
       try {
         // 1. Server recalculates price strictly based on verified Tier in DB
@@ -445,7 +446,13 @@
             mobile: userMobile,
             email: userEmail,
             workshop_id: currentWorkshopId,
-            batch_code: currentBatchCode
+            unit_price: verifiedPrice,
+            batch_code: currentBatchCode,
+            include_entry_fee: !isEntryPaid,
+            is_entry_paid: isEntryPaid,
+            skip_entry_fee: !isEntryPaid,
+            entry_fee: entryFee,
+            total_amount: currentGrandTotal
           })
         });
         const orderData = await createRes.json();
@@ -455,14 +462,15 @@
         }
 
         const { order_id, key_id, amount, currency, unit_price, prefill, workshop_name } = orderData.data;
+        const finalAmountPaise = (amount && amount > 0) ? amount : totalInPaise;
 
         // 2. Launch Razorpay Modal
         const options = {
           key: key_id,
-          amount: amount,
+          amount: finalAmountPaise,
           currency: currency || 'INR',
           name: 'Vadiva Tech Fest 3.0',
-          description: `${workshop_name} (Batch ${currentBatchCode})` + (isEntryPaid ? '' : ' + Festival Entry Pass'),
+          description: isEntryPaid ? `${workshop_name} (Batch ${currentBatchCode})` : `${workshop_name} (Batch ${currentBatchCode}) + Festival Entry Pass (₹250)`,
           image: '../../assets/Vadiva-Tech-Fest-Logo.png',
           order_id: order_id,
           prefill: prefill,

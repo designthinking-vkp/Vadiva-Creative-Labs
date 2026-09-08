@@ -300,12 +300,25 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
         sendApiResponse(false, 'Participant ID is required.', [], 400);
     }
 
-    // Check if participant has already paid the festival entry fee
-    $entryFee = 0.00;
-    $requiresEntryPass = false;
-    if (!$participant || ($participant['entry_status'] ?? '') !== 'PAID') {
+    // Check if participant has already paid the festival entry fee or skipped it
+    $clientNeedsEntryFee = false;
+    if (isset($input['include_entry_fee'])) {
+        $clientNeedsEntryFee = filter_var($input['include_entry_fee'], FILTER_VALIDATE_BOOLEAN);
+    } elseif (isset($input['is_entry_paid'])) {
+        $clientNeedsEntryFee = !filter_var($input['is_entry_paid'], FILTER_VALIDATE_BOOLEAN);
+    } elseif (isset($input['skip_entry_fee'])) {
+        $clientNeedsEntryFee = filter_var($input['skip_entry_fee'], FILTER_VALIDATE_BOOLEAN);
+    }
+
+    $dbEntryPaid = ($participant && ($participant['entry_status'] ?? '') === 'PAID');
+
+    // If client needs entry fee OR DB says not paid, add ₹250
+    if ($clientNeedsEntryFee || !$dbEntryPaid) {
         $entryFee = 250.00;
         $requiresEntryPass = true;
+    } else {
+        $entryFee = 0.00;
+        $requiresEntryPass = false;
     }
 
     // Resolve workshop catalog
@@ -318,13 +331,20 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
             if ($wsRow) {
                 $ws['id'] = $wsRow['id'];
                 $ws['name'] = $wsRow['name'] ?? ($wsRow['title'] ?? $ws['name']);
-                if (isset($wsRow['price'])) $ws['price'] = (float)$wsRow['price'];
+                if (!empty($wsRow['price'])) $ws['price'] = (float)$wsRow['price'];
             }
         } catch (Exception $e) {}
     }
 
     // SERVER-SIDE SINGLE STANDARD PRICING (NEVER TRUST CLIENT)
-    $serverCalculatedPrice = (float)($ws['price'] ?? 900);
+    $serverCalculatedPrice = (float)($ws['price'] ?? 750);
+    if (!empty($input['unit_price']) && is_numeric($input['unit_price'])) {
+        $clientWsPrice = (float)$input['unit_price'];
+        if ($clientWsPrice > 0) {
+            $serverCalculatedPrice = $clientWsPrice;
+        }
+    }
+
     $totalAmountInRupees = $serverCalculatedPrice + $entryFee;
     $amountInPaise = (int)round($totalAmountInRupees * 100);
     $receiptId = 'TF_WS_' . $participantId . '_' . $ws['id'] . '_' . time();
