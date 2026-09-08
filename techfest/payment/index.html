@@ -425,6 +425,10 @@
       btn.textContent = 'Initializing Order with Gateway…';
 
       const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+      const uid = localStorage.getItem('tf_user_id') || pid;
+      const userName = localStorage.getItem('tf_user_name') || 'Participant';
+      const userMobile = localStorage.getItem('tf_user_mobile') || localStorage.getItem('tf_guardian_mobile') || '';
+      const userEmail = localStorage.getItem('tf_user_email') || '';
       const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
       const entryFee = isEntryPaid ? 0 : 250;
       const currentGrandTotal = verifiedPrice + entryFee;
@@ -436,6 +440,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             participant_id: pid,
+            user_id: uid,
+            name: userName,
+            mobile: userMobile,
+            email: userEmail,
             workshop_id: currentWorkshopId,
             batch_code: currentBatchCode
           })
@@ -471,6 +479,10 @@
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature || 'TEST_SIGNATURE_BYPASS',
                   participant_id: pid,
+                  user_id: uid,
+                  name: userName,
+                  mobile: userMobile,
+                  email: userEmail,
                   workshop_id: currentWorkshopId,
                   batch_code: currentBatchCode
                 })

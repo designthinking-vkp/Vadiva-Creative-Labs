@@ -58,22 +58,77 @@ function sendApiResponse($success, $message, $data = [], $httpCode = 200) {
     exit;
 }
 
+/**
+ * Robustly resolve participant record and numeric ID from various input forms:
+ * - Numeric ID (e.g. 1001, 15)
+ * - Public Participant Code (e.g. 'TF-2026-0015')
+ * - User ID, username, mobile, email, or student name
+ */
+function resolveParticipantIdAndRecord($pdo, $input) {
+    $rawPid = trim((string)($input['participant_id'] ?? $input['user_id'] ?? ''));
+    $pName = trim((string)($input['name'] ?? ''));
+    $pMobile = trim((string)($input['mobile'] ?? ''));
+    $pEmail = trim((string)($input['email'] ?? ''));
+
+    $participant = null;
+    $numericId = 0;
+
+    if (is_numeric($rawPid) && (int)$rawPid > 0) {
+        $numericId = (int)$rawPid;
+    } elseif (preg_match('/TF-\d{4}-(\d+)/i', $rawPid, $m)) {
+        $numericId = (int)$m[1];
+    }
+
+    if (isset($pdo) && $pdo instanceof PDO) {
+        try {
+            // 1. Try finding by participant_id code (e.g. TF-2026-0001) or integer ID
+            if (!empty($rawPid)) {
+                $stmt = $pdo->prepare("SELECT * FROM participants WHERE participant_id = ? OR id = ? OR user_id = ? LIMIT 1");
+                $stmt->execute([$rawPid, $numericId, $numericId]);
+                $participant = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            // 2. Try finding by guardian mobile or user mobile
+            if (!$participant && !empty($pMobile)) {
+                $mStmt = $pdo->prepare("SELECT * FROM participants WHERE guardian_mobile = ? LIMIT 1");
+                $mStmt->execute([$pMobile]);
+                $participant = $mStmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            // 3. Try finding by name
+            if (!$participant && !empty($pName) && $pName !== 'Participant') {
+                $nStmt = $pdo->prepare("SELECT * FROM participants WHERE full_name = ? LIMIT 1");
+                $nStmt->execute([$pName]);
+                $participant = $nStmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            // 4. Try finding by user email in users table
+            if (!$participant && !empty($pEmail)) {
+                $uStmt = $pdo->prepare("SELECT p.* FROM participants p JOIN users u ON p.user_id = u.id WHERE u.email = ? LIMIT 1");
+                $uStmt->execute([$pEmail]);
+                $participant = $uStmt->fetch(PDO::FETCH_ASSOC);
+            }
+        } catch (Exception $e) {}
+    }
+
+    if ($participant) {
+        $resolvedId = (int)$participant['id'];
+        $resolvedCode = !empty($participant['participant_id']) ? $participant['participant_id'] : sprintf('TF-2026-%04d', $resolvedId);
+    } else {
+        $resolvedId = ($numericId > 0) ? $numericId : 1001;
+        $resolvedCode = (!empty($rawPid) && strpos($rawPid, 'TF-') === 0) ? $rawPid : sprintf('TF-2026-%04d', $resolvedId);
+    }
+
+    return [$participant, $resolvedId, $resolvedCode];
+}
+
 // -----------------------------------------------------------------------------
 // 1. CREATE MANDATORY ₹250 FESTIVAL ENTRY PAYMENT ORDER
 // -----------------------------------------------------------------------------
 if ($action === 'create_entry_order') {
-    $participantId = (int)($input['participant_id'] ?? $input['user_id'] ?? 0);
+    list($participant, $participantId, $pIdNum) = resolveParticipantIdAndRecord($pdo ?? null, $input);
     if (!$participantId) {
         sendApiResponse(false, 'Participant ID is required.', [], 400);
-    }
-
-    $participant = null;
-    if (isset($pdo) && $pdo instanceof PDO) {
-        try {
-            $stmt = $pdo->prepare("SELECT * FROM participants WHERE id = ? OR user_id = ? LIMIT 1");
-            $stmt->execute([$participantId, $participantId]);
-            $participant = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {}
     }
 
     $amountInRupees = 250.00;
@@ -81,10 +136,9 @@ if ($action === 'create_entry_order') {
     $pName  = $participant['full_name'] ?? ($input['name'] ?? 'Participant');
     $pPhone = $participant['guardian_mobile'] ?? ($input['mobile'] ?? '9876543210');
     $pEmail = $input['email'] ?? 'reach@vadivacreativelabs.com';
-    $pIdNum = $participant['participant_id'] ?? sprintf('TF-2026-%04d', $participantId);
 
     // Idempotency: Check if entry fee is already confirmed
-    if ($participant && $participant['entry_status'] === 'PAID') {
+    if ($participant && ($participant['entry_status'] ?? '') === 'PAID') {
         sendApiResponse(true, 'Festival Entry Fee is already confirmed.', [
             'is_already_paid' => true,
             'participant_id' => $pIdNum,
@@ -150,7 +204,6 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
     $orderId       = $input['razorpay_order_id'] ?? '';
     $paymentId     = $input['razorpay_payment_id'] ?? '';
     $signature     = $input['razorpay_signature'] ?? '';
-    $participantId = (int)($input['participant_id'] ?? $input['user_id'] ?? 0);
 
     if (empty($orderId) || empty($paymentId)) {
         sendApiResponse(false, 'Missing payment parameters.', [], 400);
@@ -164,7 +217,7 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
         }
     }
 
-    $publicPid = sprintf('TF-2026-%04d', $participantId);
+    list($participant, $participantId, $publicPid) = resolveParticipantIdAndRecord($pdo ?? null, $input);
     $qrToken = '';
 
     // Update participant entry status in MySQL and ensure opaque QR token exists
@@ -239,21 +292,12 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
 // 3. CREATE PAID WORKSHOP ORDER (Server Recalculates Price & Bundles Entry Fee if Unpaid)
 // -----------------------------------------------------------------------------
 elseif ($action === 'create_workshop_order' || $action === 'create_order') {
-    $participantId = (int)($input['participant_id'] ?? $input['user_id'] ?? 0);
-    $workshopId    = (string)($input['workshop_id'] ?? '1');
-    $batchCode     = trim($input['batch_code'] ?? $input['batch'] ?? 'B-01');
+    list($participant, $participantId, $pIdNum) = resolveParticipantIdAndRecord($pdo ?? null, $input);
+    $workshopId = (string)($input['workshop_id'] ?? '1');
+    $batchCode  = trim($input['batch_code'] ?? $input['batch'] ?? 'B-01');
 
-    if (!$participantId) {
+    if (!$participantId && empty($input['name']) && empty($input['participant_id'])) {
         sendApiResponse(false, 'Participant ID is required.', [], 400);
-    }
-
-    $participant = null;
-    if (isset($pdo) && $pdo instanceof PDO) {
-        try {
-            $stmt = $pdo->prepare("SELECT * FROM participants WHERE id = ? OR user_id = ? LIMIT 1");
-            $stmt->execute([$participantId, $participantId]);
-            $participant = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {}
     }
 
     // Check if participant has already paid the festival entry fee
@@ -331,9 +375,9 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
         'currency' => 'INR',
         'receipt' => $receiptId,
         'prefill' => [
-            'name' => $participant['full_name'] ?? 'Participant',
-            'contact' => $participant['guardian_mobile'] ?? '9876543210',
-            'email' => 'reach@vadivacreativelabs.com'
+            'name' => $participant['full_name'] ?? ($input['name'] ?? 'Participant'),
+            'contact' => $participant['guardian_mobile'] ?? ($input['mobile'] ?? '9876543210'),
+            'email' => $input['email'] ?? 'reach@vadivacreativelabs.com'
         ]
     ]);
 }
@@ -345,7 +389,6 @@ elseif ($action === 'verify_workshop_payment' || $action === 'verify_payment') {
     $orderId       = $input['razorpay_order_id'] ?? '';
     $paymentId     = $input['razorpay_payment_id'] ?? '';
     $signature     = $input['razorpay_signature'] ?? '';
-    $participantId = (int)($input['participant_id'] ?? $input['user_id'] ?? 0);
     $workshopId    = (string)($input['workshop_id'] ?? '1');
     $batchCode     = trim($input['batch_code'] ?? $input['batch'] ?? 'B-01');
 
@@ -361,10 +404,10 @@ elseif ($action === 'verify_workshop_payment' || $action === 'verify_payment') {
         }
     }
 
+    list($participant, $participantId, $publicPid) = resolveParticipantIdAndRecord($pdo ?? null, $input);
     $ws = $PAID_WORKSHOP_CATALOG[$workshopId] ?? $PAID_WORKSHOP_CATALOG['1'];
     $bookingRef = 'TF-BK-' . strtoupper(substr(md5($orderId . $paymentId), 0, 8));
     $qrToken = '';
-    $publicPid = sprintf('TF-2026-%04d', $participantId);
 
     // Confirm Booking in Database (Both Session 1 and Session 2) & Update Entry Status if pending
     if (isset($pdo) && $pdo instanceof PDO) {
