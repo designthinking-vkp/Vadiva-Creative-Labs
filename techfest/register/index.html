@@ -584,11 +584,24 @@
               <strong id="pay-confirm-band" style="color:#059669;">JUNIOR</strong>
             </div>
           </div>
+
+          <!-- Skip & Pay in Workshop Check-out Option -->
+          <div style="background:rgba(255,255,255,0.92); border:1.5px dashed rgba(12,184,192,0.4); border-radius:10px; padding:0.85rem 1rem; text-align:left; margin-top:0.75rem;">
+            <label style="display:flex; align-items:flex-start; gap:0.65rem; cursor:pointer; margin:0; font-size:0.88rem; color:var(--tf-deep); line-height:1.45;">
+              <input type="checkbox" id="chk-skip-entry-pass" style="margin-top:3px; width:17px; height:17px; accent-color:var(--tf-teal); cursor:pointer;" onchange="handleSkipEntryPassToggle()">
+              <span>
+                <strong>Pay Later with Workshop:</strong> Skip &#8377;250 Entry Pass fee here and pay that amount in the workshop check-out.
+              </span>
+            </label>
+            <div id="skip-entry-warning" style="display:none; margin-top:0.65rem; font-size:0.8rem; color:#b45309; background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:0.5rem 0.75rem; border-radius:4px; line-height:1.45;">
+              ⚠️ <strong>Note:</strong> Without entry fee payment, you will <u>not</u> be registered for the Fest and your QR Pass will remain locked until the &#8377;250 fee is paid during workshop checkout.
+            </div>
+          </div>
         </div>
 
-        <button type="button" class="reg-btn green" id="btn-pay-entry" onclick="launchFestivalEntryPayment()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <span>Pay &#8377;250 Festival Entry Fee &rarr;</span>
+        <button type="button" class="reg-btn green" id="btn-pay-entry" onclick="handleStep4Action()">
+          <svg id="btn-pay-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span id="btn-pay-text">Pay &#8377;250 Festival Entry Fee &rarr;</span>
         </button>
       </div>
 
@@ -909,6 +922,48 @@
 
       hideAlert();
       updateStepperUI(4);
+    }
+
+    // Step 4: Toggle Skip Entry Pass Checkbox
+    function handleSkipEntryPassToggle() {
+      const isChecked = document.getElementById('chk-skip-entry-pass')?.checked;
+      const warningEl = document.getElementById('skip-entry-warning');
+      const btn = document.getElementById('btn-pay-entry');
+      const btnText = document.getElementById('btn-pay-text');
+      const btnIcon = document.getElementById('btn-pay-icon');
+
+      if (isChecked) {
+        if (warningEl) warningEl.style.display = 'block';
+        if (btn) btn.classList.remove('green');
+        if (btnText) btnText.innerHTML = 'Skip &amp; Proceed to Workshop Selection &rarr;';
+        if (btnIcon) btnIcon.style.display = 'none';
+      } else {
+        if (warningEl) warningEl.style.display = 'none';
+        if (btn) btn.classList.add('green');
+        if (btnText) btnText.innerHTML = 'Pay &#8377;250 Festival Entry Fee &rarr;';
+        if (btnIcon) btnIcon.style.display = 'inline-block';
+      }
+    }
+
+    function handleStep4Action() {
+      const isSkipChecked = document.getElementById('chk-skip-entry-pass')?.checked;
+      if (isSkipChecked) {
+        // Explicitly record that entry fee is NOT paid yet (will be paid during workshop checkout)
+        localStorage.setItem('tf_entry_paid', 'false');
+        localStorage.setItem('tf_skip_entry_fee', 'true');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const wsParam = urlParams.get('workshop') || sessionStorage.getItem('tf_pending_workshop');
+        const batchParam = urlParams.get('batch') || sessionStorage.getItem('tf_pending_batch') || 'B-01';
+
+        if (wsParam) {
+          window.location.href = `../payment/index.html?workshop=${encodeURIComponent(wsParam)}&batch=${encodeURIComponent(batchParam)}`;
+        } else {
+          window.location.href = '../workshops/index.html';
+        }
+      } else {
+        launchFestivalEntryPayment();
+      }
     }
 
     // Step 4 Handler: Razorpay ₹250 Festival Entry Payment

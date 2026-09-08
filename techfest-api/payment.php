@@ -236,7 +236,7 @@ elseif ($action === 'verify_entry_payment' || $action === 'verify_entry_signatur
 }
 
 // -----------------------------------------------------------------------------
-// 3. CREATE PAID WORKSHOP ORDER (Server Recalculates Price via Verified Tier)
+// 3. CREATE PAID WORKSHOP ORDER (Server Recalculates Price & Bundles Entry Fee if Unpaid)
 // -----------------------------------------------------------------------------
 elseif ($action === 'create_workshop_order' || $action === 'create_order') {
     $participantId = (int)($input['participant_id'] ?? $input['user_id'] ?? 0);
@@ -256,12 +256,12 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
         } catch (Exception $e) {}
     }
 
-    // Rule: Mandatory ₹250 entry payment prerequisite
-    if ($participant && $participant['entry_status'] !== 'PAID') {
-        sendApiResponse(false, 'Pay the ₹250 festival entry fee to unlock workshops and competitions.', [
-            'is_locked' => true,
-            'requires_entry_fee' => true
-        ], 403);
+    // Check if participant has already paid the festival entry fee
+    $entryFee = 0.00;
+    $requiresEntryPass = false;
+    if (!$participant || ($participant['entry_status'] ?? '') !== 'PAID') {
+        $entryFee = 250.00;
+        $requiresEntryPass = true;
     }
 
     // Resolve workshop catalog
@@ -274,9 +274,15 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
             if ($wsRow) {
                 $ws['id'] = $wsRow['id'];
                 $ws['name'] = $wsRow['name'] ?? ($wsRow['title'] ?? $ws['name']);
+                if (isset($wsRow['price'])) $ws['price'] = (float)$wsRow['price'];
+            }
+        } catch (Exception $e) {}
+    }
+
     // SERVER-SIDE SINGLE STANDARD PRICING (NEVER TRUST CLIENT)
-    $serverCalculatedPrice = (float)($ws['price'] ?? ($ws['price_other'] ?? 900));
-    $amountInPaise = (int)round($serverCalculatedPrice * 100);
+    $serverCalculatedPrice = (float)($ws['price'] ?? 900);
+    $totalAmountInRupees = $serverCalculatedPrice + $entryFee;
+    $amountInPaise = (int)round($totalAmountInRupees * 100);
     $receiptId = 'TF_WS_' . $participantId . '_' . $ws['id'] . '_' . time();
 
     // Call Razorpay API
@@ -294,7 +300,8 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
             'workshop_id' => (string)$ws['id'],
             'workshop_name' => $ws['name'],
             'batch_code' => $batchCode,
-            'participant_id' => (string)($participant['id'] ?? $participantId)
+            'participant_id' => (string)($participant['id'] ?? $participantId),
+            'includes_entry_fee' => $requiresEntryPass ? 'yes' : 'no'
         ]
     ]));
 
@@ -317,8 +324,10 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
         'batch_code' => $batchCode,
         'batch_pairing' => 'Day 1 & Day 2 (Atomic 2-Session Batch)',
         'unit_price' => $serverCalculatedPrice,
-        'amount_in_rupees' => $serverCalculatedPrice,
+        'entry_fee' => $entryFee,
+        'amount_in_rupees' => $totalAmountInRupees,
         'amount' => $amountInPaise,
+        'includes_entry_fee' => $requiresEntryPass,
         'currency' => 'INR',
         'receipt' => $receiptId,
         'prefill' => [
@@ -330,7 +339,7 @@ elseif ($action === 'create_workshop_order' || $action === 'create_order') {
 }
 
 // -----------------------------------------------------------------------------
-// 4. VERIFY WORKSHOP PAYMENT & CONFIRM BOTH SESSIONS IN DATABASE
+// 4. VERIFY WORKSHOP PAYMENT & CONFIRM BOTH SESSIONS AND ENTRY IN DATABASE
 // -----------------------------------------------------------------------------
 elseif ($action === 'verify_workshop_payment' || $action === 'verify_payment') {
     $orderId       = $input['razorpay_order_id'] ?? '';
@@ -354,13 +363,63 @@ elseif ($action === 'verify_workshop_payment' || $action === 'verify_payment') {
 
     $ws = $PAID_WORKSHOP_CATALOG[$workshopId] ?? $PAID_WORKSHOP_CATALOG['1'];
     $bookingRef = 'TF-BK-' . strtoupper(substr(md5($orderId . $paymentId), 0, 8));
+    $qrToken = '';
+    $publicPid = sprintf('TF-2026-%04d', $participantId);
 
-    // Confirm Booking in Database (Both Session 1 and Session 2)
+    // Confirm Booking in Database (Both Session 1 and Session 2) & Update Entry Status if pending
     if (isset($pdo) && $pdo instanceof PDO) {
         try {
             $pdo->beginTransaction();
 
-            // Record in workshop_bookings / bookings table
+            // 1. Check & unlock festival pass / participant entry_status if not paid yet
+            $pCheck = $pdo->prepare("SELECT id, participant_id, entry_status, qr_token FROM participants WHERE id = ? OR user_id = ? LIMIT 1");
+            $pCheck->execute([$participantId, $participantId]);
+            $pRow = $pCheck->fetch(PDO::FETCH_ASSOC);
+
+            if ($pRow) {
+                if (!empty($pRow['participant_id'])) {
+                    $publicPid = $pRow['participant_id'];
+                }
+                $qrToken = $pRow['qr_token'] ?? '';
+
+                if ($pRow['entry_status'] !== 'PAID') {
+                    if (empty($qrToken)) {
+                        $qrToken = 'QR-TF-' . strtoupper(bin2hex(random_bytes(16)));
+                    }
+                    $upStmt = $pdo->prepare("UPDATE participants SET entry_status = 'PAID', qr_token = ?, updated_at = NOW() WHERE id = ? OR user_id = ?");
+                    $upStmt->execute([$qrToken, $participantId, $participantId]);
+
+                    try {
+                        $pdo->prepare("
+                            INSERT INTO qr_tokens (participant_id, token, is_active)
+                            SELECT id, ?, TRUE FROM participants WHERE id = ? OR user_id = ? LIMIT 1
+                            ON DUPLICATE KEY UPDATE is_active = TRUE
+                        ")->execute([$qrToken, $participantId, $participantId]);
+                    } catch (Exception $qe) {}
+
+                    // Record entry fee payment
+                    try {
+                        $pdo->prepare("
+                            INSERT INTO payments (
+                                registration_id, user_id, gateway, amount, currency,
+                                razorpay_order_id, razorpay_payment_id, razorpay_signature, status, paid_at
+                            ) VALUES (?, ?, 'razorpay', 250.00, 'INR', ?, ?, ?, 'paid', NOW())
+                        ")->execute([$participantId, $participantId, $orderId, $paymentId, $signature]);
+                    } catch (Exception $pe) {}
+                }
+            }
+
+            // 2. Record workshop payment
+            try {
+                $pdo->prepare("
+                    INSERT INTO payments (
+                        registration_id, user_id, gateway, amount, currency,
+                        razorpay_order_id, razorpay_payment_id, razorpay_signature, status, paid_at
+                    ) VALUES (?, ?, 'razorpay', ?, 'INR', ?, ?, ?, 'paid', NOW())
+                ")->execute([$participantId, $participantId, (float)($ws['price'] ?? 750), $orderId, $paymentId, $signature]);
+            } catch (Exception $wpe) {}
+
+            // 3. Record in workshop_bookings / bookings table
             $bStmt = $pdo->prepare("
                 INSERT INTO workshop_bookings (
                     booking_reference, participant_id, workshop_id, workshop_type,
@@ -394,6 +453,10 @@ elseif ($action === 'verify_workshop_payment' || $action === 'verify_payment') {
         'workshop_id' => $ws['id'],
         'workshop_name' => $ws['name'],
         'batch_code' => $batchCode,
+        'entry_status' => 'PAID',
+        'is_entry_paid' => true,
+        'participant_id' => $publicPid,
+        'qr_token' => $qrToken,
         'sessions' => [
             ['day' => 1, 'time' => '09:30–11:30', 'venue' => $ws['venue']],
             ['day' => 2, 'time' => '09:30–11:30', 'venue' => $ws['venue']]

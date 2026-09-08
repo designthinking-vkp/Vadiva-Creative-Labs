@@ -293,9 +293,9 @@
           <span style="color:var(--tf-muted);">Workshop Batch Fee:</span>
           <strong id="pay-unit-price">&#8377;750</strong>
         </div>
-        <div class="pay-row">
+        <div class="pay-row" id="pay-entry-row">
           <span style="color:var(--tf-muted);">Festival Entry Pass (&#8377;250):</span>
-          <span style="color:#059669; font-weight:700;">✓ Confirmed &amp; Paid</span>
+          <span id="pay-entry-status-badge" style="color:#059669; font-weight:700;">✓ Confirmed &amp; Paid</span>
         </div>
         <div class="pay-row total">
           <span>Total Payable Amount:</span>
@@ -391,11 +391,29 @@
       document.getElementById('pay-participant-school').textContent = userSchool;
       document.getElementById('pay-batch-code').textContent = `Batch ${currentBatchCode} (Day 1 & Day 2 Atomic Pair)`;
 
-      // Universal price
+      // Check entry fee status
+      const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
+      const entryFee = isEntryPaid ? 0 : 250;
+
+      // Universal price calculation
       verifiedPrice = ws.price || 750;
+      const grandTotal = verifiedPrice + entryFee;
+
       document.getElementById('pay-unit-price').textContent = `₹${verifiedPrice}`;
-      document.getElementById('pay-total-amount').textContent = `₹${verifiedPrice}`;
-      document.getElementById('btn-pay-label').textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+      
+      const entryBadge = document.getElementById('pay-entry-status-badge');
+      if (entryBadge) {
+        if (isEntryPaid) {
+          entryBadge.innerHTML = '✓ Confirmed &amp; Paid';
+          entryBadge.style.color = '#059669';
+        } else {
+          entryBadge.innerHTML = '+ ₹250 (Added to this checkout)';
+          entryBadge.style.color = '#dc2626';
+        }
+      }
+
+      document.getElementById('pay-total-amount').textContent = `₹${grandTotal}`;
+      document.getElementById('btn-pay-label').textContent = `Proceed to Secure Payment ₹${grandTotal}`;
 
       startSoftLockTimer();
     }
@@ -407,6 +425,9 @@
       btn.textContent = 'Initializing Order with Gateway…';
 
       const pid = localStorage.getItem('tf_participant_id') || localStorage.getItem('tf_user_id') || 1001;
+      const isEntryPaid = localStorage.getItem('tf_entry_paid') === 'true';
+      const entryFee = isEntryPaid ? 0 : 250;
+      const currentGrandTotal = verifiedPrice + entryFee;
 
       try {
         // 1. Server recalculates price strictly based on verified Tier in DB
@@ -433,7 +454,7 @@
           amount: amount,
           currency: currency || 'INR',
           name: 'Vadiva Tech Fest 3.0',
-          description: `${workshop_name} (Batch ${currentBatchCode})`,
+          description: `${workshop_name} (Batch ${currentBatchCode})` + (isEntryPaid ? '' : ' + Festival Entry Pass'),
           image: '../../assets/Vadiva-Tech-Fest-Logo.png',
           order_id: order_id,
           prefill: prefill,
@@ -460,26 +481,31 @@
                 clearInterval(timerInterval);
                 sessionStorage.removeItem('tf_pending_workshop');
                 sessionStorage.removeItem('tf_pending_batch');
+                localStorage.setItem('tf_entry_paid', 'true');
+                localStorage.removeItem('tf_skip_entry_fee');
+                if (verifyData.data && verifyData.data.participant_id) {
+                  localStorage.setItem('tf_participant_id', verifyData.data.participant_id);
+                }
 
-                showAlert('Payment confirmed! Both workshop sessions added to your schedule. Redirecting to Dashboard…', 'success');
+                showAlert('Payment confirmed! Your Festival Pass & workshop sessions are now unlocked. Redirecting to Dashboard…', 'success');
                 setTimeout(() => {
                   window.location.href = '../dashboard/index.html';
                 }, 1200);
               } else {
                 showAlert('Payment signature verification failed: ' + verifyData.message, 'error');
                 btn.disabled = false;
-                btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+                btn.textContent = `Proceed to Secure Payment ₹${currentGrandTotal}`;
               }
             } catch (vErr) {
               showAlert('Verification network error.', 'error');
               btn.disabled = false;
-              btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+              btn.textContent = `Proceed to Secure Payment ₹${currentGrandTotal}`;
             }
           },
           modal: {
             ondismiss: function() {
               btn.disabled = false;
-              btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+              btn.textContent = `Proceed to Secure Payment ₹${currentGrandTotal}`;
               showAlert('Payment window was closed. Soft lock remains active.', 'info');
             }
           }
@@ -491,7 +517,7 @@
       } catch (err) {
         showAlert(err.message || 'Unable to connect to payment gateway.', 'error');
         btn.disabled = false;
-        btn.textContent = `Proceed to Secure Payment ₹${verifiedPrice}`;
+        btn.textContent = `Proceed to Secure Payment ₹${currentGrandTotal}`;
       }
     }
 

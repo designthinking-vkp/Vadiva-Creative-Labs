@@ -284,9 +284,15 @@
           localStorage.setItem('tf_band', data.data.band || 'JUNIOR');
           localStorage.setItem('tf_entry_paid', (data.data.entry_status === 'PAID') ? 'true' : 'false');
 
+          const urlParams = new URLSearchParams(window.location.search);
+          const wsParam = urlParams.get('workshop');
+          const batchParam = urlParams.get('batch');
+
           setTimeout(() => {
             if (!data.data.has_participant_profile) {
               window.location.href = '../register/index.html';
+            } else if (wsParam) {
+              window.location.href = `../workshops/index.html?workshop=${encodeURIComponent(wsParam)}&batch=${encodeURIComponent(batchParam || 'B-01')}`;
             } else if (data.data.entry_status !== 'PAID') {
               window.location.href = '../register/index.html';
             } else {

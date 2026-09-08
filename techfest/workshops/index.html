@@ -1452,9 +1452,16 @@
       }
 
       if (!isEntryPaid) {
-        alert('Please complete your ₹250 Festival Entry Fee to unlock workshop bookings and generate your QR Pass.');
-        window.location.href = `../register/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
-        return;
+        if (isPaid) {
+          // Allowed: The mandatory ₹250 Festival Entry Pass will be bundled into this workshop checkout
+          window.location.href = `../payment/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
+          return;
+        } else {
+          // Free workshops require the ₹250 festival entry fee to be completed first to register the student for the Fest
+          alert('The ₹250 Festival Entry Fee is mandatory to register for the Fest and access free workshops. Please complete your Entry Pass payment or choose a paid workshop to pay together.');
+          window.location.href = `../register/index.html?workshop=${encodeURIComponent(wsId)}&batch=${encodeURIComponent(currentBatch)}`;
+          return;
+        }
       }
 
       // Proceed to checkout or schedule
