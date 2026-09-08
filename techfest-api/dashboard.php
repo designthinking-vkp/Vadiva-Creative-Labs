@@ -84,8 +84,8 @@ if ($action === 'get_dashboard' || empty($action)) {
             'section' => 'A',
             'school' => 'Other School',
             'band' => 'JUNIOR',
-            'entry_status' => 'PAID',
-            'qr_token' => 'QR-TF-' . strtoupper(substr(md5((string)$pNum), 0, 16))
+            'entry_status' => 'PENDING',
+            'qr_token' => ''
         ];
     }
 

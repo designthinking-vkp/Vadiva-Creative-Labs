@@ -23,10 +23,10 @@ if ($action === 'book_free_workshop') {
         $pdo->beginTransaction();
 
         // Check if participant paid entry fee
-        $stmt = $pdo->prepare('SELECT entry_status, full_name, grade FROM participants WHERE id = ?');
-        $stmt->execute([$participantId]);
+        $stmt = $pdo->prepare('SELECT id, entry_status, full_name, grade FROM participants WHERE id = ? OR user_id = ? OR participant_id = ? LIMIT 1');
+        $stmt->execute([$participantId, $participantId, (string)$participantId]);
         $participant = $stmt->fetch();
-        if (!$participant || $participant['entry_status'] !== 'PAID') {
+        if (!$participant || ($participant['entry_status'] ?? '') !== 'PAID') {
             throw new Exception('Pay the ₹250 festival entry fee to unlock workshops and competitions.');
         }
 
