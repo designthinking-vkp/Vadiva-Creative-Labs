@@ -42,24 +42,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
-        <a href="index.html">
+        <a href="https://vadivacreativelabs.com/" aria-label="Vadiva Creative Labs Home">
           <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
         </a>
       </div>
       
-      <nav class="main-nav">
-        <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">Services & Partnerships</a></li>
-          <li><a href="activity-center.html">Activity Center</a></li>
-          <li><a href="events.html">Events & Camps</a></li>
-          <li><a href="parents.html">Parent Hub</a></li>
-          <li><a href="protospark.html">Protospark</a></li>
-          <li><a href="techfest/index.html">Tech Fest</a></li>
-          <li class="mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login">Sign In</a></li>
-          <li class="mobile-only-nav-item"><a href="#" class="payment-nav-link">Online Payment</a></li>
-          <li><a href="contact.html">Contact</a></li>
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+          <li class="nav-item nav-dropdown">
+            <a href="activity-center.html" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" id="activityCenterDropdown">
+              Activity Center
+              <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="activityCenterDropdown">
+              <li><a href="events.html" class="dropdown-item">Events &amp; Camps</a></li>
+              <li><a href="services.html" class="dropdown-item">Services</a></li>
+              <li><a href="parents.html" class="dropdown-item">Parent Hub</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="https://fest.vadivacreativelabs.com/" class="nav-link">Tech Fest</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item mobile-only-nav-item"><a href="https://learn.vadivacreativelabs.com/login" class="nav-link nav-btn-pill">Sign In</a></li>
+          <li class="nav-item mobile-only-nav-item"><a href="#" class="nav-link nav-btn-pill payment-nav-link">Online Payment</a></li>
+          <li class="nav-item mobile-only-nav-item"><a href="contact.html" class="nav-link nav-btn-pill nav-btn-accent">Partner With Us</a></li>
         </ul>
       </nav>
 
@@ -67,14 +75,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
         <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
         <a href="contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
     </div>
   </header>
+
+  <!-- Tech Fest Countdown Bar -->
+  <div class="techfest-countdown-bar" id="techfest-countdown-bar">
+    <div class="container tf-countdown-container">
+      <div class="tf-countdown-branding">
+        <a href="https://fest.vadivacreativelabs.com/" class="tf-badge">TECH FEST '26</a>
+        <span class="tf-countdown-tagline">Build. Innovate. Compete on a Global Stage.</span>
+      </div>
+      <div class="tf-countdown-timer" id="tf-countdown-timer" aria-live="polite">
+        <div class="tf-countdown-unit">
+          <span class="tf-num" id="tf-days">--</span>
+          <span class="tf-label">DAYS</span>
+        </div>
+        <span class="tf-sep">:</span>
+        <div class="tf-countdown-unit">
+          <span class="tf-num" id="tf-hours">--</span>
+          <span class="tf-label">HOURS</span>
+        </div>
+        <span class="tf-sep">:</span>
+        <div class="tf-countdown-unit">
+          <span class="tf-num" id="tf-minutes">--</span>
+          <span class="tf-label">MINS</span>
+        </div>
+        <span class="tf-sep">:</span>
+        <div class="tf-countdown-unit">
+          <span class="tf-num" id="tf-seconds">--</span>
+          <span class="tf-label">SECS</span>
+        </div>
+      </div>
+      <div class="tf-countdown-live" id="tf-countdown-live" style="display: none;">
+        <span class="tf-live-dot"></span>
+        <span class="tf-live-text">Event is Live!</span>
+        <a href="https://fest.vadivacreativelabs.com/" class="tf-live-btn">Enter Fest &rarr;</a>
+      </div>
+    </div>
+  </div>
 
   <!-- Hero Banner Section -->
   <section class="hero">

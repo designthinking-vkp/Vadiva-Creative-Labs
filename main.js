@@ -256,62 +256,149 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     });
   }
 
-  // 1. Mobile Menu Toggle
-  const menuToggle = document.querySelector('.mobile-menu-toggle');
-  const mainNav = document.querySelector('nav.main-nav');
+  // 1. Activity Center Dropdown & Mobile Popover Interactivity
+  const dropdownContainers = document.querySelectorAll('.nav-dropdown');
 
-  if (menuToggle && mainNav) {
-    menuToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mainNav.classList.toggle('active');
+  dropdownContainers.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const menu = dropdown.querySelector('.dropdown-menu');
 
-      // Animate hamburger lines
-      const spans = menuToggle.querySelectorAll('span');
-      if (mainNav.classList.contains('active')) {
-        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-        spans[1].style.opacity = '0';
-        spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-      } else {
-        spans[0].style.transform = 'none';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = 'none';
+    if (!toggle || !menu) return;
+
+    // Click/tap handler for mobile and touch devices
+    toggle.addEventListener('click', (e) => {
+      // Toggle dropdown on mobile/small screens or touch devices
+      if (window.innerWidth <= 1024 || ('ontouchstart' in window && !window.matchMedia('(hover: hover)').matches)) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains('is-open');
+
+        // Close any other open dropdowns
+        dropdownContainers.forEach(d => {
+          if (d !== dropdown) {
+            d.classList.remove('is-open');
+            const t = d.querySelector('.dropdown-toggle');
+            if (t) t.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        if (isOpen) {
+          dropdown.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        } else {
+          dropdown.classList.add('is-open');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
       }
     });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
-        mainNav.classList.remove('active');
-        const spans = menuToggle.querySelectorAll('span');
-        spans[0].style.transform = 'none';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = 'none';
+    // Close when tapping an item
+    const items = menu.querySelectorAll('a');
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        dropdown.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  });
+
+  // Global click-outside listener to close dropdowns
+  document.addEventListener('click', (e) => {
+    dropdownContainers.forEach(dropdown => {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('is-open');
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
       }
     });
-  }
+  });
+
+  // Close on Escape key for accessibility
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdownContainers.forEach(dropdown => {
+        dropdown.classList.remove('is-open');
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
 
   // 2. Active Link Highlighting
   const navLinks = document.querySelectorAll('nav.main-nav a');
   const currentPath = window.location.pathname;
-  const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+  const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+  const normFile = currentFile.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
+
+  const activityCenterSubpages = ['activity-center', 'events', 'services', 'parents'];
 
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    // Normalize href and current path for comparison
+    // Normalize href
     const normHref = href.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
-    const normFile = currentFile.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
 
-    const isHomeHref = normHref === '' || normHref === 'index';
-    const isHomePath = normFile === '' || normFile === 'index';
-
-    if ((isHomeHref && isHomePath) || (normHref !== '' && normFile === normHref)) {
+    if (normHref !== '' && normFile === normHref) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
     }
   });
+
+  // Highlight Activity Center parent button if on an activity center page
+  if (activityCenterSubpages.includes(normFile)) {
+    const activityDropdownToggle = document.getElementById('activityCenterDropdown');
+    if (activityDropdownToggle) {
+      activityDropdownToggle.classList.add('active');
+    }
+  }
+
+  // 3. Tech Fest 2026 Live Countdown Timer Logic
+  function initTechFestCountdown() {
+    const timerContainer = document.getElementById('tf-countdown-timer');
+    const liveContainer = document.getElementById('tf-countdown-live');
+    const daysEl = document.getElementById('tf-days');
+    const hoursEl = document.getElementById('tf-hours');
+    const minsEl = document.getElementById('tf-minutes');
+    const secsEl = document.getElementById('tf-seconds');
+
+    if (!timerContainer || !daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+    // Target Date: 23 October 2026 00:00:00 IST (UTC+05:30)
+    const targetDate = new Date('2026-10-23T00:00:00+05:30').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        // Event has arrived or is past
+        timerContainer.style.display = 'none';
+        if (liveContainer) {
+          liveContainer.style.display = 'flex';
+        }
+        return;
+      }
+
+      // Time calculations
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minsEl.textContent = String(minutes).padStart(2, '0');
+      secsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    // Run immediately and every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+
+  initTechFestCountdown();
 
   // 3. Stats Counter Animation (Intersection Observer)
   const statNumbers = document.querySelectorAll('.stat-number');
