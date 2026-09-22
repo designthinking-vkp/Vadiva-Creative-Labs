@@ -256,7 +256,92 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     });
   }
 
-  // 1. Activity Center Dropdown & Mobile Popover Interactivity
+  // 1. Mobile Hamburger Menu & Slideout Drawer
+  function initMobileNav() {
+    const headerContainer = document.querySelector('.header-container');
+    const mainNav = document.querySelector('nav.main-nav');
+    let toggleBtn = document.querySelector('.mobile-menu-toggle');
+
+    if (!headerContainer || !mainNav) return;
+
+    // Create toggle button if not already in markup
+    if (!toggleBtn) {
+      toggleBtn = document.createElement('button');
+      toggleBtn.className = 'mobile-menu-toggle';
+      toggleBtn.setAttribute('aria-label', 'Toggle Navigation Menu');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.innerHTML = '<span></span><span></span><span></span>';
+      headerContainer.appendChild(toggleBtn);
+    }
+
+    // Ensure backdrop overlay exists
+    let backdrop = document.querySelector('.mobile-nav-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'mobile-nav-backdrop';
+      document.body.appendChild(backdrop);
+    }
+
+    function openNav() {
+      toggleBtn.classList.add('active');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      mainNav.classList.add('active');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNav() {
+      toggleBtn.classList.remove('active');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      mainNav.classList.remove('active');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+      // Also close any open dropdowns inside drawer
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(d => {
+        d.classList.remove('is-open');
+        const t = d.querySelector('.dropdown-toggle');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (mainNav.classList.contains('active')) {
+        closeNav();
+      } else {
+        openNav();
+      }
+    });
+
+    backdrop.addEventListener('click', closeNav);
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (mainNav.classList.contains('active')) closeNav();
+      }
+    });
+
+    // Close when regular nav links or CTAs are clicked
+    mainNav.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+          closeNav();
+        }
+      });
+    });
+
+    // Reset on window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1024 && mainNav.classList.contains('active')) {
+        closeNav();
+      }
+    });
+  }
+
+  initMobileNav();
+
+  // 1.1 Activity Center Dropdown & Mobile Popover Interactivity
   const dropdownContainers = document.querySelectorAll('.nav-dropdown');
 
   dropdownContainers.forEach(dropdown => {
@@ -302,15 +387,17 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     });
   });
 
-  // Global click-outside listener to close dropdowns
+  // Global click-outside listener to close dropdowns on desktop
   document.addEventListener('click', (e) => {
-    dropdownContainers.forEach(dropdown => {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('is-open');
-        const toggle = dropdown.querySelector('.dropdown-toggle');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      }
-    });
+    if (window.innerWidth > 1024) {
+      dropdownContainers.forEach(dropdown => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          const toggle = dropdown.querySelector('.dropdown-toggle');
+          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
   });
 
   // Close on Escape key for accessibility
