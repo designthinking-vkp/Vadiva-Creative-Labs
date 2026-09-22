@@ -924,14 +924,14 @@ if (typeof document !== 'undefined' && document.addEventListener) {
         // If mobile nav active, close it
         const mainNav = document.querySelector('nav.main-nav');
         const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const backdrop = document.querySelector('.mobile-nav-backdrop');
         if (mainNav && mainNav.classList.contains('active')) {
           mainNav.classList.remove('active');
-          const spans = menuToggle.querySelectorAll('span');
-          if (spans.length >= 3) {
-            spans[0].style.transform = 'none';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = 'none';
+          if (menuToggle) {
+            menuToggle.classList.remove('active');
+            menuToggle.setAttribute('aria-expanded', 'false');
           }
+          if (backdrop) backdrop.classList.remove('active');
         }
 
         if (overlay) {
