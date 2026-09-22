@@ -198,7 +198,7 @@ header.site-header {
 nav.main-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -206,8 +206,8 @@ nav.main-nav {
 nav.main-nav ul {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: clamp(6px, 1vw, 18px);
+  justify-content: flex-end;
+  gap: clamp(6px, 0.9vw, 16px);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -5250,5 +5250,389 @@ body.custom-cursor-hovering .custom-cursor-dot {
     width: 30px;
     height: 30px;
   }
+}
+
+/* ==========================================================================
+   PAGE UI ENHANCEMENTS: Events & Camps, Services, Parents Hub, Contact, About
+   ========================================================================== */
+
+/* 1. Universal Page Banner Polish */
+.page-banner {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  padding: 4.5rem 0 4rem !important;
+}
+
+.page-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(12, 184, 192, 0.07) 0%, rgba(243, 126, 75, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-banner .container {
+  position: relative;
+  z-index: 1;
+}
+
+.page-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.2vw, 2.75rem) !important;
+  font-weight: 800 !important;
+  color: var(--color-dark) !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+.page-subtitle {
+  font-size: clamp(1rem, 1.2vw, 1.15rem) !important;
+  color: var(--color-dark-light) !important;
+  line-height: 1.65 !important;
+  font-weight: 450 !important;
+  max-width: 780px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 2. Events & Camps Page Polish */
+.event-section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.fest-arena-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 1.75rem !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.fest-arena-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+  border-color: rgba(12, 184, 192, 0.3) !important;
+}
+
+.fest-arena-card h4 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-dark) !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.fest-arena-card h4 .icon-svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.fest-arena-card p {
+  color: var(--color-dark-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.camp-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.camp-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1) !important;
+}
+
+.camp-image {
+  height: 240px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.camp-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.camp-card:hover .camp-image img {
+  transform: scale(1.06);
+}
+
+.camp-content {
+  padding: 2rem !important;
+}
+
+.camp-tag {
+  display: inline-block;
+  padding: 4px 12px !important;
+  background-color: rgba(243, 126, 75, 0.1) !important;
+  color: var(--color-primary-dark) !important;
+  border-radius: 9999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  margin-bottom: 1rem !important;
+  border: 1px solid rgba(243, 126, 75, 0.2) !important;
+}
+
+.camp-concept {
+  background: #f8fafc;
+  border-left: 3px solid var(--color-primary) !important;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px !important;
+  font-style: italic;
+  color: var(--color-dark) !important;
+  font-size: 0.92rem !important;
+  line-height: 1.55 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.camp-modules h5 {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--color-dark-light) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.camp-modules ul li {
+  font-size: 0.9rem !important;
+  color: var(--color-dark) !important;
+  line-height: 1.5 !important;
+}
+
+.gallery-item {
+  border-radius: 16px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 3. Services Page Polish */
+.framework-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+  padding: 2.5rem !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.framework-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.09) !important;
+  border-color: rgba(12, 184, 192, 0.25) !important;
+}
+
+.framework-card-featured {
+  border: 2px solid var(--color-primary) !important;
+  box-shadow: 0 8px 30px rgba(243, 126, 75, 0.12) !important;
+}
+
+.framework-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: rgba(12, 184, 192, 0.1);
+  color: var(--color-primary);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.framework-modules ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+  color: var(--color-dark-light);
+  font-size: 0.92rem;
+}
+
+.framework-modules ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+/* 4. Parent Hub Page Polish */
+.parents-tabs-container {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05) !important;
+  overflow: hidden;
+}
+
+.tabs-nav {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  padding: 6px !important;
+  gap: 6px !important;
+}
+
+.tab-btn {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.92rem !important;
+  border-radius: 12px !important;
+  padding: 12px 20px !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  color: var(--color-dark-light) !important;
+  background: transparent !important;
+}
+
+.tab-btn:hover {
+  color: var(--color-primary) !important;
+  background: rgba(12, 184, 192, 0.06) !important;
+}
+
+.tab-btn.active {
+  background: #ffffff !important;
+  color: var(--color-primary) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+
+.tab-content {
+  padding: 3rem !important;
+}
+
+/* 5. Contact Page Polish */
+.contact-form-panel {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06) !important;
+  padding: 3rem !important;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  border: 1.5px solid rgba(15, 23, 42, 0.12) !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.2s ease !important;
+  background: #ffffff !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 4px rgba(243, 126, 75, 0.12) !important;
+  outline: none !important;
+}
+
+.contact-item {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: transform 0.2s ease;
+}
+
+.contact-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(12, 184, 192, 0.3);
+}
+
+.contact-item .icon-svg {
+  color: var(--color-primary);
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* 6. About Page Polish */
+.mission-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04) !important;
+  padding: 2.5rem !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08) !important;
+}
+
+.mission-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.team-highlight-container {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  padding: 3rem !important;
+}
+
+.stat-item {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(243, 126, 75, 0.25);
+  box-shadow: 0 10px 25px rgba(243, 126, 75, 0.08);
 }
 
