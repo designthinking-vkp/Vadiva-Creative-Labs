@@ -640,12 +640,32 @@ nav.main-nav a.nav-link.active {
   margin-top: 2rem;
 }
 
+/* Hero Banner Image Section */
+.hero-banner-section {
+  width: 100%;
+  position: relative;
+  background-color: var(--color-light);
+  overflow: hidden;
+  line-height: 0;
+}
+
+.hero-banner-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.hero-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
 .hero {
   position: relative;
-  padding: 7rem 0 6rem;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.5) 40%, rgba(255, 255, 255, 0.15) 70%, rgba(255, 255, 255, 0.02) 100%),
-              url('assets/hero-bg.png') no-repeat center center;
-  background-size: cover;
+  padding: 4.5rem 0 3.5rem;
+  background: var(--color-light);
   overflow: hidden;
 }
 
@@ -2638,9 +2658,7 @@ footer.site-footer {
   }
   
   .hero {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 100%),
-                url('assets/hero-bg.png') no-repeat center center;
-    background-size: cover;
+    background: var(--color-light);
   }
 
   .hero-grid {
