@@ -664,8 +664,9 @@ nav.main-nav a.nav-link.active {
 
 .hero {
   position: relative;
-  padding: 4.5rem 0 3.5rem;
-  background: var(--color-light);
+  padding: 6.5rem 0 5.5rem;
+  background: url('assets/hero-bg.png') no-repeat center center;
+  background-size: cover;
   overflow: hidden;
 }
 
