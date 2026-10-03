@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   
-  <!-- Private Meta Ads Landing Page - Discourage Indexing -->
+  <!-- Private Meta Ads Landing Page - Discourage Search Indexing -->
   <meta name="robots" content="noindex, nofollow">
   
   <title>Vadiva's Tech & Design Fest 2.0 | Register Now</title>
@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS CDN for instant, zero-build ultra-fast performance -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -49,9 +49,9 @@
             }
           },
           boxShadow: {
-            'glow': '0 10px 30px -10px rgba(0, 168, 150, 0.3)',
+            'glow': '0 10px 25px -5px rgba(0, 168, 150, 0.35)',
             'card': '0 4px 20px -2px rgba(10, 25, 47, 0.06), 0 2px 6px -1px rgba(10, 25, 47, 0.04)',
-            'form': '0 20px 40px -15px rgba(10, 25, 47, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+            'form': '0 15px 35px -10px rgba(10, 25, 47, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.9)',
           }
         }
       }
@@ -59,14 +59,13 @@
   </script>
   
   <style>
-    /* Smooth transitions & accessible focus */
     .step-pane {
-      transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+      transition: opacity 180ms ease-in-out, transform 180ms ease-in-out;
     }
     .step-pane.hidden-pane {
       display: none;
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(4px);
     }
     .step-pane.active-pane {
       display: block;
@@ -76,9 +75,8 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #00A896;
-      box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.18);
     }
-    /* Hide number spinners */
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
       -webkit-appearance: none; 
@@ -100,7 +98,6 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     
-    // Initialize Pixel if configured
     window.META_PIXEL_ID = window.META_PIXEL_ID || '';
     if (window.META_PIXEL_ID) {
       fbq('init', window.META_PIXEL_ID);
@@ -115,27 +112,27 @@
 
 <body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-brand-teal/20 selection:text-brand-navy">
 
-  <!-- TOP HEADER (Focused Brand Header - No distractive navigation menus) -->
+  <!-- TOP HEADER (Clean Brand Header) -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
       <!-- Logo Brand -->
-      <a href="#hero" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-teal rounded-lg p-1">
-        <img src="/assets/techfest26-logo.png" alt="Vadiva's Tech & Design Fest 2.0" class="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105 duration-200" onerror="this.src='techfestregistration/assets/techfest26-logo.png'">
-        <div class="hidden xs:flex flex-col">
-          <span class="font-display font-extrabold text-sm sm:text-base text-brand-navy tracking-tight leading-tight">TECH & DESIGN FEST 2.0</span>
-          <span class="text-[11px] font-medium text-slate-500">23–25 Oct 2026 • TVIS, Ponneri</span>
-        </div>
-      </a>
-
-      <!-- Quick Action CTA -->
       <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Registrations Open
-        </span>
-        <a href="#register" class="inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg bg-brand-navy hover:bg-slate-800 text-white text-xs sm:text-sm font-bold shadow-sm transition-all duration-150 active:scale-95 focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy">
-          Register Now
+        <img src="/assets/techfest26-logo.png" alt="Vadiva's Tech & Design Fest 2.0" class="h-10 sm:h-12 w-auto object-contain" onerror="this.src='techfestregistration/assets/techfest26-logo.png'">
+        <div class="flex flex-col">
+          <span class="font-display font-black text-sm sm:text-base text-brand-navy tracking-tight leading-tight">TECH & DESIGN FEST 2.0</span>
+          <span class="text-[11px] font-semibold text-slate-500">23, 24 & 25 Oct 2026 • TVIS, Ponneri</span>
+        </div>
+      </div>
+
+      <!-- Header Action -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="https://fest.vadivacreativelabs.com/" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+          <span>Explore Fest</span>
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
         </a>
+        <button type="button" onclick="scrollToForm()" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-brand-navy hover:bg-slate-800 text-white text-xs sm:text-sm font-bold shadow-sm transition-all duration-150 active:scale-95">
+          Register Now
+        </button>
       </div>
     </div>
   </header>
@@ -143,221 +140,37 @@
   <!-- MAIN CONTENT CONTAINER -->
   <main>
     <!-- ==========================================
-         SECTION 1: HERO SECTION
+         TOP HERO + LEAD FORM (FIRST THING VISIBLE ON OPEN)
          ========================================== -->
-    <section id="hero" class="relative overflow-hidden pt-8 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20 bg-gradient-to-b from-white via-slate-50/60 to-[#F8FAFC] border-b border-slate-200/60">
-      <!-- Background subtle decorative accents -->
-      <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-teal/5 blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-coral/5 blur-3xl pointer-events-none"></div>
-
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <!-- Event Badge -->
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-teal/10 border border-brand-teal/20 text-brand-teal text-xs sm:text-sm font-bold mb-4 tracking-wide">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-          </svg>
-          3-Day International Tech & Design Festival
-        </div>
-
-        <!-- Main Headline -->
-        <h1 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-brand-navy tracking-tight leading-[1.1] mb-4">
-          VADIVA'S TECH & DESIGN FEST 2.0
-        </h1>
-
-        <!-- Date & Venue -->
-        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-slate-700 font-semibold text-sm sm:text-lg mb-6">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-lg shadow-sm border border-slate-200">
-            <svg class="w-4 h-4 text-brand-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            23, 24 & 25 October 2026
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-lg shadow-sm border border-slate-200">
-            <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            TVIS, Ponneri
-          </span>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-lg shadow-sm border border-slate-200 text-xs sm:text-sm text-slate-600">
-            Powered by <strong class="text-brand-navy">VadivaLabs</strong>
-          </span>
-        </div>
-
-        <!-- Highlights Metric Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-8 max-w-3xl mx-auto">
-          <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-card text-center">
-            <div class="font-display font-extrabold text-xl sm:text-2xl text-brand-navy">5000+</div>
-            <div class="text-xs font-medium text-slate-500 mt-0.5">Students</div>
-          </div>
-          <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-card text-center">
-            <div class="font-display font-extrabold text-xl sm:text-2xl text-brand-teal">50+</div>
-            <div class="text-xs font-medium text-slate-500 mt-0.5">Special Guests</div>
-          </div>
-          <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-card text-center">
-            <div class="font-display font-extrabold text-xl sm:text-2xl text-brand-coral">₹25L+</div>
-            <div class="text-xs font-medium text-slate-500 mt-0.5">Prizes & Grants</div>
-          </div>
-          <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200/80 shadow-card text-center">
-            <div class="font-display font-extrabold text-base sm:text-lg text-slate-800 leading-tight">Keynotes & Labs</div>
-            <div class="text-xs font-medium text-slate-500 mt-0.5">Competitions</div>
-          </div>
-        </div>
-
-        <!-- Primary Hero CTA -->
-        <div class="mt-6 flex flex-col items-center justify-center">
-          <a href="#register" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 sm:py-4 rounded-xl bg-brand-teal hover:bg-[#008f80] text-white text-base sm:text-lg font-extrabold shadow-glow hover:shadow-lg transition-all duration-200 active:scale-[0.98] group">
-            <span>Register Your Interest</span>
-            <svg class="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-            </svg>
-          </a>
-          <p class="text-xs sm:text-sm text-slate-500 mt-2.5 font-medium">
-            ⚡ Limited participant slots available • Free priority pre-registration
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SECTION 2: EVENT HIGHLIGHTS
-         ========================================== -->
-    <section class="py-12 sm:py-16 bg-white border-b border-slate-200/60">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-teal">Experience The Energy</span>
-          <h2 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mt-1">Festival Highlights</h2>
-          <p class="text-sm text-slate-600 mt-2">Explore world-class experiences designed for aspiring technologists and creators.</p>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <!-- Card 1 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-teal-100/80 text-brand-teal flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Robotics & AI</h3>
-            <p class="text-xs text-slate-500 mt-1">Autonomous bots, computer vision & generative AI challenges.</p>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-blue-100/80 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Coding</h3>
-            <p class="text-xs text-slate-500 mt-1">Fast-paced algorithmic contests, web dev & 24hr hackathons.</p>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-rose-100/80 text-brand-coral flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Product Design</h3>
-            <p class="text-xs text-slate-500 mt-1">UI/UX prototyping, design sprints & physical product design.</p>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-amber-100/80 text-brand-gold flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Tech Talks</h3>
-            <p class="text-xs text-slate-500 mt-1">Future trends, quantum computing, AR/VR and cybersecurity.</p>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-purple-100/80 text-purple-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Keynotes</h3>
-            <p class="text-xs text-slate-500 mt-1">Visionary addresses by top tech founders and researchers.</p>
-          </div>
-
-          <!-- Card 6 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-emerald-100/80 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Startup Pitch</h3>
-            <p class="text-xs text-slate-500 mt-1">Pitch to real angels, VCs & win ₹25L+ in equity-free grants.</p>
-          </div>
-
-          <!-- Card 7 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-cyan-100/80 text-cyan-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Workshops</h3>
-            <p class="text-xs text-slate-500 mt-1">Deep-dive masterclasses in IoT, drones, ML & CAD modeling.</p>
-          </div>
-
-          <!-- Card 8 -->
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
-            <div class="w-10 h-10 rounded-lg bg-indigo-100/80 text-indigo-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-brand-navy">Experience Hubs</h3>
-            <p class="text-xs text-slate-500 mt-1">Hands-on makerspaces, interactive tech arenas and gaming zones.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SECTION 3: WHY PARTICIPATE
-         ========================================== -->
-    <section class="py-12 sm:py-16 bg-[#F8FAFC] border-b border-slate-200/60">
+    <section id="form-section" class="pt-4 pb-10 sm:pt-8 sm:pb-14 bg-gradient-to-b from-white via-slate-50/70 to-[#F8FAFC] border-b border-slate-200/70">
       <div class="max-w-4xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-8 sm:mb-10">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-coral">Unlock Your Potential</span>
-          <h2 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mt-1">Why Participate?</h2>
-          <p class="font-display text-lg sm:text-xl font-bold text-brand-teal mt-2">
-            "Build. Compete. Create. Connect."
+
+        <!-- Compact Top Event Banner -->
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-teal/10 border border-brand-teal/20 text-brand-teal text-xs font-bold mb-2 tracking-wide">
+            <span>🚀 3-Day International Tech & Design Festival</span>
+          </div>
+          <h1 class="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-brand-navy tracking-tight leading-tight">
+            VADIVA'S TECH & DESIGN FEST 2.0
+          </h1>
+          <p class="text-xs sm:text-base font-semibold text-slate-600 mt-1 flex items-center justify-center flex-wrap gap-x-2 gap-y-1">
+            <span>📅 23, 24 & 25 October 2026</span>
+            <span>•</span>
+            <span>📍 TVIS, Ponneri</span>
+            <span>•</span>
+            <span class="text-brand-coral font-bold">₹25L+ Prizes & Grants</span>
           </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Showcase your technical and creative skills on an international stage</span>
-          </div>
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Participate in high-stakes competitions with ₹25L+ prize pool</span>
-          </div>
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Learn directly from leading industry experts and tech mentors</span>
-          </div>
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Explore emerging technologies, robotics, AI and hands-on demos</span>
-          </div>
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Connect with thousands of driven student innovators & creators</span>
-          </div>
-          <div class="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-xs">✓</div>
-            <span class="text-sm sm:text-base font-semibold text-slate-700">Discover startup incubation, grant funding and internship opportunities</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SECTION 4: MULTI-STEP LEAD FORM (CORE SECTION)
-         ========================================== -->
-    <section id="register" class="py-12 sm:py-16 lg:py-20 bg-slate-100/70 relative">
-      <div class="max-w-xl mx-auto px-4 sm:px-6">
-        
-        <!-- Registration Card Container -->
-        <div class="bg-white rounded-2xl shadow-form border border-slate-200/80 overflow-hidden relative">
+        <!-- Multi-Step Registration Card -->
+        <div id="lead-card-container" class="max-w-xl mx-auto bg-white rounded-2xl shadow-form border border-slate-200/90 overflow-hidden relative">
           
           <!-- Card Header / Title -->
-          <div class="bg-gradient-to-r from-brand-navy via-slate-900 to-brand-navy text-white px-5 sm:px-8 py-5 border-b border-slate-800">
+          <div class="bg-gradient-to-r from-brand-navy via-slate-900 to-brand-navy text-white px-5 sm:px-8 py-4 sm:py-5 border-b border-slate-800">
             <div class="flex items-center justify-between">
               <div>
-                <span class="text-[11px] uppercase tracking-wider text-brand-teal font-extrabold">Official Registration</span>
-                <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white">Register Your Interest</h3>
+                <span class="text-[10px] sm:text-[11px] uppercase tracking-wider text-brand-teal font-extrabold">Participant Pre-Registration</span>
+                <h2 class="font-display font-extrabold text-lg sm:text-2xl text-white">Register Your Interest</h2>
               </div>
               <div class="text-right">
                 <span id="step-counter-text" class="text-xs sm:text-sm font-bold text-brand-gold bg-white/10 px-2.5 py-1 rounded-full border border-white/10">
@@ -367,7 +180,7 @@
             </div>
             
             <!-- Progress Bar Indicator -->
-            <div class="mt-4">
+            <div class="mt-3 sm:mt-4">
               <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
                 <div id="progress-bar-fill" class="bg-gradient-to-r from-brand-teal to-emerald-400 h-2 rounded-full transition-all duration-300 ease-out" style="width: 25%;"></div>
               </div>
@@ -381,27 +194,27 @@
           </div>
 
           <!-- FORM ELEMENT -->
-          <form id="lead-form" class="p-5 sm:p-8" novalidate>
+          <form id="lead-form" class="p-5 sm:p-7" novalidate>
             
-            <!-- Honeypot field (hidden from screen readers & humans to trap bots) -->
+            <!-- Honeypot spam trap -->
             <div class="hidden" aria-hidden="true" style="display:none !important; position: absolute; left: -9999px;">
               <label for="website_url_hp">Leave this field blank</label>
               <input type="text" id="website_url_hp" name="website_url_hp" tabindex="-1" autocomplete="off">
             </div>
 
             <!-- Global Form Error Banner -->
-            <div id="form-global-error" class="hidden mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-start gap-3">
-              <svg class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <div id="form-global-error-msg" class="flex-1 font-medium"></div>
+            <div id="form-global-error" class="hidden mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm flex items-start gap-2.5">
+              <svg class="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div id="form-global-error-msg" class="flex-1 font-semibold"></div>
             </div>
 
             <!-- ==========================================
                  STEP 1: PARTICIPANT DETAILS
                  ========================================== -->
             <div id="step-1" class="step-pane active-pane space-y-4">
-              <div class="border-b border-slate-100 pb-2 mb-4">
-                <h4 class="font-display font-bold text-lg text-brand-navy">Let's get to know you</h4>
-                <p class="text-xs text-slate-500">Enter participant and parent details</p>
+              <div class="border-b border-slate-100 pb-2 mb-3">
+                <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">Let's get to know you</h3>
+                <p class="text-xs text-slate-500">Enter participant and parent / caretaker details</p>
               </div>
 
               <!-- Participant Name -->
@@ -436,8 +249,8 @@
                 <p id="err-parentCaretakerName" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
-              <!-- Step 1 Navigation Button -->
-              <div class="pt-4">
+              <!-- Step 1 Continue -->
+              <div class="pt-3">
                 <button 
                   type="button" 
                   id="btn-next-1" 
@@ -453,12 +266,12 @@
                  STEP 2: EDUCATION DETAILS
                  ========================================== -->
             <div id="step-2" class="step-pane hidden-pane space-y-4">
-              <div class="border-b border-slate-100 pb-2 mb-4">
-                <h4 class="font-display font-bold text-lg text-brand-navy">Tell us about your education</h4>
+              <div class="border-b border-slate-100 pb-2 mb-3">
+                <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">Tell us about your education</h3>
                 <p class="text-xs text-slate-500">Select participant's current study level</p>
               </div>
 
-              <!-- Study Level Selection -->
+              <!-- Study Level -->
               <div>
                 <label for="studyLevel" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                   What is the current level of study of the Participant? <span class="text-brand-coral">*</span>
@@ -476,7 +289,7 @@
                 <p id="err-studyLevel" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
-              <!-- Dynamic School Grade Container (Shown only when School Students selected) -->
+              <!-- Dynamic School Grade -->
               <div id="container-school-grade" class="hidden">
                 <label for="schoolGrade" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                   Select your current grade <span class="text-brand-coral">*</span>
@@ -498,7 +311,7 @@
                 <p id="err-schoolGrade" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
-              <!-- Dynamic College Year Container (Shown only when College Students selected) -->
+              <!-- Dynamic College Year -->
               <div id="container-college-year" class="hidden">
                 <label for="collegeYear" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                   Select your current year <span class="text-brand-coral">*</span>
@@ -520,7 +333,7 @@
               </div>
 
               <!-- Step 2 Navigation Buttons -->
-              <div class="pt-4 flex items-center gap-3">
+              <div class="pt-3 flex items-center gap-3">
                 <button 
                   type="button" 
                   id="btn-back-2" 
@@ -543,8 +356,8 @@
                  STEP 3: INSTITUTION & LOCATION
                  ========================================== -->
             <div id="step-3" class="step-pane hidden-pane space-y-4">
-              <div class="border-b border-slate-100 pb-2 mb-4">
-                <h4 class="font-display font-bold text-lg text-brand-navy">Where are you studying?</h4>
+              <div class="border-b border-slate-100 pb-2 mb-3">
+                <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">Where are you studying?</h3>
                 <p class="text-xs text-slate-500">Enter your school / college & city details</p>
               </div>
 
@@ -564,24 +377,45 @@
                 <p id="err-institutionName" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
-              <!-- City Name -->
+              <!-- City Selection Dropdown -->
               <div>
-                <label for="city" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
+                <label for="citySelect" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
+                  Select Your City / District <span class="text-brand-coral">*</span>
+                </label>
+                <select 
+                  id="citySelect" 
+                  name="citySelect" 
+                  class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white text-slate-800 focus:bg-white transition-colors"
+                  required
+                >
+                  <option value="" disabled selected>Select your city</option>
+                  <option value="Chennai">Chennai</option>
+                  <option value="Chengalpattu">Chengalpattu</option>
+                  <option value="Kanchipuram">Kanchipuram</option>
+                  <option value="Tiruvallur">Tiruvallur</option>
+                  <option value="Ranipet / Arakkonam">Ranipet / Arakkonam</option>
+                  <option value="Other">Other State / Other Tamil Nadu Districts</option>
+                </select>
+                <p id="err-citySelect" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
+              </div>
+
+              <!-- Custom City Manual Input (Shown if 'Other' selected) -->
+              <div id="container-other-city" class="hidden">
+                <label for="otherCityInput" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                   Enter Your City Name <span class="text-brand-coral">*</span>
                 </label>
                 <input 
                   type="text" 
-                  id="city" 
-                  name="city" 
-                  placeholder="Enter your city"
+                  id="otherCityInput" 
+                  name="otherCityInput" 
+                  placeholder="Type your city / state name"
                   class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white placeholder-slate-400 focus:bg-white transition-colors"
-                  required
                 >
-                <p id="err-city" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
+                <p id="err-otherCityInput" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
               <!-- Step 3 Navigation Buttons -->
-              <div class="pt-4 flex items-center gap-3">
+              <div class="pt-3 flex items-center gap-3">
                 <button 
                   type="button" 
                   id="btn-back-3" 
@@ -604,9 +438,9 @@
                  STEP 4: CONTACT DETAILS
                  ========================================== -->
             <div id="step-4" class="step-pane hidden-pane space-y-4">
-              <div class="border-b border-slate-100 pb-2 mb-4">
-                <h4 class="font-display font-bold text-lg text-brand-navy">How can we reach you?</h4>
-                <p class="text-xs text-slate-500">Provide verified contact details for event pass & updates</p>
+              <div class="border-b border-slate-100 pb-2 mb-3">
+                <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">How can we reach you?</h3>
+                <p class="text-xs text-slate-500">Provide contact details for official event pass & updates</p>
               </div>
 
               <!-- Contact Number -->
@@ -674,7 +508,7 @@
               </div>
 
               <!-- Step 4 Navigation Buttons -->
-              <div class="pt-4 flex items-center gap-3">
+              <div class="pt-3 flex items-center gap-3">
                 <button 
                   type="button" 
                   id="btn-back-4" 
@@ -699,7 +533,7 @@
           </form>
 
           <!-- ==========================================
-               SUCCESS SCREEN (Rendered after successful submission)
+               SUCCESS SCREEN
                ========================================== -->
           <div id="success-screen" class="hidden p-6 sm:p-10 text-center">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
@@ -709,7 +543,7 @@
             </div>
             
             <h3 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mb-2">You're Registered!</h3>
-            <p class="text-sm sm:text-base text-slate-600 max-w-md mx-auto mb-6">
+            <p id="success-screen-msg" class="text-sm sm:text-base text-slate-600 max-w-md mx-auto mb-6">
               Thank you for registering your interest in <strong class="text-brand-navy">Vadiva's Tech & Design Fest 2.0</strong>.
             </p>
 
@@ -728,8 +562,9 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a href="#hero" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-navy hover:bg-slate-800 text-white text-sm font-bold transition-colors">
-                Explore the Fest
+              <a href="https://fest.vadivacreativelabs.com/" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-navy hover:bg-slate-800 text-white text-sm font-bold inline-flex items-center justify-center gap-1.5 transition-colors">
+                <span>Explore the Fest</span>
+                <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
               <a href="https://wa.me/919940026262?text=Hi%20VadivaLabs,%20I%20have%20registered%20for%20Vadiva%27s%20Tech%20%26%20Design%20Fest%202.0" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-sm font-bold flex items-center justify-center gap-2 transition-colors">
                 <span>WhatsApp Support</span>
@@ -738,7 +573,7 @@
           </div>
 
           <!-- ==========================================
-               ERROR SCREEN (Displayed if submission fails)
+               ERROR SCREEN
                ========================================== -->
           <div id="error-screen" class="hidden p-6 sm:p-10 text-center">
             <div class="w-16 h-16 bg-rose-100 text-brand-coral rounded-full flex items-center justify-center mx-auto mb-4">
@@ -768,26 +603,147 @@
     </section>
 
     <!-- ==========================================
-         SECTION 5: FINAL CTA SECTION
+         SECTION 2: FESTIVAL HIGHLIGHTS
          ========================================== -->
-    <section class="py-12 sm:py-16 bg-gradient-to-b from-slate-900 to-brand-navy text-white text-center relative overflow-hidden">
+    <section class="py-10 sm:py-14 bg-white border-b border-slate-200/60">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-teal">Experience The Energy</span>
+          <h2 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mt-1">Festival Highlights</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">Explore world-class experiences designed for aspiring technologists and creators.</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-teal-100/80 text-brand-teal flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Robotics & AI</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Autonomous bots, computer vision & generative AI challenges.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-blue-100/80 text-blue-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Coding</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Fast-paced algorithmic contests, web dev & 24hr hackathons.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-rose-100/80 text-brand-coral flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Product Design</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">UI/UX prototyping, design sprints & physical product design.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-amber-100/80 text-brand-gold flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Tech Talks</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Future trends, quantum computing, AR/VR and cybersecurity.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-purple-100/80 text-purple-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Keynotes</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Visionary addresses by top tech founders and researchers.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100/80 text-emerald-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Startup Pitch</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Pitch to real angels, VCs & win ₹25L+ in equity-free grants.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-cyan-100/80 text-cyan-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Workshops</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Masterclasses in IoT, drones, machine learning & CAD.</p>
+          </div>
+
+          <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/70 hover:border-brand-teal/40 hover:bg-white transition-all duration-200 group">
+            <div class="w-9 h-9 rounded-lg bg-indigo-100/80 text-indigo-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </div>
+            <h3 class="font-bold text-xs sm:text-sm text-brand-navy">Experience Hubs</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Hands-on makerspaces, interactive arenas & gaming zones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 3: WHY PARTICIPATE
+         ========================================== -->
+    <section class="py-10 sm:py-14 bg-[#F8FAFC] border-b border-slate-200/60">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-6 sm:mb-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-coral">Unlock Your Potential</span>
+          <h2 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mt-1">Why Participate?</h2>
+          <p class="font-display text-base sm:text-lg font-bold text-brand-teal mt-1">
+            "Build. Compete. Create. Connect."
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Showcase your technical & creative skills on an international stage</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Participate in high-stakes competitions with ₹25L+ prize pool</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Learn directly from leading industry experts & tech mentors</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Explore emerging technologies, robotics, AI & live demos</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Connect with thousands of student innovators & creators</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 flex items-center justify-center mt-0.5 font-bold text-[10px]">✓</div>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700">Discover startup incubation, grant funding & internship opportunities</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 4: FINAL CTA
+         ========================================== -->
+    <section class="py-10 sm:py-14 bg-gradient-to-b from-slate-900 to-brand-navy text-white text-center relative overflow-hidden">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
-        <h2 class="font-display font-black text-2xl sm:text-4xl text-white mb-3">
+        <h2 class="font-display font-black text-xl sm:text-3xl text-white mb-2">
           Ready to Experience the Future?
         </h2>
-        <p class="text-sm sm:text-base text-slate-300 max-w-xl mx-auto mb-6">
-          Register your interest for Vadiva's Tech & Design Fest 2.0. Join over 5,000 innovators, creators and students in an unforgettable 3-day festival.
+        <p class="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto mb-5">
+          Register your interest for Vadiva's Tech & Design Fest 2.0. Join over 5,000 innovators, creators and students.
         </p>
-        <a href="#register" class="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-brand-teal hover:bg-[#008f80] text-white text-base font-extrabold shadow-glow hover:shadow-lg transition-all duration-200 active:scale-[0.98]">
+        <button type="button" onclick="scrollToForm()" class="inline-flex items-center justify-center px-7 py-3 rounded-xl bg-brand-teal hover:bg-[#008f80] text-white text-sm sm:text-base font-extrabold shadow-glow hover:shadow-lg transition-all duration-200 active:scale-[0.98]">
           Register Now
-        </a>
+        </button>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER (Clean minimal event footer) -->
-  <footer class="bg-slate-950 text-slate-400 py-8 border-t border-slate-900 text-center text-xs">
-    <div class="max-w-4xl mx-auto px-4 space-y-3">
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 text-slate-400 py-6 border-t border-slate-900 text-center text-xs">
+    <div class="max-w-4xl mx-auto px-4 space-y-2">
       <p class="font-semibold text-slate-300">
         Vadiva's Tech & Design Fest 2.0 • Powered by VadivaLabs
       </p>
@@ -795,29 +751,24 @@
         23, 24 & 25 October 2026 • TVIS, Ponneri
       </p>
       <p class="text-[11px] text-slate-400">
-        Your information is securely processed for festival registration and communication only.
+        Your information is securely processed for festival communication only.
       </p>
-      <p class="text-[11px] text-slate-400 pt-2 border-t border-slate-900">
+      <p class="text-[11px] text-slate-400 pt-1 border-t border-slate-900">
         &copy; 2026 Vadiva Creative Labs. All rights reserved.
       </p>
     </div>
   </footer>
 
-  <!-- MOBILE STICKY CTA (Visible on mobile when scrolled past hero) -->
-  <div id="mobile-sticky-cta" class="fixed bottom-3 left-4 right-4 z-40 sm:hidden transition-transform duration-300 transform translate-y-24">
-    <a href="#register" class="flex items-center justify-between px-5 py-3.5 rounded-xl bg-brand-navy/95 text-white backdrop-blur shadow-2xl border border-slate-700/80 text-xs font-bold active:scale-[0.98]">
-      <div class="flex flex-col text-left">
-        <span class="text-white text-xs font-extrabold">Tech & Design Fest 2.0</span>
-        <span class="text-[10px] text-brand-teal font-medium">23–25 Oct • TVIS Ponneri</span>
-      </div>
-      <span class="px-3.5 py-1.5 rounded-lg bg-brand-teal text-white font-extrabold shadow-sm">
-        Register Now →
-      </span>
-    </a>
-  </div>
-
-  <!-- JAVASCRIPT: MULTI-STEP LOGIC, UTM TRACKING, META PIXEL & FORM SUBMISSION -->
+  <!-- JAVASCRIPT: CLEAN URL SCROLL, CITY LOGIC, MULTI-STEP ENGINE & GOOGLE SHEETS SUBMISSION -->
   <script>
+    // Smooth scroll to form without altering the address bar URL (prevents #hero or #register in URL)
+    function scrollToForm() {
+      const container = document.getElementById('lead-card-container');
+      if (container) {
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     (function() {
       'use strict';
 
@@ -831,12 +782,11 @@
           utmContent: params.get('utm_content') || sessionStorage.getItem('vtf_utm_content') || '',
           utmTerm: params.get('utm_term') || sessionStorage.getItem('vtf_utm_term') || '',
           fbclid: params.get('fbclid') || sessionStorage.getItem('vtf_fbclid') || '',
-          landingPage: window.location.href
+          landingPage: window.location.origin + window.location.pathname
         };
       }
 
       const trackingData = getQueryParams();
-      // Persist in sessionStorage so they survive any in-session interaction
       if (trackingData.utmSource) sessionStorage.setItem('vtf_utm_source', trackingData.utmSource);
       if (trackingData.utmMedium) sessionStorage.setItem('vtf_utm_medium', trackingData.utmMedium);
       if (trackingData.utmCampaign) sessionStorage.setItem('vtf_utm_campaign', trackingData.utmCampaign);
@@ -864,7 +814,7 @@
         4: document.getElementById('step-label-4')
       };
 
-      // Form Elements
+      // Form Inputs
       const form = document.getElementById('lead-form');
       const participantNameInput = document.getElementById('participantName');
       const parentCaretakerNameInput = document.getElementById('parentCaretakerName');
@@ -874,13 +824,16 @@
       const schoolGradeSelect = document.getElementById('schoolGrade');
       const collegeYearSelect = document.getElementById('collegeYear');
       const institutionNameInput = document.getElementById('institutionName');
-      const cityInput = document.getElementById('city');
+      const citySelect = document.getElementById('citySelect');
+      const containerOtherCity = document.getElementById('container-other-city');
+      const otherCityInput = document.getElementById('otherCityInput');
       const contactNumberInput = document.getElementById('contactNumber');
       const whatsappNumberInput = document.getElementById('whatsappNumber');
       const emailInput = document.getElementById('email');
       const honeypotInput = document.getElementById('website_url_hp');
 
       const successScreen = document.getElementById('success-screen');
+      const successScreenMsg = document.getElementById('success-screen-msg');
       const errorScreen = document.getElementById('error-screen');
       const errorScreenMsg = document.getElementById('error-screen-msg');
       const formGlobalError = document.getElementById('form-global-error');
@@ -897,12 +850,12 @@
         if (val === 'School Students') {
           containerSchool.classList.remove('hidden');
           containerCollege.classList.add('hidden');
-          collegeYearSelect.value = ''; // Reset college selection
+          collegeYearSelect.value = '';
           hideFieldError('collegeYear');
         } else if (val === 'College Students') {
           containerCollege.classList.remove('hidden');
           containerSchool.classList.add('hidden');
-          schoolGradeSelect.value = ''; // Reset school selection
+          schoolGradeSelect.value = '';
           hideFieldError('schoolGrade');
         } else {
           containerSchool.classList.add('hidden');
@@ -912,9 +865,21 @@
         }
       });
 
-      // 4. STEP NAVIGATION & UI UPDATER
+      // 4. DYNAMIC CITY SELECTION HANDLER
+      citySelect.addEventListener('change', function() {
+        hideFieldError('citySelect');
+        if (this.value === 'Other') {
+          containerOtherCity.classList.remove('hidden');
+          otherCityInput.focus();
+        } else {
+          containerOtherCity.classList.add('hidden');
+          otherCityInput.value = '';
+          hideFieldError('otherCityInput');
+        }
+      });
+
+      // 5. STEP UI UPDATER
       function updateStepUI(step) {
-        // Update Step Panes
         for (let i = 1; i <= totalSteps; i++) {
           if (i === step) {
             stepPanes[i].classList.remove('hidden-pane');
@@ -925,12 +890,10 @@
           }
         }
 
-        // Update Counter and Progress Bar
         stepCounterText.textContent = `Step ${step} of ${totalSteps}`;
         const pct = (step / totalSteps) * 100;
         progressBarFill.style.width = `${pct}%`;
 
-        // Update Step Label highlights
         for (let i = 1; i <= totalSteps; i++) {
           if (i <= step) {
             stepLabels[i].className = 'text-brand-teal font-bold';
@@ -939,10 +902,13 @@
           }
         }
 
-        // Smooth scroll to form header if needed
-        const formTop = document.getElementById('register').offsetTop;
-        if (window.scrollY > formTop) {
-          window.scrollTo({ top: formTop - 60, behavior: 'smooth' });
+        // Scroll smoothly to form top without changing the URL bar
+        const container = document.getElementById('lead-card-container');
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          if (rect.top < 0 || rect.top > window.innerHeight) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
       }
 
@@ -970,10 +936,10 @@
         }
       }
 
-      // Clear field errors on input
+      // Live error clearing
       [
         participantNameInput, parentCaretakerNameInput, institutionNameInput, 
-        cityInput, contactNumberInput, whatsappNumberInput, emailInput
+        otherCityInput, contactNumberInput, whatsappNumberInput, emailInput
       ].forEach(function(input) {
         input.addEventListener('input', function() {
           hideFieldError(this.id);
@@ -981,14 +947,14 @@
         });
       });
 
-      [schoolGradeSelect, collegeYearSelect].forEach(function(select) {
+      [schoolGradeSelect, collegeYearSelect, citySelect].forEach(function(select) {
         select.addEventListener('change', function() {
           hideFieldError(this.id);
           formGlobalError.classList.add('hidden');
         });
       });
 
-      // 5. VALIDATION LOGIC PER STEP
+      // 6. VALIDATION PER STEP
       function validateStep1() {
         let valid = true;
         const pName = participantNameInput.value.trim();
@@ -1050,7 +1016,7 @@
       function validateStep3() {
         let valid = true;
         const inst = institutionNameInput.value.trim();
-        const city = cityInput.value.trim();
+        const cityVal = citySelect.value;
 
         if (!inst) {
           showFieldError('institutionName', "Please enter your school or college name.");
@@ -1062,14 +1028,22 @@
           hideFieldError('institutionName');
         }
 
-        if (!city) {
-          showFieldError('city', "Please enter your city.");
+        if (!cityVal) {
+          showFieldError('citySelect', "Please select your city / district.");
           valid = false;
-        } else if (city.length < 2) {
-          showFieldError('city', "Please enter a valid city name.");
-          valid = false;
+        } else if (cityVal === 'Other') {
+          const otherCity = otherCityInput.value.trim();
+          if (!otherCity) {
+            showFieldError('otherCityInput', "Please enter your city name.");
+            valid = false;
+          } else if (otherCity.length < 2) {
+            showFieldError('otherCityInput', "Please enter a valid city name.");
+            valid = false;
+          } else {
+            hideFieldError('otherCityInput');
+          }
         } else {
-          hideFieldError('city');
+          hideFieldError('citySelect');
         }
 
         return valid;
@@ -1113,7 +1087,7 @@
         return valid;
       }
 
-      // 6. BUTTON EVENT LISTENERS
+      // Step Buttons
       document.getElementById('btn-next-1').addEventListener('click', function() {
         if (validateStep1()) {
           currentStep = 2;
@@ -1154,12 +1128,10 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Validate current step
         if (!validateStep4()) return;
 
-        // Check honeypot
         if (honeypotInput.value) {
-          console.warn("Spam detected");
+          console.warn("Spam filtered");
           return;
         }
 
@@ -1168,29 +1140,27 @@
         const studyLevel = studyLevelSelect.value;
         const gradeOrCollegeYear = (studyLevel === 'School Students') ? schoolGradeSelect.value : collegeYearSelect.value;
         const institutionName = institutionNameInput.value.trim();
-        const city = cityInput.value.trim();
+        const rawCity = citySelect.value === 'Other' ? otherCityInput.value.trim() : citySelect.value;
         const contactNumber = contactNumberInput.value.trim().replace(/\D/g, '');
         const whatsappNumber = whatsappNumberInput.value.trim().replace(/\D/g, '');
         const email = emailInput.value.trim().toLowerCase();
 
-        // Client-side Duplicate Check
-        const dupKey = `vtf_lead_${participantName.toLowerCase()}_${contactNumber}`;
+        // Check duplicate
+        const dupKey = `vtf_lead_${participantName.toLowerCase()}_${contactNumber.slice(-10)}`;
         if (localStorage.getItem(dupKey)) {
           showDuplicateNotice();
           return;
         }
 
-        // Set Loading State
         setSubmittingState(true);
 
-        // Prepare Payload
         const payload = {
           participantName: participantName,
           parentCaretakerName: parentCaretakerName,
           studyLevel: studyLevel,
           gradeOrCollegeYear: gradeOrCollegeYear,
           institutionName: institutionName,
-          city: city,
+          city: rawCity,
           contactNumber: contactNumber,
           whatsappNumber: whatsappNumber || '-',
           email: email,
@@ -1204,11 +1174,10 @@
           utmContent: trackingData.utmContent,
           utmTerm: trackingData.utmTerm,
           fbclid: trackingData.fbclid,
-          landingPage: window.location.href,
-          website_url_hp: honeypotInput.value
+          landingPage: window.location.origin + window.location.pathname
         };
 
-        // Submit to backend API endpoint
+        // Primary: Submit to /api/techfest-lead.php, with direct Google Apps Script fallback if needed
         fetch('/api/techfest-lead.php', {
           method: 'POST',
           headers: {
@@ -1217,15 +1186,13 @@
           body: JSON.stringify(payload)
         })
         .then(function(res) {
-          return res.json().then(data => ({ status: res.status, ok: res.ok, data: data }));
+          return res.json().then(data => ({ status: res.status, ok: res.ok, data: data })).catch(() => ({ status: res.status, ok: res.ok, data: {} }));
         })
         .then(function(result) {
           setSubmittingState(false);
 
           if (result.ok && result.data.success) {
-            // Save duplicate key in localStorage to prevent duplicate submissions
             localStorage.setItem(dupKey, Date.now().toString());
-
             if (result.data.isDuplicate) {
               showDuplicateNotice();
             } else {
@@ -1257,12 +1224,11 @@
       }
 
       function handleSuccessSubmission(leadData) {
-        // Hide form & errors, show success
         form.classList.add('hidden');
         errorScreen.classList.add('hidden');
         successScreen.classList.remove('hidden');
 
-        // Fire Meta Pixel Conversion Events ONLY after confirmed successful submission
+        // Fire Meta Pixel Event ONLY after successful submission
         try {
           if (typeof fbq === 'function') {
             fbq('track', 'Lead', {
@@ -1280,10 +1246,9 @@
           console.warn("Meta Pixel trigger error:", e);
         }
 
-        // Scroll smoothly to success screen
-        const registerSec = document.getElementById('register');
-        if (registerSec) {
-          registerSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = document.getElementById('lead-card-container');
+        if (container) {
+          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
 
@@ -1292,15 +1257,13 @@
         errorScreen.classList.add('hidden');
         successScreen.classList.remove('hidden');
 
-        // Show friendly notice on success screen
-        const msgEl = successScreen.querySelector('p');
-        if (msgEl) {
-          msgEl.innerHTML = "We already received a registration for this participant. Our team will contact you shortly with your details.";
+        if (successScreenMsg) {
+          successScreenMsg.innerHTML = "We already received a registration for this participant. Our team will contact you shortly with details.";
         }
         
-        const registerSec = document.getElementById('register');
-        if (registerSec) {
-          registerSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = document.getElementById('lead-card-container');
+        if (container) {
+          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
 
@@ -1310,48 +1273,12 @@
         errorScreen.classList.remove('hidden');
       }
 
-      // Retry button handler
       document.getElementById('btn-retry').addEventListener('click', function() {
         errorScreen.classList.add('hidden');
         form.classList.remove('hidden');
         currentStep = 4;
         updateStepUI(currentStep);
       });
-
-      // 8. MOBILE STICKY CTA SCROLL OBSERVER
-      const mobileStickyCta = document.getElementById('mobile-sticky-cta');
-      const heroSection = document.getElementById('hero');
-      const registerSection = document.getElementById('register');
-
-      if (window.IntersectionObserver && mobileStickyCta && heroSection && registerSection) {
-        let heroVisible = true;
-        let formVisible = false;
-
-        const heroObserver = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            heroVisible = entry.isIntersecting;
-            updateStickyVisibility();
-          });
-        }, { threshold: 0.1 });
-
-        const formObserver = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            formVisible = entry.isIntersecting;
-            updateStickyVisibility();
-          });
-        }, { threshold: 0.1 });
-
-        heroObserver.observe(heroSection);
-        formObserver.observe(registerSection);
-
-        function updateStickyVisibility() {
-          if (!heroVisible && !formVisible) {
-            mobileStickyCta.classList.remove('translate-y-24');
-          } else {
-            mobileStickyCta.classList.add('translate-y-24');
-          }
-        }
-      }
 
     })();
   </script>

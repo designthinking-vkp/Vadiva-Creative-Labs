@@ -184,23 +184,28 @@ $forwardSuccess = false;
 $gasResponse = null;
 
 if (!empty($gasEndpoint)) {
-    $ch = curl_init($gasEndpoint);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $gasEndpoint);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 
     $rawResponse = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curlError = curl_error($ch);
     curl_close($ch);
 
-    if ($httpCode >= 200 && $httpCode < 400 && $rawResponse) {
+    if ($rawResponse) {
         $gasResponse = json_decode($rawResponse, true);
         if ($gasResponse && isset($gasResponse['success']) && $gasResponse['success']) {
+            $forwardSuccess = true;
+        } elseif ($httpCode >= 200 && $httpCode < 400) {
             $forwardSuccess = true;
         }
     }
