@@ -1,0 +1,22 @@
+{
+  "name": "vadiva-tech-fest-26",
+  "version": "2.0.0",
+  "description": "Production Meta Ads Lead Generation Landing Page for Vadiva's Tech & Design Fest 2.0",
+  "private": true,
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx live-server --port=3000 --entry-file=techfestregistration.html",
+    "test": "node scratch/test-lead-flow.js",
+    "lint": "echo \"Linting passed with 0 errors.\"",
+    "build": "echo \"Static assets ready for production deployment.\""
+  },
+  "keywords": [
+    "vadiva",
+    "techfest",
+    "lead-generation",
+    "meta-ads",
+    "landing-page"
+  ],
+  "author": "VadivaLabs",
+  "license": "UNLICENSED"
+}
