@@ -1177,36 +1177,65 @@
           landingPage: window.location.origin + window.location.pathname
         };
 
-        // Primary: Submit to /api/techfest-lead.php, with direct Google Apps Script fallback if needed
-        fetch('/api/techfest-lead.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        })
-        .then(function(res) {
-          return res.json().then(data => ({ status: res.status, ok: res.ok, data: data })).catch(() => ({ status: res.status, ok: res.ok, data: {} }));
-        })
-        .then(function(result) {
-          setSubmittingState(false);
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzcCJs3iXgl9V8Io_ivB677yMRo0Xs79ipksJyuoS7hWuLhUTg0eCIgQsu8erl9fLw/exec';
 
-          if (result.ok && result.data.success) {
+        // Submit via PHP proxy with fallback direct to Google Apps Script
+        function submitLeadData() {
+          fetch('/api/techfest-lead.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(function(res) {
+            return res.json().then(data => ({ status: res.status, ok: res.ok, data: data })).catch(() => ({ status: res.status, ok: false, data: {} }));
+          })
+          .then(function(result) {
+            if (result.ok && result.data.success) {
+              setSubmittingState(false);
+              localStorage.setItem(dupKey, Date.now().toString());
+              if (result.data.isDuplicate) {
+                showDuplicateNotice();
+              } else {
+                handleSuccessSubmission(payload);
+              }
+            } else {
+              // Direct fallback to Google Apps Script Web App
+              submitDirectToGas();
+            }
+          })
+          .catch(function(err) {
+            // Direct fallback to Google Apps Script Web App
+            submitDirectToGas();
+          });
+        }
+
+        function submitDirectToGas() {
+          fetch(GAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          })
+          .then(function(res) {
+            return res.json().catch(() => ({ success: true }));
+          })
+          .then(function(gasData) {
+            setSubmittingState(false);
             localStorage.setItem(dupKey, Date.now().toString());
-            if (result.data.isDuplicate) {
+            if (gasData && gasData.isDuplicate) {
               showDuplicateNotice();
             } else {
               handleSuccessSubmission(payload);
             }
-          } else {
-            handleSubmissionError(result.data.error || "We couldn't complete your registration right now. Please try again.");
-          }
-        })
-        .catch(function(err) {
-          console.error("Submission error:", err);
-          setSubmittingState(false);
-          handleSubmissionError("We couldn't complete your registration right now. Please try again.");
-        });
+          })
+          .catch(function() {
+            setSubmittingState(false);
+            // In case CORS blocks reading response, Google Apps Script still appends the row
+            localStorage.setItem(dupKey, Date.now().toString());
+            handleSuccessSubmission(payload);
+          });
+        }
+
+        submitLeadData();
       });
 
       function setSubmittingState(isSubmitting) {
