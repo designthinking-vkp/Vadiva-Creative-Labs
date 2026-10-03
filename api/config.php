@@ -10,5 +10,5 @@ if (!defined('TECHFEST_GAS_URL')) {
 
 // Meta Pixel ID
 if (!defined('META_PIXEL_ID')) {
-    define('META_PIXEL_ID', getenv('META_PIXEL_ID') ?: '');
+    define('META_PIXEL_ID', '829280860027981');
 }
