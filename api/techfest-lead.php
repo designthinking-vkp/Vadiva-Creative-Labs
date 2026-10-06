@@ -138,10 +138,13 @@ if (!empty($errors)) {
 $duplicateCacheFile = sys_get_temp_dir() . '/techfest_dup_' . md5(strtolower($participantName) . '_' . $contactNumber) . '.txt';
 if (file_exists($duplicateCacheFile) && (time() - filemtime($duplicateCacheFile) < 86400)) {
     // Submitted within last 24 hours
+    $regId = 'VTF26-' . strtoupper(substr(md5(strtolower($participantName) . $contactNumber), 0, 8));
     echo json_encode(array(
         'success' => true,
         'isDuplicate' => true,
-        'message' => 'We already received a registration for this participant. Our team will contact you shortly.'
+        'message' => 'We already received a registration for this participant. Our team will contact you shortly.',
+        'participant' => $participantName,
+        'registrationId' => $regId
     ));
     exit;
 }
@@ -225,17 +228,21 @@ if (!empty($gasEndpoint)) {
 
 // 9. Respond to Client
 if ($forwardSuccess) {
+    $regId = 'VTF26-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
     if ($gasResponse && !empty($gasResponse['isDuplicate'])) {
         echo json_encode(array(
             'success' => true,
             'isDuplicate' => true,
-            'message' => 'We already received a registration for this participant. Our team will contact you shortly.'
+            'message' => 'We already received a registration for this participant. Our team will contact you shortly.',
+            'participant' => $participantName,
+            'registrationId' => $regId
         ));
     } else {
         echo json_encode(array(
             'success' => true,
             'message' => 'Lead submitted successfully',
-            'participant' => $participantName
+            'participant' => $participantName,
+            'registrationId' => $regId
         ));
     }
 } else {

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  
+  <!-- Private Meta Ads Confirmation Page - Discourage Search Indexing -->
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Registration Confirmed | Vadiva's Tech & Design Fest 2.0</title>
+  <meta name="description" content="Thank you for registering for Vadiva's Tech & Design Fest 2.0 — 23, 24 & 25 October 2026 at TVIS, Ponneri.">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Registration Confirmed | Vadiva's Tech & Design Fest 2.0">
+  <meta property="og:description" content="Your registration for Vadiva's Tech & Design Fest 2.0 is confirmed! 23-25 October 2026 at TVIS, Ponneri.">
+  <meta property="og:image" content="https://vadivacreativelabs.com/assets/techfest26-logo.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/techfest26-logo.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              dark: '#06101E',
+              teal: '#00A896',
+              cyan: '#028090',
+              coral: '#F05D5E',
+              gold: '#F4A261',
+              amber: '#E76F51',
+              light: '#F8FAFC',
+              card: '#FFFFFF',
+            }
+          },
+          boxShadow: {
+            'glow': '0 10px 25px -5px rgba(0, 168, 150, 0.35)',
+            'card': '0 4px 20px -2px rgba(10, 25, 47, 0.06), 0 2px 6px -1px rgba(10, 25, 47, 0.04)',
+            'form': '0 15px 35px -10px rgba(10, 25, 47, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.9)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '829280860027981');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=829280860027981&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    .checkmark-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3;
+      stroke-miterlimit: 10;
+      stroke: #10B981;
+      fill: none;
+      animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    .checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+    }
+    @keyframes stroke {
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-brand-teal/20 selection:text-brand-navy min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
+      <!-- Logo Brand -->
+      <a href="https://vadivacreativelabs.com/" class="flex items-center gap-3">
+        <img src="/assets/techfest26-logo.png" alt="Vadiva's Tech & Design Fest 2.0" class="h-10 sm:h-12 w-auto object-contain" onerror="this.src='../assets/techfest26-logo.png'; this.onerror=function(){this.src='../../assets/techfest26-logo.png';}">
+        <div class="flex flex-col">
+          <span class="font-display font-black text-sm sm:text-base text-brand-navy tracking-tight leading-tight">TECH & DESIGN FEST 2.0</span>
+          <span class="text-[11px] font-semibold text-slate-500">23, 24 & 25 Oct 2026 • TVIS, Ponneri</span>
+        </div>
+      </a>
+
+      <!-- Header Action -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="https://fest.vadivacreativelabs.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+          <span>Explore Fest</span>
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow py-8 sm:py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+
+      <!-- ==========================================
+           1. DIRECT ACCESS / UNAUTHORIZED STATE
+           Shown ONLY if visitor enters URL directly without a confirmed registration
+           ========================================== -->
+      <div id="unauthorized-view" class="hidden bg-white rounded-2xl shadow-form border border-slate-200 p-6 sm:p-10 text-center">
+        <div class="w-16 h-16 bg-amber-100 text-brand-gold rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </div>
+
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-brand-navy mb-2">No Active Registration Found</h1>
+        <p class="text-sm sm:text-base text-slate-600 max-w-md mx-auto mb-6">
+          This confirmation page is only displayed after successfully completing the registration form.
+        </p>
+
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 max-w-md mx-auto mb-6 text-xs sm:text-sm text-slate-600">
+          <p id="redirect-counter-text" class="font-semibold text-brand-teal mb-1">
+            Redirecting to the registration page in <span id="countdown-num">3</span> seconds...
+          </p>
+          <p class="text-slate-500 text-xs">If you are not redirected automatically, please click below.</p>
+        </div>
+
+        <a href="/techfestregistration/" id="btn-goto-reg" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-navy hover:bg-slate-800 text-white font-bold text-sm shadow-sm transition-all duration-150">
+          <span>Go to Registration Page</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- ==========================================
+           2. CONFIRMED REGISTRATION STATE
+           Shown ONLY after verified registration submission
+           ========================================== -->
+      <div id="confirmed-view" class="hidden space-y-6">
+
+        <!-- Main Confirmation Hero Card -->
+        <div class="bg-white rounded-2xl shadow-form border border-slate-200/90 overflow-hidden">
+          
+          <!-- Card Top Brand Banner -->
+          <div class="bg-gradient-to-r from-brand-navy via-slate-900 to-brand-navy text-white px-5 sm:px-8 py-5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-wider text-brand-teal font-extrabold block">Official Registration Confirmation</span>
+              <span class="font-display font-bold text-sm sm:text-base text-white">Vadiva's Tech & Design Fest 2.0</span>
+            </div>
+            <div id="reg-id-badge" class="inline-flex items-center gap-1.5 bg-brand-teal/20 border border-brand-teal/40 px-3 py-1 rounded-full text-xs font-mono font-bold text-brand-teal">
+              <span>REF:</span>
+              <span id="display-reg-id">VTF26-CONFIRMED</span>
+            </div>
+          </div>
+
+          <!-- Card Content Body -->
+          <div class="p-6 sm:p-10 text-center">
+            
+            <!-- Animated Green Checkmark Icon -->
+            <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5 border-2 border-emerald-100">
+              <svg class="w-12 h-12 text-emerald-500" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark-check" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+              </svg>
+            </div>
+
+            <!-- Title & Personalized Greeting -->
+            <h1 class="font-display font-black text-2xl sm:text-4xl text-brand-navy tracking-tight mb-2">
+              Registration Successful!
+            </h1>
+            <p id="success-welcome-msg" class="text-sm sm:text-base text-slate-600 max-w-lg mx-auto mb-6">
+              Thank you, <strong id="display-participant-name" class="text-brand-navy">Participant</strong>! Your registration for <strong class="text-brand-navy">Vadiva's Tech & Design Fest 2.0</strong> has been successfully recorded.
+            </p>
+
+            <!-- Duplicate Alert Banner (Only shown if duplicate lead) -->
+            <div id="duplicate-badge-msg" class="hidden mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm text-left flex items-start gap-3">
+              <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <p class="font-bold">Prior Registration On File</p>
+                <p class="text-amber-700 text-xs mt-0.5">We already have your entry recorded in our system. Our festival desk will reach out with your event pass and updates.</p>
+              </div>
+            </div>
+
+            <!-- Summary Details Grid -->
+            <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-5 sm:p-6 mb-8 text-left">
+              <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center justify-between border-b border-slate-200 pb-2">
+                <span>Registration Summary</span>
+                <span class="text-emerald-600 font-semibold flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> Verified
+                </span>
+              </h2>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Participant Name</span>
+                  <span id="summary-name" class="font-bold text-slate-800">-</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Study Level & Grade</span>
+                  <span id="summary-education" class="font-bold text-slate-800">-</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Institution</span>
+                  <span id="summary-institution" class="font-bold text-slate-800">-</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Location</span>
+                  <span id="summary-city" class="font-bold text-slate-800">-</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Primary Contact</span>
+                  <span id="summary-contact" class="font-bold text-slate-800">-</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 text-[11px] block font-medium">Registered Email</span>
+                  <span id="summary-email" class="font-bold text-slate-800 truncate block">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Venue & Date Highlight Pill Banner -->
+            <div class="bg-brand-navy text-white rounded-2xl p-5 sm:p-6 mb-8 text-left relative overflow-hidden">
+              <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-teal/10 rounded-full blur-xl pointer-events-none"></div>
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="space-y-1.5">
+                  <span class="text-brand-teal text-[11px] font-extrabold uppercase tracking-wider">Festival Dates & Location</span>
+                  <h3 class="font-display font-black text-lg sm:text-xl text-white">23, 24 & 25 October 2026</h3>
+                  <p class="text-xs sm:text-sm text-slate-300 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-brand-coral flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>The Velammal International School (TVIS), Ponneri, Chennai</span>
+                  </p>
+                </div>
+                <div class="flex-shrink-0">
+                  <a id="btn-add-calendar" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vadiva's+Tech+%26+Design+Fest+2.0&dates=20261023T033000Z/20261025T123000Z&details=3-Day+International+Tech+%26+Design+Festival+with+%E2%82%B925L%2B+prizes.+TVIS+Ponneri.+Explore+fest:+https://fest.vadivacreativelabs.com&location=The+Velammal+International+School+(TVIS),+Ponneri,+Tamil+Nadu" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs sm:text-sm font-bold text-white transition-colors">
+                    <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>Add to Google Calendar</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- What Happens Next? (Roadmap Steps) -->
+            <div class="text-left mb-8">
+              <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy mb-4 flex items-center gap-2">
+                <span>📋 What Happens Next?</span>
+              </h3>
+
+              <div class="space-y-3">
+                <!-- Step 1 -->
+                <div class="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="w-7 h-7 rounded-lg bg-brand-teal text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    1
+                  </div>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-bold text-slate-800">Entry Pass & Digital Badge</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Our festival desk will send your entry barcode pass to your registered WhatsApp number and Email ID before the event.</p>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="w-7 h-7 rounded-lg bg-brand-teal text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    2
+                  </div>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-bold text-slate-800">Rulebooks & Competition Handbooks</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">You will receive the complete guidelines for hackathons, robotics challenges, coding tournaments, and ₹25L+ grant tracks.</p>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+                  <div class="w-7 h-7 rounded-lg bg-brand-teal text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    3
+                  </div>
+                  <div>
+                    <h4 class="text-xs sm:text-sm font-bold text-slate-800">Priority Workshop Slot Booking</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Pre-registered participants receive early-bird booking access for hands-on AI, robotics, design thinking, and drone workshops.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Primary CTAs -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <a href="https://fest.vadivacreativelabs.com/" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-sm transition-all duration-150">
+                <span>Explore Fest Website</span>
+                <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </a>
+
+              <a id="btn-whatsapp-chat" href="https://wa.me/919940026262?text=Hi%20VadivaLabs,%20I%20have%20completed%20my%20registration%20for%20Vadiva%27s%20Tech%20%26%20Design%20Fest%202.0" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-extrabold text-sm flex items-center justify-center gap-2 transition-colors">
+                <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>WhatsApp Desk</span>
+              </a>
+
+              <button type="button" id="btn-register-another" class="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition-colors">
+                Register Another Participant
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto px-4">
+      <p>© 2026 Vadiva Creative Labs. All rights reserved. • TVIS, Ponneri, Chennai</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC: ACCESS GUARD & PERSONALIZATION -->
+  <script>
+    (function() {
+      'use strict';
+
+      const unauthorizedView = document.getElementById('unauthorized-view');
+      const confirmedView = document.getElementById('confirmed-view');
+      const countdownNum = document.getElementById('countdown-num');
+      const btnRegisterAnother = document.getElementById('btn-register-another');
+      const btnGotoReg = document.getElementById('btn-goto-reg');
+
+      // Determine correct registration root path
+      const regPath = '/techfestregistration/';
+      if (btnGotoReg) btnGotoReg.href = regPath;
+
+      // 1. Check for valid registration session
+      let sessionData = null;
+      try {
+        const raw = sessionStorage.getItem('vtf_reg_session');
+        if (raw) {
+          sessionData = JSON.parse(raw);
+        }
+      } catch (err) {
+        console.warn("Session read error:", err);
+      }
+
+      // Check validation: Must be registered, within last 2 hours, and have participant name
+      const isValid = sessionData &&
+                      sessionData.registered === true &&
+                      sessionData.participantName &&
+                      sessionData.timestamp &&
+                      (Date.now() - sessionData.timestamp < 7200000); // 2 hours validity
+
+      if (!isValid) {
+        // DIRECT ACCESS GUARD: Do not show false success
+        unauthorizedView.classList.remove('hidden');
+        confirmedView.classList.add('hidden');
+
+        // Countdown and redirect
+        let countdown = 3;
+        const timer = setInterval(function() {
+          countdown--;
+          if (countdownNum) countdownNum.textContent = countdown;
+          if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.replace(regPath);
+          }
+        }, 1000);
+        return;
+      }
+
+      // 2. VALID REGISTRATION: Populate Thank You page
+      unauthorizedView.classList.add('hidden');
+      confirmedView.classList.remove('hidden');
+
+      // Render Participant Info
+      const pName = sessionData.participantName || 'Participant';
+      const regId = sessionData.registrationId || ('VTF26-' + Math.random().toString(36).substring(2, 8).toUpperCase());
+      const pEdu = (sessionData.studyLevel || '') + (sessionData.gradeOrCollegeYear ? ' (' + sessionData.gradeOrCollegeYear + ')' : '');
+      const pInst = sessionData.institutionName || 'Not specified';
+      const pCity = sessionData.city || 'Chennai';
+      const pContact = sessionData.contactNumber ? ('+91 ' + sessionData.contactNumber.replace(/(\d{5})(\d{5})/, '$1 $2')) : '-';
+      const pEmail = sessionData.email || '-';
+
+      document.getElementById('display-reg-id').textContent = regId;
+      document.getElementById('display-participant-name').textContent = pName;
+      document.getElementById('summary-name').textContent = pName;
+      document.getElementById('summary-education').textContent = pEdu || 'Student';
+      document.getElementById('summary-institution').textContent = pInst;
+      document.getElementById('summary-city').textContent = pCity;
+      document.getElementById('summary-contact').textContent = pContact;
+      document.getElementById('summary-email').textContent = pEmail;
+
+      if (sessionData.isDuplicate) {
+        const dupBadge = document.getElementById('duplicate-badge-msg');
+        if (dupBadge) dupBadge.classList.remove('hidden');
+      }
+
+      // Update WhatsApp chat link with personalized message
+      const waBtn = document.getElementById('btn-whatsapp-chat');
+      if (waBtn) {
+        const waText = encodeURIComponent(`Hi VadivaLabs, I have registered for Vadiva's Tech & Design Fest 2.0 (Ref: ${regId}, Participant: ${pName}). Please share event updates!`);
+        waBtn.href = `https://wa.me/919940026262?text=${waText}`;
+      }
+
+      // 3. Fire Meta Pixel Conversion Event ONCE per session
+      try {
+        if (!sessionStorage.getItem('vtf_pixel_lead_fired') && typeof fbq === 'function') {
+          fbq('track', 'Lead', {
+            content_name: "Vadiva's Tech & Design Fest 2.0 Lead",
+            content_category: sessionData.studyLevel || 'General',
+            value: 0.00,
+            currency: 'INR'
+          });
+          fbq('track', 'CompleteRegistration', {
+            content_name: "Tech & Design Fest 2.0 Registration",
+            status: 'success'
+          });
+          sessionStorage.setItem('vtf_pixel_lead_fired', '1');
+        }
+      } catch (e) {
+        console.warn("Meta Pixel firing error:", e);
+      }
+
+      // 4. "Register Another Participant" Handler
+      if (btnRegisterAnother) {
+        btnRegisterAnother.addEventListener('click', function() {
+          // Clear current session to allow clean registration
+          sessionStorage.removeItem('vtf_reg_session');
+          sessionStorage.removeItem('vtf_pixel_lead_fired');
+          window.location.href = regPath;
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

@@ -1148,7 +1148,7 @@
         // Check duplicate
         const dupKey = `vtf_lead_${participantName.toLowerCase()}_${contactNumber.slice(-10)}`;
         if (localStorage.getItem(dupKey)) {
-          showDuplicateNotice();
+          showDuplicateNotice(payload);
           return;
         }
 
@@ -1190,14 +1190,10 @@
             return res.json().then(data => ({ status: res.status, ok: res.ok, data: data })).catch(() => ({ status: res.status, ok: false, data: {} }));
           })
           .then(function(result) {
-            if (result.ok && result.data.success) {
+            if (result.ok && result.data && result.data.success) {
               setSubmittingState(false);
               localStorage.setItem(dupKey, Date.now().toString());
-              if (result.data.isDuplicate) {
-                showDuplicateNotice();
-              } else {
-                handleSuccessSubmission(payload);
-              }
+              handleSuccessSubmission(payload, result.data);
             } else {
               // Direct fallback to Google Apps Script Web App
               submitDirectToGas();
@@ -1219,19 +1215,19 @@
             return res.json().catch(() => ({ success: true }));
           })
           .then(function(gasData) {
-            setSubmittingState(false);
-            localStorage.setItem(dupKey, Date.now().toString());
-            if (gasData && gasData.isDuplicate) {
-              showDuplicateNotice();
+            if (gasData && gasData.success !== false) {
+              setSubmittingState(false);
+              localStorage.setItem(dupKey, Date.now().toString());
+              handleSuccessSubmission(payload, gasData || {});
             } else {
-              handleSuccessSubmission(payload);
+              handleSubmissionError(gasData && gasData.error ? gasData.error : "We couldn't complete your registration right now. Please try again.");
             }
           })
-          .catch(function() {
-            setSubmittingState(false);
+          .catch(function(gasErr) {
             // In case CORS blocks reading response, Google Apps Script still appends the row
+            setSubmittingState(false);
             localStorage.setItem(dupKey, Date.now().toString());
-            handleSuccessSubmission(payload);
+            handleSuccessSubmission(payload, { success: true });
           });
         }
 
@@ -1252,12 +1248,35 @@
         }
       }
 
-      function handleSuccessSubmission(leadData) {
-        form.classList.add('hidden');
-        errorScreen.classList.add('hidden');
-        successScreen.classList.remove('hidden');
+      function handleSuccessSubmission(leadData, serverResponse) {
+        const regId = (serverResponse && serverResponse.registrationId) 
+          ? serverResponse.registrationId 
+          : ('VTF26-' + Math.random().toString(36).substring(2, 8).toUpperCase());
+        const isDuplicate = !!(serverResponse && serverResponse.isDuplicate);
 
-        // Fire Meta Pixel Event ONLY after successful submission
+        const sessionPayload = {
+          registered: true,
+          registrationId: regId,
+          participantName: leadData.participantName,
+          parentCaretakerName: leadData.parentCaretakerName,
+          studyLevel: leadData.studyLevel,
+          gradeOrCollegeYear: leadData.gradeOrCollegeYear,
+          institutionName: leadData.institutionName,
+          city: leadData.city,
+          contactNumber: leadData.contactNumber,
+          whatsappNumber: leadData.whatsappNumber,
+          email: leadData.email,
+          isDuplicate: isDuplicate,
+          timestamp: Date.now()
+        };
+
+        try {
+          sessionStorage.setItem('vtf_reg_session', JSON.stringify(sessionPayload));
+        } catch (e) {
+          console.warn("sessionStorage save error:", e);
+        }
+
+        // Fire Meta Pixel Event before redirecting
         try {
           if (typeof fbq === 'function') {
             fbq('track', 'Lead', {
@@ -1270,36 +1289,72 @@
               content_name: "Tech & Design Fest 2.0 Registration",
               status: 'success'
             });
+            sessionStorage.setItem('vtf_pixel_lead_fired', '1');
           }
         } catch (e) {
           console.warn("Meta Pixel trigger error:", e);
         }
 
-        const container = document.getElementById('lead-card-container');
-        if (container) {
-          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Determine Thank You page destination
+        let thankYouUrl = '/techfestregistration/thank-you/';
+        if (window.location.protocol === 'file:') {
+          thankYouUrl = 'thank-you/index.html';
+        } else {
+          const currentPath = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+          if (currentPath.endsWith('/techfestregistration') || currentPath === '/techfestregistration') {
+            thankYouUrl = currentPath + '/thank-you/';
+          }
         }
+
+        window.location.href = thankYouUrl;
       }
 
-      function showDuplicateNotice() {
-        form.classList.add('hidden');
-        errorScreen.classList.add('hidden');
-        successScreen.classList.remove('hidden');
+      function showDuplicateNotice(leadData) {
+        const sessionPayload = {
+          registered: true,
+          registrationId: 'VTF26-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+          participantName: leadData.participantName,
+          parentCaretakerName: leadData.parentCaretakerName,
+          studyLevel: leadData.studyLevel,
+          gradeOrCollegeYear: leadData.gradeOrCollegeYear,
+          institutionName: leadData.institutionName,
+          city: leadData.city,
+          contactNumber: leadData.contactNumber,
+          whatsappNumber: leadData.whatsappNumber,
+          email: leadData.email,
+          isDuplicate: true,
+          timestamp: Date.now()
+        };
 
-        if (successScreenMsg) {
-          successScreenMsg.innerHTML = "We already received a registration for this participant. Our team will contact you shortly with details.";
+        try {
+          sessionStorage.setItem('vtf_reg_session', JSON.stringify(sessionPayload));
+        } catch (e) {
+          console.warn("sessionStorage save error:", e);
         }
-        
-        const container = document.getElementById('lead-card-container');
-        if (container) {
-          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        let thankYouUrl = '/techfestregistration/thank-you/';
+        if (window.location.protocol === 'file:') {
+          thankYouUrl = 'thank-you/index.html';
+        } else {
+          const currentPath = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+          if (currentPath.endsWith('/techfestregistration') || currentPath === '/techfestregistration') {
+            thankYouUrl = currentPath + '/thank-you/';
+          }
         }
+
+        window.location.href = thankYouUrl;
       }
 
       function handleSubmissionError(errorMsg) {
-        form.classList.add('hidden');
-        errorScreenMsg.textContent = errorMsg;
-        errorScreen.classList.remove('hidden');
+        setSubmittingState(false);
+        sessionStorage.removeItem('vtf_reg_session');
+        const globalErr = document.getElementById('form-global-error');
+        const globalErrMsg = document.getElementById('form-global-error-msg');
+        if (globalErr && globalErrMsg) {
+          globalErrMsg.textContent = errorMsg || "We couldn't complete your registration right now. Please check your details and try again.";
+          globalErr.classList.remove('hidden');
+          globalErr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
       }
 
       document.getElementById('btn-retry').addEventListener('click', function() {
