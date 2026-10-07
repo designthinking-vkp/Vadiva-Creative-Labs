@@ -1463,29 +1463,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           isIndia = true;
         }
 
-        // Calculate number of team members (multiplier)
-        let memberCount = 1;
-        if (regData && regData.numMembers) {
-          const parsedMem = parseInt(regData.numMembers);
-          if (!isNaN(parsedMem) && parsedMem > 0) {
-            memberCount = parsedMem;
-          }
-        } else {
-          const checkedMemRadio = document.querySelector('input[name="numMembers"]:checked');
-          if (checkedMemRadio) {
-            const parsedMem = parseInt(checkedMemRadio.value);
-            if (!isNaN(parsedMem) && parsedMem > 0) {
-              memberCount = parsedMem;
-            }
-          }
-        }
+        const totalINR = 1920;
+        const totalUSD = 20;
 
-        const baseINR = 1920;
-        const baseUSD = 20;
-        const totalINR = baseINR * memberCount;
-        const totalUSD = baseUSD * memberCount;
-
-        const perPersonFormatted = isIndia ? '₹1,920 INR' : '$20.00 USD';
         const amountText = isIndia 
           ? `₹${totalINR.toLocaleString('en-IN')} INR` 
           : `$${totalUSD.toFixed(2)} USD`;
@@ -1495,11 +1475,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           feeDisplay.innerText = `Total Registration Fee: ${amountText}`;
         }
         if (feeNote) {
-          if (memberCount > 1) {
-            feeNote.innerText = `Per Person Registration Fee: ${perPersonFormatted} (${memberCount} Members × ${perPersonFormatted} = ${amountText})`;
-          } else {
-            feeNote.innerText = `Per Person Registration Fee: ${perPersonFormatted}`;
-          }
+          feeNote.innerText = `Registration Fee: ${amountText} (Per team or individual)`;
         }
         if (feeMethodsNote) {
           feeMethodsNote.innerText = isIndia 
@@ -1901,20 +1877,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       isIndia = true;
     }
 
-    const perPersonText = isIndia ? '₹1,920 INR' : '$20.00 USD';
+    const feeText = isIndia ? '₹1,920 INR' : '$20.00 USD';
 
     const feeDisplay = document.getElementById('registration-fee-display');
     const feeNote = document.getElementById('registration-fee-note');
     const inrTexts = document.querySelectorAll('.inr-fee-text');
     
     if (feeDisplay) {
-      feeDisplay.innerText = `Registration Fee: ${perPersonText}`;
+      feeDisplay.innerText = `Registration Fee: ${feeText}`;
     }
     if (feeNote) {
-      feeNote.innerText = `Per Person Registration Fee: ${perPersonText}`;
+      feeNote.innerText = `Registration Fee: ${feeText} (Per team or individual)`;
     }
     inrTexts.forEach(el => {
-      el.innerText = perPersonText;
+      el.innerText = feeText;
     });
   }
 
