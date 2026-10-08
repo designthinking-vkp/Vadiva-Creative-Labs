@@ -268,29 +268,14 @@
             <div id="step-2" class="step-pane hidden-pane space-y-4">
               <div class="border-b border-slate-100 pb-2 mb-3">
                 <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">Tell us about your education</h3>
-                <p class="text-xs text-slate-500">Select participant's current study level</p>
+                <p class="text-xs text-slate-500">Select participant's current grade</p>
               </div>
 
-              <!-- Study Level -->
+              <!-- Hidden studyLevel input to preserve database / API schema -->
+              <input type="hidden" id="studyLevel" name="studyLevel" value="School Students">
+
+              <!-- Grade Selection -->
               <div>
-                <label for="studyLevel" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
-                  What is the current level of study of the Participant? <span class="text-brand-coral">*</span>
-                </label>
-                <select 
-                  id="studyLevel" 
-                  name="studyLevel" 
-                  class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white text-slate-800 focus:bg-white transition-colors"
-                  required
-                >
-                  <option value="" disabled selected>Select level of study</option>
-                  <option value="School Students">School Students</option>
-                  <option value="College Students">College Students</option>
-                </select>
-                <p id="err-studyLevel" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
-              </div>
-
-              <!-- Dynamic School Grade -->
-              <div id="container-school-grade" class="hidden">
                 <label for="schoolGrade" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
                   Select your current grade <span class="text-brand-coral">*</span>
                 </label>
@@ -298,6 +283,7 @@
                   id="schoolGrade" 
                   name="schoolGrade" 
                   class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white text-slate-800 focus:bg-white transition-colors"
+                  required
                 >
                   <option value="" disabled selected>Select grade</option>
                   <option value="Grade 6">Grade 6</option>
@@ -309,27 +295,6 @@
                   <option value="Grade 12">Grade 12</option>
                 </select>
                 <p id="err-schoolGrade" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
-              </div>
-
-              <!-- Dynamic College Year -->
-              <div id="container-college-year" class="hidden">
-                <label for="collegeYear" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
-                  Select your current year <span class="text-brand-coral">*</span>
-                </label>
-                <select 
-                  id="collegeYear" 
-                  name="collegeYear" 
-                  class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white text-slate-800 focus:bg-white transition-colors"
-                >
-                  <option value="" disabled selected>Select college year</option>
-                  <option value="1st Year">1st Year</option>
-                  <option value="2nd Year">2nd Year</option>
-                  <option value="3rd Year">3rd Year</option>
-                  <option value="4th Year">4th Year</option>
-                  <option value="5th Year / Integrated">5th Year / Integrated</option>
-                  <option value="PG / Master's">PG / Master's</option>
-                </select>
-                <p id="err-collegeYear" class="hidden text-xs text-brand-coral font-semibold mt-1"></p>
               </div>
 
               <!-- Step 2 Navigation Buttons -->
@@ -358,19 +323,19 @@
             <div id="step-3" class="step-pane hidden-pane space-y-4">
               <div class="border-b border-slate-100 pb-2 mb-3">
                 <h3 class="font-display font-bold text-base sm:text-lg text-brand-navy">Where are you studying?</h3>
-                <p class="text-xs text-slate-500">Enter your school / college & city details</p>
+                <p class="text-xs text-slate-500">Enter your school & city details</p>
               </div>
 
               <!-- Institution Name -->
               <div>
                 <label for="institutionName" class="block text-xs sm:text-sm font-bold text-slate-700 mb-1">
-                  Institution Name <span class="text-brand-coral">*</span>
+                  School Name <span class="text-brand-coral">*</span>
                 </label>
                 <input 
                   type="text" 
                   id="institutionName" 
                   name="institutionName" 
-                  placeholder="Enter your school / college name"
+                  placeholder="Enter your school name"
                   class="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 bg-white placeholder-slate-400 focus:bg-white transition-colors"
                   required
                 >
@@ -818,11 +783,8 @@
       const form = document.getElementById('lead-form');
       const participantNameInput = document.getElementById('participantName');
       const parentCaretakerNameInput = document.getElementById('parentCaretakerName');
-      const studyLevelSelect = document.getElementById('studyLevel');
-      const containerSchool = document.getElementById('container-school-grade');
-      const containerCollege = document.getElementById('container-college-year');
+      const studyLevelInput = document.getElementById('studyLevel');
       const schoolGradeSelect = document.getElementById('schoolGrade');
-      const collegeYearSelect = document.getElementById('collegeYear');
       const institutionNameInput = document.getElementById('institutionName');
       const citySelect = document.getElementById('citySelect');
       const containerOtherCity = document.getElementById('container-other-city');
@@ -841,29 +803,6 @@
       const btnSubmit = document.getElementById('btn-submit');
       const btnSubmitText = document.getElementById('btn-submit-text');
       const btnSubmitSpinner = document.getElementById('btn-submit-spinner');
-
-      // 3. DYNAMIC EDUCATION LEVEL CHANGE HANDLER
-      studyLevelSelect.addEventListener('change', function() {
-        const val = this.value;
-        hideFieldError('studyLevel');
-
-        if (val === 'School Students') {
-          containerSchool.classList.remove('hidden');
-          containerCollege.classList.add('hidden');
-          collegeYearSelect.value = '';
-          hideFieldError('collegeYear');
-        } else if (val === 'College Students') {
-          containerCollege.classList.remove('hidden');
-          containerSchool.classList.add('hidden');
-          schoolGradeSelect.value = '';
-          hideFieldError('schoolGrade');
-        } else {
-          containerSchool.classList.add('hidden');
-          containerCollege.classList.add('hidden');
-          schoolGradeSelect.value = '';
-          collegeYearSelect.value = '';
-        }
-      });
 
       // 4. DYNAMIC CITY SELECTION HANDLER
       citySelect.addEventListener('change', function() {
@@ -941,17 +880,21 @@
         participantNameInput, parentCaretakerNameInput, institutionNameInput, 
         otherCityInput, contactNumberInput, whatsappNumberInput, emailInput
       ].forEach(function(input) {
-        input.addEventListener('input', function() {
-          hideFieldError(this.id);
-          formGlobalError.classList.add('hidden');
-        });
+        if (input) {
+          input.addEventListener('input', function() {
+            hideFieldError(this.id);
+            formGlobalError.classList.add('hidden');
+          });
+        }
       });
 
-      [schoolGradeSelect, collegeYearSelect, citySelect].forEach(function(select) {
-        select.addEventListener('change', function() {
-          hideFieldError(this.id);
-          formGlobalError.classList.add('hidden');
-        });
+      [schoolGradeSelect, citySelect].forEach(function(select) {
+        if (select) {
+          select.addEventListener('change', function() {
+            hideFieldError(this.id);
+            formGlobalError.classList.add('hidden');
+          });
+        }
       });
 
       // 6. VALIDATION PER STEP
@@ -985,31 +928,12 @@
 
       function validateStep2() {
         let valid = true;
-        const level = studyLevelSelect.value;
-
-        if (!level) {
-          showFieldError('studyLevel', "Please select your current level of study.");
-          return false;
+        if (!schoolGradeSelect.value) {
+          showFieldError('schoolGrade', "Please select your grade.");
+          valid = false;
         } else {
-          hideFieldError('studyLevel');
+          hideFieldError('schoolGrade');
         }
-
-        if (level === 'School Students') {
-          if (!schoolGradeSelect.value) {
-            showFieldError('schoolGrade', "Please select your grade.");
-            valid = false;
-          } else {
-            hideFieldError('schoolGrade');
-          }
-        } else if (level === 'College Students') {
-          if (!collegeYearSelect.value) {
-            showFieldError('collegeYear', "Please select your college year.");
-            valid = false;
-          } else {
-            hideFieldError('collegeYear');
-          }
-        }
-
         return valid;
       }
 
@@ -1019,10 +943,10 @@
         const cityVal = citySelect.value;
 
         if (!inst) {
-          showFieldError('institutionName', "Please enter your school or college name.");
+          showFieldError('institutionName', "Please enter your school name.");
           valid = false;
         } else if (inst.length < 2) {
-          showFieldError('institutionName', "Please enter a valid institution name.");
+          showFieldError('institutionName', "Please enter a valid school name.");
           valid = false;
         } else {
           hideFieldError('institutionName');
@@ -1137,8 +1061,8 @@
 
         const participantName = participantNameInput.value.trim();
         const parentCaretakerName = parentCaretakerNameInput.value.trim();
-        const studyLevel = studyLevelSelect.value;
-        const gradeOrCollegeYear = (studyLevel === 'School Students') ? schoolGradeSelect.value : collegeYearSelect.value;
+        const studyLevel = (studyLevelInput && studyLevelInput.value) ? studyLevelInput.value : 'School Students';
+        const gradeOrCollegeYear = schoolGradeSelect.value;
         const institutionName = institutionNameInput.value.trim();
         const rawCity = citySelect.value === 'Other' ? otherCityInput.value.trim() : citySelect.value;
         const contactNumber = contactNumberInput.value.trim().replace(/\D/g, '');
