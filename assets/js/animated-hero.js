@@ -1,54 +1,86 @@
 /**
- * VADIVA CREATIVE LABS - CINEMATIC ANIMATED HERO (Three.js WebGL Engine)
+ * VADIVA CREATIVE LABS — CONTINUOUS 3D HERO ANIMATION STORY
  * 
- * CORE STORYTELLING ARC: IDEA -> BUILD -> TEST -> IMPACT
+ * Educational Philosophy:
+ * "Education should go beyond acquiring information. Students should have opportunities
+ * to think independently, design solutions, build working prototypes, test their ideas,
+ * and develop practical skills."
  * 
- * Scene 1 — IDEA (0s - 4.5s):
- * A glowing spark of inspiration appears. Clean geometric particles coalesce into a 
- * 3D wireframe blueprint of an autonomous robotic rover and articulated arm.
+ * Single Evolving Visual Object:
+ * SPARK -> BLUEPRINT GLOBE -> WORKBENCH & ROBOT -> CALIBRATION CAGE & SENSOR TEST -> INNOVATION NETWORK -> SPARK
  * 
- * Scene 2 — BUILD (4.5s - 9.5s):
- * The blueprint transforms into a physical robotic build. Mechanical limbs, turntable base,
- * PCB motherboard, microcontrollers, and actuators assemble and lock into place.
+ * Exact 20.0-Second Continuous Story Timeline:
  * 
- * Scene 3 — TEST (9.5s - 14.5s):
- * The prototype comes alive. The robotic arm articulates through calibration cycles,
- * sensor scanning cones sweep the workspace, test waveforms illuminate circuit traces,
- * and diagnostic LED telemetry indicates operational readiness.
+ * 01 — IDEA: The birth of an invention (0.0s – 5.0s)
+ * - 0.0–1.0s: The spark appears in deep navy. Orange & electric-blue particles drift.
+ *             One orange particle glows intensely, emits a soft pulse, camera pushes forward.
+ * - 1.0–2.5s: The idea takes shape. Thin blue lines expand into geometric triangles assembling
+ *             a 3D wireframe globe. Orange particles orbit, elliptical paths move around it,
+ *             center glows softly.
+ * - 2.5–4.0s: A world of possibilities. Blue network connections illuminate sequentially.
+ *             Orange pulse travels across globe. Circular blueprint forms at center.
+ * - 4.0–5.0s: Transition to BUILD. Outer wireframe reorganizes, lines converge toward center
+ *             blueprint. Circular blueprint expands and rotates into a horizontal engineering
+ *             workbench as camera moves downward.
  * 
- * Scene 4 — IMPACT (14.5s - 19.5s):
- * Camera draws back to reveal the connected innovation ecosystem. Glowing national campus
- * network orbits radiate outwards, connecting students to real-world STEM possibilities.
- * Seamless loop returns gently to the spark of the next IDEA.
+ * 02 — BUILD: Turning imagination into something real (5.0s – 10.0s)
+ * - 5.0–6.0s: Workbench emerges. Circular robotic base appears, outer ring illuminates electric blue,
+ *             orange light orbits its circumference. Camera settles into 3/4 view.
+ * - 6.0–7.5s: Components assemble. Three mechanical parts descend along controlled paths:
+ *             1. Lower rotating base / actuator
+ *             2. Middle mechanical elbow joint
+ *             3. Upper manipulator / sensor assembly
+ *             Connections snap into place with subtle mechanical movement and blue pulses.
+ * - 7.5–8.5s: Prototype activates. Blue circuit path illuminates across workbench.
+ *             Robotic assembly articulates through sequenced joint rotations.
+ *             Orange signal pulse passes from base to end effector.
+ * - 8.5–10.0s: Transition to TEST. Robot returns to neutral. Thin blue wireframe appears
+ *              around it forming a 3D measurement cage. Camera pushes closer.
  * 
- * RESPONSIVE & COMPACT:
- * - Desktop: Rendered cleanly in right visual zone with subtle parallax.
- * - Mobile: Camera reframed to center on the robotic prototype, reduced particle count,
- *   compact container bounds, and performance optimizations.
+ * 03 — TEST: Proving that the idea works (10.0s – 15.0s)
+ * - 10.0–11.0s: Testing environment activates. Wireframe cage expands. Measurement grid lines connect,
+ *               orange marker points appear at joints and movement paths.
+ * - 11.0–12.5s: Sensors evaluate movement. Robot executes controlled test movement. Trajectory lines
+ *               trace path, orange joint markers pulse, holographic reference rings display calibration.
+ * - 12.5–13.5s: Refinement & improvement (Iteration). Robot pauses, makes a small adjustment.
+ *               Misaligned wireframe segment shifts into perfect position. Robot repeats movement
+ *               smoothly as measurement lines lock into green/cyan alignment.
+ * - 13.5–15.0s: Transition to IMPACT. Calibration cage expands beyond robot. Lines extend outward into
+ *               connected network nodes. Camera pulls back smoothly.
+ * 
+ * 04 — IMPACT: One invention becomes part of something bigger (15.0s – 20.0s)
+ * - 15.0–16.0s: Network expands. Connected lines radiate in all directions with blue intersection nodes
+ *               and orange data pulses. Robot remains visible as central seed.
+ * - 16.0–17.0s: Individual ideas connect into spherical structure. 4 innovation discipline clusters
+ *               (Robotics/Engineering, AI/Tech, Creative Design, Collaboration) take shape.
+ * - 17.0–18.5s: Ecosystem comes together. Camera pulls back to reveal complete digital globe of
+ *               interconnected lines and nodes rotating slowly in harmony.
+ * - 18.5–20.0s: Return to the beginning. Outer lines fade, central point brightens, one orange particle
+ *               separates and drifts forward as camera approaches, looping seamlessly into Scene 01.
  */
 
 (function () {
   'use strict';
 
-  // Check reduced motion preference
+  // Respect reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) {
-    console.info('[Vadiva Hero] prefers-reduced-motion enabled. Using static fallback.');
+    console.info('[Vadiva Hero] prefers-reduced-motion is active. Ambient CSS fallback rendered.');
     return;
   }
 
-  // WebGL context verification
+  // WebGL support detection
   function isWebGLAvailable() {
     try {
-      const canvas = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+      const testCanvas = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')));
     } catch (e) {
       return false;
     }
   }
 
   if (!isWebGLAvailable() || typeof THREE === 'undefined') {
-    console.warn('[Vadiva Hero] WebGL or Three.js unavailable. Using CSS fallback.');
+    console.warn('[Vadiva Hero] WebGL/Three.js not available. Using CSS fallback.');
     return;
   }
 
@@ -58,31 +90,28 @@
 
   heroSection.classList.add('hero-canvas-active');
 
-  // Story Stage Duration Constants (Total Cycle = 19.0s)
-  const DURATION_IDEA = 4.5;
-  const DURATION_BUILD = 5.0;
-  const DURATION_TEST = 5.0;
-  const DURATION_IMPACT = 4.5;
-  const TOTAL_CYCLE = DURATION_IDEA + DURATION_BUILD + DURATION_TEST + DURATION_IMPACT; // 19.0s
+  // Exact 20.0-second timeline configuration
+  const TOTAL_CYCLE = 20.0;
 
-  // Brand Color Palette
+  // Brand Palette
   const COLOR_ORANGE = 0xf37e4b;
   const COLOR_ORANGE_BRIGHT = 0xff9e75;
   const COLOR_BLUE_ELECTRIC = 0x38bdf8;
-  const COLOR_BLUE_DARK = 0x0f172a;
+  const COLOR_BLUE_NAVY = 0x0f172a;
   const COLOR_CYAN = 0x0cb8c0;
   const COLOR_WHITE = 0xffffff;
+  const COLOR_SUCCESS = 0x10b981;
 
   // Scene, Camera, Renderer Setup
   let scene, camera, renderer;
   let currentWidth = heroSection.clientWidth || window.innerWidth;
-  let currentHeight = heroSection.clientHeight || 680;
+  let currentHeight = heroSection.clientHeight || 700;
 
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x060a1a, 0.035);
+  scene.fog = new THREE.FogExp2(0x060a1a, 0.032);
 
   camera = new THREE.PerspectiveCamera(46, currentWidth / currentHeight, 0.1, 100);
-  camera.position.set(2.0, 0.5, 7.2);
+  camera.position.set(2.0, 0.4, 7.2);
 
   renderer = new THREE.WebGLRenderer({
     canvas: canvas,
@@ -94,23 +123,23 @@
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setClearColor(0x000000, 0);
 
-  // Lighting Configuration
+  // Lighting
   const ambientLight = new THREE.AmbientLight(0x1a264a, 1.4);
   scene.add(ambientLight);
 
-  const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
-  keyLight.position.set(4, 7, 5);
-  scene.add(keyLight);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.6);
+  mainLight.position.set(4, 7, 5);
+  scene.add(mainLight);
 
-  const orangeRimLight = new THREE.PointLight(COLOR_ORANGE, 2.8, 18);
-  orangeRimLight.position.set(2.5, 1.2, 2.5);
-  scene.add(orangeRimLight);
+  const orangePointLight = new THREE.PointLight(COLOR_ORANGE, 2.8, 18);
+  orangePointLight.position.set(2.4, 1.2, 2.5);
+  scene.add(orangePointLight);
 
-  const electricFillLight = new THREE.PointLight(COLOR_BLUE_ELECTRIC, 2.4, 20);
-  electricFillLight.position.set(0.5, 2.2, -1.8);
-  scene.add(electricFillLight);
+  const electricPointLight = new THREE.PointLight(COLOR_BLUE_ELECTRIC, 2.2, 20);
+  electricPointLight.position.set(0.6, 2.2, -1.8);
+  scene.add(electricPointLight);
 
-  // Interactive Mouse Parallax
+  // Mouse Parallax Interaction
   let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
   function onPointerMove(e) {
     const rect = canvas.getBoundingClientRect();
@@ -122,31 +151,54 @@
   }
   window.addEventListener('pointermove', onPointerMove, { passive: true });
 
-  // Master Innovation Group (Anchored in right half on desktop, centered on mobile)
+  // Master Innovation Group
   const innovationRoot = new THREE.Group();
   innovationRoot.position.set(1.5, -0.15, 0);
   scene.add(innovationRoot);
 
   // ===========================================================================
-  // SCENE 1: IDEA — THE BLUEPRINT & CONVERGING THOUGHT PARTICLES
+  // 1. SCENE 01: IDEA (The Spark -> Blueprint Globe -> Circular Blueprint)
   // ===========================================================================
-  const groupIdea = new THREE.Group();
-  innovationRoot.add(groupIdea);
+  const ideaGroup = new THREE.Group();
+  innovationRoot.add(ideaGroup);
 
-  // 1. Blueprint Particles
-  const isNarrowScreen = window.innerWidth <= 768;
-  const particleCount = isNarrowScreen ? 320 : 640;
+  // The Primary Spark Particle (The Birth of the Idea)
+  const sparkGeo = new THREE.SphereGeometry(0.12, 16, 16);
+  const sparkMat = new THREE.MeshBasicMaterial({
+    color: COLOR_WHITE,
+    transparent: true,
+    opacity: 1.0,
+    blending: THREE.AdditiveBlending
+  });
+  const sparkMesh = new THREE.Mesh(sparkGeo, sparkMat);
+  sparkMesh.position.set(0, 0, 0);
+  ideaGroup.add(sparkMesh);
+
+  // Spark Aura Halo
+  const sparkHaloGeo = new THREE.SphereGeometry(0.35, 16, 16);
+  const sparkHaloMat = new THREE.MeshBasicMaterial({
+    color: COLOR_ORANGE_BRIGHT,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending
+  });
+  const sparkHaloMesh = new THREE.Mesh(sparkHaloGeo, sparkHaloMat);
+  sparkMesh.add(sparkHaloMesh);
+
+  // Drifting Ambient Particles (Navy, Electric Blue, Orange)
+  const isMobile = window.innerWidth <= 768;
+  const particleCount = isMobile ? 260 : 540;
   const particleGeo = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(particleCount * 3);
   const particleColors = new Float32Array(particleCount * 3);
-  const particleData = [];
+  const particleMeta = [];
 
   for (let i = 0; i < particleCount; i++) {
     const u = Math.random();
     const v = Math.random();
     const theta = u * 2.0 * Math.PI;
     const phi = Math.acos(2.0 * v - 1.0);
-    const r = 1.45 + (Math.random() - 0.5) * 0.4;
+    const r = 1.35 + (Math.random() - 0.5) * 0.35;
 
     const x = r * Math.sin(phi) * Math.cos(theta);
     const y = r * Math.sin(phi) * Math.sin(theta);
@@ -156,13 +208,16 @@
     particlePositions[i * 3 + 1] = y;
     particlePositions[i * 3 + 2] = z;
 
-    particleData.push({
-      origX: x, origY: y, origZ: z,
-      r: r, theta: theta, phi: phi,
-      speed: 0.3 + Math.random() * 0.7
+    particleMeta.push({
+      baseR: r,
+      theta: theta,
+      phi: phi,
+      speed: 0.2 + Math.random() * 0.8,
+      driftX: (Math.random() - 0.5) * 0.02,
+      driftY: (Math.random() - 0.5) * 0.02
     });
 
-    if (Math.random() > 0.4) {
+    if (Math.random() > 0.45) {
       particleColors[i * 3] = 0.95;
       particleColors[i * 3 + 1] = 0.49;
       particleColors[i * 3 + 2] = 0.29; // Orange
@@ -176,281 +231,342 @@
   particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
   particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
 
-  const particleMat = new THREE.PointsMaterial({
-    size: 0.052,
+  const particleMaterial = new THREE.PointsMaterial({
+    size: 0.05,
     vertexColors: true,
     transparent: true,
-    opacity: 0.95,
+    opacity: 0.9,
     blending: THREE.AdditiveBlending,
     depthWrite: false
   });
-  const particleSystem = new THREE.Points(particleGeo, particleMat);
-  groupIdea.add(particleSystem);
+  const particleSystem = new THREE.Points(particleGeo, particleMaterial);
+  ideaGroup.add(particleSystem);
 
-  // 2. Blueprint Wireframe Sphere & Coordinate Latitudes
-  const blueprintWireMat = new THREE.MeshBasicMaterial({
+  // Assembling Wireframe Blueprint Globe (Triangular Icosahedron Geometry)
+  const globeWireGeo = new THREE.IcosahedronGeometry(1.4, 2);
+  const globeWireMat = new THREE.MeshBasicMaterial({
     color: COLOR_BLUE_ELECTRIC,
     wireframe: true,
     transparent: true,
-    opacity: 0.4,
+    opacity: 0.0, // Fades in 1.0 - 2.5s
     blending: THREE.AdditiveBlending
   });
-  const blueprintSphere = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4, 2), blueprintWireMat);
-  groupIdea.add(blueprintSphere);
+  const globeWireMesh = new THREE.Mesh(globeWireGeo, globeWireMat);
+  ideaGroup.add(globeWireMesh);
 
-  // Blueprint Concept Compass Rings
-  const compassRing1 = new THREE.Mesh(
+  // Elliptical Blueprint Latitude Paths
+  const orbitCurve1 = new THREE.Mesh(
     new THREE.RingGeometry(1.65, 1.68, 48),
-    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE, side: THREE.DoubleSide, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending })
+    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE, side: THREE.DoubleSide, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  compassRing1.rotation.x = Math.PI * 0.4;
-  groupIdea.add(compassRing1);
+  orbitCurve1.rotation.x = Math.PI * 0.38;
+  ideaGroup.add(orbitCurve1);
 
-  const compassRing2 = new THREE.Mesh(
+  const orbitCurve2 = new THREE.Mesh(
     new THREE.RingGeometry(1.85, 1.88, 48),
-    new THREE.MeshBasicMaterial({ color: COLOR_CYAN, side: THREE.DoubleSide, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending })
+    new THREE.MeshBasicMaterial({ color: COLOR_CYAN, side: THREE.DoubleSide, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  compassRing2.rotation.y = Math.PI * 0.3;
-  groupIdea.add(compassRing2);
+  orbitCurve2.rotation.y = Math.PI * 0.25;
+  ideaGroup.add(orbitCurve2);
 
-  // Central Core "Idea Spark"
-  const sparkSphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.35, 20, 20),
-    new THREE.MeshBasicMaterial({ color: COLOR_WHITE, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9 })
+  // The Central Circular Blueprint (Forms 2.5s - 4.0s, expands to workbench at 4.0s - 5.0s)
+  const circularBlueprintGroup = new THREE.Group();
+  circularBlueprintGroup.position.set(0, 0, 0);
+  ideaGroup.add(circularBlueprintGroup);
+
+  const blueprintRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.85, 0.92, 48),
+    new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, side: THREE.DoubleSide, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  groupIdea.add(sparkSphere);
+  circularBlueprintGroup.add(blueprintRing);
+
+  const blueprintInnerRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.45, 0.48, 36),
+    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE, side: THREE.DoubleSide, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
+  );
+  circularBlueprintGroup.add(blueprintInnerRing);
 
 
   // ===========================================================================
-  // SCENE 2: BUILD — ROBOTIC PROTOTYPE ASSEMBLY & LAB PEDESTAL
+  // 2. SCENE 02: BUILD (Workbench, Controlled Assembly & Activation)
   // ===========================================================================
-  const groupBuild = new THREE.Group();
-  innovationRoot.add(groupBuild);
+  const buildGroup = new THREE.Group();
+  innovationRoot.add(buildGroup);
 
-  // 1. Hexagonal Laboratory Test Pedestal
-  const pedestalGeo = new THREE.CylinderGeometry(2.2, 2.4, 0.28, 6);
-  const pedestalMat = new THREE.MeshStandardMaterial({
+  // 1. Physical Engineering Workbench
+  const workbenchMat = new THREE.MeshStandardMaterial({
     color: 0x111c38,
-    metalness: 0.8,
-    roughness: 0.3,
+    metalness: 0.85,
+    roughness: 0.25,
     transparent: true,
-    opacity: 0.95
+    opacity: 0.0
   });
-  const pedestal = new THREE.Mesh(pedestalGeo, pedestalMat);
-  pedestal.position.y = -1.15;
-  groupBuild.add(pedestal);
+  const workbench = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.5, 0.25, 32), workbenchMat);
+  workbench.position.y = -1.15;
+  buildGroup.add(workbench);
 
-  // Glowing Hex Pedestal Accent Edge
-  const pedestalRim = new THREE.Mesh(
-    new THREE.CylinderGeometry(2.22, 2.22, 0.05, 6),
-    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })
+  // Illuminated Outer Circumference Track (Electric Blue)
+  const workbenchTrack = new THREE.Mesh(
+    new THREE.TorusGeometry(2.32, 0.035, 16, 64),
+    new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  pedestalRim.position.y = -1.02;
-  groupBuild.add(pedestalRim);
+  workbenchTrack.rotation.x = Math.PI / 2;
+  workbenchTrack.position.y = -1.02;
+  buildGroup.add(workbenchTrack);
 
-  // 2. Physical Student Robotics Prototype: Articulated 4-Axis Robotic Arm
-  const robotArmGroup = new THREE.Group();
-  robotArmGroup.position.set(0.4, -1.0, 0);
-  groupBuild.add(robotArmGroup);
+  // Orbiting Orange Circumference Light Runner
+  const orbitLightMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(0.08, 12, 12),
+    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE_BRIGHT, blending: THREE.AdditiveBlending })
+  );
+  orbitLightMesh.position.set(2.32, -1.02, 0);
+  buildGroup.add(orbitLightMesh);
 
-  // Base Turntable
-  const armTurntableMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.7, roughness: 0.3 });
+  // Workbench Blue Circuit Paths (Surface PCB Traces)
+  const circuitTraceMat = new THREE.LineBasicMaterial({ color: COLOR_CYAN, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending });
+  const circuitPoints = [
+    new THREE.Vector3(-1.4, -1.01, -0.6), new THREE.Vector3(-0.6, -1.01, -0.6),
+    new THREE.Vector3(-0.6, -1.01, 0.2), new THREE.Vector3(0.0, -1.01, 0.2),
+    new THREE.Vector3(0.0, -1.01, 0.8), new THREE.Vector3(0.8, -1.01, 0.8)
+  ];
+  const circuitTrace = new THREE.Line(new THREE.BufferGeometry().setFromPoints(circuitPoints), circuitTraceMat);
+  buildGroup.add(circuitTrace);
+
+  // 2. THE THREE MECHANICAL ROBOTIC COMPONENTS (Descending Assembly 6.0s - 7.5s)
+  const robotRoot = new THREE.Group();
+  robotRoot.position.set(0.3, -1.02, 0);
+  buildGroup.add(robotRoot);
+
+  const armDarkMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.75, roughness: 0.3 });
   const armOrangeMat = new THREE.MeshStandardMaterial({
     color: COLOR_ORANGE,
     metalness: 0.5,
-    roughness: 0.2,
+    roughness: 0.25,
     emissive: 0x9a3412,
-    emissiveIntensity: 0.35
+    emissiveIntensity: 0.3
   });
-  const armTurntable = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.6, 0.3, 20), armTurntableMat);
-  robotArmGroup.add(armTurntable);
 
-  // Base Servo Ring
-  const servoRing = new THREE.Mesh(
-    new THREE.TorusGeometry(0.52, 0.03, 12, 32),
+  // COMPONENT 1: Lower Actuator & Rotating Turntable Base
+  const comp1Group = new THREE.Group();
+  robotRoot.add(comp1Group);
+
+  const baseTurntable = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.62, 0.3, 24), armDarkMat);
+  comp1Group.add(baseTurntable);
+
+  const baseRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.53, 0.03, 12, 32),
     new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, blending: THREE.AdditiveBlending })
   );
-  servoRing.rotation.x = Math.PI / 2;
-  servoRing.position.y = 0.1;
-  robotArmGroup.add(servoRing);
+  baseRing.rotation.x = Math.PI / 2;
+  baseRing.position.y = 0.1;
+  comp1Group.add(baseRing);
 
-  // Shoulder Joint & Lower Arm
-  const armShoulder = new THREE.Group();
-  armShoulder.position.set(0, 0.25, 0);
-  robotArmGroup.add(armShoulder);
+  // COMPONENT 2: Middle Mechanical Joint & Lower Arm
+  const comp2Group = new THREE.Group();
+  comp2Group.position.set(0, 0.25, 0);
+  comp1Group.add(comp2Group);
 
-  const shoulderSphere = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 18), armOrangeMat);
-  armShoulder.add(shoulderSphere);
+  const shoulderBall = new THREE.Mesh(new THREE.SphereGeometry(0.28, 18, 18), armOrangeMat);
+  comp2Group.add(shoulderBall);
 
-  const lowerArm = new THREE.Mesh(new THREE.BoxGeometry(0.22, 1.15, 0.24), armTurntableMat);
-  lowerArm.position.set(0, 0.58, 0);
-  armShoulder.add(lowerArm);
+  const lowerBeam = new THREE.Mesh(new THREE.BoxGeometry(0.22, 1.15, 0.24), armDarkMat);
+  lowerBeam.position.set(0, 0.58, 0);
+  comp2Group.add(lowerBeam);
 
-  // Elbow Joint & Upper Forearm
-  const armElbow = new THREE.Group();
-  armElbow.position.set(0, 1.15, 0);
-  armShoulder.add(armElbow);
+  // COMPONENT 3: Upper Mechanical Joint & Actuator Sensor Tool Head
+  const comp3Group = new THREE.Group();
+  comp3Group.position.set(0, 1.15, 0);
+  comp2Group.add(comp3Group);
 
-  const elbowSphere = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), armOrangeMat);
-  armElbow.add(elbowSphere);
+  const elbowBall = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), armOrangeMat);
+  comp3Group.add(elbowBall);
 
-  const upperArm = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.05, 0.2), armTurntableMat);
-  upperArm.position.set(0, 0.52, 0);
-  armElbow.add(upperArm);
+  const upperBeam = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.05, 0.2), armDarkMat);
+  upperBeam.position.set(0, 0.52, 0);
+  comp3Group.add(upperBeam);
 
-  // Wrist & Actuator End Effector
-  const armWrist = new THREE.Group();
-  armWrist.position.set(0, 1.05, 0);
-  armElbow.add(armWrist);
+  const wristJoint = new THREE.Group();
+  wristJoint.position.set(0, 1.05, 0);
+  comp3Group.add(wristJoint);
 
   const wristSphere = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), armOrangeMat);
-  armWrist.add(wristSphere);
+  wristJoint.add(wristSphere);
 
-  // Dual Claw Gripper (Mechanical Prototype)
-  const gripperMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.9, roughness: 0.2 });
-  const clawLeft = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.28, 0.08), gripperMat);
-  clawLeft.position.set(-0.1, 0.22, 0);
+  // Gripper Actuator Claws
+  const clawMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 });
+  const clawLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.26, 0.08), clawMat);
+  clawLeft.position.set(-0.09, 0.2, 0);
   clawLeft.rotation.z = -0.15;
-  armWrist.add(clawLeft);
+  wristJoint.add(clawLeft);
 
-  const clawRight = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.28, 0.08), gripperMat);
-  clawRight.position.set(0.1, 0.22, 0);
+  const clawRight = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.26, 0.08), clawMat);
+  clawRight.position.set(0.09, 0.2, 0);
   clawRight.rotation.z = 0.15;
-  armWrist.add(clawRight);
+  wristJoint.add(clawRight);
 
-  // Tool Focal Point Light
-  const toolSparkLight = new THREE.PointLight(COLOR_BLUE_ELECTRIC, 1.2, 4);
-  toolSparkLight.position.set(0, 0.35, 0);
-  armWrist.add(toolSparkLight);
+  // Focal End Effector Light & Activation Signal Pulse
+  const toolPointLight = new THREE.PointLight(COLOR_BLUE_ELECTRIC, 0.0, 5);
+  toolPointLight.position.set(0, 0.32, 0);
+  wristJoint.add(toolPointLight);
 
-  // 3. Embedded Engineering Modules: Microcontroller PCB & Breadboard Prototype
-  const pcbWorkbench = new THREE.Group();
-  pcbWorkbench.position.set(-0.85, -0.92, 0.2);
-  groupBuild.add(pcbWorkbench);
-
-  // PCB Board
-  const pcbBoard = new THREE.Mesh(
-    new THREE.BoxGeometry(1.25, 0.05, 0.95),
-    new THREE.MeshStandardMaterial({ color: 0x064e3b, roughness: 0.4 })
+  // Orange Signal Pulse Capsule (Travels from base to gripper during activation)
+  const signalPulse = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 12, 12),
+    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE_BRIGHT, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  pcbWorkbench.add(pcbBoard);
-
-  // MCU Chip
-  const mcuChip = new THREE.Mesh(
-    new THREE.BoxGeometry(0.4, 0.08, 0.4),
-    new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.1 })
-  );
-  mcuChip.position.set(0, 0.06, 0);
-  pcbWorkbench.add(mcuChip);
-
-  // Power LED
-  const pcbLed = new THREE.Mesh(
-    new THREE.SphereGeometry(0.05, 10, 10),
-    new THREE.MeshBasicMaterial({ color: COLOR_ORANGE, blending: THREE.AdditiveBlending })
-  );
-  pcbLed.position.set(0.4, 0.06, 0.3);
-  pcbWorkbench.add(pcbLed);
+  robotRoot.add(signalPulse);
 
 
   // ===========================================================================
-  // SCENE 3: TEST — SENSOR SWEEPS, CIRCUIT WAVEFORMS & ACTIVE EXPERIMENTATION
+  // 3. SCENE 03: TEST (3D Measurement Cage, Sensor Sweep, Iterative Correction)
   // ===========================================================================
-  const groupTest = new THREE.Group();
-  innovationRoot.add(groupTest);
+  const testGroup = new THREE.Group();
+  innovationRoot.add(testGroup);
 
-  // 1. Sweeping Ultrasonic/LiDAR Sensor Cone from Robot Hand
-  const sensorConeGeo = new THREE.ConeGeometry(0.9, 2.0, 24, 1, true);
+  // 1. 3D Wireframe Measurement & Calibration Cage (Surrounds the Robot)
+  const cageGeo = new THREE.BoxGeometry(2.4, 3.2, 2.4);
+  const cageMat = new THREE.MeshBasicMaterial({
+    color: COLOR_BLUE_ELECTRIC,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.0,
+    blending: THREE.AdditiveBlending
+  });
+  const calibrationCage = new THREE.Mesh(cageGeo, cageMat);
+  calibrationCage.position.set(0.3, 0.5, 0);
+  testGroup.add(calibrationCage);
+
+  // Measurement Key Point Markers (Orange Node Dots at Key Joints & Vertices)
+  const markerGroup = new THREE.Group();
+  testGroup.add(markerGroup);
+
+  const markerGeo = new THREE.SphereGeometry(0.06, 12, 12);
+  const markerMat = new THREE.MeshBasicMaterial({ color: COLOR_ORANGE_BRIGHT, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.0 });
+
+  const markerPositions = [
+    new THREE.Vector3(0.3, -1.0, 0), // Base
+    new THREE.Vector3(0.3, -0.75, 0), // Shoulder
+    new THREE.Vector3(0.3, 0.4, 0),   // Elbow
+    new THREE.Vector3(0.3, 1.45, 0),  // Wrist
+    new THREE.Vector3(-0.9, 0.5, -1.2), // Cage corners
+    new THREE.Vector3(1.5, 0.5, -1.2),
+    new THREE.Vector3(1.5, 0.5, 1.2),
+    new THREE.Vector3(-0.9, 0.5, 1.2)
+  ];
+  const markers = [];
+  markerPositions.forEach(pos => {
+    const m = new THREE.Mesh(markerGeo, markerMat);
+    m.position.copy(pos);
+    markerGroup.add(m);
+    markers.push(m);
+  });
+
+  // 2. Trajectory Trace Line (Recorded Path of Robot Gripper Motion)
+  const trajectoryPoints = [];
+  for (let t = 0; t <= 36; t++) {
+    const angle = (t / 36) * Math.PI;
+    const tx = 0.3 + Math.sin(angle) * 0.8;
+    const ty = 1.1 + Math.cos(angle) * 0.35;
+    const tz = Math.sin(angle * 2) * 0.4;
+    trajectoryPoints.push(new THREE.Vector3(tx, ty, tz));
+  }
+  const trajectoryGeo = new THREE.BufferGeometry().setFromPoints(trajectoryPoints);
+  const trajectoryMat = new THREE.LineBasicMaterial({ color: COLOR_CYAN, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending });
+  const trajectoryLine = new THREE.Line(trajectoryGeo, trajectoryMat);
+  testGroup.add(trajectoryLine);
+
+  // 3. Sensor Scanning Sweep Cone (Represents simulated calibration)
+  const sensorConeGeo = new THREE.ConeGeometry(0.85, 1.8, 24, 1, true);
   const sensorConeMat = new THREE.MeshBasicMaterial({
     color: COLOR_CYAN,
-    transparent: true,
-    opacity: 0.35,
     wireframe: true,
+    transparent: true,
+    opacity: 0.0,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide
   });
   const sensorCone = new THREE.Mesh(sensorConeGeo, sensorConeMat);
-  sensorCone.position.set(0.4, 0.4, 0.2);
-  sensorCone.rotation.x = Math.PI; // Point down toward workbench
-  groupTest.add(sensorCone);
+  sensorCone.position.set(0.3, 1.2, 0.2);
+  sensorCone.rotation.x = Math.PI;
+  testGroup.add(sensorCone);
 
-  // 2. Oscilloscope / Circuit Sine Waveform Curves
-  const wavePoints = [];
-  for (let w = 0; w <= 48; w++) {
-    const wx = (w / 48) * 3.0 - 1.5;
-    const wy = Math.sin((w / 48) * Math.PI * 4) * 0.25;
-    wavePoints.push(new THREE.Vector3(wx, wy, 0));
-  }
-  const waveGeo = new THREE.BufferGeometry().setFromPoints(wavePoints);
-  const waveMat = new THREE.LineBasicMaterial({
-    color: COLOR_ORANGE,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
-  });
-  const circuitWave = new THREE.Line(waveGeo, waveMat);
-  circuitWave.position.set(0, 0.9, 0.2);
-  groupTest.add(circuitWave);
-
-  // 3. Dynamic Test Data Ring (Holographic Calibration Meter)
-  const testDial = new THREE.Mesh(
-    new THREE.RingGeometry(1.1, 1.25, 32),
-    new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, wireframe: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, side: THREE.DoubleSide })
-  );
-  testDial.position.set(0.4, 0.6, 0);
-  testDial.rotation.y = Math.PI * 0.2;
-  groupTest.add(testDial);
+  // 4. Misaligned Wireframe Segment for "Refinement and Improvement" (12.5s - 13.5s)
+  const misalignedSegGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-0.6, 1.2, 0),
+    new THREE.Vector3(0.3, 1.5, 0.3),
+    new THREE.Vector3(1.1, 1.2, 0)
+  ]);
+  const misalignedSegMat = new THREE.LineBasicMaterial({ color: COLOR_ORANGE, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending });
+  const misalignedSegment = new THREE.Line(misalignedSegGeo, misalignedSegMat);
+  testGroup.add(misalignedSegment);
 
 
   // ===========================================================================
-  // SCENE 4: IMPACT — NATIONAL INNOVATION ECOSYSTEM & GLOBAL CONNECTIVITY
+  // 4. SCENE 04: IMPACT (Network Nodes, 4 Innovation Clusters, Digital Globe Loop)
   // ===========================================================================
-  const groupImpact = new THREE.Group();
-  innovationRoot.add(groupImpact);
+  const impactGroup = new THREE.Group();
+  innovationRoot.add(impactGroup);
 
-  // 1. Ecosystem Orbital Rings
-  const orbitGroup = new THREE.Group();
-  groupImpact.add(orbitGroup);
+  // Expanding Ecosystem Orbital Paths
+  const orbitalRingsGroup = new THREE.Group();
+  impactGroup.add(orbitalRingsGroup);
 
-  for (let o = 0; o < 3; o++) {
-    const orbitPts = [];
-    const rX = 2.4 + o * 0.4;
-    const rZ = 1.6 + o * 0.3;
+  for (let o = 0; o < 4; o++) {
+    const ringPts = [];
+    const radX = 2.4 + o * 0.35;
+    const radZ = 1.7 + o * 0.25;
     for (let a = 0; a <= 48; a++) {
       const angle = (a / 48) * Math.PI * 2;
-      orbitPts.push(new THREE.Vector3(Math.cos(angle) * rX, 0, Math.sin(angle) * rZ));
+      ringPts.push(new THREE.Vector3(Math.cos(angle) * radX, 0, Math.sin(angle) * radZ));
     }
     const oLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(orbitPts),
+      new THREE.BufferGeometry().setFromPoints(ringPts),
       new THREE.LineBasicMaterial({
         color: o % 2 === 0 ? COLOR_ORANGE : COLOR_BLUE_ELECTRIC,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.0,
         blending: THREE.AdditiveBlending
       })
     );
-    oLine.rotation.x = Math.PI * (0.2 + o * 0.18);
+    oLine.rotation.x = Math.PI * (0.22 + o * 0.16);
     oLine.rotation.z = Math.PI * (0.12 * o);
-    orbitGroup.add(oLine);
-
-    // Connected Node Satellite
-    const sat = new THREE.Mesh(
-      new THREE.SphereGeometry(0.08, 12, 12),
-      new THREE.MeshBasicMaterial({ color: o % 2 === 0 ? COLOR_ORANGE_BRIGHT : COLOR_BLUE_ELECTRIC, blending: THREE.AdditiveBlending })
-    );
-    orbitGroup.add(sat);
+    orbitalRingsGroup.add(oLine);
   }
 
-  // 2. Global Luminous Impact Sphere
-  const impactCore = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.5, 2),
-    new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, wireframe: true, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending })
+  // 4 Innovation Discipline Clusters (Distinct geometric nodes):
+  // 1. Robotics & Engineering (Octahedron)
+  // 2. Artificial Intelligence & Technology (Dodecahedron)
+  // 3. Creative Design & Problem-Solving (Torus)
+  // 4. Collaboration & Learning (Tetrahedron)
+  const clusterGroup = new THREE.Group();
+  impactGroup.add(clusterGroup);
+
+  const cluster1 = new THREE.Mesh(new THREE.OctahedronGeometry(0.3, 0), new THREE.MeshBasicMaterial({ color: COLOR_ORANGE_BRIGHT, wireframe: true, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending }));
+  cluster1.position.set(-2.2, 0.9, 0.4);
+  clusterGroup.add(cluster1);
+
+  const cluster2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.28, 0), new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, wireframe: true, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending }));
+  cluster2.position.set(2.2, 1.1, -0.3);
+  clusterGroup.add(cluster2);
+
+  const cluster3 = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.06, 12, 24), new THREE.MeshBasicMaterial({ color: COLOR_CYAN, wireframe: true, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending }));
+  cluster3.position.set(-1.6, -1.1, 0.6);
+  clusterGroup.add(cluster3);
+
+  const cluster4 = new THREE.Mesh(new THREE.TetrahedronGeometry(0.32, 0), new THREE.MeshBasicMaterial({ color: COLOR_WHITE, wireframe: true, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending }));
+  cluster4.position.set(1.7, -1.0, 0.5);
+  clusterGroup.add(cluster4);
+
+  // Grand Complete Innovation Globe (Forms 17.0s - 18.5s)
+  const finalGlobe = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.65, 2),
+    new THREE.MeshBasicMaterial({ color: COLOR_BLUE_ELECTRIC, wireframe: true, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending })
   );
-  impactCore.position.set(0, 0.2, 0);
-  groupImpact.add(impactCore);
+  impactGroup.add(finalGlobe);
 
 
   // ===========================================================================
-  // HUD UI BINDINGS & STORY STATE SYNCHRONIZATION
+  // HUD UI ELEMENTS & REAL-TIME STORY SYNCHRONIZATION
   // ===========================================================================
   const stagePillTag = document.querySelector('.stage-tag');
   const stagePillTitle = document.getElementById('stage-title-text');
@@ -460,7 +576,7 @@
   const navButtons = document.querySelectorAll('.scene-step-btn');
   const navProgressBar = document.querySelector('.scene-nav-progress');
 
-  const STORY_METADATA = [
+  const STORY_STAGES = [
     {
       tag: 'STAGE 01',
       title: 'IDEA',
@@ -472,7 +588,7 @@
       tag: 'STAGE 02',
       title: 'BUILD',
       desc: 'Physical Robotics Prototyping',
-      telTitle: 'MAKER FORGE LAB',
+      telTitle: 'MAKERFORGE LAB',
       telMetric: 'Actuators & Sensors Assembled'
     },
     {
@@ -480,7 +596,7 @@
       title: 'TEST',
       desc: 'Real-World Calibration',
       telTitle: 'SYSTEM VALIDATION',
-      telMetric: 'Real-Time Sensor Feeds Active'
+      telMetric: 'Simulated Calibration & Active Testing'
     },
     {
       tag: 'STAGE 04',
@@ -491,33 +607,33 @@
     }
   ];
 
-  let manualTimeOverride = null;
+  let manualTimeJump = null;
 
   navButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      const idx = parseInt(btn.getAttribute('data-scene'), 10) || 0;
-      switch (idx) {
-        case 0: manualTimeOverride = 0.5; break;
-        case 1: manualTimeOverride = 4.8; break;
-        case 2: manualTimeOverride = 9.8; break;
-        case 3: manualTimeOverride = 14.8; break;
+      const stageIdx = parseInt(btn.getAttribute('data-scene'), 10) || 0;
+      switch (stageIdx) {
+        case 0: manualTimeJump = 0.1; break;
+        case 1: manualTimeJump = 5.1; break;
+        case 2: manualTimeJump = 10.1; break;
+        case 3: manualTimeJump = 15.1; break;
       }
     });
   });
 
-  function updateStoryHUD(activeStageIndex, progress) {
-    const meta = STORY_METADATA[activeStageIndex];
-    if (meta) {
-      if (stagePillTag) stagePillTag.textContent = meta.tag;
-      if (stagePillTitle) stagePillTitle.textContent = meta.title;
-      if (stagePillDesc) stagePillDesc.textContent = meta.desc;
-      if (hudTelTitle) hudTelTitle.textContent = meta.telTitle;
-      if (hudTelMetric) hudTelMetric.textContent = meta.telMetric;
+  function updateHUD(stageIndex, progressPercent) {
+    const data = STORY_STAGES[stageIndex];
+    if (data) {
+      if (stagePillTag) stagePillTag.textContent = data.tag;
+      if (stagePillTitle) stagePillTitle.textContent = data.title;
+      if (stagePillDesc) stagePillDesc.textContent = data.desc;
+      if (hudTelTitle) hudTelTitle.textContent = data.telTitle;
+      if (hudTelMetric) hudTelMetric.textContent = data.telMetric;
     }
 
     if (navButtons.length > 0) {
-      navButtons.forEach((btn, idx) => {
-        if (idx === activeStageIndex) {
+      navButtons.forEach((btn, i) => {
+        if (i === stageIndex) {
           btn.classList.add('active');
           btn.setAttribute('aria-selected', 'true');
         } else {
@@ -528,224 +644,426 @@
     }
 
     if (navProgressBar) {
-      navProgressBar.style.width = `${(progress * 100).toFixed(1)}%`;
+      navProgressBar.style.width = `${(progressPercent * 100).toFixed(1)}%`;
     }
   }
 
 
   // ===========================================================================
-  // MAIN ANIMATION LOOP & STORY ARC CHOREOGRAPHY
+  // CONTINUOUS 20-SECOND ANIMATION LOOP & DETAILED STAGE TIMELINE
   // ===========================================================================
   const clock = new THREE.Clock();
-  let accumulatedTime = 0;
+  let time = 0;
   let isVisible = true;
-  let animFrameId = null;
+  let animId = null;
 
   function animate() {
-    animFrameId = requestAnimationFrame(animate);
-
-    if (!isVisible) return; // Pause rendering if scrolled out of view
+    animId = requestAnimationFrame(animate);
+    if (!isVisible) return; // Conserve resources when off-screen
 
     const delta = clock.getDelta();
-    accumulatedTime += delta;
+    time += delta;
 
-    if (manualTimeOverride !== null) {
-      accumulatedTime = manualTimeOverride;
-      manualTimeOverride = null;
+    if (manualTimeJump !== null) {
+      time = manualTimeJump;
+      manualTimeJump = null;
     }
 
-    const cycleTime = accumulatedTime % TOTAL_CYCLE;
-    const progress = cycleTime / TOTAL_CYCLE;
+    const t = time % TOTAL_CYCLE;
+    const progress = t / TOTAL_CYCLE;
 
-    // Mouse Parallax Lerp
+    // Mouse Parallax Lerping
     mouse.x += (mouse.targetX - mouse.x) * 0.05;
     mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
-    // Determine Active Scene & Transition Weights (Smooth Continuous Blending)
-    let w1 = 0, w2 = 0, w3 = 0, w4 = 0;
-    let activeIndex = 0;
+    // Active Stage Index: 0 (0-5s), 1 (5-10s), 2 (10-15s), 3 (15-20s)
+    let currentStage = 0;
+    if (t >= 15.0) currentStage = 3;
+    else if (t >= 10.0) currentStage = 2;
+    else if (t >= 5.0) currentStage = 1;
 
-    if (cycleTime < 4.5) {
-      activeIndex = 0; // IDEA
-      w1 = 1.0;
-      if (cycleTime > 3.5) {
-        const t = (cycleTime - 3.5) / 1.0;
-        w1 = 1.0 - t;
-        w2 = t;
-      }
-    } else if (cycleTime < 9.5) {
-      activeIndex = 1; // BUILD
-      const tScene = cycleTime - 4.5;
-      if (tScene < 1.0) {
-        w2 = tScene;
-        w1 = 1.0 - tScene;
-      } else if (tScene > 4.0) {
-        const tOut = (tScene - 4.0) / 1.0;
-        w2 = 1.0 - tOut;
-        w3 = tOut;
-      } else {
-        w2 = 1.0;
-      }
-    } else if (cycleTime < 14.5) {
-      activeIndex = 2; // TEST
-      const tScene = cycleTime - 9.5;
-      if (tScene < 1.0) {
-        w3 = tScene;
-        w2 = 1.0 - tScene;
-      } else if (tScene > 4.0) {
-        const tOut = (tScene - 4.0) / 1.0;
-        w3 = 1.0 - tOut;
-        w4 = tOut;
-      } else {
-        w3 = 1.0;
-      }
-    } else {
-      activeIndex = 3; // IMPACT
-      const tScene = cycleTime - 14.5;
-      if (tScene < 1.0) {
-        w4 = tScene;
-        w3 = 1.0 - tScene;
-      } else if (tScene > 4.0) {
-        // Seamless loop back to Scene 1
-        const tOut = (tScene - 4.0) / 1.0;
-        w4 = 1.0 - tOut;
-        w1 = tOut;
-      } else {
-        w4 = 1.0;
-      }
-    }
-
-    updateStoryHUD(activeIndex, progress);
-
-    // Apply Opacity & Transformations to Groups
-    groupIdea.visible = w1 > 0.01;
-    particleMat.opacity = w1 * 0.95;
-    blueprintWireMat.opacity = w1 * 0.45;
-    sparkSphere.material.opacity = w1 * 0.9;
-
-    groupBuild.visible = (w2 > 0.01 || w3 > 0.01);
-    // Keep robot prototype visible and prominent during both BUILD and TEST
-    const robotVisibility = Math.max(w2, w3, (w4 > 0 ? 0.3 * w4 : 0));
-    groupBuild.scale.setScalar(0.9 + robotVisibility * 0.1);
-    pedestalMat.opacity = 0.4 + robotVisibility * 0.55;
-
-    groupTest.visible = w3 > 0.01;
-    sensorConeMat.opacity = w3 * 0.35;
-    waveMat.opacity = w3 * 0.8;
-    testDial.material.opacity = w3 * 0.6;
-
-    groupImpact.visible = w4 > 0.01;
-    impactCore.material.opacity = w4 * 0.55;
+    updateHUD(currentStage, progress);
 
     // -------------------------------------------------------------------------
-    // INTERNAL OBJECT MOTION & KINEMATICS
+    // STAGE 01: IDEA (0.0s – 5.0s)
     // -------------------------------------------------------------------------
+    if (t < 5.0) {
+      ideaGroup.visible = true;
 
-    // 1. Scene 1 Particles & Blueprint Rotation
-    if (groupIdea.visible) {
-      blueprintSphere.rotation.y += 0.006;
-      compassRing1.rotation.z += 0.008;
-      compassRing2.rotation.z -= 0.006;
+      // 0.0–1.0s: The spark appears & intensifies
+      if (t < 1.0) {
+        const p1 = t / 1.0;
+        sparkMesh.scale.setScalar(0.4 + p1 * 0.8);
+        sparkMat.opacity = Math.min(1.0, p1 * 1.5);
+        sparkHaloMat.opacity = Math.sin(p1 * Math.PI) * 0.8;
+        particleMaterial.opacity = p1 * 0.7;
+        globeWireMat.opacity = 0;
+        blueprintRing.material.opacity = 0;
+        blueprintInnerRing.material.opacity = 0;
+      }
+      // 1.0–2.5s: The idea takes shape (Lines assemble into 3D wireframe globe)
+      else if (t < 2.5) {
+        const p2 = (t - 1.0) / 1.5;
+        sparkMesh.scale.setScalar(1.2 - p2 * 0.4);
+        globeWireMat.opacity = p2 * 0.45;
+        orbitCurve1.material.opacity = p2 * 0.5;
+        orbitCurve2.material.opacity = p2 * 0.35;
+        particleMaterial.opacity = 0.7 + Math.sin(p2 * Math.PI) * 0.25;
+      }
+      // 2.5–4.0s: A world of possibilities (Globe complete, orange pulse, center blueprint forms)
+      else if (t < 4.0) {
+        const p3 = (t - 2.5) / 1.5;
+        globeWireMat.opacity = 0.45;
+        orbitCurve1.material.opacity = 0.5;
+        orbitCurve2.material.opacity = 0.35;
+        // Circular blueprint forms near center
+        blueprintRing.material.opacity = p3 * 0.8;
+        blueprintInnerRing.material.opacity = p3 * 0.7;
+        circularBlueprintGroup.scale.setScalar(0.7 + p3 * 0.3);
+      }
+      // 4.0–5.0s: Transition to BUILD (Outer wireframe reorganizes, blueprint expands/rotates into horizontal workbench)
+      else {
+        const p4 = (t - 4.0) / 1.0;
+        globeWireMat.opacity = (1.0 - p4) * 0.45;
+        orbitCurve1.material.opacity = (1.0 - p4) * 0.5;
+        orbitCurve2.material.opacity = (1.0 - p4) * 0.35;
+        sparkMat.opacity = (1.0 - p4);
 
-      const positions = particleGeo.attributes.position.array;
+        // Circular blueprint expands and tilts from vertical to horizontal workbench
+        circularBlueprintGroup.rotation.x = p4 * (Math.PI / 2);
+        circularBlueprintGroup.position.y = -p4 * 1.15;
+        circularBlueprintGroup.scale.setScalar(1.0 + p4 * 1.4);
+        blueprintRing.material.opacity = (1.0 - p4) * 0.8;
+
+        // Workbench fades in concurrently
+        buildGroup.visible = true;
+        workbenchMat.opacity = p4 * 0.95;
+        workbenchTrack.material.opacity = p4 * 0.8;
+      }
+
+      // Continuous Idea Rotation
+      globeWireMesh.rotation.y += 0.007;
+      globeWireMesh.rotation.x += 0.003;
+      orbitCurve1.rotation.z += 0.008;
+      orbitCurve2.rotation.z -= 0.006;
+      circularBlueprintGroup.rotation.z += 0.01;
+
+      // Animate thought particles
+      const pArr = particleGeo.attributes.position.array;
       for (let i = 0; i < particleCount; i++) {
-        const p = particleData[i];
-        const angle = p.theta + accumulatedTime * p.speed * 0.3;
-        const curR = p.r + Math.sin(accumulatedTime * 2.5 + i) * 0.05;
-        positions[i * 3] = curR * Math.sin(p.phi) * Math.cos(angle);
-        positions[i * 3 + 1] = curR * Math.sin(p.phi) * Math.sin(angle);
-        positions[i * 3 + 2] = curR * Math.cos(p.phi);
+        const m = particleMeta[i];
+        const ang = m.theta + time * m.speed * 0.25;
+        const curR = m.baseR + Math.sin(time * 2.0 + i) * 0.04;
+        pArr[i * 3] = curR * Math.sin(m.phi) * Math.cos(ang);
+        pArr[i * 3 + 1] = curR * Math.sin(m.phi) * Math.sin(ang);
+        pArr[i * 3 + 2] = curR * Math.cos(m.phi);
       }
       particleGeo.attributes.position.needsUpdate = true;
-    }
-
-    // 2. Robotic Arm Articulation (Active during BUILD & TEST)
-    if (groupBuild.visible) {
-      const armTime = accumulatedTime * 1.5;
-      armTurntable.rotation.y = Math.sin(armTime * 0.4) * 0.4;
-      armShoulder.rotation.z = Math.sin(armTime * 0.7) * 0.22 - 0.15;
-      armElbow.rotation.z = Math.cos(armTime * 0.8) * 0.3 + 0.25;
-      armWrist.rotation.y = armTime * 1.2;
-
-      // LED Pulsing
-      pcbLed.scale.setScalar(0.85 + Math.sin(accumulatedTime * 8) * 0.25);
-    }
-
-    // 3. Sensor Cone & Circuit Wave Animation during TEST
-    if (groupTest.visible) {
-      sensorCone.rotation.y += 0.03;
-      testDial.rotation.z += 0.01;
-
-      // Animate wave vertices
-      const waveArray = waveGeo.attributes.position.array;
-      for (let w = 0; w <= 48; w++) {
-        waveArray[w * 3 + 1] = Math.sin((w / 48) * Math.PI * 4 + accumulatedTime * 6) * 0.25;
-      }
-      waveGeo.attributes.position.needsUpdate = true;
-    }
-
-    // 4. Impact Ecosystem Orbitals
-    if (groupImpact.visible) {
-      impactCore.rotation.y += 0.008;
-      orbitGroup.rotation.y += 0.007;
-    }
-
-    // -------------------------------------------------------------------------
-    // ADAPTIVE CAMERA PATH (Desktop vs Mobile Framing)
-    // -------------------------------------------------------------------------
-    const isMobile = window.innerWidth <= 768;
-
-    let targetCamX = isMobile ? 0 : (1.6 + mouse.x * 0.5);
-    let targetCamY = isMobile ? -0.1 : (0.4 + mouse.y * 0.35);
-    let targetCamZ = isMobile ? 6.2 : 7.2;
-
-    if (activeIndex === 0) {
-      // IDEA: Forward glide
-      targetCamZ = isMobile ? 6.4 : 7.5;
-    } else if (activeIndex === 1) {
-      // BUILD: Focus down into the robotic workshop
-      targetCamZ = isMobile ? 5.8 : 6.6;
-      targetCamY = isMobile ? -0.2 : (0.3 + mouse.y * 0.35);
-    } else if (activeIndex === 2) {
-      // TEST: Level framing showing prototype & sensor sweep
-      targetCamZ = isMobile ? 6.0 : 6.8;
-      targetCamY = isMobile ? -0.1 : (0.45 + mouse.y * 0.35);
     } else {
-      // IMPACT: Pull back to reveal full interconnected ecosystem
-      targetCamZ = isMobile ? 6.6 : 7.6;
-      targetCamY = isMobile ? 0 : (0.4 + mouse.y * 0.35);
+      ideaGroup.visible = false;
     }
 
+    // -------------------------------------------------------------------------
+    // STAGE 02: BUILD (5.0s – 10.0s)
+    // -------------------------------------------------------------------------
+    if (t >= 4.5 && t < 10.5) {
+      buildGroup.visible = true;
+
+      // 5.0–6.0s: Workbench emerges & circular base appears
+      if (t < 6.0) {
+        const b1 = Math.max(0, (t - 5.0) / 1.0);
+        workbenchMat.opacity = 0.95;
+        workbenchTrack.material.opacity = 0.8;
+        circuitTraceMat.opacity = b1 * 0.6;
+        comp1Group.position.y = (1.0 - b1) * 0.8; // Base settles down
+        comp1Group.scale.setScalar(b1);
+        comp2Group.position.y = 2.0; // Keep upper parts high
+        comp3Group.position.y = 2.0;
+        comp2Group.scale.setScalar(0);
+        comp3Group.scale.setScalar(0);
+      }
+      // 6.0–7.5s: Three mechanical components descend and assemble
+      else if (t < 7.5) {
+        const b2 = (t - 6.0) / 1.5;
+        comp1Group.position.y = 0;
+        comp1Group.scale.setScalar(1);
+
+        // Lower joint / beam descends (6.0 - 6.75s)
+        const pComp2 = Math.min(1.0, b2 * 1.6);
+        comp2Group.position.y = (1.0 - pComp2) * 1.5 + 0.25;
+        comp2Group.scale.setScalar(Math.min(1, pComp2 * 1.2));
+
+        // Upper gripper descends & locks into joint (6.75 - 7.5s)
+        const pComp3 = Math.max(0, Math.min(1.0, (b2 - 0.4) * 1.8));
+        comp3Group.position.y = (1.0 - pComp3) * 1.6 + 1.15;
+        comp3Group.scale.setScalar(Math.min(1, pComp3 * 1.2));
+
+        // Pulse at connection moment
+        if (pComp3 > 0.85) {
+          toolPointLight.intensity = (pComp3 - 0.85) * 6.0;
+        }
+      }
+      // 7.5–8.5s: Prototype activates (Joint rotations, circuit illumination, orange signal pulse)
+      else if (t < 8.5) {
+        const b3 = (t - 7.5) / 1.0;
+        comp2Group.position.y = 0.25;
+        comp3Group.position.y = 1.15;
+        comp2Group.scale.setScalar(1);
+        comp3Group.scale.setScalar(1);
+        circuitTraceMat.opacity = 0.9;
+
+        // Controlled sequenced joint movements
+        robotRoot.rotation.y = Math.sin(b3 * Math.PI) * 0.45;
+        comp2Group.rotation.z = Math.sin(b3 * Math.PI) * 0.3 - 0.1;
+        comp3Group.rotation.z = Math.cos(b3 * Math.PI) * 0.35 + 0.15;
+        wristJoint.rotation.y = b3 * Math.PI * 1.5;
+
+        // Orange signal pulse travels from base (y = -1.0) to tool (y = 1.4)
+        signalPulse.material.opacity = 0.9;
+        signalPulse.position.y = -1.0 + b3 * 2.4;
+        signalPulse.position.x = 0.3 + Math.sin(b3 * Math.PI) * 0.1;
+        toolPointLight.intensity = 1.0 + Math.sin(b3 * Math.PI * 3) * 0.5;
+      }
+      // 8.5–10.0s: Transition to TEST (Robot returns to neutral, 3D measurement cage forms)
+      else {
+        const b4 = (t - 8.5) / 1.5;
+        signalPulse.material.opacity = 0;
+        // Return robot to neutral
+        robotRoot.rotation.y *= (1.0 - b4 * 0.2);
+        comp2Group.rotation.z *= (1.0 - b4 * 0.2);
+        comp3Group.rotation.z *= (1.0 - b4 * 0.2);
+
+        // 3D Measurement cage appears & aligns with robot
+        testGroup.visible = true;
+        cageMat.opacity = b4 * 0.5;
+        markerMat.opacity = b4 * 0.8;
+      }
+
+      // Orbiting light moving around base track
+      const trackAng = time * 2.5;
+      orbitLightMesh.position.x = Math.cos(trackAng) * 2.32;
+      orbitLightMesh.position.z = Math.sin(trackAng) * 2.32;
+    }
+
+    // -------------------------------------------------------------------------
+    // STAGE 03: TEST (10.0s – 15.0s)
+    // -------------------------------------------------------------------------
+    if (t >= 9.5 && t < 15.5) {
+      buildGroup.visible = true; // Robot prototype remains visible at center
+      testGroup.visible = true;
+
+      // 10.0–11.0s: Testing environment activates (Measurement cage expands, orange markers at joints)
+      if (t < 11.0) {
+        const s1 = (t - 10.0) / 1.0;
+        cageMat.opacity = 0.5 + s1 * 0.2;
+        markerMat.opacity = 0.8 + s1 * 0.2;
+        trajectoryMat.opacity = s1 * 0.4;
+      }
+      // 11.0–12.5s: Sensors evaluate movement (Controlled test movement, trajectory lines trace, markers pulse)
+      else if (t < 12.5) {
+        const s2 = (t - 11.0) / 1.5;
+        cageMat.opacity = 0.7;
+        trajectoryMat.opacity = 0.9;
+        sensorConeMat.opacity = 0.4;
+
+        // Controlled test motion
+        const movePhase = Math.sin(s2 * Math.PI * 2);
+        robotRoot.rotation.y = movePhase * 0.35;
+        comp2Group.rotation.z = -0.1 + movePhase * 0.22;
+        comp3Group.rotation.z = 0.2 - movePhase * 0.28;
+
+        // Sensor sweep rotation
+        sensorCone.rotation.y += 0.04;
+
+        // Markers pulse when reaching test extremes
+        const pulseVal = Math.abs(Math.sin(s2 * Math.PI * 4));
+        markerMat.opacity = 0.6 + pulseVal * 0.4;
+
+        // Show misaligned segment before correction
+        misalignedSegMat.opacity = 0.75;
+      }
+      // 12.5–13.5s: Refinement and improvement (Robot pauses, misaligned wireframe shifts, repeating movement smoothly)
+      else if (t < 13.5) {
+        const s3 = (t - 12.5) / 1.0;
+
+        // Small pause and micro-adjustment
+        robotRoot.rotation.y = Math.sin(s3 * Math.PI) * 0.08;
+        comp2Group.rotation.z = 0.05 * Math.sin(s3 * Math.PI);
+
+        // Misaligned wireframe segment shifts smoothly into alignment & turns green/cyan
+        misalignedSegment.position.y = (1.0 - s3) * 0.2;
+        misalignedSegment.rotation.z = (1.0 - s3) * 0.15;
+        if (s3 > 0.6) {
+          misalignedSegMat.color.setHex(COLOR_SUCCESS);
+          cageMat.color.setHex(COLOR_CYAN);
+        }
+      }
+      // 13.5–15.0s: Transition to IMPACT (Calibration cage lines expand outward into connected nodes)
+      else {
+        const s4 = (t - 13.5) / 1.5;
+        misalignedSegMat.opacity = (1.0 - s4);
+
+        // Cage expands outward
+        calibrationCage.scale.setScalar(1.0 + s4 * 1.5);
+        cageMat.opacity = (1.0 - s4) * 0.6;
+
+        // Reveal impact network
+        impactGroup.visible = true;
+        orbitalRingsGroup.children.forEach(c => { c.material.opacity = s4 * 0.55; });
+        cluster1.material.opacity = s4 * 0.7;
+        cluster2.material.opacity = s4 * 0.7;
+        cluster3.material.opacity = s4 * 0.7;
+        cluster4.material.opacity = s4 * 0.7;
+      }
+    } else if (t < 4.5 || t >= 15.5) {
+      testGroup.visible = false;
+    }
+
+    // -------------------------------------------------------------------------
+    // STAGE 04: IMPACT (15.0s – 20.0s)
+    // -------------------------------------------------------------------------
+    if (t >= 14.5) {
+      impactGroup.visible = true;
+
+      // 15.0–16.0s: Network expands, small nodes appear, robot becomes central seed
+      if (t < 16.0) {
+        const m1 = (t - 15.0) / 1.0;
+        buildGroup.visible = true;
+        buildGroup.scale.setScalar(1.0 - m1 * 0.35); // Robot scales down smoothly into central seed
+        workbenchMat.opacity = (1.0 - m1 * 0.6);
+
+        orbitalRingsGroup.children.forEach(c => { c.material.opacity = 0.55; });
+        cluster1.material.opacity = 0.7;
+        cluster2.material.opacity = 0.7;
+        cluster3.material.opacity = 0.7;
+        cluster4.material.opacity = 0.7;
+        finalGlobe.material.opacity = m1 * 0.3;
+      }
+      // 16.0–17.0s: Individual ideas connect into 4 distinct innovation discipline clusters
+      else if (t < 17.0) {
+        const m2 = (t - 16.0) / 1.0;
+        buildGroup.visible = (m2 < 0.8);
+        finalGlobe.material.opacity = 0.3 + m2 * 0.3;
+
+        // Animate distinct clusters
+        cluster1.rotation.y += 0.02; // Robotics
+        cluster2.rotation.x += 0.018; // AI
+        cluster3.rotation.z += 0.025; // Design
+        cluster4.rotation.y += 0.022; // Collaboration
+      }
+      // 17.0–18.5s: Ecosystem comes together (Complete digital globe, harmonious rotation, calm view)
+      else if (t < 18.5) {
+        finalGlobe.material.opacity = 0.65;
+        orbitalRingsGroup.children.forEach(c => { c.material.opacity = 0.6; });
+
+        finalGlobe.rotation.y += 0.006;
+        orbitalRingsGroup.rotation.y += 0.005;
+
+        cluster1.rotation.y += 0.015;
+        cluster2.rotation.x += 0.015;
+        cluster3.rotation.z += 0.015;
+        cluster4.rotation.y += 0.015;
+      }
+      // 18.5–20.0s: Return to the beginning (Outer lines fade, central point brightens, one orange particle separates & drifts forward)
+      else {
+        const m4 = (t - 18.5) / 1.5;
+
+        // Outer lines fade away
+        finalGlobe.material.opacity = (1.0 - m4) * 0.65;
+        orbitalRingsGroup.children.forEach(c => { c.material.opacity = (1.0 - m4) * 0.6; });
+        cluster1.material.opacity = (1.0 - m4) * 0.7;
+        cluster2.material.opacity = (1.0 - m4) * 0.7;
+        cluster3.material.opacity = (1.0 - m4) * 0.7;
+        cluster4.material.opacity = (1.0 - m4) * 0.7;
+
+        // Center brightens and prepares for the opening spark
+        ideaGroup.visible = true;
+        sparkMesh.scale.setScalar(0.2 + m4 * 0.4);
+        sparkMat.opacity = m4;
+        sparkHaloMat.opacity = m4 * 0.6;
+        sparkMesh.position.z = m4 * 0.8; // One particle drifts forward toward camera
+      }
+    } else {
+      impactGroup.visible = false;
+      if (t < 4.5) {
+        buildGroup.visible = false;
+        sparkMesh.position.z = 0;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // ADAPTIVE CAMERA CINEMATICS (Continuous Eased Motion Across All 4 Scenes)
+    // -------------------------------------------------------------------------
+    const isNarrow = window.innerWidth <= 768;
+
+    let targetCamX = isNarrow ? 0 : (1.6 + mouse.x * 0.5);
+    let targetCamY = isNarrow ? -0.1 : (0.4 + mouse.y * 0.35);
+    let targetCamZ = isNarrow ? 6.2 : 7.2;
+
+    // Stage 01 (0-5s): Camera slowly pushes toward glowing spark and globe
+    if (t < 5.0) {
+      const p = t / 5.0;
+      targetCamZ = isNarrow ? (6.6 - p * 0.4) : (7.6 - p * 0.6);
+      targetCamY = isNarrow ? (-0.1 - p * 0.1) : (0.35 - p * 0.15 + mouse.y * 0.35);
+    }
+    // Stage 02 (5-10s): Camera moves downward toward surface, settles into 3/4 view
+    else if (t < 10.0) {
+      const p = (t - 5.0) / 5.0;
+      targetCamZ = isNarrow ? (6.0 - p * 0.2) : (6.8 - p * 0.3);
+      targetCamY = isNarrow ? -0.2 : (0.2 + p * 0.15 + mouse.y * 0.35);
+      targetCamX = isNarrow ? 0 : (1.7 + mouse.x * 0.5);
+    }
+    // Stage 03 (10-15s): Level engineering inspection view, pushes closer to calibrate
+    else if (t < 15.0) {
+      const p = (t - 10.0) / 5.0;
+      targetCamZ = isNarrow ? (5.8 + p * 0.3) : (6.5 + p * 0.4);
+      targetCamY = isNarrow ? -0.1 : (0.4 + mouse.y * 0.35);
+    }
+    // Stage 04 (15-20s): Camera pulls back smoothly to reveal complete ecosystem, then approaches spark
+    else {
+      const p = (t - 15.0) / 5.0;
+      if (p < 0.7) {
+        // Pull back reveal (15 - 18.5s)
+        targetCamZ = isNarrow ? (6.2 + (p / 0.7) * 0.6) : (7.0 + (p / 0.7) * 0.7);
+        targetCamY = isNarrow ? 0 : (0.45 + mouse.y * 0.35);
+      } else {
+        // Return to opening composition (18.5 - 20.0s)
+        const pr = (p - 0.7) / 0.3;
+        targetCamZ = isNarrow ? (6.8 - pr * 0.2) : (7.7 - pr * 0.1);
+        targetCamY = isNarrow ? -0.1 : (0.35 + mouse.y * 0.35);
+      }
+    }
+
+    // Smooth Easing Lerp
     camera.position.x += (targetCamX - camera.position.x) * 0.05;
     camera.position.y += (targetCamY - camera.position.y) * 0.05;
     camera.position.z += (targetCamZ - camera.position.z) * 0.05;
 
-    const lookTargetX = isMobile ? 0 : 1.5;
-    const lookTargetY = isMobile ? -0.2 : 0.05;
-    camera.lookAt(lookTargetX, lookTargetY, 0);
+    const lookX = isNarrow ? 0 : 1.5;
+    const lookY = isNarrow ? -0.15 : 0.0;
+    camera.lookAt(lookX, lookY, 0);
 
     renderer.render(scene, camera);
   }
 
   // ===========================================================================
-  // RESPONSIVE VIEWPORT & RESIZE OBSERVER
+  // RESIZE & PERFORMANCE HANDLING
   // ===========================================================================
-  function handleResize() {
+  function onResize() {
     if (!heroSection || !renderer || !camera) return;
 
-    const isMobile = window.innerWidth <= 768;
-    const visualContainer = document.querySelector('.hero-visual');
+    const isSmall = window.innerWidth <= 768;
+    const visualBox = document.querySelector('.hero-visual');
 
-    // On mobile, size to the dedicated compact visual area
-    if (isMobile && visualContainer) {
-      currentWidth = visualContainer.clientWidth || window.innerWidth;
-      currentHeight = visualContainer.clientHeight || 290;
-      innovationRoot.position.set(0, -0.1, 0); // Perfectly centered
+    if (isSmall && visualBox) {
+      currentWidth = visualBox.clientWidth || window.innerWidth;
+      currentHeight = visualBox.clientHeight || 290;
+      innovationRoot.position.set(0, -0.1, 0);
       camera.fov = 48;
     } else {
       currentWidth = heroSection.clientWidth || window.innerWidth;
       currentHeight = heroSection.clientHeight || 700;
-      innovationRoot.position.set(1.5, -0.15, 0); // Positioned in right column
+      innovationRoot.position.set(1.5, -0.15, 0);
       camera.fov = 46;
     }
 
@@ -754,25 +1072,25 @@
     renderer.setSize(currentWidth, currentHeight);
   }
 
-  window.addEventListener('resize', handleResize, { passive: true });
+  window.addEventListener('resize', onResize, { passive: true });
   if (typeof ResizeObserver !== 'undefined') {
-    const ro = new ResizeObserver(() => handleResize());
-    ro.observe(heroSection);
+    const observer = new ResizeObserver(() => onResize());
+    observer.observe(heroSection);
   }
-  handleResize(); // Initial call
+  onResize();
 
-  // IntersectionObserver to pause loop off-screen
+  // IntersectionObserver to pause render loop off-screen
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         isVisible = entry.isIntersecting;
       });
     }, { threshold: 0.05 });
-    observer.observe(heroSection);
+    io.observe(heroSection);
   }
 
-  // Start animation loop
-  animFrameId = requestAnimationFrame(animate);
+  // Start continuous loop
+  animId = requestAnimationFrame(animate);
 
-  console.info('[Vadiva Hero] Rebuilt 4-Scene Story (IDEA -> BUILD -> TEST -> IMPACT) Loaded.');
+  console.info('[Vadiva Hero] Continuous 20s Evolving Story (IDEA -> BUILD -> TEST -> IMPACT) Loaded.');
 })();
