@@ -166,6 +166,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <!-- Custom status notice will go here -->
             </div>
 
+            <!-- Pay Now Option (Only visible if Payment Status is PENDING) -->
+            <button id="payNowStatusBtn" class="btn btn-primary" style="display: none; width: 100%; margin-bottom: 1rem; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 700; padding: 0.75rem 1.5rem;">
+              <span id="payNowStatusBtnText">Pay Now (Registration Fee)</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+            </button>
+
             <button id="searchAgainBtn" class="btn btn-secondary" style="width: 100%;">Search Another ID</button>
           </div>
         </div>
@@ -218,6 +227,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="main.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="razorpay-checkout.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const scriptUrl = 'https://script.google.com/macros/s/AKfycby2JL8sKCi_8W0-53VE8aovpU570RbSYldQkVwq2D1v9QDy_9TbJNlZ2JUy1LhufiBE/exec';
@@ -235,6 +246,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const resPaymentStatus = document.getElementById('resPaymentStatus');
       const statusMessage = document.getElementById('statusMessage');
       const searchAgainBtn = document.getElementById('searchAgainBtn');
+      const payNowStatusBtn = document.getElementById('payNowStatusBtn');
+      const payNowStatusBtnText = document.getElementById('payNowStatusBtnText');
+
+      let currentDetails = null;
       
       // Trigger search on Enter key
       regIdInput.addEventListener('keypress', (e) => {
@@ -256,6 +271,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         searchBox.style.display = 'none';
         statusLoading.style.display = 'block';
         statusResult.style.display = 'none';
+        if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+        currentDetails = null;
         
         // JSONP call to bypass CORS redirects
         const callbackName = 'jsonp_' + Math.floor(100000 + Math.random() * 900000);
@@ -271,6 +288,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           statusLoading.style.display = 'none';
           
           if (result && result.status === 'success') {
+            currentDetails = result;
             displayDetails(result);
           } else {
             alert(result.message || 'Registration ID not found. Please try again.');
@@ -296,22 +314,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         resTeamName.innerText = data.teamName || '-';
         resDivision.innerText = data.division || '-';
         
-        let displayStatus = data.paymentStatus;
+        let displayStatus = (data.paymentStatus || 'Pending').trim();
+        const isPaid = displayStatus.toLowerCase() === 'completed' || 
+                       displayStatus.toLowerCase() === 'registered' || 
+                       displayStatus.toLowerCase().startsWith('paid');
+        const isUnderVerification = displayStatus.toLowerCase() === 'under verification';
+        const isPending = !isPaid && !isUnderVerification;
+
         if (displayStatus === 'Completed') {
           displayStatus = 'Registered';
         }
         resPaymentStatus.innerText = displayStatus;
         
         // Custom message and styles based on status
-        if (displayStatus === 'Registered') {
+        if (isPaid) {
           resPaymentStatus.style.color = '#047857';
+          resPaymentStatus.innerText = 'Registered / Paid';
           statusMessage.style.border = '1px solid rgba(16, 185, 129, 0.2)';
           statusMessage.style.background = 'rgba(16, 185, 129, 0.05)';
           statusMessage.style.color = '#047857';
           statusMessage.innerHTML = `
             <strong>Registration Complete!</strong> Your payment has been verified, and your team is officially registered for Protospark '26 in Kuala Lumpur, Malaysia. We look forward to seeing your innovation!
           `;
-        } else if (displayStatus === 'Under Verification') {
+          if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+        } else if (isUnderVerification) {
           resPaymentStatus.style.color = '#d97706';
           statusMessage.style.border = '1px solid rgba(217, 119, 6, 0.2)';
           statusMessage.style.background = 'rgba(217, 119, 6, 0.05)';
@@ -319,23 +345,155 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           statusMessage.innerHTML = `
             <strong>Under Verification:</strong> Your payment screenshot has been uploaded. Our staff is currently verifying the transaction. Once approved, your status will update to "Registered".
           `;
+          if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
         } else {
           resPaymentStatus.style.color = 'var(--color-primary-dark)';
           statusMessage.style.border = '1px dashed rgba(243, 126, 75, 0.3)';
           statusMessage.style.background = 'rgba(243, 126, 75, 0.04)';
           statusMessage.style.color = 'var(--color-primary-dark)';
           statusMessage.innerHTML = `
-            <strong>Payment Pending:</strong> Your details are received, but payment is pending. Please coordinate with your coordinator to complete the Rs. 2,000 fee payment.
+            <strong>Payment Pending:</strong> Your details are received, but payment is pending. Please click "Pay Now" below to complete your registration fee payment.
           `;
+          
+          // Pay Now is ONLY visible if payment status is PENDING!
+          if (payNowStatusBtn) {
+            payNowStatusBtn.style.display = 'flex';
+            if (payNowStatusBtnText) {
+              payNowStatusBtnText.innerText = 'Pay Now (Registration Fee)';
+            }
+          }
         }
         
         statusResult.style.display = 'block';
+      }
+
+      // Helper function to update payment in Google Apps Script database
+      function updatePaymentInDatabase(regId, pDetails, formattedAmt) {
+        const pId = (pDetails && pDetails.paymentId) ? pDetails.paymentId : '';
+        const oId = (pDetails && pDetails.orderId) ? pDetails.orderId : '';
+
+        try {
+          fetch(scriptUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'confirmRazorpayPayment',
+              registrationId: regId,
+              paymentId: pId,
+              orderId: oId,
+              amount: formattedAmt
+            })
+          }).catch(err => console.warn('POST updatePayment error:', err));
+        } catch(e) {}
+
+        try {
+          const jsonpPayCb = 'jsonp_pay_' + Math.floor(100000 + Math.random() * 900000);
+          const payScript = document.createElement('script');
+          payScript.src = scriptUrl + 
+            '?action=confirmRazorpayPayment' +
+            '&registrationId=' + encodeURIComponent(regId) +
+            '&paymentId=' + encodeURIComponent(pId) +
+            '&orderId=' + encodeURIComponent(oId) +
+            '&amount=' + encodeURIComponent(formattedAmt) +
+            '&callback=' + jsonpPayCb;
+          window[jsonpPayCb] = function(resp) {
+            try { delete window[jsonpPayCb]; } catch(e) {}
+            if (payScript.parentNode) payScript.parentNode.removeChild(payScript);
+          };
+          payScript.onerror = function() {
+            try { delete window[jsonpPayCb]; } catch(e) {}
+            if (payScript.parentNode) payScript.parentNode.removeChild(payScript);
+          };
+          document.body.appendChild(payScript);
+        } catch(e) {}
+      }
+
+      // Pay Now button click listener
+      if (payNowStatusBtn) {
+        payNowStatusBtn.addEventListener('click', async function() {
+          if (!currentDetails || !currentDetails.registrationId) {
+            alert('Registration details not found. Please search again.');
+            return;
+          }
+
+          payNowStatusBtn.setAttribute('disabled', 'disabled');
+          const originalBtnHtml = payNowStatusBtn.innerHTML;
+          if (payNowStatusBtnText) {
+            payNowStatusBtnText.innerText = 'Initiating Checkout...';
+          }
+
+          try {
+            let isIndia = true;
+            try {
+              if (currentDetails.countryOfRegistration && currentDetails.countryOfRegistration.toLowerCase().includes('india')) {
+                isIndia = true;
+              } else if (typeof window.detectUserGeoLocation === 'function') {
+                const countryCode = await window.detectUserGeoLocation();
+                isIndia = (countryCode === 'IN');
+              } else {
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                isIndia = tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta';
+              }
+            } catch (geoErr) {
+              isIndia = true;
+            }
+
+            const totalINR = 1920;
+            const totalUSD = 20;
+            const amountText = isIndia ? '₹1,920 INR' : '$20.00 USD';
+            const currency = isIndia ? 'INR' : 'USD';
+
+            if (typeof window.initiateRazorpayCheckout !== 'function') {
+              alert('Payment gateway is loading. Please wait a moment and try again.');
+              payNowStatusBtn.removeAttribute('disabled');
+              payNowStatusBtn.innerHTML = originalBtnHtml;
+              return;
+            }
+
+            window.initiateRazorpayCheckout({
+              currency: currency,
+              amountINR: isIndia ? totalINR : undefined,
+              amountUSD: isIndia ? undefined : totalUSD,
+              registrationId: currentDetails.registrationId,
+              businessName: 'Vadiva / ProtoSpark 2026',
+              description: `Registration Fee (${amountText})`,
+              userName: currentDetails.teamLeaderName || currentDetails.coordinatorName || '',
+              userEmail: currentDetails.coordinatorEmail || '',
+              userContact: currentDetails.coordinatorMobile || '',
+              triggerButton: payNowStatusBtn,
+              onDismiss: function() {
+                payNowStatusBtn.removeAttribute('disabled');
+                payNowStatusBtn.innerHTML = originalBtnHtml;
+              },
+              onSuccess: function(paymentDetails) {
+                const finalAmount = (paymentDetails && paymentDetails.amount) ? paymentDetails.amount : amountText;
+                const newStatus = `Paid (${finalAmount})`;
+
+                currentDetails.paymentStatus = newStatus;
+                displayDetails(currentDetails);
+
+                // Update database
+                updatePaymentInDatabase(currentDetails.registrationId, paymentDetails, finalAmount);
+              },
+              onFailure: function(err) {
+                payNowStatusBtn.removeAttribute('disabled');
+                payNowStatusBtn.innerHTML = originalBtnHtml;
+              }
+            });
+          } catch(payErr) {
+            console.error('Checkout error:', payErr);
+            alert('Failed to initiate payment. Please try again.');
+            payNowStatusBtn.removeAttribute('disabled');
+            payNowStatusBtn.innerHTML = originalBtnHtml;
+          }
+        });
       }
       
       function resetView() {
         searchBox.style.display = 'block';
         statusLoading.style.display = 'none';
         statusResult.style.display = 'none';
+        if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
         regIdInput.focus();
       }
       

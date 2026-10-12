@@ -407,7 +407,7 @@ function doGet(e) {
       duplicateType: dupCheck.duplicateType || "",
       message: dupCheck.message || ""
     };
-  } else if (action === "checkStatus") {
+  } else if (action === "checkStatus" || action === "getRegistrationStatus") {
     var regId = e.parameter.registrationId;
     if (regId) {
       // Find row across all sheets so any registration ID works
@@ -457,6 +457,47 @@ function doGet(e) {
       result = {
         status: "error",
         message: "Registration ID not found. Please verify your ID."
+      };
+    }
+  } else if (action === "confirmRazorpayPayment" || action === "updatePayment") {
+    var regId = e.parameter.registrationId;
+    var paymentId = e.parameter.paymentId || "";
+    var orderId = e.parameter.orderId || "";
+    var amountText = e.parameter.amount || (e.parameter.currency === "USD" ? "$20.00 USD" : "₹1,920 INR");
+    var paymentStatus = (action === "confirmRazorpayPayment" || paymentId) ? "Paid (" + amountText + ")" : "Under Verification";
+    var paymentInfo = paymentId ? ("Razorpay Payment ID: " + paymentId + " | Order ID: " + orderId + " | Amount: " + amountText + " | Date: " + new Date().toLocaleString()) : "";
+    
+    var found = null;
+    if (regId) {
+      found = findRowById(ss, regId);
+    }
+    if (!found && e.parameter.coordinatorEmail && e.parameter.schoolName && e.parameter.teamName) {
+      found = findRowByDetails(ss, e.parameter.coordinatorEmail, e.parameter.schoolName, e.parameter.teamName);
+    }
+    
+    if (found) {
+      var targetSheet = found.sheet;
+      var rowIndex = found.rowIndex;
+      if (paymentInfo) {
+        targetSheet.getRange(rowIndex, 28).setValue(paymentInfo);
+      }
+      targetSheet.getRange(rowIndex, 29).setValue(paymentStatus);
+      
+      try {
+        checkAndTriggerMetaEventForNewRow(targetSheet, rowIndex);
+      } catch (metaErr) {
+        Logger.log("Meta API trigger failed for payment update: " + metaErr.toString());
+      }
+      
+      result = {
+        status: "success",
+        message: "Payment status updated to " + paymentStatus,
+        paymentStatus: paymentStatus
+      };
+    } else {
+      result = {
+        status: "error",
+        message: "Registration details or ID not found."
       };
     }
   } else {
