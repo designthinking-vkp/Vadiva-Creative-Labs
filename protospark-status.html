@@ -167,13 +167,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <!-- Pay Now Option (Only visible if Payment Status is PENDING) -->
-            <button id="payNowStatusBtn" class="btn btn-primary" style="display: none; width: 100%; margin-bottom: 1rem; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 700; padding: 0.75rem 1.5rem;">
+            <button id="payNowStatusBtn" class="btn btn-primary" style="display: none; width: 100%; margin-bottom: 0.65rem; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; font-weight: 700; padding: 0.75rem 1.5rem;">
               <span id="payNowStatusBtnText">Pay Now (Registration Fee)</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="5" width="20" height="14" rx="2"></rect>
                 <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
             </button>
+
+            <!-- International payment help notice for cardholders -->
+            <div id="intlCardHelpNotice" style="display: none; margin-bottom: 1rem; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.8rem; color: #1e3a8a; line-height: 1.45; text-align: left;">
+              <strong style="color: #1e40af;">💡 Note for International Cards (e.g. Malaysia / Maybank / CIMB):</strong>
+              Please ensure <em>Overseas Card Usage</em> and online transactions are activated in your banking app (e.g. Maybank2u / MAE), or use a Credit Card / Wise.
+            </div>
 
             <button id="searchAgainBtn" class="btn btn-secondary" style="width: 100%;">Search Another ID</button>
           </div>
@@ -358,8 +364,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           // Pay Now is ONLY visible if payment status is PENDING!
           if (payNowStatusBtn) {
             payNowStatusBtn.style.display = 'flex';
+            const isOverseas = result.countryOfRegistration && !result.countryOfRegistration.toLowerCase().includes('india');
             if (payNowStatusBtnText) {
-              payNowStatusBtnText.innerText = 'Pay Now (Registration Fee)';
+              payNowStatusBtnText.innerText = isOverseas ? 'Pay Now ($20.00 USD Registration Fee)' : 'Pay Now (Registration Fee)';
+            }
+            const intlNotice = document.getElementById('intlCardHelpNotice');
+            if (intlNotice) {
+              intlNotice.style.display = isOverseas ? 'block' : 'none';
             }
           }
         }
@@ -427,6 +438,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             try {
               if (currentDetails.countryOfRegistration && currentDetails.countryOfRegistration.toLowerCase().includes('india')) {
                 isIndia = true;
+              } else if (currentDetails.countryOfRegistration && currentDetails.countryOfRegistration.trim() !== '') {
+                // Explicitly overseas country
+                isIndia = false;
               } else if (typeof window.detectUserGeoLocation === 'function') {
                 const countryCode = await window.detectUserGeoLocation();
                 isIndia = (countryCode === 'IN');
@@ -452,6 +466,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             window.initiateRazorpayCheckout({
               currency: currency,
+              countryCode: isIndia ? 'IN' : 'MY',
               amountINR: isIndia ? totalINR : undefined,
               amountUSD: isIndia ? undefined : totalUSD,
               registrationId: currentDetails.registrationId,

@@ -535,6 +535,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </svg>
         </button>
 
+        <!-- International payment help notice for cardholders -->
+        <div id="intlCardHelpNotice" style="display: none; margin-top: 0.65rem; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.8rem; color: #1e3a8a; line-height: 1.45; text-align: left;">
+          <strong style="color: #1e40af;">💡 Note for International Cards (e.g. Malaysia / Maybank / CIMB):</strong>
+          Please ensure <em>Overseas Card Usage</em> and online transactions are activated in your banking app (e.g. Maybank2u / MAE), or use a Credit Card / Wise.
+        </div>
+
         <!-- Payment Success / Status Notice -->
         <div id="paymentStatusNotice" style="display: none; margin-top: 1rem; background: #e8f5e9; border: 1px solid rgba(46, 125, 50, 0.3); color: #1b5e20; padding: 0.75rem 1rem; border-radius: var(--border-radius-sm); font-size: 0.9rem; font-weight: 600; text-align: center; align-items: center; justify-content: center; gap: 8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; color: #2e7d32;">
@@ -685,6 +691,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           resultCard.style.display = 'none';
           errorMsg.style.display = 'none';
           if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+          const intlNoticeInit = document.getElementById('intlCardHelpNotice');
+          if (intlNoticeInit) intlNoticeInit.style.display = 'none';
           if (paymentStatusNotice) paymentStatusNotice.style.display = 'none';
           currentDetails = null;
           
@@ -723,6 +731,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               const isUnderVerification = rawStatus.toLowerCase() === 'under verification';
               const isPending = !isPaid && !isUnderVerification;
               
+              const intlNotice = document.getElementById('intlCardHelpNotice');
+
               // Style badge & toggle Pay Now button based on status
               if (isPaid) {
                 badge.style.background = '#e8f5e9';
@@ -730,12 +740,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 badge.style.borderColor = 'rgba(46, 125, 50, 0.2)';
                 badge.innerText = 'Registered / Completed';
                 if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+                if (intlNotice) intlNotice.style.display = 'none';
               } else if (isUnderVerification) {
                 badge.style.background = '#fff3e0';
                 badge.style.color = '#ef6c00';
                 badge.style.borderColor = 'rgba(239, 108, 0, 0.2)';
                 badge.innerText = 'Under Verification';
                 if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+                if (intlNotice) intlNotice.style.display = 'none';
               } else {
                 badge.style.background = '#ffebee';
                 badge.style.color = '#c62828';
@@ -745,8 +757,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 // The "Pay Now" Button is ONLY visible if Payment Status is PENDING!
                 if (payNowStatusBtn) {
                   payNowStatusBtn.style.display = 'flex';
+                  const isOverseas = result.countryOfRegistration && !result.countryOfRegistration.toLowerCase().includes('india');
                   if (payNowStatusBtnText) {
-                    payNowStatusBtnText.innerText = 'Pay Now (Registration Fee)';
+                    payNowStatusBtnText.innerText = isOverseas ? 'Pay Now ($20.00 USD Registration Fee)' : 'Pay Now (Registration Fee)';
+                  }
+                  if (intlNotice) {
+                    intlNotice.style.display = isOverseas ? 'block' : 'none';
                   }
                 }
               }
@@ -756,6 +772,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               errorText.innerText = result.message || 'Registration ID not found.';
               errorMsg.style.display = 'flex';
               if (payNowStatusBtn) payNowStatusBtn.style.display = 'none';
+              const intlNotice = document.getElementById('intlCardHelpNotice');
+              if (intlNotice) intlNotice.style.display = 'none';
             }
             delete window[callbackName];
           };
@@ -840,6 +858,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             try {
               if (currentDetails.countryOfRegistration && currentDetails.countryOfRegistration.toLowerCase().includes('india')) {
                 isIndia = true;
+              } else if (currentDetails.countryOfRegistration && currentDetails.countryOfRegistration.trim() !== '') {
+                // Overseas country explicitly registered (e.g., Malaysia)
+                isIndia = false;
               } else if (typeof window.detectUserGeoLocation === 'function') {
                 const countryCode = await window.detectUserGeoLocation();
                 isIndia = (countryCode === 'IN');
@@ -865,6 +886,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             window.initiateRazorpayCheckout({
               currency: currency,
+              countryCode: isIndia ? 'IN' : 'MY',
               amountINR: isIndia ? totalINR : undefined,
               amountUSD: isIndia ? undefined : totalUSD,
               registrationId: currentDetails.registrationId,

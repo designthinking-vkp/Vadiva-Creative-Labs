@@ -1339,7 +1339,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // Detect user location dynamically (India vs International)
         let isIndia = true;
         try {
-          if (typeof window.detectUserGeoLocation === 'function') {
+          if (regData && regData.countryOfRegistration) {
+            isIndia = regData.countryOfRegistration.toLowerCase().includes('india');
+          } else if (typeof window.detectUserGeoLocation === 'function') {
             const countryCode = await window.detectUserGeoLocation();
             isIndia = countryCode === 'IN';
           } else {
@@ -1365,9 +1367,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           feeNote.innerText = `Registration Fee: ${amountText} (Per team or individual)`;
         }
         if (feeMethodsNote) {
-          feeMethodsNote.innerText = isIndia 
+          feeMethodsNote.innerHTML = isIndia 
             ? 'Pay via UPI (Google Pay, PhonePe, Paytm), Netbanking, Cards, or Wallets.' 
-            : 'Pay via Credit/Debit Card or International Payment Options.';
+            : 'Pay via Credit/Debit Card.<br><span style="font-size: 0.8rem; color: #1e40af; display: inline-block; margin-top: 4px;">💡 Malaysian / international cards: Ensure <em>Overseas Card Usage</em> is enabled in your banking app (e.g. Maybank2u / MAE) or use a Credit Card / Wise.</span>';
         }
         if (feeBtnSpan) {
           feeBtnSpan.innerText = `Pay ${amountText} via Razorpay`;
@@ -1378,6 +1380,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (typeof window.initiateRazorpayCheckout === 'function') {
               window.initiateRazorpayCheckout({
                 currency: currency,
+                countryCode: isIndia ? 'IN' : 'MY',
                 amountINR: isIndia ? totalINR : undefined,
                 amountUSD: isIndia ? undefined : totalUSD,
                 registrationId: regId || '',

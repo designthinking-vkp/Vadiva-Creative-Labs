@@ -272,11 +272,11 @@
       const rzpInstance = new window.Razorpay(checkoutOptions);
 
       rzpInstance.on('payment.failed', function (response) {
-        alert(`Payment Failed: ${response.error.description} (Reason: ${response.error.reason})`);
         if (triggerBtn) {
           triggerBtn.innerText = originalText;
           triggerBtn.disabled = false;
         }
+        showPaymentFailureModal(response.error, options);
         if (typeof options.onFailure === 'function') {
           options.onFailure(response.error);
         }
@@ -285,12 +285,162 @@
       rzpInstance.open();
 
     } catch (err) {
-      alert(`Error initiating payment: ${err.message}`);
       if (triggerBtn) {
         triggerBtn.innerText = originalText;
         triggerBtn.disabled = false;
       }
+      showPaymentFailureModal({
+        description: err.message || 'Error initiating payment gateway.',
+        reason: 'gateway_error'
+      }, options);
+      if (typeof options.onFailure === 'function') {
+        options.onFailure(err);
+      }
     }
+  }
+
+  /**
+   * Displays friendly modal with bank decline explanations, Maybank / international card instructions & WhatsApp support
+   */
+  function showPaymentFailureModal(err, options = {}) {
+    let modal = document.getElementById('razorpay-failure-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'razorpay-failure-modal';
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+        z-index: 99999; display: flex; align-items: center; justify-content: center;
+        padding: 1.25rem; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif;
+      `;
+      document.body.appendChild(modal);
+    }
+
+    const regId = options.registrationId || '';
+    const errDesc = (err && (err.description || err.message)) ? String(err.description || err.message) : '';
+    const errReason = (err && err.reason) ? String(err.reason) : '';
+    const errSource = (err && err.source) ? String(err.source) : '';
+    const isBankDecline = errReason === 'declined_by_bank' || 
+                          errSource === 'issuer_bank' || 
+                          errDesc.toLowerCase().includes('declined') ||
+                          errDesc.toLowerCase().includes('bank');
+
+    const whatsappMsg = encodeURIComponent(
+      `Hello Vadiva Team, I am trying to pay the Protospark registration fee for Registration ID: ${regId || 'N/A'}. My bank card declined the payment (${errReason || errDesc || 'declined_by_bank'}). Kindly assist me with the payment.`
+    );
+    const whatsappUrl = `https://wa.me/917200981134?text=${whatsappMsg}`;
+
+    modal.innerHTML = `
+      <div style="
+        background: #ffffff; border-radius: 16px; max-width: 540px; width: 100%;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35); overflow: hidden; border: 2px solid #ef4444;
+        max-height: 90vh; display: flex; flex-direction: column;
+      ">
+        <div style="background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%); padding: 1.25rem 1.5rem; border-bottom: 1px solid #fecaca; display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: #ef4444; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg style="width: 24px; height: 24px; fill: none; stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #b91c1c;">Payment Issue</div>
+            <h3 style="margin: 0.15rem 0 0 0; font-size: 1.2rem; font-weight: 800; color: #991b1b;">
+              ${isBankDecline ? 'Declined by Your Issuing Bank' : 'Payment Not Completed'}
+            </h3>
+          </div>
+          <button id="closeFailureModalTopBtn" style="background: transparent; border: none; font-size: 1.5rem; color: #991b1b; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+
+        <div style="padding: 1.25rem 1.5rem; overflow-y: auto; color: #334155; font-size: 0.9rem; line-height: 1.5;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 0.2rem;">Bank Response</div>
+            <div style="color: #0f172a; font-weight: 600; font-size: 0.88rem;">${errDesc || 'Your payment was declined by the card issuing bank.'}</div>
+            ${errReason ? `<div style="font-size: 0.72rem; color: #64748b; margin-top: 0.25rem;">Reason code: <code style="background: #e2e8f0; padding: 2px 5px; border-radius: 4px;">${errReason}</code></div>` : ''}
+          </div>
+
+          ${isBankDecline ? `
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin: 0 0 0.35rem 0; color: #0f172a; font-size: 0.92rem; font-weight: 700;">Why did this happen?</h4>
+              <p style="margin: 0 0 0.75rem 0; color: #475569; font-size: 0.86rem;">
+                Under Bank Negara Malaysia and international security rules, <strong>Malaysian debit cards (such as Maybank, CIMB, Public Bank)</strong> have overseas & foreign currency transactions <strong>blocked by default</strong>.
+              </p>
+              
+              <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.85rem; margin-bottom: 0.75rem;">
+                <div style="font-weight: 800; color: #1e40af; margin-bottom: 0.4rem; font-size: 0.88rem;">
+                  💡 How to resolve in 1 minute:
+                </div>
+                <ol style="margin: 0; padding-left: 1.15rem; color: #1e3a8a; font-size: 0.83rem; line-height: 1.55;">
+                  <li><strong>Activate Overseas Usage:</strong> In your <strong>Maybank2u / MAE app</strong>, go to <em>Settings &gt; Cards &gt; Manage Debit Cards &gt; Overseas Card Usage</em>, and turn it <strong>ON / Activate</strong>.</li>
+                  <li><strong>Check Daily Limit:</strong> In <em>Purchase Limit / E-Commerce</em>, ensure your daily limit is at least RM 150 (approx $20 USD).</li>
+                  <li><strong>Or Use a Credit Card / Wise:</strong> Credit cards, <strong>Wise</strong>, and <strong>BigPay</strong> cards usually do not block cross-border payments.</li>
+                </ol>
+              </div>
+            </div>
+          ` : `
+            <p style="margin: 0 0 1rem 0; color: #475569; font-size: 0.88rem;">
+              Please check your card balance, verify your details, or try an alternative card/payment method.
+            </p>
+          `}
+
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1rem;">
+            <button id="retryPaymentFailureBtn" style="
+              width: 100%; background: #2563eb; color: #ffffff; border: none;
+              padding: 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.92rem;
+              cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            ">
+              <svg style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              Retry Payment (After Enabling Card)
+            </button>
+
+            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="
+              width: 100%; background: #10b981; color: #ffffff; text-decoration: none;
+              padding: 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.92rem;
+              display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+              box-sizing: border-box; text-align: center;
+            ">
+              <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.203c.044.072.044.419-.1.824z"/>
+              </svg>
+              WhatsApp Support (+91 72009 81134)
+            </a>
+
+            <button id="closeFailureModalBottomBtn" style="
+              width: 100%; background: transparent; border: 1px solid #cbd5e1; color: #64748b;
+              padding: 0.65rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem;
+              cursor: pointer;
+            ">
+              Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const close = () => {
+      modal.style.display = 'none';
+    };
+
+    const topCloseBtn = document.getElementById('closeFailureModalTopBtn');
+    const bottomCloseBtn = document.getElementById('closeFailureModalBottomBtn');
+    const retryBtn = document.getElementById('retryPaymentFailureBtn');
+
+    if (topCloseBtn) topCloseBtn.onclick = close;
+    if (bottomCloseBtn) bottomCloseBtn.onclick = close;
+    if (retryBtn) {
+      retryBtn.onclick = () => {
+        close();
+        if (typeof window.initiateRazorpayCheckout === 'function') {
+          window.initiateRazorpayCheckout(options);
+        }
+      };
+    }
+
+    modal.style.display = 'flex';
   }
 
   /**
@@ -304,7 +454,7 @@
         orderId: details.orderId,
         registrationId: details.registrationId,
         amount: details.amount,
-        status: 'Paid ($2 USD)'
+        status: `Paid (${details.amount || '$20.00 USD'})`
       };
 
       fetch(APPS_SCRIPT_URL, {
