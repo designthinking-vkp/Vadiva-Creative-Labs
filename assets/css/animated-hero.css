@@ -1,25 +1,25 @@
 /* ==========================================================================
-   VADIVA CREATIVE LABS - CINEMATIC ANIMATED HERO EXPERIENCE
-   Four Connected Scenes:
-   Scene 1: The Spark (0s - 4s)
-   Scene 2: The Makers (4s - 9s)
-   Scene 3: The Breakthrough (9s - 14s)
-   Scene 4: The Future (14s - 19s)
-   Seamless Looping (19s -> 0s)
+   VADIVA CREATIVE LABS - CINEMATIC ANIMATED HERO (RESPONSIVE REDESIGN)
+   Story Architecture: IDEA -> BUILD -> TEST -> IMPACT
+   Desktop: Stable two-column grid (Left: Content, Right: 3D Innovation Lab)
+   Mobile: Intentional linear stack (1. Headline -> 2. Paragraph -> 3. CTAs -> 4. Compact 3D Story Visual)
    ========================================================================== */
 
-/* Hero Container Override for Cinematic Visuals */
+/* Hero Container Override */
 .hero {
   position: relative !important;
-  min-height: 640px;
-  max-height: 820px;
-  height: clamp(620px, 78vh, 760px);
+  width: 100% !important;
+  min-height: 620px;
+  max-height: 800px;
+  height: clamp(620px, 76vh, 740px);
   padding: 0 !important;
+  margin: 0 !important;
   display: flex !important;
   align-items: center !important;
   background: radial-gradient(circle at 75% 50%, #0d1b3e 0%, #080d22 55%, #050816 100%) !important;
   overflow: hidden !important;
-  border-bottom: 1px solid rgba(243, 126, 75, 0.12);
+  border-bottom: 1px solid rgba(243, 126, 75, 0.14);
+  box-sizing: border-box !important;
 }
 
 /* Background Atmosphere Gradients */
@@ -31,10 +31,10 @@
   background:
     radial-gradient(ellipse 55% 45% at 75% 50%, rgba(12, 184, 192, 0.12) 0%, transparent 70%),
     radial-gradient(ellipse 45% 40% at 85% 65%, rgba(243, 126, 75, 0.12) 0%, transparent 65%),
-    linear-gradient(90deg, rgba(5, 8, 22, 0.94) 0%, rgba(5, 8, 22, 0.78) 42%, rgba(5, 8, 22, 0.15) 75%, transparent 100%);
+    linear-gradient(90deg, rgba(5, 8, 22, 0.95) 0%, rgba(5, 8, 22, 0.82) 42%, rgba(5, 8, 22, 0.2) 75%, transparent 100%);
 }
 
-/* Fallback Grid & Backdrop Layer */
+/* Fallback Backdrop Layer */
 .hero-fallback-backdrop {
   position: absolute;
   inset: 0;
@@ -59,37 +59,39 @@
   pointer-events: auto;
   cursor: grab;
   outline: none;
+  display: block;
 }
 
 #vadiva-hero-canvas:active {
   cursor: grabbing;
 }
 
-/* Cinematic Vignette & Left-Side Text Protector */
+/* Contrast Vignette & Text Readability Shield */
 .hero-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 3;
   background:
-    linear-gradient(to right, rgba(5, 8, 22, 0.95) 0%, rgba(5, 8, 22, 0.8) 32%, rgba(5, 8, 22, 0.2) 65%, rgba(5, 8, 22, 0.35) 100%),
-    linear-gradient(to top, rgba(5, 8, 22, 0.75) 0%, transparent 22%),
-    linear-gradient(to bottom, rgba(5, 8, 22, 0.6) 0%, transparent 18%);
+    linear-gradient(to right, rgba(5, 8, 22, 0.96) 0%, rgba(5, 8, 22, 0.85) 35%, rgba(5, 8, 22, 0.22) 65%, rgba(5, 8, 22, 0.35) 100%),
+    linear-gradient(to top, rgba(5, 8, 22, 0.75) 0%, transparent 20%),
+    linear-gradient(to bottom, rgba(5, 8, 22, 0.6) 0%, transparent 16%);
 }
 
-/* Grid Layout over Canvas */
+/* Desktop Grid Layout: Max-Width Centered & Structured Columns */
 .hero-grid {
   position: relative !important;
   z-index: 4 !important;
   width: 100% !important;
+  max-width: var(--max-width, 1440px) !important;
+  margin: 0 auto !important;
   height: 100% !important;
   display: grid !important;
-  grid-template-columns: 46% 54% !important;
+  grid-template-columns: minmax(0, 48%) minmax(0, 52%) !important;
   align-items: center !important;
-  gap: 2rem !important;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  box-sizing: border-box;
+  gap: clamp(1.5rem, 3vw, 3rem) !important;
+  padding: 2.5rem 2rem !important;
+  box-sizing: border-box !important;
 }
 
 /* Left Content Safe Zone */
@@ -139,9 +141,9 @@
 
 /* Headline */
 .hero-content h1 {
-  font-size: clamp(2.35rem, 3.8vw, 3.6rem) !important;
+  font-size: clamp(2.35rem, 3.6vw, 3.5rem) !important;
   font-weight: 800 !important;
-  line-height: 1.14 !important;
+  line-height: 1.15 !important;
   margin-bottom: 1.35rem !important;
   color: #ffffff !important;
   letter-spacing: -0.025em !important;
@@ -162,11 +164,11 @@
 
 /* Supporting Paragraph */
 .hero-content p {
-  font-size: clamp(1rem, 1.12vw, 1.15rem) !important;
+  font-size: clamp(1rem, 1.1vw, 1.12rem) !important;
   line-height: 1.65 !important;
-  color: rgba(226, 232, 240, 0.92) !important;
+  color: rgba(226, 232, 240, 0.94) !important;
   margin-bottom: 2rem !important;
-  max-width: 540px !important;
+  max-width: 560px !important;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
@@ -174,7 +176,7 @@
 .hero-content .cta-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-top: 1.8rem;
   flex-wrap: wrap;
 }
@@ -188,6 +190,10 @@
   padding: 0.85rem 1.75rem;
   border-radius: 10px;
   transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .hero-content .cta-group .btn-primary:hover {
@@ -206,6 +212,10 @@
   padding: 0.85rem 1.75rem;
   border-radius: 10px;
   transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .hero-content .cta-group .btn-secondary:hover {
@@ -215,93 +225,107 @@
   color: #ffffff;
 }
 
-/* Right Visual Area - Interactive Overlay HUD */
+/* Right Visual Area */
 .hero-visual {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 440px;
+  min-height: 420px;
   display: flex !important;
   align-items: center;
   justify-content: center;
-  pointer-events: none; /* Let canvas capture interaction */
+  pointer-events: none;
 }
 
-/* Floating HUD Cards */
+/* Live Narrative Stage Indicator Pill (Clean, Meaningful, Top-Right) */
+.hud-stage-pill {
+  position: absolute;
+  top: 14%;
+  right: 5%;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(13, 27, 62, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  padding: 7px 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 6;
+  transition: all 0.3s ease;
+}
+
+.hud-stage-pill:hover {
+  border-color: rgba(243, 126, 75, 0.6);
+  transform: translateY(-2px);
+}
+
+.stage-tag {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #f37e4b;
+  text-transform: uppercase;
+}
+
+.stage-separator {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.75rem;
+}
+
+.stage-title {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.stage-desc {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+/* Robot Telemetry Badge (Bottom Right of visual) */
 .hud-telemetry {
   position: absolute;
   pointer-events: auto;
-  background: rgba(13, 27, 62, 0.72);
-  border: 1px solid rgba(12, 184, 192, 0.32);
+  background: rgba(13, 27, 62, 0.78);
+  border: 1px solid rgba(243, 126, 75, 0.35);
   border-radius: 12px;
-  padding: 10px 16px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  padding: 8px 14px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
   z-index: 6;
 }
 
-.hud-telemetry:hover {
-  border-color: rgba(243, 126, 75, 0.6);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 42px rgba(243, 126, 75, 0.25);
-}
-
-.hud-top-right {
-  top: 14%;
-  right: 4%;
-  animation: hud-float-1 6s ease-in-out infinite alternate;
-}
-
-.hud-bottom-right {
+.hud-robot-status {
   bottom: 12%;
-  right: 8%;
-  animation: hud-float-2 7s ease-in-out infinite alternate-reverse;
-}
-
-.hud-bottom-mid {
-  bottom: 16%;
-  left: 4%;
-  animation: hud-float-3 6.5s ease-in-out infinite alternate;
-}
-
-@keyframes hud-float-1 {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-10px); }
-}
-
-@keyframes hud-float-2 {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(8px); }
-}
-
-@keyframes hud-float-3 {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-7px); }
+  right: 6%;
 }
 
 .hud-icon-wrap {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
-  background: rgba(12, 184, 192, 0.15);
-  border: 1px solid rgba(12, 184, 192, 0.4);
+  background: rgba(243, 126, 75, 0.15);
+  border: 1px solid rgba(243, 126, 75, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #38bdf8;
-  flex-shrink: 0;
-}
-
-.hud-icon-orange {
-  background: rgba(243, 126, 75, 0.15);
-  border-color: rgba(243, 126, 75, 0.4);
   color: #f37e4b;
+  flex-shrink: 0;
 }
 
 .hud-info {
@@ -311,7 +335,7 @@
 
 .hud-title {
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.2;
@@ -319,25 +343,25 @@
 
 .hud-metric {
   font-family: var(--font-body);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 500;
   color: rgba(148, 163, 184, 0.95);
   letter-spacing: 0.02em;
 }
 
-/* Scene Navigation / Indicator Bar at Bottom of Hero */
+/* Story Sequence Selector / Progress Indicator Bar at Bottom of Hero */
 .hero-scene-nav {
   position: absolute;
-  bottom: 22px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: rgba(8, 13, 34, 0.7);
+  gap: 14px;
+  background: rgba(8, 13, 34, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 8px 18px;
+  padding: 6px 16px;
   border-radius: 999px;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -353,7 +377,7 @@
   cursor: pointer;
   padding: 4px 10px;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
   font-family: var(--font-heading);
   font-size: 0.72rem;
   font-weight: 700;
@@ -368,7 +392,7 @@
 
 .scene-step-btn.active {
   color: #f37e4b;
-  background: rgba(243, 126, 75, 0.15);
+  background: rgba(243, 126, 75, 0.18);
   box-shadow: 0 0 12px rgba(243, 126, 75, 0.25);
 }
 
@@ -396,115 +420,317 @@
   transition: width 0.1s linear;
 }
 
-/* Reduced Motion & Fallback Enhancements */
+/* ==========================================================================
+   PROTOSPARK FLOATING PROMOTIONAL BANNER REFACTOR
+   Non-obtrusive, responsive, compact floating bar with safe-area spacing
+   ========================================================================== */
+.floating-cta {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(92%, 880px) !important;
+  max-width: 880px !important;
+  background: linear-gradient(135deg, rgba(17, 26, 66, 0.94) 0%, rgba(9, 14, 36, 0.98) 100%) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+  border-radius: 14px !important;
+  padding: 10px 22px !important;
+  z-index: 850 !important; /* Kept safely below header (1000) and menus */
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease !important;
+}
+
+.floating-cta-title {
+  color: #38bdf8 !important;
+  font-family: var(--font-heading) !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.floating-cta-desc {
+  color: #e2e8f0 !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.85rem !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.floating-cta-action {
+  flex-shrink: 0 !important;
+}
+
+.btn-cta-register {
+  background: linear-gradient(135deg, #f37e4b 0%, #e05d26 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  padding: 7px 18px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(243, 126, 75, 0.35) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.btn-cta-register:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(243, 126, 75, 0.5) !important;
+}
+
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   #vadiva-hero-canvas {
-    display: none;
+    display: none !important;
   }
   .hero-fallback-backdrop {
     opacity: 1 !important;
-    background: radial-gradient(circle at 70% 50%, #152252 0%, #0d1636 50%, #060a1a 100%) !important;
   }
+  .hud-stage-pill,
   .hud-telemetry {
-    animation: none !important;
-  }
-  .hero-pill-dot {
     animation: none !important;
   }
 }
 
-/* Responsive Media Queries */
-@media (max-width: 1200px) {
+/* ==========================================================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ========================================================================== */
+
+/* 1. Large Laptops / Tablets Landscape (1025px - 1280px) */
+@media (max-width: 1280px) {
   .hero {
-    height: clamp(600px, 75vh, 720px);
+    height: clamp(580px, 72vh, 680px);
   }
   .hero-grid {
     grid-template-columns: 50% 50% !important;
     gap: 1.5rem !important;
+    padding: 2rem 1.5rem !important;
   }
   .hero-content h1 {
-    font-size: 2.75rem !important;
+    font-size: clamp(2.2rem, 3.2vw, 2.85rem) !important;
   }
 }
 
-@media (max-width: 992px) {
+/* 2. Tablets & Small Laptops (769px - 1024px) */
+@media (max-width: 1024px) {
   .hero {
     height: auto !important;
-    min-height: 660px;
-    padding: 3.5rem 0 4.5rem !important;
+    min-height: 580px;
+    padding: 3rem 0 3.5rem !important;
   }
   .hero-grid {
-    grid-template-columns: 1fr !important;
-    text-align: center;
-    gap: 2.5rem !important;
+    grid-template-columns: 52% 48% !important;
+    gap: 1.25rem !important;
+    padding: 1.5rem 1.25rem !important;
   }
-  .hero-content {
-    max-width: 680px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .hero-content h1 {
+    font-size: 2.35rem !important;
   }
   .hero-content p {
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-  .hero-content .cta-group {
-    justify-content: center;
-  }
-  .hero-vignette {
-    background:
-      linear-gradient(to bottom, rgba(5, 8, 22, 0.88) 0%, rgba(5, 8, 22, 0.7) 40%, rgba(5, 8, 22, 0.92) 100%);
-  }
-  .hero-visual {
-    min-height: 320px;
-    height: 340px;
-  }
-  .hud-top-right {
-    top: 5%;
-    right: 5%;
-  }
-  .hud-bottom-right {
-    bottom: 5%;
-    right: 5%;
-  }
-  .hud-bottom-mid {
-    bottom: 8%;
-    left: 5%;
+    font-size: 0.96rem !important;
   }
   .hero-scene-nav {
-    display: none; /* Keep clean on tablet/mobile */
+    display: none !important; /* Keep mobile/tablet UI clean */
+  }
+  .floating-cta {
+    width: calc(100% - 32px) !important;
+    padding: 8px 16px !important;
+    bottom: 14px !important;
+  }
+  .floating-cta-desc {
+    display: none !important; /* Condense on tablet */
   }
 }
 
-@media (max-width: 640px) {
+/* 3. Mobile Devices (<= 768px): Mobile-First Linear Layout */
+@media (max-width: 768px) {
   .hero {
-    min-height: 600px;
-    padding: 2.5rem 0 3.5rem !important;
+    height: auto !important;
+    min-height: unset !important;
+    padding: 1.75rem 0 2.5rem !important;
+    align-items: flex-start !important;
+    background: #060a1a !important;
   }
+
+  .hero-atmosphere {
+    background:
+      radial-gradient(ellipse 70% 40% at 50% 80%, rgba(243, 126, 75, 0.14) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 35% at 50% 20%, rgba(12, 184, 192, 0.12) 0%, transparent 65%) !important;
+  }
+
+  /* Linear Mobile-First Stack */
+  .hero-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0 1.25rem !important;
+    gap: 1.25rem !important;
+    text-align: left !important;
+  }
+
+  .hero-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    order: 1 !important;
+  }
+
+  .hero-pill-badge {
+    margin-bottom: 0.85rem !important;
+    padding: 4px 12px !important;
+  }
+
+  .hero-pill-text {
+    font-size: 0.72rem !important;
+  }
+
   .hero-content h1 {
-    font-size: 2.15rem !important;
+    font-size: clamp(1.85rem, 6.8vw, 2.35rem) !important;
+    line-height: 1.18 !important;
+    margin-bottom: 1rem !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7) !important;
   }
+
   .hero-content p {
-    font-size: 0.98rem !important;
+    font-size: 0.94rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1.35rem !important;
+    color: rgba(226, 232, 240, 0.92) !important;
   }
+
+  /* CTAs in order: Full-width or neatly stacked */
   .hero-content .cta-group {
-    width: 100%;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+    margin-top: 1rem !important;
   }
+
   .hero-content .cta-group .btn {
-    width: 100%;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.82rem 1.25rem !important;
+    font-size: 0.92rem !important;
+    box-sizing: border-box !important;
   }
-  .hud-telemetry {
-    padding: 6px 12px;
+
+  /* Dedicated compact 3D Story Visual Area below CTAs */
+  .hero-visual {
+    width: 100% !important;
+    height: 290px !important;
+    min-height: 290px !important;
+    max-height: 290px !important;
+    order: 2 !important;
+    margin-top: 0.5rem !important;
+    border-radius: 16px !important;
+    background: rgba(13, 27, 62, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    overflow: hidden !important;
+    position: relative !important;
   }
+
+  /* On mobile, canvas sits inside/relative to the visual viewport */
+  #vadiva-hero-canvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .hero-vignette {
+    display: none !important; /* Not needed in separate linear layout */
+  }
+
+  .hud-stage-pill {
+    top: 10px !important;
+    right: 10px !important;
+    padding: 5px 12px !important;
+  }
+
+  .stage-tag {
+    font-size: 0.65rem !important;
+  }
+
+  .stage-title {
+    font-size: 0.7rem !important;
+  }
+
+  .stage-desc {
+    display: none !important; /* Hide secondary description to prevent wrapping */
+  }
+
+  .hud-robot-status {
+    bottom: 10px !important;
+    right: 10px !important;
+    padding: 5px 10px !important;
+  }
+
+  .hud-icon-wrap {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
   .hud-title {
-    font-size: 0.72rem;
+    font-size: 0.68rem !important;
   }
+
   .hud-metric {
-    font-size: 0.62rem;
+    font-size: 0.58rem !important;
   }
-  .hud-bottom-mid {
-    display: none; /* reduce clutter on small screens */
+
+  .hero-scene-nav {
+    display: none !important;
+  }
+
+  /* Protospark Banner: Ultra-compact, non-intrusive bottom strip */
+  .floating-cta {
+    bottom: 10px !important;
+    width: calc(100% - 24px) !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    gap: 8px !important;
+  }
+
+  .floating-cta-title {
+    font-size: 0.88rem !important;
+  }
+
+  .floating-cta-desc {
+    display: none !important;
+  }
+
+  .btn-cta-register {
+    padding: 5px 12px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* 4. Ultra Narrow Viewports (<= 380px) */
+@media (max-width: 380px) {
+  .hero-content h1 {
+    font-size: 1.7rem !important;
+  }
+  .hero-visual {
+    height: 250px !important;
+    min-height: 250px !important;
   }
 }
