@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const PROTOSPARK_GAS_URL = process.env.PROTOSPARK_GAS_URL || 'https://script.google.com/macros/s/AKfycby2JL8sKCi_8W0-53VE8aovpU570RbSYldQkVwq2D1v9QDy_9TbJNlZ2JUy1LhufiBE/exec';
+const PROTOSPARK_GAS_URL = process.env.PROTOSPARK_GAS_URL || 'https://script.google.com/macros/s/AKfycbxiLFS3szE1P7hERw2Ph5LgliSqASHOfluPN32lrs1gnRQkzRKzGhgxjJgFPcZS61E/exec';
 const ADMIN_USERNAME = process.env.PROTOSPARK_ADMIN_USERNAME || 'designthinking@vkp.co.in';
 const ADMIN_SECRET = process.env.PROTOSPARK_ADMIN_SECRET || 'protospark_visitor_pass_mgmt_secret_token_2026_vkp_vadiva';
 const AUTH_FILE = path.join(__dirname, 'admin_auth.json');
