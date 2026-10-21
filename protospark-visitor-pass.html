@@ -100,12 +100,20 @@
         </p>
 
         <!-- Pass Summary Box -->
-        <div id="successSummaryBox" style="background: #f8fafc; border: 2px dashed #00b4d8; border-radius: 12px; padding: 1.75rem; text-align: left; margin-bottom: 2rem; max-width: 680px; margin-left: auto; margin-right: auto;">
+        <div id="successSummaryBox" class="printable-pass-area" style="background: #f8fafc; border: 2px dashed #00b4d8; border-radius: 12px; padding: 1.75rem; text-align: left; margin-bottom: 2rem; max-width: 680px; margin-left: auto; margin-right: auto;">
           <!-- Dynamically populated -->
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
-          <a href="protospark-verify-pass.html" id="verifyPassBtn" class="btn btn-primary" style="padding: 0.85rem 1.75rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+        <div class="no-print" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+          <button type="button" onclick="window.print()" class="btn btn-primary" style="padding: 0.85rem 1.75rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print / Save Pass (PDF)
+          </button>
+          <a href="protospark-verify-pass.html" id="verifyPassBtn" class="btn btn-secondary" style="padding: 0.85rem 1.75rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; border: 1px solid #00b4d8; color: #0077b6;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
