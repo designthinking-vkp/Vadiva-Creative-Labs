@@ -8,7 +8,7 @@ if (!defined('TECHFEST_GAS_URL')) {
     define('TECHFEST_GAS_URL', 'https://script.google.com/macros/s/AKfycbzcCJs3iXgl9V8Io_ivB677yMRo0Xs79ipksJyuoS7hWuLhUTg0eCIgQsu8erl9fLw/exec');
 }
 
-// Protospark Google Apps Script Web App URL for Google Sheet: 1zpCULOehOpgS9mhAG70raLhNGh1JOuxUzUhkcy_s1Ck
+// Protospark Google Apps Script Web App URL for Google Sheet: 1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8
 if (!defined('PROTOSPARK_GAS_URL')) {
     define('PROTOSPARK_GAS_URL', getenv('PROTOSPARK_GAS_URL') ?: 'https://script.google.com/macros/s/AKfycby2JL8sKCi_8W0-53VE8aovpU570RbSYldQkVwq2D1v9QDy_9TbJNlZ2JUy1LhufiBE/exec');
 }

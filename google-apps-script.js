@@ -1,19 +1,43 @@
 /**
- * Protospark 2026 Student Team Registration Backend
+ * Protospark 2026 Student Team & Visitor Pass Backend
  * 
  * Instructions:
- * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1zpCULOehOpgS9mhAG70raLhNGh1JOuxUzUhkcy_s1Ck/edit?gid=0#gid=0
+ * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8/edit?gid=0#gid=0
  * 2. Click Extensions > Apps Script in the menu.
  * 3. Delete any default code in Code.gs and paste this script.
  * 4. Click Save (disk icon).
- * 5. Click Deploy > New Deployment.
+ * 5. Click Deploy > Manage Deployments > Edit (or New Deployment).
  * 6. Select "Web App" as the deployment type.
  * 7. Set Description: "Protospark 2026 API"
  * 8. Set Execute as: "Me"
  * 9. Set Who has access: "Anyone"
  * 10. Click Deploy and authorize all permissions.
- * 11. Copy the "Web app URL" and paste it as the API endpoint in the frontend protospark-register.html page.
+ * 11. Copy the "Web app URL" and paste it as the API endpoint in the frontend protospark-register.html page or api/config.php.
  */
+
+var PROTOSPARK_SPREADSHEET_ID = "1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8";
+var PROTOSPARK_SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8/edit";
+
+/**
+ * Helper to obtain the Google Spreadsheet instance:
+ * 1. Uses SpreadsheetApp.getActiveSpreadsheet() if script is container-bound to the sheet
+ * 2. Falls back to SpreadsheetApp.openById(PROTOSPARK_SPREADSHEET_ID)
+ * 3. Falls back to SpreadsheetApp.openByUrl(PROTOSPARK_SPREADSHEET_URL)
+ */
+function getProtosparkSpreadsheet() {
+  try {
+    var active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (e) {
+    Logger.log("getActiveSpreadsheet fallback: " + e.toString());
+  }
+  try {
+    return SpreadsheetApp.openById(PROTOSPARK_SPREADSHEET_ID);
+  } catch (eId) {
+    Logger.log("openById fallback: " + eId.toString());
+    return SpreadsheetApp.openByUrl(PROTOSPARK_SPREADSHEET_URL);
+  }
+}
 
 function parseFormString(str) {
   var res = {};
@@ -53,8 +77,7 @@ function doPost(e) {
       }
     }
     
-    var sheetUrl = "https://docs.google.com/spreadsheets/d/1zpCULOehOpgS9mhAG70raLhNGh1JOuxUzUhkcy_s1Ck/edit";
-    var ss = SpreadsheetApp.openByUrl(sheetUrl);
+    var ss = getProtosparkSpreadsheet();
     
     // Support saving to a specific custom sheet (e.g. for Dr. Herald Innovations)
     var sheetName = data.sheetName || "Submissions";
@@ -377,8 +400,7 @@ function doGet(e) {
   var action = e.parameter.action;
   var callback = e.parameter.callback;
   
-  var sheetUrl = "https://docs.google.com/spreadsheets/d/1zpCULOehOpgS9mhAG70raLhNGh1JOuxUzUhkcy_s1Ck/edit";
-  var ss = SpreadsheetApp.openByUrl(sheetUrl);
+  var ss = getProtosparkSpreadsheet();
   
   var result = {};
   
@@ -556,12 +578,7 @@ var VISITOR_PASS_HEADERS = [
   "Registration Status"
 ];
 
-function getOrCreateVisitorPassSheet(ss) {
-  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
-  if (!vpSheet) {
-    vpSheet = ss.insertSheet(VISITOR_PASS_SHEET_NAME);
-  }
-  
+function prepareVisitorPassHeaders(vpSheet) {
   if (vpSheet.getLastRow() === 0) {
     vpSheet.appendRow(VISITOR_PASS_HEADERS);
     vpSheet.getRange(1, 1, 1, VISITOR_PASS_HEADERS.length)
@@ -570,9 +587,16 @@ function getOrCreateVisitorPassSheet(ss) {
       .setFontColor("#1e2b6d");
     vpSheet.setFrozenRows(1);
   } else {
-    // Verify first row headers
+    // Verify first row headers without overwriting existing data or columns
     var currentHeaderCols = vpSheet.getLastColumn();
-    if (currentHeaderCols < VISITOR_PASS_HEADERS.length) {
+    if (currentHeaderCols === 0) {
+      vpSheet.appendRow(VISITOR_PASS_HEADERS);
+      vpSheet.getRange(1, 1, 1, VISITOR_PASS_HEADERS.length)
+        .setFontWeight("bold")
+        .setBackground("#e0f7fa")
+        .setFontColor("#1e2b6d");
+      vpSheet.setFrozenRows(1);
+    } else if (currentHeaderCols < VISITOR_PASS_HEADERS.length) {
       var existingVals = vpSheet.getRange(1, 1, 1, currentHeaderCols).getValues()[0];
       for (var h = existingVals.length; h < VISITOR_PASS_HEADERS.length; h++) {
         vpSheet.getRange(1, h + 1).setValue(VISITOR_PASS_HEADERS[h]).setFontWeight("bold");
@@ -580,6 +604,67 @@ function getOrCreateVisitorPassSheet(ss) {
     }
   }
   return vpSheet;
+}
+
+function getOrCreateVisitorPassSheet(ss) {
+  // 1. Check exact match for "Visitor pass"
+  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  if (vpSheet) {
+    return prepareVisitorPassHeaders(vpSheet);
+  }
+  
+  var allSheets = ss.getSheets();
+  
+  // 2. Case-insensitive search and common variations ("Visitor Pass", "visitor pass", "Visitors", etc.)
+  var targetVariations = [
+    "visitor pass",
+    "visitor passes",
+    "visitors",
+    "visitor_pass",
+    "visitorpass",
+    "passes",
+    "pass"
+  ];
+  for (var i = 0; i < allSheets.length; i++) {
+    var sName = allSheets[i].getName().trim().toLowerCase();
+    if (targetVariations.indexOf(sName) !== -1) {
+      return prepareVisitorPassHeaders(allSheets[i]);
+    }
+  }
+  
+  // 3. Scan row 1 headers of all sheets to locate a sheet already containing visitor pass columns
+  for (var j = 0; j < allSheets.length; j++) {
+    var curSheet = allSheets[j];
+    var lastCol = curSheet.getLastColumn();
+    var lastRow = curSheet.getLastRow();
+    if (lastRow > 0 && lastCol > 0) {
+      var headerRow = curSheet.getRange(1, 1, 1, Math.min(lastCol, 20)).getValues()[0];
+      var normalizedHeaders = headerRow.map(function(h) {
+        return String(h || "").trim().toLowerCase();
+      });
+      if (normalizedHeaders.indexOf("visitor id") !== -1 || 
+          (normalizedHeaders.indexOf("visitor name") !== -1 && normalizedHeaders.indexOf("visitor type") !== -1)) {
+        return prepareVisitorPassHeaders(curSheet);
+      }
+    }
+  }
+  
+  // 4. If the first sheet (gid=0) is empty or a default blank "Sheet1", use it
+  if (allSheets.length > 0) {
+    var defaultSheet = allSheets[0];
+    if (defaultSheet.getLastRow() <= 1 && (defaultSheet.getName() === "Sheet1" || defaultSheet.getLastRow() === 0)) {
+      try {
+        defaultSheet.setName(VISITOR_PASS_SHEET_NAME);
+      } catch (renameErr) {
+        // Ignore if renaming fails due to sheet permissions or collision
+      }
+      return prepareVisitorPassHeaders(defaultSheet);
+    }
+  }
+  
+  // 5. Otherwise create and insert the target "Visitor pass" worksheet
+  vpSheet = ss.insertSheet(VISITOR_PASS_SHEET_NAME);
+  return prepareVisitorPassHeaders(vpSheet);
 }
 
 function handleVisitorPassRegistration(ss, data) {
@@ -805,10 +890,10 @@ function handleVisitorPassRegistration(ss, data) {
 }
 
 function handleVerifyVisitorPass(ss, visitorId, callback) {
-  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  var vpSheet = getOrCreateVisitorPassSheet(ss);
   var result = {};
   
-  if (!vpSheet || !visitorId) {
+  if (!visitorId) {
     result = {
       status: "error",
       valid: false,
@@ -863,18 +948,11 @@ function handleVerifyVisitorPass(ss, visitorId, callback) {
 }
 
 function handleGetVisitorPasses(ss, params, callback) {
-  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  var vpSheet = getOrCreateVisitorPassSheet(ss);
   var result = {};
   
-  if (!vpSheet) {
-    result = {
-      status: "success",
-      count: 0,
-      records: []
-    };
-  } else {
-    var lastRow = vpSheet.getLastRow();
-    var records = [];
+  var lastRow = vpSheet.getLastRow();
+  var records = [];
     
     if (lastRow > 1) {
       var numCols = Math.min(vpSheet.getLastColumn(), VISITOR_PASS_HEADERS.length);
@@ -920,13 +998,7 @@ function handleGetVisitorPasses(ss, params, callback) {
 }
 
 function handleUpdateVisitorPassStatus(ss, data) {
-  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
-  if (!vpSheet) {
-    return ContentService.createTextOutput(JSON.stringify({
-      status: "error",
-      message: "Visitor pass sheet does not exist."
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
+  var vpSheet = getOrCreateVisitorPassSheet(ss);
   
   var visitorId = String(data.visitorId || "").trim().toUpperCase();
   var newStatus = String(data.registrationStatus || data.status || "").trim();
@@ -1069,8 +1141,7 @@ function findWorkshopRow(ss, email, name) {
  * strictly for the "Workshop Registrations" sheet.
  */
 function fixWorkshopHeadersOnly() {
-  var sheetUrl = "https://docs.google.com/spreadsheets/d/1zpCULOehOpgS9mhAG70raLhNGh1JOuxUzUhkcy_s1Ck/edit";
-  var ss = SpreadsheetApp.openByUrl(sheetUrl);
+  var ss = getProtosparkSpreadsheet();
   
   var workshopHeaders = [
     "Timestamp",
