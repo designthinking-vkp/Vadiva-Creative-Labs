@@ -1,6 +1,7 @@
 RewriteEngine On
 
-# Protospark Visitor Pass & Admin Routes
+# Explicit Protospark Routes
+RewriteRule ^protospark/?$ protospark.html [L]
 RewriteRule ^protospark/admin/visitor-passes/?$ protospark-admin-visitor-passes.html [L]
 RewriteRule ^protospark/visitor-pass/?$ protospark-visitor-pass.html [L]
 RewriteRule ^protospark/verify-pass/?$ protospark-verify-pass.html [L]
