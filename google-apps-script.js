@@ -65,6 +65,17 @@ function doPost(e) {
     
     var lastRow = sheet.getLastRow();
 
+    // Handle Visitor Pass registration & management
+    if (data.action === "registerVisitorPass" || data.action === "visitorPassRegister") {
+      return handleVisitorPassRegistration(ss, data);
+    }
+    if (data.action === "getVisitorPasses") {
+      return handleGetVisitorPasses(ss, data);
+    }
+    if (data.action === "updateVisitorPassStatus") {
+      return handleUpdateVisitorPassStatus(ss, data);
+    }
+
     // Handle Razorpay order creation via Google Apps Script (bypasses CORS for file:// and static hosting)
     if (data.action === "createRazorpayOrder") {
       var currency = data.currency || "INR";
@@ -371,7 +382,12 @@ function doGet(e) {
   
   var result = {};
   
-  if (action === "getRegistrationId") {
+  if (action === "verifyVisitorPass") {
+    var visitorId = e.parameter.id || e.parameter.visitorId;
+    return handleVerifyVisitorPass(ss, visitorId, callback);
+  } else if (action === "getVisitorPasses") {
+    return handleGetVisitorPasses(ss, e.parameter, callback);
+  } else if (action === "getRegistrationId") {
     var isWorkshopQuery = (e.parameter.type === "workshop");
     var found = null;
     
@@ -514,6 +530,439 @@ function doGet(e) {
   
   return ContentService.createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ==========================================
+// PROTOSPARK VISITOR PASS MANAGEMENT SYSTEM
+// ==========================================
+
+var VISITOR_PASS_SHEET_NAME = "Visitor pass";
+
+var VISITOR_PASS_HEADERS = [
+  "Visitor ID",
+  "Registration Date & Time",
+  "Visitor Type",
+  "Visitor Name",
+  "School Name",
+  "Email ID",
+  "Contact Number",
+  "Teacher Name",
+  "Teacher Email",
+  "Teacher Contact Number",
+  "Group / Teacher Registration ID",
+  "Student Count in Group",
+  "Pass Generation Status",
+  "Pass Storage Reference",
+  "Registration Status"
+];
+
+function getOrCreateVisitorPassSheet(ss) {
+  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  if (!vpSheet) {
+    vpSheet = ss.insertSheet(VISITOR_PASS_SHEET_NAME);
+  }
+  
+  if (vpSheet.getLastRow() === 0) {
+    vpSheet.appendRow(VISITOR_PASS_HEADERS);
+    vpSheet.getRange(1, 1, 1, VISITOR_PASS_HEADERS.length)
+      .setFontWeight("bold")
+      .setBackground("#e0f7fa")
+      .setFontColor("#1e2b6d");
+    vpSheet.setFrozenRows(1);
+  } else {
+    // Verify first row headers
+    var currentHeaderCols = vpSheet.getLastColumn();
+    if (currentHeaderCols < VISITOR_PASS_HEADERS.length) {
+      var existingVals = vpSheet.getRange(1, 1, 1, currentHeaderCols).getValues()[0];
+      for (var h = existingVals.length; h < VISITOR_PASS_HEADERS.length; h++) {
+        vpSheet.getRange(1, h + 1).setValue(VISITOR_PASS_HEADERS[h]).setFontWeight("bold");
+      }
+    }
+  }
+  return vpSheet;
+}
+
+function handleVisitorPassRegistration(ss, data) {
+  var vpSheet = getOrCreateVisitorPassSheet(ss);
+  
+  // Acquire script lock to guarantee atomicity and collision prevention
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000); // Wait up to 30s
+  } catch (lockErr) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: "Registration server is currently busy. Please try submitting again."
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var storedVisCounter = parseInt(props.getProperty("LAST_VISITOR_ID_NUM") || "0", 10);
+    var storedGrpCounter = parseInt(props.getProperty("LAST_GROUP_ID_NUM") || "0", 10);
+    
+    // Safety check against actual existing rows in column A
+    var lastRow = vpSheet.getLastRow();
+    if (lastRow > 1) {
+      var idValues = vpSheet.getRange(2, 1, lastRow - 1, 1).getValues();
+      for (var i = 0; i < idValues.length; i++) {
+        var idStr = String(idValues[i][0] || "").trim();
+        var matchVis = idStr.match(/PS-VIS-2026-(\d+)/i);
+        if (matchVis) {
+          var numVis = parseInt(matchVis[1], 10);
+          if (numVis > storedVisCounter) storedVisCounter = numVis;
+        }
+      }
+    }
+    
+    // Check group column K as well
+    if (lastRow > 1) {
+      var grpValues = vpSheet.getRange(2, 11, lastRow - 1, 1).getValues();
+      for (var g = 0; g < grpValues.length; g++) {
+        var grpStr = String(grpValues[g][0] || "").trim();
+        var matchGrp = grpStr.match(/PS-GRP-2026-(\d+)/i);
+        if (matchGrp) {
+          var numGrp = parseInt(matchGrp[1], 10);
+          if (numGrp > storedGrpCounter) storedGrpCounter = numGrp;
+        }
+      }
+    }
+    
+    var nowIST = Utilities.formatDate(new Date(), "Asia/Kolkata", "yyyy-MM-dd HH:mm:ss");
+    var isTeacher = (data.isTeacher === true || data.isTeacher === "true" || data.isTeacher === "yes" || data.visitorType === "Teacher");
+    
+    var rowsToInsert = [];
+    var registeredVisitors = [];
+    var groupId = "";
+    
+    if (isTeacher) {
+      storedGrpCounter++;
+      groupId = "PS-GRP-2026-" + Utilities.formatString("%06d", storedGrpCounter);
+      
+      var teacherName = String(data.teacherName || data.fullName || "").trim();
+      var teacherSchool = String(data.schoolName || "").trim();
+      var teacherEmail = String(data.teacherEmail || data.email || "").trim();
+      var teacherContact = String(data.teacherContactNumber || data.contactNumber || "").trim();
+      var teacherAttending = (data.teacherAttending !== false && data.teacherAttending !== "false" && data.teacherAttending !== "no");
+      
+      var studentList = Array.isArray(data.students) ? data.students : [];
+      var studentCount = studentList.length;
+      
+      // If teacher is attending, register teacher record
+      if (teacherAttending) {
+        storedVisCounter++;
+        var teacherVisId = "PS-VIS-2026-" + Utilities.formatString("%06d", storedVisCounter);
+        var teacherToken = Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, teacherVisId + "_" + teacherEmail + "_2026")).substring(0, 16);
+        
+        rowsToInsert.push([
+          teacherVisId,
+          nowIST,
+          "Teacher",
+          teacherName,
+          teacherSchool,
+          teacherEmail,
+          teacherContact,
+          teacherName,
+          teacherEmail,
+          teacherContact,
+          groupId,
+          studentCount,
+          "Generated",
+          teacherToken,
+          "Confirmed"
+        ]);
+        
+        registeredVisitors.push({
+          visitorId: teacherVisId,
+          visitorName: teacherName,
+          schoolName: teacherSchool,
+          visitorType: "Teacher",
+          groupId: groupId,
+          registrationDate: nowIST,
+          token: teacherToken,
+          email: teacherEmail,
+          contactNumber: teacherContact
+        });
+      }
+      
+      // Register each student
+      for (var s = 0; s < studentList.length; s++) {
+        var student = studentList[s];
+        var sName = String(student.studentName || student.fullName || "").trim();
+        var sSchool = String(student.schoolName || teacherSchool).trim();
+        var sEmail = String(student.studentEmail || student.email || "").trim();
+        var sContact = String(student.studentContactNumber || student.contactNumber || "").trim();
+        
+        storedVisCounter++;
+        var studentVisId = "PS-VIS-2026-" + Utilities.formatString("%06d", storedVisCounter);
+        var studentToken = Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, studentVisId + "_" + sName + "_2026")).substring(0, 16);
+        
+        rowsToInsert.push([
+          studentVisId,
+          nowIST,
+          "Student",
+          sName,
+          sSchool,
+          sEmail,
+          sContact,
+          teacherName,
+          teacherEmail,
+          teacherContact,
+          groupId,
+          studentCount,
+          "Generated",
+          studentToken,
+          "Confirmed"
+        ]);
+        
+        registeredVisitors.push({
+          visitorId: studentVisId,
+          visitorName: sName,
+          schoolName: sSchool,
+          visitorType: "Student",
+          groupId: groupId,
+          registrationDate: nowIST,
+          token: studentToken,
+          email: sEmail,
+          contactNumber: sContact
+        });
+      }
+      
+    } else {
+      // Individual Visitor Registration
+      var vName = String(data.fullName || data.visitorName || "").trim();
+      var vSchool = String(data.schoolName || "").trim();
+      var vEmail = String(data.email || "").trim();
+      var vContact = String(data.contactNumber || "").trim();
+      
+      storedVisCounter++;
+      var indivVisId = "PS-VIS-2026-" + Utilities.formatString("%06d", storedVisCounter);
+      var indivToken = Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, indivVisId + "_" + vEmail + "_2026")).substring(0, 16);
+      
+      rowsToInsert.push([
+        indivVisId,
+        nowIST,
+        "Individual Visitor",
+        vName,
+        vSchool,
+        vEmail,
+        vContact,
+        "",
+        "",
+        "",
+        "",
+        0,
+        "Generated",
+        indivToken,
+        "Confirmed"
+      ]);
+      
+      registeredVisitors.push({
+        visitorId: indivVisId,
+        visitorName: vName,
+        schoolName: vSchool,
+        visitorType: "Individual Visitor",
+        groupId: "",
+        registrationDate: nowIST,
+        token: indivToken,
+        email: vEmail,
+        contactNumber: vContact
+      });
+    }
+    
+    // Batch append to sheet
+    if (rowsToInsert.length > 0) {
+      var startRow = vpSheet.getLastRow() + 1;
+      vpSheet.getRange(startRow, 1, rowsToInsert.length, VISITOR_PASS_HEADERS.length).setValues(rowsToInsert);
+    }
+    
+    // Persist latest atomic counter in ScriptProperties
+    props.setProperty("LAST_VISITOR_ID_NUM", String(storedVisCounter));
+    if (storedGrpCounter > 0) {
+      props.setProperty("LAST_GROUP_ID_NUM", String(storedGrpCounter));
+    }
+    
+    var output = {
+      status: "success",
+      message: "Visitor pass registration completed successfully.",
+      groupId: groupId,
+      totalRegistered: registeredVisitors.length,
+      records: registeredVisitors
+    };
+    
+    return ContentService.createTextOutput(JSON.stringify(output))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (err) {
+    Logger.log("Error in handleVisitorPassRegistration: " + err.toString());
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: "Failed to save registration: " + err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function handleVerifyVisitorPass(ss, visitorId, callback) {
+  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  var result = {};
+  
+  if (!vpSheet || !visitorId) {
+    result = {
+      status: "error",
+      valid: false,
+      message: "Visitor ID required."
+    };
+  } else {
+    var searchId = String(visitorId).trim().toUpperCase();
+    var lastRow = vpSheet.getLastRow();
+    var foundRow = null;
+    
+    if (lastRow > 1) {
+      var data = vpSheet.getRange(2, 1, lastRow - 1, VISITOR_PASS_HEADERS.length).getValues();
+      for (var i = 0; i < data.length; i++) {
+        if (String(data[i][0]).trim().toUpperCase() === searchId) {
+          foundRow = data[i];
+          break;
+        }
+      }
+    }
+    
+    if (foundRow) {
+      var regStatus = String(foundRow[14] || "Confirmed");
+      var isValid = (regStatus.toLowerCase() !== "cancelled" && regStatus.toLowerCase() !== "inactive");
+      
+      result = {
+        status: "success",
+        valid: isValid,
+        visitorId: String(foundRow[0]),
+        registrationDate: String(foundRow[1]),
+        visitorType: String(foundRow[2]),
+        visitorName: String(foundRow[3]),
+        schoolName: String(foundRow[4]),
+        groupReference: String(foundRow[10] || ""),
+        passStatus: String(foundRow[12] || "Generated"),
+        registrationStatus: regStatus
+      };
+    } else {
+      result = {
+        status: "error",
+        valid: false,
+        message: "Pass not found or invalid Visitor ID."
+      };
+    }
+  }
+  
+  if (callback) {
+    return ContentService.createTextOutput(callback + "(" + JSON.stringify(result) + ")")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function handleGetVisitorPasses(ss, params, callback) {
+  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  var result = {};
+  
+  if (!vpSheet) {
+    result = {
+      status: "success",
+      count: 0,
+      records: []
+    };
+  } else {
+    var lastRow = vpSheet.getLastRow();
+    var records = [];
+    
+    if (lastRow > 1) {
+      var numCols = Math.min(vpSheet.getLastColumn(), VISITOR_PASS_HEADERS.length);
+      var values = vpSheet.getRange(2, 1, lastRow - 1, numCols).getValues();
+      
+      for (var r = 0; r < values.length; r++) {
+        var row = values[r];
+        if (!row[0]) continue; // Skip empty row
+        
+        records.push({
+          visitorId: String(row[0] || ""),
+          registrationDate: String(row[1] || ""),
+          visitorType: String(row[2] || ""),
+          visitorName: String(row[3] || ""),
+          schoolName: String(row[4] || ""),
+          email: String(row[5] || ""),
+          contactNumber: String(row[6] || ""),
+          teacherName: String(row[7] || ""),
+          teacherEmail: String(row[8] || ""),
+          teacherContactNumber: String(row[9] || ""),
+          groupReference: String(row[10] || ""),
+          studentCount: parseInt(row[11] || 0, 10),
+          passStatus: String(row[12] || "Generated"),
+          storageRef: String(row[13] || ""),
+          registrationStatus: String(row[14] || "Confirmed")
+        });
+      }
+    }
+    
+    result = {
+      status: "success",
+      count: records.length,
+      records: records
+    };
+  }
+  
+  if (callback) {
+    return ContentService.createTextOutput(callback + "(" + JSON.stringify(result) + ")")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function handleUpdateVisitorPassStatus(ss, data) {
+  var vpSheet = ss.getSheetByName(VISITOR_PASS_SHEET_NAME);
+  if (!vpSheet) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: "Visitor pass sheet does not exist."
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  var visitorId = String(data.visitorId || "").trim().toUpperCase();
+  var newStatus = String(data.registrationStatus || data.status || "").trim();
+  var lastRow = vpSheet.getLastRow();
+  var updated = false;
+  
+  if (lastRow > 1) {
+    var idCol = vpSheet.getRange(2, 1, lastRow - 1, 1).getValues();
+    for (var i = 0; i < idCol.length; i++) {
+      if (String(idCol[i][0]).trim().toUpperCase() === visitorId) {
+        var targetRowIndex = i + 2;
+        if (newStatus) {
+          vpSheet.getRange(targetRowIndex, 15).setValue(newStatus);
+        }
+        if (data.passStatus) {
+          vpSheet.getRange(targetRowIndex, 13).setValue(String(data.passStatus));
+        }
+        updated = true;
+        break;
+      }
+    }
+  }
+  
+  if (updated) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      message: "Status updated for " + visitorId,
+      visitorId: visitorId,
+      newStatus: newStatus
+    })).setMimeType(ContentService.MimeType.JSON);
+  } else {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: "Visitor ID not found."
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 // Helper to check if email or mobile is already registered in any sheet

@@ -1,5 +1,10 @@
 RewriteEngine On
 
+# Protospark Visitor Pass & Admin Routes
+RewriteRule ^protospark/admin/visitor-passes/?$ protospark-admin-visitor-passes.html [L]
+RewriteRule ^protospark/visitor-pass/?$ protospark-visitor-pass.html [L]
+RewriteRule ^protospark/verify-pass/?$ protospark-verify-pass.html [L]
+
 # 1. External Redirect: Redirect direct requests for page.html to /page
 RewriteCond %{THE_REQUEST} \s/+(.*?)\.html\s [NC]
 RewriteRule ^ /%1 [R=301,L]

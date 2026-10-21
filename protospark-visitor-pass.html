@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protospark '26 Visitor Pass Registration | Vadiva Creative Labs</title>
+  <meta name="description" content="Register for official visitor passes to Protospark 2026 International Innovation Challenge in Kuala Lumpur, Malaysia. Individual and school group registrations.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="protospark-theme">
+
+  <!-- Header Section -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="https://vadivacreativelabs.com/" class="logo-split-container" aria-label="Vadiva Creative Labs Home">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 48px; width: auto; display: block;">
+          <span class="logo-divider">|</span>
+          <img src="assets/protospark-logo.png" alt="Protospark Logo" style="height: 48px; width: 202px; display: block;">
+        </a>
+      </div>
+      
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+          <li class="nav-item"><a href="protospark.html" class="nav-link active">Protospark</a></li>
+          <li class="nav-item"><a href="protospark-visitor-pass.html" class="nav-link active" style="color: var(--color-primary); font-weight: 700;">Visitor Pass</a></li>
+          <li class="nav-item"><a href="https://fest.vadivacreativelabs.com/" class="nav-link">Tech Fest</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="mobile-drawer-cta">
+          <a href="protospark.html" class="btn btn-sm btn-secondary">Protospark Info</a>
+          <a href="protospark-register.html" class="btn btn-sm btn-primary">Team Registration</a>
+        </div>
+      </nav>
+
+      <div class="header-action">
+        <a href="protospark-verify-pass.html" class="btn btn-sm btn-secondary header-cta" style="border: 1px solid var(--color-primary); color: var(--color-primary);">Verify Pass</a>
+        <a href="protospark-register.html" class="btn btn-sm btn-primary header-cta">Team Registration</a>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="registration-container" style="max-width: 900px; margin: 2rem auto; padding: 0 1.5rem;">
+    <!-- Back Link -->
+    <a href="protospark.html" class="back-link" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--color-dark); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Back to Protospark Info
+    </a>
+
+    <!-- Page Header -->
+    <div class="registration-header" style="text-align: center; margin-bottom: 2.5rem;">
+      <div class="subtitle" style="font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
+        Event Entry &amp; Attendance
+      </div>
+      <h1 style="font-family: var(--font-heading); font-size: 2.4rem; color: var(--color-dark); margin-bottom: 0.75rem; font-weight: 800;">
+        Protospark '26 – Visitor Pass Registration
+      </h1>
+      <p class="description" style="max-width: 700px; margin: 0 auto; color: var(--color-dark-light); font-size: 1.05rem; line-height: 1.6;">
+        Register for official visitor admission to the Protospark 2026 International Innovation Challenge in Kuala Lumpur, Malaysia. Individual attendees and teachers registering student delegations are welcome.
+      </p>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="form-card" style="background: #ffffff; border-radius: var(--border-radius-md); box-shadow: var(--shadow-premium); padding: 2.5rem; border: 1px solid var(--color-border); position: relative;">
+      
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" style="display: none; position: absolute; inset: 0; background: rgba(255, 255, 255, 0.94); z-index: 50; border-radius: inherit; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div class="form-spinner" style="width: 50px; height: 50px; border: 4px solid #e0f7fa; border-top-color: #00b4d8; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+        <div id="loadingText" style="margin-top: 1.25rem; font-family: var(--font-heading); font-weight: 700; color: var(--color-dark); font-size: 1.1rem;">
+          Processing Registration...
+        </div>
+        <p style="color: var(--color-dark-light); font-size: 0.9rem; margin-top: 0.35rem;">Generating unique Visitor IDs and recording in event registry...</p>
+      </div>
+
+      <!-- Success Screen (Hidden by default) -->
+      <div id="successScreen" style="display: none; text-align: center; padding: 2rem 1rem;">
+        <div style="width: 72px; height: 72px; background: #e8f5e9; color: #2e7d32; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 2rem; color: #1e2b6d; margin-bottom: 0.5rem; font-weight: 800;">
+          Registration Confirmed!
+        </h2>
+        <p style="color: #475569; font-size: 1.05rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+          Your visitor registration has been successfully recorded in the official Protospark database. Below are your assigned Visitor ID details.
+        </p>
+
+        <!-- Pass Summary Box -->
+        <div id="successSummaryBox" style="background: #f8fafc; border: 2px dashed #00b4d8; border-radius: 12px; padding: 1.75rem; text-align: left; margin-bottom: 2rem; max-width: 680px; margin-left: auto; margin-right: auto;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+          <a href="protospark-verify-pass.html" id="verifyPassBtn" class="btn btn-primary" style="padding: 0.85rem 1.75rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Verify Pass Status
+          </a>
+          <button type="button" id="registerAnotherBtn" class="btn btn-secondary" style="padding: 0.85rem 1.75rem; background: #e0f7fa; color: #0077b6; border: 1px solid #00b4d8; cursor: pointer; border-radius: 8px; font-weight: 600;">
+            Register Another Visitor
+          </button>
+        </div>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="visitorPassForm" novalidate>
+        <!-- Honeypot spam trap (hidden) -->
+        <div style="display: none;" aria-hidden="true">
+          <input type="text" name="website_hp" id="website_hp" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- SECTION A: VISITOR TYPE -->
+        <div style="margin-bottom: 2.25rem;">
+          <label style="display: block; font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--color-dark); margin-bottom: 0.75rem;">
+            Section 1: Visitor Category <span style="color: #e53935;">*</span>
+          </label>
+          <p style="color: var(--color-dark-light); font-size: 0.95rem; margin-bottom: 1.25rem;">
+            <strong>Are you a teacher registering students or attending with a school group?</strong>
+          </p>
+
+          <div class="visitor-type-options">
+            <!-- Option 1: Individual -->
+            <label class="visitor-type-card selected" id="cardIndividual" for="typeIndividual">
+              <input type="radio" id="typeIndividual" name="isTeacherRadio" value="no" checked>
+              <div class="visitor-type-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #00b4d8;">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                No, Individual Visitor
+              </div>
+              <div class="visitor-type-desc">
+                For parents, industry professionals, students attending independently, mentors, and general public guests.
+              </div>
+            </label>
+
+            <!-- Option 2: Teacher -->
+            <label class="visitor-type-card" id="cardTeacher" for="typeTeacher">
+              <input type="radio" id="typeTeacher" name="isTeacherRadio" value="yes">
+              <div class="visitor-type-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #00b4d8;">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Yes, I am a Teacher
+              </div>
+              <div class="visitor-type-desc">
+                Register yourself and multiple students from your school under a single consolidated group registration.
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- SECTION B: INDIVIDUAL VISITOR FORM (Visible when Individual selected) -->
+        <div id="sectionIndividual" style="display: block;">
+          <div style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--color-dark); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e0f7fa;">
+            Section 2: Individual Visitor Details
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <!-- Full Name -->
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="indivName" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Full Name <span style="color: #e53935;">*</span>
+              </label>
+              <input type="text" id="indivName" name="fullName" class="form-control" placeholder="Enter your full name" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;" required>
+              <div class="field-error" id="indivNameError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Full name is required.</div>
+            </div>
+
+            <!-- School / Institution Name -->
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="indivSchool" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                School / Institution Name <span style="color: #e53935;">*</span>
+              </label>
+              <input type="text" id="indivSchool" name="schoolName" class="form-control" placeholder="e.g. St. Francis School or Organization Name" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;" required>
+              <div class="field-error" id="indivSchoolError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">School / Institution name is required.</div>
+            </div>
+
+            <!-- Email ID -->
+            <div class="form-group">
+              <label for="indivEmail" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Email ID <span style="color: #e53935;">*</span>
+              </label>
+              <input type="email" id="indivEmail" name="email" class="form-control" placeholder="e.g. visitor@example.com" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;" required>
+              <div class="field-error" id="indivEmailError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Please provide a valid email address.</div>
+            </div>
+
+            <!-- Contact Number -->
+            <div class="form-group">
+              <label for="indivPhone" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Contact Number <span style="color: #e53935;">*</span>
+              </label>
+              <input type="tel" id="indivPhone" name="contactNumber" class="form-control" placeholder="e.g. 9876543210 or +60 12-345 6789" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;" required>
+              <div class="field-error" id="indivPhoneError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Please provide a valid contact number.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION C: TEACHER REGISTRATION FORM (Visible when Teacher selected) -->
+        <div id="sectionTeacher" style="display: none;">
+          <div style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--color-dark); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e0f7fa;">
+            Section 2: Teacher &amp; School Information
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <!-- Teacher Full Name -->
+            <div class="form-group">
+              <label for="teacherName" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Teacher Full Name <span style="color: #e53935;">*</span>
+              </label>
+              <input type="text" id="teacherName" name="teacherName" class="form-control" placeholder="Enter teacher full name" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;">
+              <div class="field-error" id="teacherNameError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Teacher name is required.</div>
+            </div>
+
+            <!-- School Name -->
+            <div class="form-group">
+              <label for="teacherSchool" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                School Name <span style="color: #e53935;">*</span>
+              </label>
+              <input type="text" id="teacherSchool" name="teacherSchool" class="form-control" placeholder="Enter official school name" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;">
+              <div class="field-error" id="teacherSchoolError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">School name is required.</div>
+            </div>
+
+            <!-- Teacher Email ID -->
+            <div class="form-group">
+              <label for="teacherEmail" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Teacher Email ID <span style="color: #e53935;">*</span>
+              </label>
+              <input type="email" id="teacherEmail" name="teacherEmail" class="form-control" placeholder="e.g. teacher@school.edu" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;">
+              <div class="field-error" id="teacherEmailError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Valid teacher email is required.</div>
+            </div>
+
+            <!-- Teacher Contact Number -->
+            <div class="form-group">
+              <label for="teacherPhone" style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.4rem; font-size: 0.95rem;">
+                Teacher Contact Number <span style="color: #e53935;">*</span>
+              </label>
+              <input type="tel" id="teacherPhone" name="teacherContactNumber" class="form-control" placeholder="e.g. 9876543210 or +60 12-345 6789" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem;">
+              <div class="field-error" id="teacherPhoneError" style="color: #e53935; font-size: 0.85rem; margin-top: 4px; display: none;">Valid teacher contact number is required.</div>
+            </div>
+
+            <!-- Teacher Attendance Option -->
+            <div class="form-group" style="grid-column: span 2; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.25rem;">
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin: 0; font-size: 0.95rem; color: #166534; font-weight: 600;">
+                <input type="checkbox" id="teacherAttending" name="teacherAttending" checked style="width: 18px; height: 18px; margin-top: 2px; accent-color: #00b4d8;">
+                <div>
+                  Yes, I (Teacher) will also attend the event and require an official Visitor Pass.
+                  <span style="display: block; font-weight: 400; font-size: 0.85rem; color: #15803d; margin-top: 2px;">
+                    Generates a separate individual Teacher pass in addition to your students' passes.
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- STUDENT REGISTRATION SECTION -->
+          <div style="margin-top: 2rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: var(--color-dark); margin: 0;">
+                  Student Registration
+                </h3>
+                <p style="color: var(--color-dark-light); font-size: 0.88rem; margin: 2px 0 0 0;">
+                  Each student will be allocated an individual Visitor ID and pass linked to your group.
+                </p>
+              </div>
+              <span id="studentCountBadge" style="background: #e0f7fa; color: #0077b6; font-weight: 700; font-size: 0.85rem; padding: 4px 12px; border-radius: 20px;">
+                1 Student
+              </span>
+            </div>
+
+            <!-- Container for Dynamic Student Cards -->
+            <div id="studentContainer">
+              <!-- Student cards rendered here -->
+            </div>
+
+            <!-- Add Another Student Button -->
+            <button type="button" id="addStudentBtn" style="background: #ffffff; color: #0077b6; border: 2px dashed #00b4d8; border-radius: 8px; padding: 0.85rem 1.5rem; width: 100%; font-family: var(--font-heading); font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Another Student
+            </button>
+            <div style="text-align: right; font-size: 0.8rem; color: #64748b; margin-top: 4px;">
+              Configurable limit: Maximum 50 students per submission
+            </div>
+          </div>
+        </div>
+
+        <!-- Global Form Error Banner -->
+        <div id="formErrorBanner" style="display: none; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 1rem; border-radius: 8px; margin-top: 1.5rem; font-size: 0.95rem;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 2rem;">
+          <button type="submit" id="submitBtn" class="btn-protospark-visitor-pass" style="width: 100%; font-size: 1.15rem; padding: 1.1rem;">
+            Submit Registration &amp; Generate Visitor Pass
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background: #0f172a; color: #94a3b8; padding: 3rem 0; margin-top: 4rem; text-align: center; font-size: 0.9rem;">
+    <div class="container">
+      <p style="margin-bottom: 0.5rem; color: #ffffff; font-weight: 600;">Protospark '26 • Vadiva Creative Labs</p>
+      <p style="margin-bottom: 1rem;">International Innovation Challenge • Kuala Lumpur, Malaysia</p>
+      <div style="display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem;">
+        <a href="protospark.html" style="color: #94a3b8; text-decoration: none;">Event Info</a>
+        <a href="protospark-register.html" style="color: #94a3b8; text-decoration: none;">Team Registration</a>
+        <a href="protospark-verify-pass.html" style="color: #94a3b8; text-decoration: none;">Verify Pass</a>
+        <a href="protospark-admin-visitor-passes.html" style="color: #64748b; text-decoration: none; font-size: 0.8rem;">Admin Portal</a>
+      </div>
+      <p style="font-size: 0.8rem; color: #64748b;">&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    (function() {
+      // API Endpoints: try server-side proxy first, fallback to Apps Script directly if static hosting
+      const API_URL = 'api/visitor-pass.php';
+      const FALLBACK_GAS_URL = 'https://script.google.com/macros/s/AKfycby2JL8sKCi_8W0-53VE8aovpU570RbSYldQkVwq2D1v9QDy_9TbJNlZ2JUy1LhufiBE/exec';
+
+      const MAX_STUDENTS = 50;
+
+      // Elements
+      const form = document.getElementById('visitorPassForm');
+      const cardIndividual = document.getElementById('cardIndividual');
+      const cardTeacher = document.getElementById('cardTeacher');
+      const typeIndividual = document.getElementById('typeIndividual');
+      const typeTeacher = document.getElementById('typeTeacher');
+      const sectionIndividual = document.getElementById('sectionIndividual');
+      const sectionTeacher = document.getElementById('sectionTeacher');
+      const studentContainer = document.getElementById('studentContainer');
+      const addStudentBtn = document.getElementById('addStudentBtn');
+      const studentCountBadge = document.getElementById('studentCountBadge');
+      const submitBtn = document.getElementById('submitBtn');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
+      const formErrorBanner = document.getElementById('formErrorBanner');
+      const successScreen = document.getElementById('successScreen');
+      const successSummaryBox = document.getElementById('successSummaryBox');
+      const registerAnotherBtn = document.getElementById('registerAnotherBtn');
+      const teacherSchoolInput = document.getElementById('teacherSchool');
+
+      // State: student rows
+      let students = [
+        { studentName: '', schoolName: '', studentEmail: '', studentContactNumber: '' }
+      ];
+
+      // Switch Visitor Category UI
+      function setVisitorCategory(isTeacher) {
+        if (isTeacher) {
+          cardTeacher.classList.add('selected');
+          cardIndividual.classList.remove('selected');
+          typeTeacher.checked = true;
+          sectionTeacher.style.display = 'block';
+          sectionIndividual.style.display = 'none';
+        } else {
+          cardIndividual.classList.add('selected');
+          cardTeacher.classList.remove('selected');
+          typeIndividual.checked = true;
+          sectionIndividual.style.display = 'block';
+          sectionTeacher.style.display = 'none';
+        }
+        clearErrors();
+      }
+
+      cardIndividual.addEventListener('click', () => setVisitorCategory(false));
+      cardTeacher.addEventListener('click', () => setVisitorCategory(true));
+
+      // Render Dynamic Student Entries
+      function renderStudents() {
+        studentContainer.innerHTML = '';
+        studentCountBadge.textContent = `${students.length} ${students.length === 1 ? 'Student' : 'Students'}`;
+
+        students.forEach((student, index) => {
+          const card = document.createElement('div');
+          card.className = 'student-entry-card';
+          card.dataset.index = index;
+
+          const defaultSchool = student.schoolName || teacherSchoolInput.value.trim();
+
+          card.innerHTML = `
+            <div class="student-header">
+              <span class="student-index-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Student #${index + 1}
+              </span>
+              ${students.length > 1 ? `
+                <button type="button" class="btn-remove-student" data-remove-index="${index}">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  Remove
+                </button>
+              ` : ''}
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group" style="grid-column: span 2;">
+                <label style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.35rem; font-size: 0.9rem;">
+                  Student Full Name <span style="color: #e53935;">*</span>
+                </label>
+                <input type="text" class="form-control student-input-name" data-field="studentName" value="${escapeHtml(student.studentName)}" placeholder="Enter student's full name" style="width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--color-border); border-radius: 6px; font-size: 0.95rem;" required>
+              </div>
+              <div class="form-group" style="grid-column: span 2;">
+                <label style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.35rem; font-size: 0.9rem;">
+                  School Name <span style="font-weight: 400; color: #64748b;">(defaults to teacher's school)</span>
+                </label>
+                <input type="text" class="form-control student-input-school" data-field="schoolName" value="${escapeHtml(defaultSchool)}" placeholder="School name" style="width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--color-border); border-radius: 6px; font-size: 0.95rem;">
+              </div>
+              <div class="form-group">
+                <label style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.35rem; font-size: 0.9rem;">
+                  Student Email ID <span style="font-weight: 400; color: #64748b;">(Optional)</span>
+                </label>
+                <input type="email" class="form-control" data-field="studentEmail" value="${escapeHtml(student.studentEmail)}" placeholder="student@example.com" style="width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--color-border); border-radius: 6px; font-size: 0.95rem;">
+              </div>
+              <div class="form-group">
+                <label style="display: block; font-weight: 600; color: #1e2b6d; margin-bottom: 0.35rem; font-size: 0.9rem;">
+                  Student Contact Number <span style="font-weight: 400; color: #64748b;">(Optional)</span>
+                </label>
+                <input type="tel" class="form-control" data-field="studentContactNumber" value="${escapeHtml(student.studentContactNumber)}" placeholder="Contact number" style="width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--color-border); border-radius: 6px; font-size: 0.95rem;">
+              </div>
+            </div>
+          `;
+          studentContainer.appendChild(card);
+        });
+
+        // Attach dynamic input listeners to preserve values
+        studentContainer.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', function() {
+            const cardIdx = parseInt(this.closest('.student-entry-card').dataset.index, 10);
+            const field = this.dataset.field;
+            if (students[cardIdx]) {
+              students[cardIdx][field] = this.value;
+            }
+          });
+        });
+
+        // Attach remove buttons
+        studentContainer.querySelectorAll('.btn-remove-student').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const remIdx = parseInt(this.dataset.removeIndex, 10);
+            if (students.length > 1) {
+              students.splice(remIdx, 1);
+              renderStudents();
+            }
+          });
+        });
+
+        // Hide add button if limit reached
+        if (students.length >= MAX_STUDENTS) {
+          addStudentBtn.style.display = 'none';
+        } else {
+          addStudentBtn.style.display = 'flex';
+        }
+      }
+
+      // Add another student
+      addStudentBtn.addEventListener('click', () => {
+        if (students.length < MAX_STUDENTS) {
+          const teacherSchool = teacherSchoolInput.value.trim();
+          students.push({ studentName: '', schoolName: teacherSchool, studentEmail: '', studentContactNumber: '' });
+          renderStudents();
+        }
+      });
+
+      // Update school on existing students when teacher's school changes if blank
+      teacherSchoolInput.addEventListener('change', () => {
+        const tSchool = teacherSchoolInput.value.trim();
+        students.forEach(st => {
+          if (!st.schoolName) st.schoolName = tSchool;
+        });
+        renderStudents();
+      });
+
+      // Clear errors
+      function clearErrors() {
+        formErrorBanner.style.display = 'none';
+        formErrorBanner.textContent = '';
+        document.querySelectorAll('.field-error').forEach(el => el.style.display = 'none');
+      }
+
+      function showError(elemId, msg) {
+        const el = document.getElementById(elemId);
+        if (el) {
+          el.textContent = msg;
+          el.style.display = 'block';
+        }
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+        });
+      }
+
+      // Initial render of 1 student
+      renderStudents();
+
+      // Form Submit Handler
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const isTeacher = typeTeacher.checked;
+        const errors = [];
+
+        // Honeypot check
+        const hp = document.getElementById('website_hp').value;
+        if (hp) return;
+
+        let payload = {
+          action: 'registerVisitorPass',
+          isTeacher: isTeacher
+        };
+
+        if (isTeacher) {
+          const teacherName = document.getElementById('teacherName').value.trim();
+          const teacherSchool = document.getElementById('teacherSchool').value.trim();
+          const teacherEmail = document.getElementById('teacherEmail').value.trim();
+          const teacherPhone = document.getElementById('teacherPhone').value.trim();
+          const teacherAttending = document.getElementById('teacherAttending').checked;
+
+          if (!teacherName) {
+            showError('teacherNameError', 'Teacher full name is required.');
+            errors.push('Teacher full name is required.');
+          }
+          if (!teacherSchool) {
+            showError('teacherSchoolError', 'School name is required.');
+            errors.push('School name is required.');
+          }
+          if (!teacherEmail || !teacherEmail.includes('@')) {
+            showError('teacherEmailError', 'Please provide a valid teacher email.');
+            errors.push('Valid teacher email is required.');
+          }
+          if (!teacherPhone || teacherPhone.length < 8) {
+            showError('teacherPhoneError', 'Please provide a valid contact number.');
+            errors.push('Teacher contact number is required.');
+          }
+
+          // Validate students
+          const validStudents = [];
+          students.forEach((st, idx) => {
+            const name = (st.studentName || '').trim();
+            if (!name) {
+              errors.push(`Student #${idx + 1} name is required.`);
+            } else {
+              validStudents.push({
+                studentName: name,
+                schoolName: (st.schoolName || teacherSchool).trim(),
+                studentEmail: (st.studentEmail || '').trim(),
+                studentContactNumber: (st.studentContactNumber || '').trim()
+              });
+            }
+          });
+
+          if (validStudents.length === 0) {
+            errors.push('Please add at least one student.');
+          }
+
+          payload.teacherName = teacherName;
+          payload.schoolName = teacherSchool;
+          payload.teacherEmail = teacherEmail;
+          payload.teacherContactNumber = teacherPhone;
+          payload.teacherAttending = teacherAttending;
+          payload.students = validStudents;
+
+        } else {
+          const fullName = document.getElementById('indivName').value.trim();
+          const schoolName = document.getElementById('indivSchool').value.trim();
+          const email = document.getElementById('indivEmail').value.trim();
+          const contactNumber = document.getElementById('indivPhone').value.trim();
+
+          if (!fullName) {
+            showError('indivNameError', 'Full name is required.');
+            errors.push('Full name is required.');
+          }
+          if (!schoolName) {
+            showError('indivSchoolError', 'School / Institution name is required.');
+            errors.push('School name is required.');
+          }
+          if (!email || !email.includes('@')) {
+            showError('indivEmailError', 'Please provide a valid email address.');
+            errors.push('Valid email address is required.');
+          }
+          if (!contactNumber || contactNumber.length < 8) {
+            showError('indivPhoneError', 'Please provide a valid contact number.');
+            errors.push('Contact number is required.');
+          }
+
+          payload.fullName = fullName;
+          payload.schoolName = schoolName;
+          payload.email = email;
+          payload.contactNumber = contactNumber;
+        }
+
+        if (errors.length > 0) {
+          formErrorBanner.textContent = 'Please correct the highlighted fields before submitting.';
+          formErrorBanner.style.display = 'block';
+          formErrorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        loadingOverlay.style.display = 'flex';
+        loadingText.textContent = 'Saving Registration & Generating Passes...';
+
+        try {
+          let responseData = null;
+
+          // Attempt 1: Call server-side API proxy
+          try {
+            const res = await fetch(API_URL + '?action=register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+              responseData = await res.json();
+            }
+          } catch (proxyErr) {
+            console.warn('API proxy unreachable, attempting direct Google Apps Script fallback:', proxyErr);
+          }
+
+          // Attempt 2: If proxy failed (e.g. running on local file:// or purely static server), call Apps Script direct
+          if (!responseData || !responseData.success) {
+            const gasRes = await fetch(FALLBACK_GAS_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(payload)
+            });
+            const gasData = await gasRes.json();
+            if (gasData && (gasData.status === 'success' || gasData.success)) {
+              responseData = {
+                success: true,
+                groupId: gasData.groupId,
+                records: gasData.records || []
+              };
+            } else {
+              throw new Error((gasData && gasData.message) || 'Error from Google Sheets database.');
+            }
+          }
+
+          if (responseData && responseData.success) {
+            // Render Success Summary
+            renderSuccessSummary(responseData);
+            form.style.display = 'none';
+            successScreen.style.display = 'block';
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+          } else {
+            throw new Error((responseData && responseData.error) || 'Failed to complete registration.');
+          }
+
+        } catch (err) {
+          console.error('Registration Error:', err);
+          formErrorBanner.textContent = err.message || 'An error occurred during submission. Please check your connection and try again.';
+          formErrorBanner.style.display = 'block';
+        } finally {
+          submitBtn.disabled = false;
+          loadingOverlay.style.display = 'none';
+        }
+      });
+
+      // Render Success Summary
+      function renderSuccessSummary(data) {
+        const records = data.records || [];
+        const isGroup = !!data.groupId;
+
+        let html = '';
+        if (isGroup) {
+          html += `
+            <div style="border-bottom: 2px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Teacher / Group Reference</span>
+                <div style="font-family: monospace; font-size: 1.25rem; font-weight: 800; color: #0077b6;">${escapeHtml(data.groupId)}</div>
+              </div>
+              <span style="background: #e0f7fa; color: #0077b6; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.85rem;">
+                ${records.length} Passes Allocated
+              </span>
+            </div>
+            <div style="font-weight: 700; color: #1e2b6d; margin-bottom: 0.75rem;">Registered Attendees &amp; Visitor IDs:</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+          `;
+
+          records.forEach(rec => {
+            const isT = rec.visitorType === 'Teacher';
+            html += `
+              <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 10px 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <div>
+                  <strong style="color: #1e2b6d;">${escapeHtml(rec.visitorName)}</strong>
+                  <span style="display: inline-block; margin-left: 8px; font-size: 0.75rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; ${isT ? 'background: #fff9c4; color: #b78103;' : 'background: #e0f2fe; color: #0284c7;'}">
+                    ${escapeHtml(rec.visitorType)}
+                  </span>
+                </div>
+                <div style="font-family: monospace; font-weight: 800; color: #0077b6; font-size: 0.95rem;">
+                  ${escapeHtml(rec.visitorId)}
+                </div>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        } else {
+          // Individual
+          const rec = records[0] || {};
+          html += `
+            <div style="text-align: center; padding: 0.5rem 0;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Your Unique Visitor ID</span>
+              <div style="font-family: monospace; font-size: 2rem; font-weight: 900; color: #0077b6; margin: 0.5rem 0; letter-spacing: 0.05em;">
+                ${escapeHtml(rec.visitorId || 'PS-VIS-2026-CONFIRMED')}
+              </div>
+              <div style="color: #1e2b6d; font-weight: 700; font-size: 1.15rem;">${escapeHtml(rec.visitorName || '')}</div>
+              <div style="color: #64748b; font-size: 0.95rem;">${escapeHtml(rec.schoolName || '')}</div>
+            </div>
+          `;
+        }
+
+        successSummaryBox.innerHTML = html;
+      }
+
+      // Register another button
+      registerAnotherBtn.addEventListener('click', () => {
+        form.reset();
+        students = [{ studentName: '', schoolName: '', studentEmail: '', studentContactNumber: '' }];
+        renderStudents();
+        setVisitorCategory(false);
+        form.style.display = 'block';
+        successScreen.style.display = 'none';
+        window.scrollTo({ top: 150, behavior: 'smooth' });
+      });
+
+    })();
+  </script>
+</body>
+</html>

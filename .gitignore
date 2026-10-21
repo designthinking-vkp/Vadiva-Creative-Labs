@@ -25,3 +25,11 @@ yarn-debug.log*
 yarn-error.log*
 logs/
 *.log
+
+# Private Visitor Pass Data & Credentials
+api/admin_auth.json
+api/visitor_registrations_backup.json
+api/rate_limits/
+*.pdf
+*.zip
+scratch/
