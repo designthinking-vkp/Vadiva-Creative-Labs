@@ -2,7 +2,7 @@
  * Protospark 2026 Student Team & Visitor Pass Backend
  * 
  * Instructions:
- * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8/edit?gid=0#gid=0
+ * 1. Open your Google Sheet: https://docs.google.com/spreadsheets/d/1TJNnBRlIQmdmc0C6rTtrrn5jg5f1WzsYa0rruA1aX9U/edit?gid=0#gid=0
  * 2. Click Extensions > Apps Script in the menu.
  * 3. Delete any default code in Code.gs and paste this script.
  * 4. Click Save (disk icon).
@@ -15,8 +15,8 @@
  * 11. Copy the "Web app URL" and paste it as the API endpoint in the frontend protospark-register.html page or api/config.php.
  */
 
-var PROTOSPARK_SPREADSHEET_ID = "1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8";
-var PROTOSPARK_SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1aANITWUsSJZSzQQLxIAP9iuPE99hQN0NpIRnRHUTEm8/edit";
+var PROTOSPARK_SPREADSHEET_ID = "1TJNnBRlIQmdmc0C6rTtrrn5jg5f1WzsYa0rruA1aX9U";
+var PROTOSPARK_SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1TJNnBRlIQmdmc0C6rTtrrn5jg5f1WzsYa0rruA1aX9U/edit";
 
 /**
  * Helper to obtain the Google Spreadsheet instance:
@@ -407,6 +407,14 @@ function doGet(e) {
   if (action === "verifyVisitorPass") {
     var visitorId = e.parameter.id || e.parameter.visitorId;
     return handleVerifyVisitorPass(ss, visitorId, callback);
+  } else if (action === "verifyIntegration" || action === "checkIntegration") {
+    var integrationReport = verifyVisitorPassIntegration();
+    if (callback) {
+      return ContentService.createTextOutput(callback + "(" + JSON.stringify(integrationReport) + ")")
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return ContentService.createTextOutput(JSON.stringify(integrationReport))
+      .setMimeType(ContentService.MimeType.JSON);
   } else if (action === "getVisitorPasses") {
     return handleGetVisitorPasses(ss, e.parameter, callback);
   } else if (action === "getRegistrationId") {
@@ -665,6 +673,87 @@ function getOrCreateVisitorPassSheet(ss) {
   // 5. Otherwise create and insert the target "Visitor pass" worksheet
   vpSheet = ss.insertSheet(VISITOR_PASS_SHEET_NAME);
   return prepareVisitorPassHeaders(vpSheet);
+}
+
+/**
+ * Diagnostic & verification utility:
+ * Can be run manually in Apps Script Editor or triggered via GET ?action=verifyIntegration
+ * Confirms spreadsheet accessibility, verifies the "Visitor pass" worksheet, and checks required headers.
+ */
+function verifyVisitorPassIntegration() {
+  var report = {
+    timestamp: new Date().toISOString(),
+    spreadsheetId: PROTOSPARK_SPREADSHEET_ID,
+    spreadsheetAccessible: false,
+    spreadsheetTitle: "",
+    worksheetFound: false,
+    worksheetName: "",
+    headersValid: false,
+    missingHeaders: [],
+    presentHeaders: [],
+    totalRows: 0,
+    status: "pending"
+  };
+  
+  try {
+    var ss = getProtosparkSpreadsheet();
+    if (!ss) {
+      report.status = "error";
+      report.error = "Could not open spreadsheet with ID: " + PROTOSPARK_SPREADSHEET_ID;
+      Logger.log(JSON.stringify(report, null, 2));
+      return report;
+    }
+    
+    report.spreadsheetAccessible = true;
+    report.spreadsheetTitle = ss.getName();
+    
+    var vpSheet = getOrCreateVisitorPassSheet(ss);
+    if (!vpSheet) {
+      report.status = "error";
+      report.error = "Failed to locate or initialize 'Visitor pass' worksheet.";
+      Logger.log(JSON.stringify(report, null, 2));
+      return report;
+    }
+    
+    report.worksheetFound = true;
+    report.worksheetName = vpSheet.getName();
+    report.totalRows = vpSheet.getLastRow();
+    
+    // Check headers in row 1
+    var lastCol = Math.max(vpSheet.getLastColumn(), VISITOR_PASS_HEADERS.length);
+    var actualHeaders = [];
+    if (vpSheet.getLastRow() >= 1 && lastCol > 0) {
+      actualHeaders = vpSheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) {
+        return String(h || "").trim();
+      });
+    }
+    report.presentHeaders = actualHeaders;
+    
+    var missing = [];
+    for (var i = 0; i < VISITOR_PASS_HEADERS.length; i++) {
+      if (actualHeaders.indexOf(VISITOR_PASS_HEADERS[i]) === -1) {
+        missing.push(VISITOR_PASS_HEADERS[i]);
+      }
+    }
+    report.missingHeaders = missing;
+    report.headersValid = (missing.length === 0);
+    
+    if (report.headersValid) {
+      report.status = "success";
+      report.message = "Spreadsheet and 'Visitor pass' worksheet verified with all required headers.";
+    } else {
+      report.status = "warning";
+      report.message = "Worksheet found but missing headers: " + missing.join(", ");
+    }
+    
+    Logger.log(JSON.stringify(report, null, 2));
+    return report;
+  } catch (err) {
+    report.status = "error";
+    report.error = err.toString();
+    Logger.log("verifyVisitorPassIntegration error: " + err.toString());
+    return report;
+  }
 }
 
 function handleVisitorPassRegistration(ss, data) {
