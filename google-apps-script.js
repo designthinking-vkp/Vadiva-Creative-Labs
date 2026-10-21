@@ -982,12 +982,11 @@ function handleGetVisitorPasses(ss, params, callback) {
       }
     }
     
-    result = {
-      status: "success",
-      count: records.length,
-      records: records
-    };
-  }
+  result = {
+    status: "success",
+    count: records.length,
+    records: records
+  };
   
   if (callback) {
     return ContentService.createTextOutput(callback + "(" + JSON.stringify(result) + ")")
