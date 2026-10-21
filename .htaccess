@@ -1,5 +1,12 @@
 RewriteEngine On
 
+# LiteSpeed Web Server Automated reCAPTCHA Bypass:
+# Prevents Hostinger/LiteSpeed Anti-DDoS engine from intercepting visitors or form submissions with a CAPTCHA challenge
+<IfModule LiteSpeed>
+    RewriteRule .* - [E=nrc:1,E=nobreak:1]
+</IfModule>
+RewriteRule ^api/ - [E=nrc:1]
+
 # Explicit Protospark Routes
 RewriteRule ^protospark/?$ protospark.html [L]
 RewriteRule ^protospark/admin/visitor-passes/?$ protospark-admin-visitor-passes.html [L]

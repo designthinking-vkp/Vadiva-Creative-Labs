@@ -117,10 +117,13 @@ function fetchGas(postPayload, queryParam = '') {
         port: u.port || (isHttps ? 443 : 80),
         path: u.pathname + u.search,
         method: postData ? 'POST' : 'GET',
-        headers: postData ? {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData)
-        } : {}
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          ...(postData ? {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData)
+          } : {})
+        }
       };
 
       const req = client.request(opts, (res) => {

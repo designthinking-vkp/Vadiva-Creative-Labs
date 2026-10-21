@@ -59,14 +59,17 @@ if (!is_array($input)) {
     $input = $_POST;
 }
 
-// 3. Honeypot Spam Protection
+// 3. Honeypot Spam Protection (prevent autofill false-positives)
 if (!empty($input['website_url_hp']) || !empty($input['honeypot']) || !empty($input['hp_field'])) {
-    // Silently return success to spam bots without processing or storing
-    echo json_encode(array(
-        'success' => true,
-        'message' => 'Registration received'
-    ));
-    exit;
+    $hasLegitData = !empty($input['participantName']) && (!empty($input['email']) || !empty($input['contactNumber']));
+    if (!$hasLegitData) {
+        // Silently return success to spam bots without processing or storing
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'Registration received'
+        ));
+        exit;
+    }
 }
 
 // 4. Sanitize and Extract Fields
@@ -189,6 +192,7 @@ $gasResponse = null;
 if (!empty($gasEndpoint)) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $gasEndpoint);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));

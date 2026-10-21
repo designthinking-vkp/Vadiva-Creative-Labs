@@ -142,6 +142,7 @@ function getAdminCredentials($authFile, $defaultUsername) {
 function forwardToGas($gasUrl, $payload) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $gasUrl);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
@@ -301,6 +302,7 @@ if ($action === 'verify') {
     $verifyUrl = $gasUrl . '?action=verifyVisitorPass&id=' . urlencode($visitorId);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $verifyUrl);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 15);
@@ -350,6 +352,7 @@ if ($action === 'list') {
     $listUrl = $gasUrl . '?action=getVisitorPasses';
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $listUrl);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 25);
