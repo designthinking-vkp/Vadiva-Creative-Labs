@@ -1,12 +1,304 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <base href="/">
   <meta charset="UTF-8">
-  <title>Redirecting to Pass Verification</title>
-  <meta http-equiv="refresh" content="0; url=../../protospark-verify-pass.html">
-  <script>window.location.replace("../../protospark-verify-pass.html" + window.location.search);</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Protospark '26 Visitor Pass | Vadiva Creative Labs</title>
+  <meta name="description" content="Verify the authenticity and validity of an official Protospark 2026 Visitor Pass.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @media (max-width: 540px) {
+      .verify-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .verify-form-container {
+        flex-direction: column !important;
+      }
+      .verify-form-container button {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+    }
+  </style>
 </head>
-<body>
-  <p>Redirecting to <a href="../../protospark-verify-pass.html">Protospark Pass Verification</a>...</p>
+<body class="protospark-theme">
+
+  <!-- Header Section -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="https://vadivacreativelabs.com/" class="logo-split-container" aria-label="Vadiva Creative Labs Home">
+          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 48px; width: auto; display: block;">
+          <span class="logo-divider">|</span>
+          <img src="assets/protospark-logo.png" alt="Protospark Logo" style="height: 48px; width: 202px; display: block;">
+        </a>
+      </div>
+      
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+          <li class="nav-item"><a href="protospark.html" class="nav-link">Protospark</a></li>
+          <li class="nav-item"><a href="protospark-visitor-pass.html" class="nav-link">Visitor Pass</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="mobile-drawer-cta">
+          <a href="protospark.html" class="btn btn-sm btn-secondary">Protospark Info</a>
+          <a href="protospark-visitor-pass.html" class="btn btn-sm btn-primary">Register as Visitor</a>
+        </div>
+      </nav>
+
+      <div class="header-action">
+        <a href="protospark-visitor-pass.html" class="btn btn-sm btn-primary header-cta">Register as Visitor</a>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="registration-container" style="max-width: 680px; margin: 3rem auto; padding: 0 1.5rem;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div style="font-family: var(--font-heading); font-size: 0.9rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
+        Gate &amp; Entry Verification
+      </div>
+      <h1 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-dark); margin-bottom: 0.75rem; font-weight: 800;">
+        Verify Protospark Visitor Pass
+      </h1>
+      <p style="color: var(--color-dark-light); font-size: 1rem; line-height: 1.5;">
+        Scan a pass QR code or enter a Visitor ID below to verify authenticity and admission status for Protospark '26 in Kuala Lumpur, Malaysia.
+      </p>
+    </div>
+
+    <!-- Search Box -->
+    <div style="background: #ffffff; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-premium); border: 1px solid var(--color-border); margin-bottom: 2rem;">
+      <form id="verifyForm" class="verify-form-container" style="display: flex; gap: 10px;">
+        <input type="text" id="visitorIdInput" placeholder="Enter Visitor ID (e.g. PS-VIS-2026-000001)" style="flex: 1; min-width: 0; padding: 0.85rem 1rem; border: 2px solid var(--color-border); border-radius: 8px; font-family: monospace; font-size: 1.05rem; font-weight: 700; text-transform: uppercase;" required>
+        <button type="submit" id="searchBtn" class="btn btn-primary" style="padding: 0 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Verify
+        </button>
+      </form>
+    </div>
+
+    <!-- Status Result Box -->
+    <div id="resultBox" class="printable-pass-area" style="display: none; background: #ffffff; border-radius: 16px; box-shadow: var(--shadow-premium); border: 1px solid var(--color-border); overflow: hidden;">
+      <!-- Dynamically populated -->
+    </div>
+
+    <!-- Loading State -->
+    <div id="verifyLoading" style="display: none; text-align: center; padding: 3rem 1rem;">
+      <div style="width: 44px; height: 44px; border: 4px solid #e0f7fa; border-top-color: #00b4d8; border-radius: 50%; margin: 0 auto 1rem auto; animation: spin 0.8s linear infinite;"></div>
+      <div style="font-weight: 700; color: #1e2b6d;">Verifying Pass in Event Database...</div>
+    </div>
+  </main>
+
+  <footer style="background: #0f172a; color: #94a3b8; padding: 2.5rem 0; margin-top: 4rem; text-align: center; font-size: 0.85rem;">
+    <div class="container">
+      <p style="margin-bottom: 0.35rem; color: #ffffff; font-weight: 600;">Protospark '26 • Official Verification Portal</p>
+      <p style="margin: 0;">Powered by Vadiva Creative Labs. Privacy-protected gate validation.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    (function() {
+      const API_URL = 'api/visitor-pass.php';
+      const FALLBACK_GAS_URL = 'https://script.google.com/macros/s/AKfycbxiLFS3szE1P7hERw2Ph5LgliSqASHOfluPN32lrs1gnRQkzRKzGhgxjJgFPcZS61E/exec';
+
+      const verifyForm = document.getElementById('verifyForm');
+      const visitorIdInput = document.getElementById('visitorIdInput');
+      const resultBox = document.getElementById('resultBox');
+      const verifyLoading = document.getElementById('verifyLoading');
+
+      // Check query parameter ?id=
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialId = urlParams.get('id') || urlParams.get('visitorId');
+      if (initialId) {
+        visitorIdInput.value = initialId.trim();
+        performVerification(initialId.trim());
+      }
+
+      verifyForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const id = visitorIdInput.value.trim();
+        if (id) {
+          performVerification(id);
+        }
+      });
+
+      async function performVerification(id) {
+        resultBox.style.display = 'none';
+        verifyLoading.style.display = 'block';
+
+        try {
+          let data = null;
+
+          // Try server API first
+          try {
+            const res = await fetch(`${API_URL}?action=verify&id=${encodeURIComponent(id)}`);
+            if (res.ok) {
+              data = await res.json();
+            }
+          } catch (e) {
+            console.warn('Backend proxy unreachable, checking Google Apps Script:', e);
+          }
+
+          // Fallback to Apps Script direct
+          if (!data || !data.success) {
+            const gasRes = await fetch(`${FALLBACK_GAS_URL}?action=verifyVisitorPass&id=${encodeURIComponent(id)}`);
+            const gasData = await gasRes.json();
+            if (gasData && gasData.status === 'success') {
+              data = {
+                success: true,
+                valid: gasData.valid,
+                visitor: gasData
+              };
+            }
+          }
+
+          if (data && data.success && data.visitor) {
+            renderResult(data.visitor, data.valid !== false);
+          } else {
+            renderNotFound(id);
+          }
+        } catch (err) {
+          console.error('Verification error:', err);
+          renderNotFound(id);
+        } finally {
+          verifyLoading.style.display = 'none';
+        }
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+        });
+      }
+
+      function renderResult(visitor, isValid) {
+        const isCancelled = (visitor.registrationStatus || '').toLowerCase() === 'cancelled';
+        const isActuallyValid = isValid && !isCancelled;
+
+        resultBox.innerHTML = `
+          <!-- Header Banner -->
+          <div style="background: ${isActuallyValid ? 'linear-gradient(135deg, #166534 0%, #22c55e 100%)' : '#dc2626'}; color: #ffffff; padding: 1.5rem; text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; margin-bottom: 0.5rem;">
+              ${isActuallyValid ? `
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              ` : `
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              `}
+            </div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; margin: 0 0 4px 0;">
+              ${isActuallyValid ? 'OFFICIAL VISITOR PASS - VALID' : 'PASS INACTIVE / CANCELLED'}
+            </h2>
+            <div style="font-size: 0.85rem; opacity: 0.95;">
+              ${isActuallyValid ? 'Authorized for Event Admission • Protospark \'26' : 'This pass is marked cancelled and is not valid for entry.'}
+            </div>
+          </div>
+
+          <!-- Body Info -->
+          <div style="padding: 1.75rem;">
+            <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; margin-bottom: 1rem;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Visitor ID</span>
+              <div style="font-family: monospace; font-size: 1.6rem; font-weight: 900; color: #0077b6;">
+                ${escapeHtml(visitor.visitorId)}
+              </div>
+            </div>
+
+            <div class="verify-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Visitor Name</span>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #1e2b6d;">${escapeHtml(visitor.visitorName || 'N/A')}</div>
+              </div>
+
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Visitor Type</span>
+                <div>
+                  <span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.85rem; background: #e0f2fe; color: #0369a1;">
+                    ${escapeHtml(visitor.visitorType || 'Visitor')}
+                  </span>
+                </div>
+              </div>
+
+              <div style="grid-column: span 2;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">School / Organization</span>
+                <div style="font-size: 1.05rem; font-weight: 600; color: #334155;">${escapeHtml(visitor.schoolName || 'N/A')}</div>
+              </div>
+
+              ${visitor.groupReference ? `
+                <div style="grid-column: span 2;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Group Reference ID</span>
+                  <div style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: #0077b6;">${escapeHtml(visitor.groupReference)}</div>
+                </div>
+              ` : ''}
+
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Issued Date</span>
+                <div style="font-size: 0.9rem; color: #475569;">${escapeHtml(visitor.registrationDate || 'Official Event Pass')}</div>
+              </div>
+
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Pass Status</span>
+                <div style="font-size: 0.9rem; font-weight: 700; color: ${isActuallyValid ? '#15803d' : '#b91c1c'};">
+                  ${escapeHtml(visitor.registrationStatus || 'Confirmed')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Gate Privacy Notice -->
+            <div style="margin-top: 1.5rem; background: #f8fafc; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.78rem; color: #64748b; line-height: 1.4;">
+              <strong>Gate Security Notice:</strong> This public verification response displays only entry-essential credentials. Private personal details (email and contact numbers) are withheld in compliance with privacy requirements.
+            </div>
+
+            ${isActuallyValid ? `
+              <div class="no-print" style="margin-top: 1.25rem;">
+                <button type="button" onclick="window.print()" class="btn btn-primary" style="width: 100%; padding: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; cursor: pointer;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                  </svg>
+                  Print / Save Pass (PDF)
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        resultBox.style.display = 'block';
+      }
+
+      function renderNotFound(id) {
+        resultBox.innerHTML = `
+          <div style="background: #ef4444; color: #ffffff; padding: 1.5rem; text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; margin-bottom: 0.5rem;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; margin: 0 0 4px 0;">
+              VISITOR PASS NOT FOUND
+            </h2>
+            <div style="font-size: 0.85rem; opacity: 0.95;">
+              The Visitor ID "${escapeHtml(id)}" does not exist in the official registration database.
+            </div>
+          </div>
+          <div style="padding: 1.5rem; text-align: center; color: #475569; font-size: 0.9rem;">
+            Please ensure the Visitor ID is typed accurately, or contact the registration coordinator desk at <strong>reach@vadivacreativelabs.com</strong>.
+          </div>
+        `;
+        resultBox.style.display = 'block';
+      }
+    })();
+  </script>
 </body>
 </html>
