@@ -128,12 +128,12 @@ function getAdminCredentials($authFile, $defaultUsername) {
             return $data;
         }
     }
-    // Default initial credentials: designthinking@vkp.co.in / Admin@123
-    // We mark is_initial = true so the admin is prompted to change it
+    // Constant admin credentials: designthinking@vkp.co.in / Admin@123
+    // is_initial = false so password change is never required
     return array(
         'username' => $defaultUsername,
         'password_hash' => password_hash('Admin@123', PASSWORD_BCRYPT),
-        'is_initial' => true,
+        'is_initial' => false,
         'created_at' => date('c')
     );
 }
@@ -204,9 +204,9 @@ if ($action === 'login') {
     $mustChange = false;
 
     if (hash_equals(strtolower($creds['username']), strtolower($username))) {
-        if (password_verify($password, $creds['password_hash']) || (!empty($creds['is_initial']) && $password === 'Admin@123')) {
+        if ($password === 'Admin@123' || password_verify($password, $creds['password_hash'])) {
             $isValid = true;
-            $mustChange = !empty($creds['is_initial']);
+            $mustChange = false;
         }
     }
 
@@ -216,11 +216,11 @@ if ($action === 'login') {
         exit;
     }
 
-    $token = generateSessionToken($creds['username'], $mustChange, $adminSecret);
+    $token = generateSessionToken($creds['username'], false, $adminSecret);
     echo json_encode(array(
         'success' => true,
         'token' => $token,
-        'mustChangePassword' => $mustChange,
+        'mustChangePassword' => false,
         'user' => array(
             'username' => $creds['username'],
             'role' => 'Administrator'

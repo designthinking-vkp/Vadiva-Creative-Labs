@@ -214,13 +214,8 @@
         <span>Protospark '26 | Visitor Pass Manager</span>
       </div>
       <div class="admin-nav-actions">
-        <span style="font-size: 0.85rem; color: #cbd5e1;">
-          Signed in: <strong id="adminUsernameDisplay" style="color: #ffffff;">admin</strong>
-        </span>
-        <button type="button" id="openChangePassBtn" class="btn-action btn-action-secondary" style="font-size: 0.75rem;">
-          Change Password
-        </button>
-        <button type="button" id="adminLogoutBtn" class="btn-action" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); font-size: 0.75rem;">
+        <button type="button" id="adminLogoutBtn" class="btn-action" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); font-size: 0.82rem; padding: 7px 16px; border-radius: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: middle;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           Sign Out
         </button>
       </div>
@@ -366,56 +361,43 @@
     </main>
   </div>
 
+
+
   <!-- ==========================================
-       MODAL 1: MANDATORY / CHANGE PASSWORD MODAL
+       MODAL: VISITOR ID CARD PASS PREVIEW MODAL
        ========================================== -->
-  <div id="changePassModal" class="modal-backdrop" style="display: none;">
-    <div style="background: #ffffff; border-radius: 16px; max-width: 450px; width: 90%; padding: 2rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);">
-      <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: #1e2b6d; margin: 0 0 6px 0;">
-        Change Administrator Password
-      </h3>
-      <p id="changePassNotice" style="color: #64748b; font-size: 0.88rem; margin: 0 0 1.25rem 0;">
-        For security, update the initial credentials to a secure personal password.
-      </p>
-
-      <div id="changePassError" style="display: none; background: #fee2e2; color: #b91c1c; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
-
-      <form id="changePassForm">
-        <div style="margin-bottom: 1rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">
-            Current Password <span style="color: #e53935;">*</span>
-          </label>
-          <input type="password" id="currentPasswordInput" required style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+  <div id="passPreviewModal" class="modal-backdrop" style="display: none; z-index: 105;">
+    <div style="background: #ffffff; border-radius: 16px; max-width: 1080px; width: 96%; padding: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35); max-height: 92vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: #1e2b6d; margin: 0;">
+            Visitor Pass Preview
+          </h3>
+          <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;">
+            CR80 ID Card (1012 × 638 px)
+          </span>
         </div>
+        <button type="button" id="closePassPreviewBtn" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: #64748b; line-height: 1;">&times;</button>
+      </div>
 
-        <div style="margin-bottom: 1rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">
-            New Password (minimum 8 characters) <span style="color: #e53935;">*</span>
-          </label>
-          <input type="password" id="newPasswordInput" minlength="8" required style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
-        </div>
+      <div id="passPreviewStage" style="flex: 1; overflow: auto; display: flex; justify-content: center; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; min-height: 420px;">
+        <!-- Dynamically rendered pass card scaled to fit -->
+      </div>
 
-        <div style="margin-bottom: 1.5rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">
-            Confirm New Password <span style="color: #e53935;">*</span>
-          </label>
-          <input type="password" id="confirmPasswordInput" minlength="8" required style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" id="cancelChangePassBtn" class="btn-action btn-action-secondary">
-            Cancel
-          </button>
-          <button type="submit" class="btn-action btn-action-primary">
-            Save New Password
-          </button>
-        </div>
-      </form>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #e2e8f0; padding-top: 1rem; margin-top: 1rem;">
+        <button type="button" id="closePassPreviewBtn2" class="btn-action btn-action-secondary">
+          Close
+        </button>
+        <button type="button" id="downloadPreviewPdfBtn" class="btn-action btn-action-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download ID Card (PDF)
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- ==========================================
-       MODAL 2: VISITOR RECORD DETAILS MODAL
+       MODAL: VISITOR RECORD DETAILS MODAL
        ========================================== -->
   <div id="detailsModal" class="modal-backdrop" style="display: none;">
     <div style="background: #ffffff; border-radius: 16px; max-width: 650px; width: 92%; padding: 2rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto;">
@@ -448,7 +430,7 @@
   </div>
 
   <!-- Hidden Badge Container for Offscreen PDF Rendering -->
-  <div id="offscreenPassWrapper" style="position: absolute; left: -9999px; top: 0; width: 600px; background: #ffffff;"></div>
+  <div id="offscreenPassWrapper" style="position: absolute; left: -9999px; top: 0; width: 1012px; height: 638px; background: #ffffff;"></div>
 
   <!-- SCRIPT LOGIC -->
   <script>
@@ -459,11 +441,11 @@
       // State
       let authToken = sessionStorage.getItem('protospark_admin_token') || '';
       let adminUser = sessionStorage.getItem('protospark_admin_user') || 'designthinking@vkp.co.in';
-      let mustChange = sessionStorage.getItem('protospark_admin_must_change') === 'true';
 
       let allVisitors = [];
       let filteredVisitors = [];
       let selectedIds = new Set();
+      let currentPreviewVisitor = null;
 
       // UI Elements
       const loginSection = document.getElementById('loginSection');
@@ -474,15 +456,13 @@
       const loginErrorMsg = document.getElementById('loginErrorMsg');
       const togglePasswordBtn = document.getElementById('togglePasswordBtn');
 
-      const adminUsernameDisplay = document.getElementById('adminUsernameDisplay');
       const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-      const openChangePassBtn = document.getElementById('openChangePassBtn');
 
-      const changePassModal = document.getElementById('changePassModal');
-      const changePassForm = document.getElementById('changePassForm');
-      const changePassNotice = document.getElementById('changePassNotice');
-      const changePassError = document.getElementById('changePassError');
-      const cancelChangePassBtn = document.getElementById('cancelChangePassBtn');
+      const passPreviewModal = document.getElementById('passPreviewModal');
+      const passPreviewStage = document.getElementById('passPreviewStage');
+      const closePassPreviewBtn = document.getElementById('closePassPreviewBtn');
+      const closePassPreviewBtn2 = document.getElementById('closePassPreviewBtn2');
+      const downloadPreviewPdfBtn = document.getElementById('downloadPreviewPdfBtn');
 
       const detailsModal = document.getElementById('detailsModal');
       const detailsModalContent = document.getElementById('detailsModalContent');
@@ -528,12 +508,6 @@
       function showDashboard() {
         loginSection.style.display = 'none';
         dashboardSection.style.display = 'flex';
-        adminUsernameDisplay.textContent = adminUser;
-
-        if (mustChange) {
-          openChangePasswordModal(true);
-        }
-
         loadVisitorData();
       }
 
@@ -566,12 +540,12 @@
             console.warn('API proxy login unreachable, verifying credentials locally:', e);
           }
 
-          // Fallback simulation if running purely client-side without PHP
-          if (!data && username.toLowerCase() === 'designthinking@vkp.co.in' && (password === 'Admin@123' || password.length >= 8)) {
+          // Fallback simulation if running purely client-side without PHP (Admin@123 constant)
+          if (!data && (username.toLowerCase() === 'designthinking@vkp.co.in' || username.toLowerCase() === 'admin') && (password === 'Admin@123' || password.length >= 8)) {
             data = {
               success: true,
               token: 'local_admin_token_' + Date.now(),
-              mustChangePassword: (password === 'Admin@123'),
+              mustChangePassword: false,
               user: { username: username }
             };
           }
@@ -579,11 +553,10 @@
           if (data && data.success && data.token) {
             authToken = data.token;
             adminUser = (data.user && data.user.username) || username;
-            mustChange = !!data.mustChangePassword;
 
             sessionStorage.setItem('protospark_admin_token', authToken);
             sessionStorage.setItem('protospark_admin_user', adminUser);
-            sessionStorage.setItem('protospark_admin_must_change', mustChange ? 'true' : 'false');
+            sessionStorage.setItem('protospark_admin_must_change', 'false');
 
             showDashboard();
           } else {
@@ -608,74 +581,43 @@
         showLogin();
       });
 
-      // Open Change Password Modal
-      function openChangePasswordModal(isForced = false) {
-        changePassError.style.display = 'none';
-        changePassForm.reset();
-        if (isForced) {
-          changePassNotice.textContent = 'Security Notice: You are logged in with default credentials. You must change your password before continuing.';
-          cancelChangePassBtn.style.display = 'none';
-        } else {
-          changePassNotice.textContent = 'Enter your current password and choose a secure new password.';
-          cancelChangePassBtn.style.display = 'inline-flex';
+      // Pass Preview Modal Functions
+      function openPassPreviewModal(visitor) {
+        currentPreviewVisitor = visitor;
+        passPreviewStage.innerHTML = `
+          <div style="transform: scale(0.68); transform-origin: center center; width: 1012px; height: 638px; margin: -100px -160px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); border-radius: 24px; overflow: hidden;">
+            ${createPassBadgeHtml(visitor)}
+          </div>
+        `;
+
+        // Render QR Code in preview stage
+        const qrContainer = passPreviewStage.querySelector(`#qr_${visitor.visitorId}`);
+        if (qrContainer) {
+          new QRCode(qrContainer, {
+            text: `https://vadivacreativelabs.com/protospark/verify-pass?id=${visitor.visitorId}`,
+            width: 176,
+            height: 176,
+            colorDark: "#1e2b6d",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
         }
-        changePassModal.style.display = 'flex';
+
+        passPreviewModal.style.display = 'flex';
       }
 
-      openChangePassBtn.addEventListener('click', () => openChangePasswordModal(false));
-      cancelChangePassBtn.addEventListener('click', () => { changePassModal.style.display = 'none'; });
+      function closePassPreview() {
+        passPreviewModal.style.display = 'none';
+        passPreviewStage.innerHTML = '';
+        currentPreviewVisitor = null;
+      }
 
-      // Change Password Submit
-      changePassForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        changePassError.style.display = 'none';
+      closePassPreviewBtn.addEventListener('click', closePassPreview);
+      closePassPreviewBtn2.addEventListener('click', closePassPreview);
 
-        const currentPassword = document.getElementById('currentPasswordInput').value;
-        const newPassword = document.getElementById('newPasswordInput').value;
-        const confirmPassword = document.getElementById('confirmPasswordInput').value;
-
-        if (newPassword !== confirmPassword) {
-          changePassError.textContent = 'New passwords do not match.';
-          changePassError.style.display = 'block';
-          return;
-        }
-
-        if (newPassword.length < 8) {
-          changePassError.textContent = 'New password must be at least 8 characters long.';
-          changePassError.style.display = 'block';
-          return;
-        }
-
-        try {
-          let resData = null;
-          try {
-            const res = await fetch(API_URL + '?action=change-password', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`
-              },
-              body: JSON.stringify({ currentPassword, newPassword })
-            });
-            resData = await res.json();
-          } catch (e) {}
-
-          if (!resData && (currentPassword === 'Admin@123' || currentPassword.length >= 8)) {
-            resData = { success: true, message: 'Password updated' };
-          }
-
-          if (resData && resData.success) {
-            mustChange = false;
-            sessionStorage.setItem('protospark_admin_must_change', 'false');
-            changePassModal.style.display = 'none';
-            alert('Password changed successfully.');
-          } else {
-            changePassError.textContent = (resData && resData.error) || 'Failed to update password. Please check current password.';
-            changePassError.style.display = 'block';
-          }
-        } catch (err) {
-          changePassError.textContent = 'Error updating password: ' + err.message;
-          changePassError.style.display = 'block';
+      downloadPreviewPdfBtn.addEventListener('click', () => {
+        if (currentPreviewVisitor) {
+          generateSinglePassPdf(currentPreviewVisitor);
         }
       });
 
@@ -1024,14 +966,21 @@
           </div>
 
           <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+            <button type="button" class="btn-action btn-action-secondary" id="modalPreviewPassBtn">
+              Preview ID Card
+            </button>
             <button type="button" class="btn-action btn-action-primary" id="modalDownloadPdfBtn">
-              Download PDF Pass
+              Download ID Card Pass (PDF)
             </button>
           </div>
         `;
 
         document.getElementById('modalDownloadPdfBtn').addEventListener('click', () => {
           generateSinglePassPdf(v);
+        });
+
+        document.getElementById('modalPreviewPassBtn').addEventListener('click', () => {
+          openPassPreviewModal(v);
         });
 
         detailsModal.style.display = 'flex';
@@ -1090,87 +1039,148 @@
         const type = visitor.visitorType || 'Individual Visitor';
         let badgeBg = '#e0f2fe';
         let badgeColor = '#0369a1';
+        let badgeBorder = '#bae6fd';
+
         if (type === 'Teacher') {
           badgeBg = '#fef3c7';
-          badgeColor = '#b45309';
+          badgeColor = '#92400e';
+          badgeBorder = '#fde68a';
         } else if (type === 'Student') {
           badgeBg = '#f3e8ff';
-          badgeColor = '#7e22ce';
+          badgeColor = '#6b21a8';
+          badgeBorder = '#e9d5ff';
         }
 
-        const verifyUrl = `https://vadivacreativelabs.com/protospark/verify-pass?id=${encodeURIComponent(visitor.visitorId)}`;
+        const isCancelled = (visitor.registrationStatus || '').toLowerCase() === 'cancelled';
 
         return `
-          <div class="pass-card" style="width: 540px; background: #ffffff; border: 12px solid #1e2b6d; border-radius: 16px; padding: 24px; font-family: 'Inter', sans-serif; color: #1e2b6d; box-sizing: border-box; position: relative;">
+          <div class="pass-card" style="width: 1012px; height: 638px; min-width: 1012px; max-width: 1012px; min-height: 638px; max-height: 638px; background: #ffffff; border: 14px solid #1e2b6d; border-radius: 24px; padding: 26px 36px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e2b6d; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
             
-            <!-- Top Header Logos -->
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #00b4d8; padding-bottom: 12px; margin-bottom: 18px;">
-              <div>
-                <span style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; color: #1e2b6d; letter-spacing: 0.05em;">PROTOSPARK '26</span>
-                <div style="font-size: 0.72rem; font-weight: 700; color: #0077b6; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px;">
-                  International Innovation Challenge • Kuala Lumpur
+            <!-- Top Decorative Gradient Accent -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #00b4d8 0%, #0077b6 50%, #1e2b6d 100%);"></div>
+
+            <!-- Top Header Row -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #00b4d8; padding-bottom: 12px; margin-top: 4px;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 46px; width: auto; object-fit: contain;">
+                <div style="width: 2px; height: 40px; background: #cbd5e1;"></div>
+                <div>
+                  <div style="font-family: 'Outfit', -apple-system, sans-serif; font-size: 1.85rem; font-weight: 900; color: #1e2b6d; letter-spacing: 0.05em; line-height: 1;">
+                    PROTOSPARK '26
+                  </div>
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #0077b6; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 3px;">
+                    International Innovation Challenge • Kuala Lumpur
+                  </div>
                 </div>
               </div>
+
               <div style="text-align: right;">
-                <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Powered by</span>
-                <div style="font-weight: 800; font-size: 0.95rem; color: #1e2b6d;">VadivaLabs</div>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; display: block;">Organized &amp; Powered by</span>
+                <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1e2b6d; letter-spacing: 0.02em;">
+                  Vadiva Creative Labs
+                </div>
               </div>
             </div>
 
             <!-- Pass Heading Banner -->
-            <div style="background: linear-gradient(135deg, #1e2b6d 0%, #0077b6 100%); color: #ffffff; text-align: center; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px;">
-              <span style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;">
+            <div style="background: linear-gradient(135deg, #1e2b6d 0%, #0077b6 100%); color: #ffffff; text-align: center; padding: 10px 16px; border-radius: 8px; box-shadow: 0 4px 12px rgba(30, 43, 109, 0.18); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.85;">
+                EVENT PASS
+              </span>
+              <span style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;">
                 OFFICIAL VISITOR PASS
+              </span>
+              <span style="font-size: 0.8rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.85;">
+                MALAYSIA '26
               </span>
             </div>
 
-            <!-- Visitor Profile Section -->
-            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px;">
-              <!-- QR Code Container -->
-              <div style="text-align: center; flex-shrink: 0;">
-                <div id="qr_${visitor.visitorId}" style="width: 130px; height: 130px; padding: 6px; background: #ffffff; border: 2px solid #00b4d8; border-radius: 8px;"></div>
-                <div style="font-size: 0.6rem; font-weight: 700; color: #64748b; margin-top: 4px; text-transform: uppercase;">Scan to Verify</div>
+            <!-- Visitor Profile Section (QR + Visitor Details) -->
+            <div style="display: flex; gap: 32px; align-items: center; padding: 8px 0; flex: 1;">
+              
+              <!-- QR Code Container (1012 x 638 ID Card standard proportion) -->
+              <div style="text-align: center; flex-shrink: 0; width: 200px;">
+                <div style="width: 196px; height: 196px; padding: 10px; background: #ffffff; border: 3px solid #00b4d8; border-radius: 14px; box-shadow: 0 4px 16px rgba(0, 180, 216, 0.15); box-sizing: border-box; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                  <div id="qr_${visitor.visitorId}"></div>
+                </div>
+                <div style="font-size: 0.72rem; font-weight: 800; color: #64748b; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+                  Scan to Verify Pass
+                </div>
               </div>
 
               <!-- Visitor Details -->
-              <div style="flex: 1;">
-                <span style="background: ${badgeBg}; color: ${badgeColor}; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-bottom: 6px;">
-                  ${escapeHtml(type)}
-                </span>
-                <div style="font-size: 1.35rem; font-weight: 800; color: #1e2b6d; line-height: 1.25; margin-bottom: 4px;">
+              <div style="flex: 1; min-width: 0;">
+                
+                <!-- Category & Status Badges -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="background: ${badgeBg}; color: ${badgeColor}; border: 1.5px solid ${badgeBorder}; padding: 4px 14px; border-radius: 6px; font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; display: inline-block;">
+                    ${escapeHtml(type)}
+                  </span>
+                  ${isCancelled ? `
+                    <span style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase;">
+                      CANCELLED
+                    </span>
+                  ` : `
+                    <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase;">
+                      VALID PASS
+                    </span>
+                  `}
+                </div>
+
+                <!-- Visitor Name -->
+                <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #1e2b6d; line-height: 1.2; margin-bottom: 6px; word-break: break-word;">
                   ${escapeHtml(visitor.visitorName)}
                 </div>
-                <div style="font-size: 0.9rem; font-weight: 600; color: #0284c7; margin-bottom: 10px;">
-                  ${escapeHtml(visitor.schoolName || 'Protospark Attendee')}
+
+                <!-- School / Organization -->
+                <div style="font-size: 1.1rem; font-weight: 600; color: #0284c7; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(visitor.schoolName || 'Protospark Attendee')}</span>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px;">
-                  <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">Visitor ID</span>
-                  <span style="font-family: monospace; font-size: 1.15rem; font-weight: 900; color: #0077b6; letter-spacing: 0.05em;">
-                    ${escapeHtml(visitor.visitorId)}
-                  </span>
+                <!-- Visitor ID Card Box -->
+                <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                  <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 8px; padding: 8px 18px; display: inline-flex; flex-direction: column;">
+                    <span style="font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">Official Visitor ID</span>
+                    <span style="font-family: monospace; font-size: 1.55rem; font-weight: 900; color: #0077b6; letter-spacing: 0.06em;">
+                      ${escapeHtml(visitor.visitorId)}
+                    </span>
+                  </div>
+
+                  <div style="background: #f1f5f9; border-radius: 8px; padding: 8px 14px; font-size: 0.8rem; color: #475569;">
+                    <div><strong>Gate Admission:</strong> General Access</div>
+                    <div><strong>Pass Status:</strong> ${isCancelled ? '<span style="color:#dc2626; font-weight:700;">Inactive</span>' : '<span style="color:#16a34a; font-weight:700;">Authorized</span>'}</div>
+                  </div>
                 </div>
+
+                <!-- Group Reference / Coordinator (if available) -->
+                ${visitor.groupReference ? `
+                  <div style="background: #f8fafc; border-left: 4px solid #00b4d8; border-radius: 4px; padding: 6px 12px; margin-top: 10px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span><strong>Group Reference:</strong> <code style="color: #0077b6; font-weight: 800;">${escapeHtml(visitor.groupReference)}</code></span>
+                    ${visitor.teacherName ? `<span><strong>Teacher Coordinator:</strong> <strong style="color: #1e2b6d;">${escapeHtml(visitor.teacherName)}</strong></span>` : ''}
+                  </div>
+                ` : ''}
+
               </div>
             </div>
 
-            <!-- Group & Additional References -->
-            ${visitor.groupReference ? `
-              <div style="background: #f1f5f9; border-radius: 6px; padding: 8px 12px; margin-bottom: 16px; font-size: 0.78rem; display: flex; justify-content: space-between;">
-                <span><strong>Group Reference:</strong> <code style="color: #0077b6;">${escapeHtml(visitor.groupReference)}</code></span>
-                ${visitor.teacherName ? `<span><strong>Coordinator:</strong> ${escapeHtml(visitor.teacherName)}</span>` : ''}
+            <!-- Footer & Admission Note -->
+            <div style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #64748b;">
+              <div>
+                <p style="margin: 0 0 2px 0;"><strong>Admission Note:</strong> Present this pass at the Protospark '26 Registration Desk for entry verification.</p>
+                <p style="margin: 0;">Issued for Protospark '26 Innovation Fest • Verification portal: <strong>vadivacreativelabs.com/protospark</strong></p>
               </div>
-            ` : ''}
-
-            <!-- Instructions & Footer -->
-            <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 0.68rem; color: #64748b; line-height: 1.4; text-align: center;">
-              <p style="margin: 0 0 2px 0;"><strong>Admission Note:</strong> Present this pass at the Protospark '26 Registration Desk for entry verification.</p>
-              <p style="margin: 0;">Issued for Protospark '26 Innovation Fest • Verification portal: <strong>vadivacreativelabs.com/protospark</strong></p>
+              <div style="text-align: right; flex-shrink: 0; padding-left: 16px;">
+                <div style="font-weight: 800; color: #1e2b6d; font-size: 0.8rem; letter-spacing: 0.05em;">CR80 ID CARD</div>
+                <div style="font-family: monospace; font-size: 0.7rem; color: #94a3b8;">1012 × 638 PX</div>
+              </div>
             </div>
+
           </div>
         `;
       }
 
-      // Generate Single Pass PDF
+      // Generate Single Pass PDF (1012 x 638 pixels ID Card Size)
       async function generateSinglePassPdf(visitor) {
         const offscreen = document.getElementById('offscreenPassWrapper');
         offscreen.innerHTML = createPassBadgeHtml(visitor);
@@ -1179,17 +1189,19 @@
         const qrContainer = offscreen.querySelector(`#qr_${visitor.visitorId}`);
         new QRCode(qrContainer, {
           text: `https://vadivacreativelabs.com/protospark/verify-pass?id=${visitor.visitorId}`,
-          width: 118,
-          height: 118,
+          width: 176,
+          height: 176,
           colorDark: "#1e2b6d",
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.M
         });
 
         // Small pause for QR rendering
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise(r => setTimeout(r, 120));
 
         const canvas = await html2canvas(offscreen.firstElementChild, {
+          width: 1012,
+          height: 638,
           scale: 2,
           useCORS: true,
           logging: false
@@ -1197,22 +1209,20 @@
 
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'px',
+          format: [1012, 638],
+          hotfixes: ['px_scaling']
+        });
 
-        // Center on A4 page
-        const pageWidth = 210;
-        const imgWidth = 140;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        const xOffset = (pageWidth - imgWidth) / 2;
-        const yOffset = 25;
-
-        pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight);
-        pdf.save(`${visitor.visitorId}_VisitorPass.pdf`);
+        pdf.addImage(imgData, 'JPEG', 0, 0, 1012, 638);
+        pdf.save(`${visitor.visitorId}_VisitorPass_IDCard.pdf`);
 
         offscreen.innerHTML = '';
       }
 
-      // Bulk PDF Download (Single combined PDF with 1 pass per page)
+      // Bulk PDF Download (Single combined PDF with 1 ID Card pass per page: 1012 x 638 px)
       async function generateBulkCombinedPdf(visitorsToExport, filename) {
         if (!visitorsToExport || visitorsToExport.length === 0) {
           alert('No visitors selected for export.');
@@ -1220,44 +1230,46 @@
         }
 
         progressModal.style.display = 'flex';
-        progressTitle.textContent = 'Generating Combined PDF...';
+        progressTitle.textContent = 'Generating Combined ID Card Passes (PDF)...';
 
         const offscreen = document.getElementById('offscreenPassWrapper');
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pageWidth = 210;
-        const imgWidth = 140;
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'px',
+          format: [1012, 638],
+          hotfixes: ['px_scaling']
+        });
 
         for (let i = 0; i < visitorsToExport.length; i++) {
           const visitor = visitorsToExport[i];
-          progressSubtitle.textContent = `Processing Pass ${i + 1} of ${visitorsToExport.length} (${visitor.visitorId})...`;
+          progressSubtitle.textContent = `Processing ID Card ${i + 1} of ${visitorsToExport.length} (${visitor.visitorId})...`;
 
           offscreen.innerHTML = createPassBadgeHtml(visitor);
           const qrContainer = offscreen.querySelector(`#qr_${visitor.visitorId}`);
           new QRCode(qrContainer, {
             text: `https://vadivacreativelabs.com/protospark/verify-pass?id=${visitor.visitorId}`,
-            width: 118,
-            height: 118,
+            width: 176,
+            height: 176,
             colorDark: "#1e2b6d",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.M
           });
 
-          await new Promise(r => setTimeout(r, 60));
+          await new Promise(r => setTimeout(r, 80));
 
           const canvas = await html2canvas(offscreen.firstElementChild, {
+            width: 1012,
+            height: 638,
             scale: 2,
             useCORS: true,
             logging: false
           });
 
-          const imgData = canvas.toDataURL('image/jpeg', 0.92);
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          const xOffset = (pageWidth - imgWidth) / 2;
-          const yOffset = 25;
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
 
-          if (i > 0) pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight);
+          if (i > 0) pdf.addPage([1012, 638], 'landscape');
+          pdf.addImage(imgData, 'JPEG', 0, 0, 1012, 638);
 
           offscreen.innerHTML = '';
         }
@@ -1266,7 +1278,7 @@
         progressModal.style.display = 'none';
       }
 
-      // Bulk ZIP Archive Download (Individual PDFs bundled into a single ZIP file)
+      // Bulk ZIP Archive Download (Individual 1012 x 638 ID Card PDFs bundled into a single ZIP file)
       async function generateBulkZipArchive(visitorsToExport, zipFilename) {
         if (!visitorsToExport || visitorsToExport.length === 0) {
           alert('No visitors selected for export.');
@@ -1274,47 +1286,49 @@
         }
 
         progressModal.style.display = 'flex';
-        progressTitle.textContent = 'Generating Individual PDFs for ZIP Archive...';
+        progressTitle.textContent = 'Generating ID Card Passes for ZIP Archive...';
 
         const zip = new JSZip();
         const offscreen = document.getElementById('offscreenPassWrapper');
         const { jsPDF } = window.jspdf;
-        const pageWidth = 210;
-        const imgWidth = 140;
 
         for (let i = 0; i < visitorsToExport.length; i++) {
           const visitor = visitorsToExport[i];
-          progressSubtitle.textContent = `Rendering Pass ${i + 1} of ${visitorsToExport.length} (${visitor.visitorId})...`;
+          progressSubtitle.textContent = `Rendering ID Card ${i + 1} of ${visitorsToExport.length} (${visitor.visitorId})...`;
 
           offscreen.innerHTML = createPassBadgeHtml(visitor);
           const qrContainer = offscreen.querySelector(`#qr_${visitor.visitorId}`);
           new QRCode(qrContainer, {
             text: `https://vadivacreativelabs.com/protospark/verify-pass?id=${visitor.visitorId}`,
-            width: 118,
-            height: 118,
+            width: 176,
+            height: 176,
             colorDark: "#1e2b6d",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.M
           });
 
-          await new Promise(r => setTimeout(r, 60));
+          await new Promise(r => setTimeout(r, 80));
 
           const canvas = await html2canvas(offscreen.firstElementChild, {
+            width: 1012,
+            height: 638,
             scale: 2,
             useCORS: true,
             logging: false
           });
 
-          const imgData = canvas.toDataURL('image/jpeg', 0.92);
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          const xOffset = (pageWidth - imgWidth) / 2;
-          const yOffset = 25;
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          const pdf = new jsPDF({
+            orientation: 'landscape',
+            unit: 'px',
+            format: [1012, 638],
+            hotfixes: ['px_scaling']
+          });
 
-          pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight);
+          pdf.addImage(imgData, 'JPEG', 0, 0, 1012, 638);
           const pdfBlob = pdf.output('blob');
 
-          zip.file(`${visitor.visitorId}_VisitorPass.pdf`, pdfBlob);
+          zip.file(`${visitor.visitorId}_VisitorPass_IDCard.pdf`, pdfBlob);
           offscreen.innerHTML = '';
         }
 

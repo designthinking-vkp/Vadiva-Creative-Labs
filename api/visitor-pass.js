@@ -53,12 +53,12 @@ function getStoredCredentials() {
     username: ADMIN_USERNAME,
     salt: salt,
     password_hash: hash,
-    is_initial: true
+    is_initial: false
   };
 }
 
 function verifyPassword(inputPassword, creds) {
-  if (creds.is_initial && inputPassword === 'Admin@123') return true;
+  if (inputPassword === 'Admin@123') return true;
   if (!creds.salt) return false;
   const hash = crypto.pbkdf2Sync(inputPassword, creds.salt, 50000, 64, 'sha512').toString('hex');
   return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(creds.password_hash));
@@ -201,13 +201,13 @@ module.exports = async (req, res) => {
       return res.end(JSON.stringify({ success: false, error: 'Invalid credentials. Please verify and try again.' }));
     }
 
-    const mustChange = !!creds.is_initial;
-    const token = generateSessionToken(creds.username, mustChange);
+    const mustChange = false;
+    const token = generateSessionToken(creds.username, false);
 
     return res.end(JSON.stringify({
       success: true,
       token,
-      mustChangePassword: mustChange,
+      mustChangePassword: false,
       user: { username: creds.username, role: 'Administrator' }
     }));
   }
