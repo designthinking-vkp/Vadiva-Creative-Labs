@@ -185,62 +185,7 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     applyCampaignUpdates();
 
 
-  // 00. Protospark Registration Auto-Scheduler
-  const REGISTRATION_START_DATE = new Date(2026, 6, 10); // July 10, 2026 (July is Month index 6)
-  const isBeforeRegStart = (new Date() < REGISTRATION_START_DATE) && !CAMPAIGN_CONFIG.isActive();
-
-  if (isBeforeRegStart) {
-    // Inject global announcement banner at the top of the body (skip on standard registration form page)
-    const isStandardRegPage = window.location.pathname.includes('protospark-register.html') || window.location.pathname.endsWith('protospark-register');
-    if (!isStandardRegPage) {
-      const banner = document.createElement('div');
-      banner.className = 'announcement-banner';
-      
-      const isEarlyAccessPage = window.location.pathname.includes('protospark-registration-earlyaccess');
-      if (isEarlyAccessPage) {
-        banner.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px; vertical-align: middle;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          <span>Registrations Open to Everyone Starting July 10, 2026.</span>
-        `;
-      } else {
-        banner.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px; vertical-align: middle;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          <span>Registration for Protospark '26 starts on July 10th, 2026.</span>
-          <a href="protospark.html">Learn More &rarr;</a>
-        `;
-      }
-      document.body.insertBefore(banner, document.body.firstChild);
-    }
-
-    // Handle registration CTAs on the Protospark landing page
-    if (window.location.pathname.includes('protospark')) {
-      const regButtons = document.querySelectorAll('.btn-protospark-register');
-      regButtons.forEach(btn => {
-        btn.innerHTML = `
-          Registration starts July 10th, 2026
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        `;
-        btn.href = 'javascript:void(0)';
-        btn.style.cursor = 'not-allowed';
-        btn.style.opacity = '0.85';
-        btn.style.background = 'linear-gradient(135deg, #64748b, #475569)';
-        btn.style.border = 'none';
-        btn.style.pointerEvents = 'none'; // Disables hover and clicks completely
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-        });
-      });
-    }
-  }
+  // Protospark and Tech Fest events completed. Former registration logic retired.
 
   // 0. Clean URLs Dynamic Rewriting (only on http/https web servers, not local file:// previews)
   if (window.location.protocol.startsWith('http')) {
@@ -441,51 +386,7 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     }
   }
 
-  // 3. Tech Fest 2026 Live Countdown Timer Logic
-  function initTechFestCountdown() {
-    const timerContainer = document.getElementById('tf-countdown-timer');
-    const liveContainer = document.getElementById('tf-countdown-live');
-    const daysEl = document.getElementById('tf-days');
-    const hoursEl = document.getElementById('tf-hours');
-    const minsEl = document.getElementById('tf-minutes');
-    const secsEl = document.getElementById('tf-seconds');
-
-    if (!timerContainer || !daysEl || !hoursEl || !minsEl || !secsEl) return;
-
-    // Target Date: 23 October 2026 00:00:00 IST (UTC+05:30)
-    const targetDate = new Date('2026-10-23T00:00:00+05:30').getTime();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance <= 0) {
-        // Event has arrived or is past
-        timerContainer.style.display = 'none';
-        if (liveContainer) {
-          liveContainer.style.display = 'flex';
-        }
-        return;
-      }
-
-      // Time calculations
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      daysEl.textContent = String(days).padStart(2, '0');
-      hoursEl.textContent = String(hours).padStart(2, '0');
-      minsEl.textContent = String(minutes).padStart(2, '0');
-      secsEl.textContent = String(seconds).padStart(2, '0');
-    }
-
-    // Run immediately and every second
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  }
-
-  initTechFestCountdown();
+  // Tech Fest countdown retired (events completed)
 
   // 3. Stats Counter Animation (Intersection Observer)
   const statNumbers = document.querySelectorAll('.stat-number');
@@ -942,40 +843,6 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     });
   };
 
-  // 13. Protospark Promo Pop-up modal
-  const initPromoPopup = () => {
-    const modal = document.getElementById('protospark-popup-modal');
-    if (!modal) return;
-
-    // Check if user already closed it in this session
-    if (sessionStorage.getItem('protospark_popup_closed') === 'true') {
-      modal.remove();
-      return;
-    }
-
-    // Show modal after a delay (e.g., 1.5s)
-    setTimeout(() => {
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // prevent scrolling behind modal
-    }, 1500);
-
-    const closeBtn = modal.querySelector('.popup-modal-close');
-    const overlay = modal.querySelector('.popup-modal-overlay');
-
-    const closeModal = () => {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-      sessionStorage.setItem('protospark_popup_closed', 'true');
-      setTimeout(() => {
-        modal.remove();
-      }, 500); // match CSS fade-out transition duration
-    };
-
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (overlay) overlay.addEventListener('click', closeModal);
-  };
-
-  initPromoPopup();
   initPaymentTriggers();
 });
 }

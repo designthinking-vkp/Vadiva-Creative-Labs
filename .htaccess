@@ -7,17 +7,10 @@ RewriteEngine On
 </IfModule>
 RewriteRule ^api/ - [E=nrc:1]
 
-# Fallback rewrites for static assets and APIs requested relative to /protospark/ subpaths
-RewriteRule ^protospark/(?:.+/)?assets/(.*)$ assets/$1 [L]
-RewriteRule ^protospark/(?:.+/)?style\.css$ style.css [L]
-RewriteRule ^protospark/(?:.+/)?main\.js$ main.js [L]
-RewriteRule ^protospark/(?:.+/)?api/(.*)$ api/$1 [L]
-
-# Explicit Protospark Routes
-RewriteRule ^protospark/?$ protospark.html [L]
-RewriteRule ^protospark/(?:admin/visitor-passes|protospark-admin-visitor-passes)/?$ protospark-admin-visitor-passes.html [L]
-RewriteRule ^protospark/(?:visitor-pass|protospark-visitor-pass)/?$ protospark-visitor-pass.html [L]
-RewriteRule ^protospark/(?:verify-pass|protospark-verify-pass)/?$ protospark-verify-pass.html [L]
+# 301 Permanent Redirects for Completed Event Pages (Protospark & Tech Fest) to Gallery
+RewriteRule ^protospark.*$ /gallery [R=301,L]
+RewriteRule ^techfest.*$ /gallery [R=301,L]
+RewriteRule ^(?:protospark|techfestregistration).*\.html$ /gallery [R=301,L]
 
 # 1. External Redirect: Redirect direct requests for page.html to /page
 RewriteCond %{THE_REQUEST} \s/+(.*?)\.html\s [NC]

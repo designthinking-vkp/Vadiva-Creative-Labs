@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery Admin Panel | Vadiva Creative Labs</title>
+  <meta name="description" content="Secure internal administration system for managing and publishing Vadiva event media, albums, and categories.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/gallery-admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+      <a href="gallery-admin.html" class="admin-logo-wrap">
+        <img src="assets/logo.png" alt="Vadiva Logo" class="admin-logo-img">
+        <div>
+          <div class="admin-logo-text">Vadiva</div>
+          <div class="admin-logo-sub">Gallery Admin</div>
+        </div>
+      </a>
+    </div>
+
+    <nav class="admin-nav" aria-label="Admin Navigation">
+      <div class="admin-nav-section-label">Overview</div>
+      <button type="button" class="admin-nav-item active" data-tab="dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </button>
+
+      <div class="admin-nav-section-label">Media &amp; Publishing</div>
+      <button type="button" class="admin-nav-item" data-tab="upload">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        Upload Manager
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="library">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        Media Library
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="featured">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        Featured Moments
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="videos">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+        Videos
+      </button>
+
+      <div class="admin-nav-section-label">Organise</div>
+      <button type="button" class="admin-nav-item" data-tab="albums">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        Albums &amp; Events
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="categories">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+        </svg>
+        Categories &amp; Tags
+      </button>
+
+      <div class="admin-nav-section-label">System</div>
+      <button type="button" class="admin-nav-item" data-tab="trash">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+        Trash &amp; Recovery
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Gallery Settings
+      </button>
+      <button type="button" class="admin-nav-item" data-tab="team">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Team &amp; Roles
+      </button>
+    </nav>
+
+    <!-- Sidebar User Footer -->
+    <div class="admin-sidebar-footer">
+      <div class="admin-user-card">
+        <div class="admin-user-avatar" id="adminUserAvatar">V</div>
+        <div class="admin-user-info">
+          <div class="admin-user-name" id="adminUserName">Dr. Vadiva</div>
+          <span class="admin-role-badge role-super" id="adminUserRoleBadge">Super Admin</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Wrap -->
+  <div class="admin-main-wrap">
+    
+    <!-- Top Header Bar -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <button type="button" class="btn-icon-sm" id="adminMobileToggle" style="display: none;" aria-label="Toggle Navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <h1 class="admin-page-title" id="adminPageTitle">Gallery Overview &amp; Metrics</h1>
+      </div>
+
+      <div class="admin-header-right">
+        <!-- Quick Role Switcher (for evaluation & testing) -->
+        <div class="role-switcher-dropdown">
+          <label for="roleQuickSwitcher" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Role Preview:</label>
+          <select id="roleQuickSwitcher" class="admin-select" style="font-size: 0.8rem; padding: 0.35rem 0.65rem;">
+            <option value="Super Admin">Super Admin (Full Access)</option>
+            <option value="Admin">Admin (Media &amp; Albums)</option>
+            <option value="Editor">Editor (Uploads &amp; Drafts)</option>
+            <option value="Viewer">Viewer (Read-Only)</option>
+          </select>
+        </div>
+
+        <a href="gallery.html" target="_blank" class="btn btn-sm btn-primary" style="display: inline-flex; align-items: center; gap: 0.4rem; border-radius: 9999px;">
+          <span>Visit Public Gallery</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Content Area with Tabs -->
+    <main class="admin-content-area">
+
+      <!-- ===================================================================
+           TAB 1: DASHBOARD OVERVIEW
+           =================================================================== -->
+      <section class="admin-tab-pane active" id="tab-dashboard">
+        
+        <!-- Metrics Row -->
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Total Photos</h4>
+              <div class="metric-value" id="metricPhotos">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-photos">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Total Videos</h4>
+              <div class="metric-value" id="metricVideos">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-videos">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Albums</h4>
+              <div class="metric-value" id="metricAlbums">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-albums">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Published Live</h4>
+              <div class="metric-value" id="metricPublished" style="color: #16a34a;">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-published">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Drafts</h4>
+              <div class="metric-value" id="metricDrafts" style="color: #d97706;">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-drafts">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Archived</h4>
+              <div class="metric-value" id="metricArchived">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-archived">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <h4>Trash</h4>
+              <div class="metric-value" id="metricTrash" style="color: #ef4444;">0</div>
+            </div>
+            <div class="metric-icon-wrap metric-trash">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="admin-quick-actions">
+          <button type="button" class="btn btn-primary" onclick="document.querySelector('[data-tab=upload]').click()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Upload New Media
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="VadivaGalleryAdmin.openAlbumEdit(null)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            Create New Album
+          </button>
+          <button type="button" class="btn btn-sm" style="border: 1px solid var(--admin-border); background: white;" onclick="document.querySelector('[data-tab=featured]').click()">
+            ★ Curate Featured Moments
+          </button>
+          <button type="button" class="btn btn-sm" style="border: 1px solid var(--admin-border); background: white;" onclick="document.querySelector('[data-tab=categories]').click()">
+            Manage Categories &amp; Tags
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+          <!-- Recent Uploads Card -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Recent Media Uploads</h3>
+              <button type="button" class="btn btn-sm btn-secondary" onclick="document.querySelector('[data-tab=library]').click()">View All Library</button>
+            </div>
+            <div class="admin-table-wrap" style="border: none; margin: 0;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Thumb</th>
+                    <th>Title &amp; Event</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardRecentUploads">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Recent Albums Card -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Event Albums</h3>
+              <button type="button" class="btn btn-sm btn-secondary" onclick="document.querySelector('[data-tab=albums]').click()">All Albums</button>
+            </div>
+            <div id="dashboardRecentAlbums" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           TAB 2: UPLOAD MANAGER
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-upload">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Upload New Photos or Videos</h3>
+              <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0;">Drag and drop multiple event photos or videos to batch upload and publish.</p>
+            </div>
+          </div>
+
+          <!-- Drag and Drop Dropzone -->
+          <div class="dropzone-container" id="uploadDropzone">
+            <div class="dropzone-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <h4 class="dropzone-title">Drag &amp; Drop media files here</h4>
+            <p class="dropzone-desc">Supports JPEG, PNG, WEBP, GIF, and MP4 videos (Single or Multiple)</p>
+            <button type="button" class="btn btn-sm btn-secondary">Browse Files from Computer</button>
+            <input type="file" id="uploadFileInput" multiple accept="image/*,video/*" style="display: none;">
+          </div>
+
+          <!-- Upload Queue List -->
+          <div id="uploadQueueContainer" class="upload-queue-list">
+            <!-- Queued files appear here with preview and progress -->
+          </div>
+
+          <!-- Metadata Form -->
+          <form id="mediaUploadForm">
+            <h4 style="font-size: 1.05rem; margin-bottom: 1rem; border-top: 1px solid var(--admin-border); padding-top: 1.5rem;">Media Metadata &amp; Publishing Options</h4>
+            
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="uploadTitle">Title / Caption *</label>
+                <input type="text" id="uploadTitle" name="title" class="form-control" placeholder="e.g. Drone Racing Finals Day 2" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="uploadAlbumSelect">Assign to Album</label>
+                <select id="uploadAlbumSelect" name="albumId" class="form-control">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="uploadCategorySelect">Category *</label>
+                <select id="uploadCategorySelect" name="categoryId" class="form-control" required>
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="uploadStatus">Publishing Status *</label>
+                <select id="uploadStatus" name="status" class="form-control">
+                  <option value="published">Published (Visible on Public Website)</option>
+                  <option value="draft">Draft (Private to Admin Team)</option>
+                  <option value="archived">Archived (Stored in Archive)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="uploadDesc">Description</label>
+              <textarea id="uploadDesc" name="description" class="form-control" placeholder="Brief description of the activity, student participants, or event context..."></textarea>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="uploadTags">Tags (Comma-Separated)</label>
+                <input type="text" id="uploadTags" name="tags" class="form-control" placeholder="Robotics, Drones, National Level">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="uploadCustomUrl">Or Direct File / Video URL (Optional)</label>
+                <input type="url" id="uploadCustomUrl" name="customUrl" class="form-control" placeholder="https://.../video.mp4 or YouTube / Vimeo link">
+              </div>
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+              <input type="checkbox" id="uploadFeatured" name="featured" style="width: 18px; height: 18px; accent-color: var(--admin-primary);">
+              <label for="uploadFeatured" style="font-weight: 600; font-size: 0.9rem; cursor: pointer;">
+                Mark as Featured Moment (display prominently on public Gallery hero)
+              </label>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.75rem;">
+              <button type="button" class="btn btn-primary" id="btnStartUpload">Upload &amp; Save Media</button>
+              <button type="button" class="btn btn-secondary" id="btnClearQueue">Clear Queue</button>
+            </div>
+          </form>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 3: MEDIA LIBRARY
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-library">
+        
+        <!-- Library Toolbar -->
+        <div class="library-toolbar">
+          <div class="library-search-wrap">
+            <input type="text" id="librarySearchInput" class="form-control" placeholder="Search by title, event, tag...">
+          </div>
+
+          <div class="library-filters-wrap">
+            <select id="libFilterType" class="admin-select">
+              <option value="all">All Types</option>
+              <option value="photo">Photos</option>
+              <option value="video">Videos</option>
+            </select>
+
+            <select id="libFilterStatus" class="admin-select">
+              <option value="all">All Statuses</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="archived">Archived</option>
+            </select>
+
+            <select id="libFilterAlbum" class="admin-select">
+              <option value="all">All Albums</option>
+            </select>
+
+            <select id="libFilterCategory" class="admin-select">
+              <option value="all">All Categories</option>
+            </select>
+
+            <select id="libSort" class="admin-select">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="title_asc">Title (A-Z)</option>
+              <option value="views">Most Viewed</option>
+            </select>
+
+            <div class="view-mode-toggle">
+              <button type="button" class="view-btn active" id="btnViewGrid" title="Grid View">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </button>
+              <button type="button" class="view-btn" id="btnViewTable" title="Table View">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media Grid View Container -->
+        <div class="admin-media-grid" id="adminMediaGridContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Media Table View Container -->
+        <div class="admin-table-wrap" id="adminMediaTableContainer" style="display: none;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;"><input type="checkbox" id="selectAllMediaCheckbox"></th>
+                <th>Thumb</th>
+                <th>Title &amp; Event</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminMediaTableBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Floating Bulk Action Toolbar -->
+        <div class="bulk-action-bar" id="bulkActionBar">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <strong id="bulkSelectedCount">0 items selected</strong>
+            <button type="button" class="btn btn-sm" id="btnBulkCancel" style="background: rgba(255,255,255,0.15); color: white; border: none;">Deselect All</button>
+          </div>
+
+          <div class="bulk-btn-group">
+            <button type="button" class="btn btn-sm btn-secondary" id="btnBulkPublish">Publish</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnBulkUnpublish">Set as Draft</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnBulkArchive">Archive</button>
+            <button type="button" class="btn btn-sm btn-secondary" id="btnBulkFeatured">★ Toggle Featured</button>
+            
+            <select id="bulkMoveAlbumSelect" class="admin-select" style="background:#1e293b;color:white;border-color:#334155;font-size:0.8rem;padding:0.35rem 0.65rem;">
+              <option value="">Move to Album...</option>
+            </select>
+
+            <button type="button" class="btn btn-sm btn-danger" id="btnBulkDelete" style="background:#ef4444;color:white;border:none;">Move to Trash</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           TAB 4: ALBUMS & EVENT MANAGEMENT
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-albums">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <p style="color: #64748b; font-size: 0.95rem; margin: 0;">Organise event photos and videos into structured public albums.</p>
+          <button type="button" class="btn btn-primary" id="btnCreateAlbum">+ Create New Album</button>
+        </div>
+
+        <div class="metrics-row" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));" id="adminAlbumsGrid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 5: CATEGORIES & TAGS
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-categories">
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem;">
+          
+          <!-- Categories Column -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Event Categories</h3>
+              <button type="button" class="btn btn-sm btn-primary" id="btnAddCategory">+ Add Category</button>
+            </div>
+            <div class="admin-table-wrap" style="border: none; margin: 0;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Category Name</th>
+                    <th>Description</th>
+                    <th>Media</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tags Column -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Custom Tags Cloud</h3>
+            </div>
+            
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+              <input type="text" id="newTagInput" class="form-control" placeholder="e.g. Drone Racing">
+              <button type="button" class="btn btn-sm btn-secondary" id="btnAddTag" style="white-space:nowrap;">Add Tag</button>
+            </div>
+
+            <div id="tagsListContainer" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 6: FEATURED MOMENTS
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-featured">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Curate Public Featured Moments</h3>
+              <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0;">
+                These selected moments appear on the public Gallery hero section. Set one as Primary Hero Showcase.
+              </p>
+            </div>
+          </div>
+          <div id="featuredItemsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 7: VIDEOS MANAGEMENT
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-videos">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Dedicated Video Assets</h3>
+              <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0;">Manage highlight reels, competition demos, and student presentation videos.</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" onclick="document.querySelector('[data-tab=upload]').click()">+ Upload Video</button>
+          </div>
+          <div class="admin-table-wrap" style="border: none; margin: 0;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Thumb</th>
+                  <th>Video Title &amp; Details</th>
+                  <th>Duration</th>
+                  <th>Album</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="videosTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 8: TRASH & RECOVERY
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-trash">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Deleted Media &amp; Recovery</h3>
+              <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0;">Items moved to trash can be restored anytime or permanently deleted.</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-danger" id="btnEmptyTrash" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;">
+              Empty Trash Forever
+            </button>
+          </div>
+
+          <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">Trashed Photos &amp; Videos</h4>
+          <div class="admin-table-wrap" style="margin-bottom: 2rem;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Thumb</th>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Trashed Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="trashMediaTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">Trashed Albums</h4>
+          <div id="trashAlbumsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 9: GALLERY SETTINGS
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-settings">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
+          
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Public Gallery Display Settings</h3>
+            </div>
+            <form id="gallerySettingsForm">
+              <div class="form-group">
+                <label class="form-label" for="heroTaglineInput">Public Hero Tagline</label>
+                <input type="text" id="heroTaglineInput" name="heroTagline" class="form-control" value="Moments That Inspire. Experiences That Last.">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="heroSubtitleInput">Public Hero Subtitle</label>
+                <textarea id="heroSubtitleInput" name="heroSubtitle" class="form-control" rows="2">Explore memorable moments, creative experiences, events, workshops, and stories from the Vadiva community.</textarea>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="galleryLayoutSelect">Media Grid Layout</label>
+                  <select id="galleryLayoutSelect" name="galleryLayout" class="form-control">
+                    <option value="masonry">Responsive Masonry Grid</option>
+                    <option value="uniform">Uniform Aspect Grid (Square)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="defaultSortSelect">Default Sorting on Load</label>
+                  <select id="defaultSortSelect" name="defaultSort" class="form-control">
+                    <option value="newest">Newest First</option>
+                    <option value="featured">Featured First</option>
+                    <option value="views">Most Viewed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="border-top: 1px solid var(--admin-border); padding-top: 1rem; margin-top: 1rem;">
+                <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Feature Toggles</h4>
+                
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" name="allowDownloads" checked style="width: 18px; height: 18px; accent-color: var(--admin-primary);">
+                    <span style="font-size: 0.9rem;">Allow public visitors to download high-resolution photos</span>
+                  </label>
+                  
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" name="allowSharing" checked style="width: 18px; height: 18px; accent-color: var(--admin-primary);">
+                    <span style="font-size: 0.9rem;">Enable social media share buttons and direct link copying</span>
+                  </label>
+
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" name="showViewCounts" checked style="width: 18px; height: 18px; accent-color: var(--admin-primary);">
+                    <span style="font-size: 0.9rem;">Track and record view counts on media items</span>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Save Gallery Settings</button>
+            </form>
+          </div>
+
+          <!-- Database Tools Column -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Database Backup &amp; Restore</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem;">
+              Export a complete JSON backup of all albums, published media, tags, and categories, or restore an existing backup.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <button type="button" class="btn btn-secondary" id="btnExportDb">
+                Download Database JSON Backup
+              </button>
+              <button type="button" class="btn btn-secondary" id="btnImportDb">
+                Import JSON Backup...
+              </button>
+              
+              <div style="border-top: 1px dashed var(--admin-border); margin-top: 1rem; padding-top: 1rem;">
+                <h5 style="font-size: 0.85rem; color: #b91c1c; margin-bottom: 0.4rem;">Reset to Default Archive</h5>
+                <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 0.75rem;">Restores all verified default Vadiva Tech Fest and Protospark imagery.</p>
+                <button type="button" class="btn btn-sm" id="btnResetDb" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5;">
+                  Reset Database to Verified Defaults
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 10: TEAM & ROLE PERMISSIONS
+           =================================================================== -->
+      <section class="admin-tab-pane" id="tab-team">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="admin-card-title">Team Members &amp; Role-Based Access Control (RBAC)</h3>
+              <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0;">Authorized Vadiva team members with role-defined permissions.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btnAddTeamMember">+ Add Team Member</button>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Team Member</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Added Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="teamTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Permissions Matrix Display -->
+          <h4 style="font-size: 1.1rem; margin-top: 2rem; margin-bottom: 0.75rem;">Role Permission Matrix</h4>
+          <div class="admin-table-wrap">
+            <table class="admin-table perm-matrix-table">
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Super Admin</th>
+                  <th>Admin</th>
+                  <th>Editor</th>
+                  <th>Viewer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>View Dashboard &amp; Analytics</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                </tr>
+                <tr>
+                  <td>Upload Photos &amp; Videos</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+                <tr>
+                  <td>Edit Media Metadata &amp; Albums</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+                <tr>
+                  <td>Publish / Unpublish to Website</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+                <tr>
+                  <td>Bulk Actions &amp; Delete to Trash</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+                <tr>
+                  <td>Permanent Deletion &amp; Empty Trash</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+                <tr>
+                  <td>Manage Team &amp; System Settings</td>
+                  <td class="perm-check">✔</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                  <td class="perm-cross">✘</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===================================================================
+       MODALS
+       =================================================================== -->
+  
+  <!-- Media Edit Metadata Modal -->
+  <div class="admin-modal" id="mediaEditModal" role="dialog" aria-modal="true" aria-label="Edit media metadata">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem;">Edit Media Metadata</h3>
+        <button type="button" class="btn-icon-sm admin-modal-close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <div style="margin-bottom: 1rem; text-align: center;">
+          <img id="editMediaPreviewImg" src="" style="max-height: 180px; border-radius: 8px; object-fit: cover;" alt="Preview">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editMediaTitle">Title</label>
+          <input type="text" id="editMediaTitle" class="form-control">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="editMediaAlbum">Album</label>
+            <select id="editMediaAlbum" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editMediaCategory">Category</label>
+            <select id="editMediaCategory" class="form-control"></select>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="editMediaStatus">Publishing Status</label>
+            <select id="editMediaStatus" class="form-control">
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:flex;align-items:center;padding-top:1.5rem;">
+            <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+              <input type="checkbox" id="editMediaFeatured" style="width:18px;height:18px;accent-color:var(--admin-primary);">
+              <span style="font-weight:600;font-size:0.85rem;">Mark as Featured</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editMediaTags">Tags (Comma-Separated)</label>
+          <input type="text" id="editMediaTags" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editMediaDesc">Description</label>
+          <textarea id="editMediaDesc" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="btn btn-secondary admin-modal-close">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="VadivaGalleryAdmin.saveMediaEdit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Album Create / Edit Modal -->
+  <div class="admin-modal" id="albumEditModal" role="dialog" aria-modal="true" aria-label="Album modal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem;" id="albumModalTitle">Create New Album</h3>
+        <button type="button" class="btn-icon-sm admin-modal-close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <div class="form-group">
+          <label class="form-label" for="albumName">Album Name *</label>
+          <input type="text" id="albumName" class="form-control" placeholder="e.g. Vadiva Tech &amp; Design Fest 2026" required>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="albumEventName">Event Name</label>
+            <input type="text" id="albumEventName" class="form-control" placeholder="e.g. Annual Tech Convergence">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="albumDate">Event Date / Period</label>
+            <input type="text" id="albumDate" class="form-control" placeholder="e.g. October 23-25, 2026">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="albumModalCategory">Category</label>
+            <select id="albumModalCategory" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="albumStatus">Status</label>
+            <select id="albumStatus" class="form-control">
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="albumCover">Cover Image Path / URL</label>
+          <input type="text" id="albumCover" class="form-control" value="assets/techfest/Vadiva Tech&Design Fest.jpeg">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="albumDesc">Album Description</label>
+          <textarea id="albumDesc" class="form-control" rows="3" placeholder="Brief summary of what happened at this event..."></textarea>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="btn btn-secondary admin-modal-close">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="VadivaGalleryAdmin.saveAlbumModal()">Save Album</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media Preview Modal -->
+  <div class="admin-modal" id="previewModal" role="dialog" aria-modal="true" aria-label="Media preview">
+    <div class="admin-modal-card" style="max-width: 800px;">
+      <div class="admin-modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem;" id="previewModalTitle">Media Preview</h3>
+        <button type="button" class="btn-icon-sm admin-modal-close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body" style="text-align: center;" id="previewModalContainer">
+        <!-- Rendered media -->
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="btn btn-secondary admin-modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/gallery-store.js"></script>
+  <script src="assets/js/gallery-admin.js"></script>
+</body>
+</html>

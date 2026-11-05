@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "start": "npx serve -l 3000 .",
-    "dev": "npx live-server --port=3000 --entry-file=techfestregistration.html",
-    "test": "node scratch/test-visitor-pass.js",
+    "dev": "npx live-server --port=3000 --entry-file=index.html",
+    "test": "node scratch/test-gallery.js",
     "lint": "echo \"Linting passed with 0 errors.\"",
     "build": "echo \"Static assets ready for production deployment.\""
   },
