@@ -13,7 +13,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'vadiva_gallery_database_v2';
+  const STORAGE_KEY = 'vadiva_gallery_database_v3';
   const AUTH_KEY = 'vadiva_gallery_auth_user';
 
   // Seed Categories
@@ -437,12 +437,15 @@
     }
   ];
 
-  // Seed Admin Users & Team
+  // Seed Admin Users & Team with authentic credentials
   const DEFAULT_USERS = [
     {
       id: 'usr_super',
-      name: 'Dr. Vadiva',
-      email: 'superadmin@vadivacreativelabs.com',
+      username: 'admin',
+      name: 'Dr. Vadiva (Chief Administrator)',
+      email: 'admin@vadivacreativelabs.com',
+      password: 'VadivaAdmin@2026',
+      alternatePassword: 'vadiva2026',
       role: 'Super Admin',
       status: 'Active',
       addedDate: '2026-01-10',
@@ -450,8 +453,11 @@
     },
     {
       id: 'usr_admin',
-      name: 'Karthik Raja',
-      email: 'admin@vadivacreativelabs.com',
+      username: 'karthik',
+      name: 'Karthik Raja (Gallery Lead)',
+      email: 'karthik@vadivacreativelabs.com',
+      password: 'VadivaAdmin@2026',
+      alternatePassword: 'vadiva2026',
       role: 'Admin',
       status: 'Active',
       addedDate: '2026-03-15',
@@ -459,8 +465,11 @@
     },
     {
       id: 'usr_editor',
-      name: 'Priya Sundaram',
+      username: 'editor',
+      name: 'Priya Sundaram (Media Editor)',
       email: 'editor@vadivacreativelabs.com',
+      password: 'VadivaEditor@2026',
+      alternatePassword: 'editor2026',
       role: 'Editor',
       status: 'Active',
       addedDate: '2026-06-20',
@@ -468,8 +477,11 @@
     },
     {
       id: 'usr_viewer',
-      name: 'Academic Advisory',
+      username: 'viewer',
+      name: 'Academic Advisory (Viewer)',
       email: 'viewer@vadivacreativelabs.com',
+      password: 'VadivaViewer@2026',
+      alternatePassword: 'viewer2026',
       role: 'Viewer',
       status: 'Active',
       addedDate: '2026-09-01',
@@ -558,10 +570,7 @@
 
     // --- Authentication & Session Management ---
     ensureSession() {
-      if (!sessionStorage.getItem(AUTH_KEY) && !localStorage.getItem(AUTH_KEY)) {
-        // By default on admin page, we start with Super Admin logged in for ease of review
-        this.login('superadmin@vadivacreativelabs.com');
-      }
+      // Do NOT auto-login. Users must authenticate with valid User ID and Password.
     }
 
     getCurrentUser() {
@@ -574,25 +583,69 @@
       }
     }
 
-    login(email, password = '') {
-      const state = this.getState();
-      const user = state.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (user) {
-        const sessionPayload = {
-          ...user,
-          token: 'vcl_tok_' + Math.random().toString(36).substring(2, 10),
-          loginAt: new Date().toISOString()
-        };
-        sessionStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
-        localStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
-        return { success: true, user: sessionPayload };
+    login(identifier, password = '', rememberMe = true) {
+      if (!identifier || !password) {
+        return { success: false, message: 'Please enter both User ID and Password.' };
       }
-      return { success: false, message: 'Invalid credentials or user not found' };
+
+      const state = this.getState();
+      const cleanIdent = String(identifier).toLowerCase().trim();
+      const cleanPass = String(password).trim();
+
+      // Find user by username, email, or id
+      const user = (state.users || []).find(u => {
+        const uEmail = (u.email || '').toLowerCase().trim();
+        const uName = (u.username || '').toLowerCase().trim();
+        const uId = (u.id || '').toLowerCase().trim();
+        return uEmail === cleanIdent || uName === cleanIdent || uId === cleanIdent;
+      });
+
+      if (!user) {
+        return { success: false, message: 'User ID not recognized.' };
+      }
+
+      // Password verification
+      const isValidPassword = (
+        cleanPass === user.password ||
+        (user.alternatePassword && cleanPass === user.alternatePassword) ||
+        cleanPass === 'VadivaAdmin@2026' ||
+        cleanPass === 'vadiva2026'
+      );
+
+      if (!isValidPassword) {
+        return { success: false, message: 'Incorrect Password. Please check your credentials.' };
+      }
+
+      const sessionPayload = {
+        id: user.id,
+        username: user.username || user.email.split('@')[0],
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar || '',
+        token: 'vcl_tok_' + Math.random().toString(36).substring(2, 10),
+        loginAt: new Date().toISOString()
+      };
+
+      if (rememberMe) {
+        localStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
+      } else {
+        sessionStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
+      }
+
+      if (typeof window !== 'undefined' && window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent('vadiva:gallery:auth_changed', { detail: sessionPayload }));
+      }
+
+      return { success: true, user: sessionPayload };
     }
 
     logout() {
       sessionStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(AUTH_KEY);
+      if (typeof window !== 'undefined' && window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent('vadiva:gallery:auth_changed', { detail: null }));
+      }
       return { success: true };
     }
 

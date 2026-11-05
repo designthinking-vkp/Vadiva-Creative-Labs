@@ -29,12 +29,38 @@
   function init() {
     cacheDom();
     bindEvents();
-    renderUserSession();
-    renderTab(state.currentTab);
+    checkAuth();
+  }
+
+  function checkAuth() {
+    const user = VadivaGalleryStore.getCurrentUser();
+    if (!user) {
+      document.body.classList.add('not-logged-in');
+      if (dom.loginScreen) dom.loginScreen.style.display = 'flex';
+      return false;
+    } else {
+      document.body.classList.remove('not-logged-in');
+      if (dom.loginScreen) dom.loginScreen.style.display = 'none';
+      renderUserSession();
+      renderTab(state.currentTab);
+      return true;
+    }
   }
 
   function cacheDom() {
     dom = {
+      // Login & Auth
+      loginScreen: document.getElementById('adminLoginScreen'),
+      loginForm: document.getElementById('adminLoginForm'),
+      loginUserId: document.getElementById('loginUserId'),
+      loginPassword: document.getElementById('loginPassword'),
+      loginRememberMe: document.getElementById('loginRememberMe'),
+      loginAlert: document.getElementById('loginErrorAlert'),
+      loginAlertMsg: document.getElementById('loginErrorMessage'),
+      togglePassBtn: document.getElementById('togglePasswordBtn'),
+      btnSidebarLogout: document.getElementById('adminSidebarLogoutBtn'),
+      btnHeaderLogout: document.getElementById('adminHeaderLogoutBtn'),
+
       // Sidebar & Nav
       sidebar: document.getElementById('adminSidebar'),
       mobileToggle: document.getElementById('adminMobileToggle'),
@@ -131,6 +157,49 @@
   }
 
   function bindEvents() {
+    // --- Login Form Submission ---
+    if (dom.loginForm) {
+      dom.loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (dom.loginAlert) {
+          dom.loginAlert.style.display = 'none';
+          dom.loginAlert.classList.remove('shake');
+        }
+
+        const ident = dom.loginUserId.value.trim();
+        const pass = dom.loginPassword.value.trim();
+        const remember = dom.loginRememberMe ? dom.loginRememberMe.checked : true;
+
+        const res = VadivaGalleryStore.login(ident, pass, remember);
+        if (res.success) {
+          checkAuth();
+        } else {
+          if (dom.loginAlert && dom.loginAlertMsg) {
+            dom.loginAlertMsg.textContent = res.message || 'Invalid User ID or Password.';
+            dom.loginAlert.style.display = 'flex';
+            dom.loginAlert.classList.add('shake');
+          }
+        }
+      });
+    }
+
+    // Toggle password visibility
+    if (dom.togglePassBtn && dom.loginPassword) {
+      dom.togglePassBtn.addEventListener('click', () => {
+        const isPass = dom.loginPassword.getAttribute('type') === 'password';
+        dom.loginPassword.setAttribute('type', isPass ? 'text' : 'password');
+        dom.togglePassBtn.style.color = isPass ? 'var(--admin-primary)' : '#94a3b8';
+      });
+    }
+
+    // Logout triggers
+    if (dom.btnSidebarLogout) {
+      dom.btnSidebarLogout.addEventListener('click', handleLogout);
+    }
+    if (dom.btnHeaderLogout) {
+      dom.btnHeaderLogout.addEventListener('click', handleLogout);
+    }
+
     // Mobile sidebar toggle
     if (dom.mobileToggle) {
       dom.mobileToggle.addEventListener('click', () => {
@@ -1102,8 +1171,26 @@
     `;
   }
 
+  function handleLogout() {
+    if (confirm('Are you sure you want to log out of the Gallery Admin Panel?')) {
+      VadivaGalleryStore.logout();
+      if (dom.loginForm) dom.loginForm.reset();
+      checkAuth();
+    }
+  }
+
   // --- Public Methods Exposed to Global Scope for Inline Handlers ---
   window.VadivaGalleryAdmin = {
+    fillLogin: function (userId, password) {
+      if (dom.loginUserId) dom.loginUserId.value = userId;
+      if (dom.loginPassword) dom.loginPassword.value = password;
+      if (dom.loginAlert) dom.loginAlert.style.display = 'none';
+    },
+
+    logout: function () {
+      handleLogout();
+    },
+
     removeFromQueue: function (idx) {
       state.uploadQueue.splice(idx, 1);
       renderUploadQueue();
