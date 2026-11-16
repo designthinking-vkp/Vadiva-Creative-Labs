@@ -1,11 +1,428 @@
-<!-- Root alias for Registration Status Portal -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=/events/registration-status.html">
-  <script>window.location.replace('/events/registration-status.html');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Registration Status &amp; Digital Card Portal | Vadiva Creative Labs</title>
+  <meta name="description" content="Check your event registration status, verify payment, and download your personalized Digital Event Card using your Participant UID or Email.">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/events/event-common.css">
+
+  <style>
+    .portal-hero {
+      background: linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 100%);
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid #E2E8F0;
+      text-align: center;
+    }
+
+    .portal-search-box {
+      max-width: 620px;
+      margin: 2rem auto 0;
+      background: #FFFFFF;
+      border: 2px solid #BAE6FD;
+      border-radius: 20px;
+      padding: 0.6rem;
+      display: flex;
+      gap: 0.5rem;
+      box-shadow: 0 12px 30px rgba(2, 132, 199, 0.12);
+    }
+
+    .portal-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0.85rem 1.25rem;
+      font-size: 1.05rem;
+      font-family: var(--event-font-body);
+      color: #0F172A;
+      background: transparent;
+    }
+
+    .portal-search-btn {
+      background: #0284C7;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.85rem 1.75rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .portal-search-btn:hover {
+      background: #0369A1;
+      transform: translateY(-1px);
+    }
+
+    /* Result Card Presentation */
+    .portal-result-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+      padding: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .portal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin: 1.75rem 0;
+      background: #F8FAFC;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid #E2E8F0;
+    }
+
+    .portal-meta-item strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748B;
+      margin-bottom: 0.25rem;
+    }
+
+    .portal-meta-item span {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="/events/registration-status.html">Registration Status Check Portal</a>...</p>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="https://vadivacreativelabs.com/" aria-label="Vadiva Creative Labs Home">
+          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 50px; width: auto; display: block;">
+        </a>
+      </div>
+      
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="/index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="/about.html" class="nav-link">About Us</a></li>
+          <li class="nav-item"><a href="/events.html" class="nav-link">Events &amp; Camps</a></li>
+          <li class="nav-item"><a href="/gallery.html" class="nav-link">Gallery</a></li>
+          <li class="nav-item"><a href="registration-status.html" class="nav-link active" style="color: #0284C7; font-weight: 700;">Check Status</a></li>
+          <li class="nav-item"><a href="/contact.html" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="mobile-drawer-cta">
+          <a href="/events.html" class="btn btn-sm btn-primary">Browse 2026 Events</a>
+        </div>
+      </nav>
+
+      <div class="header-action">
+        <a href="/events.html" class="btn btn-sm btn-primary">Browse 2026 Events</a>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PORTAL HERO & SEARCH SECTION -->
+  <section class="portal-hero">
+    <div class="container">
+      <span class="event-info-pill" style="background: #E0F2FE; color: #0284C7; margin-bottom: 1rem;">
+        Self-Service Participant Portal
+      </span>
+      <h1 style="font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 900; color: #0F172A; margin-bottom: 0.75rem;">
+        Check Registration Status
+      </h1>
+      <p style="color: #64748B; font-size: 1.15rem; max-width: 620px; margin: 0 auto;">
+        Enter your <strong>Participant UID</strong> (e.g. <code>KMF26-8A3F</code>, <code>PSF26-1042</code>, <code>SWI26-9C4D</code>) or registered <strong>Email ID</strong> to verify your registration and re-download your Digital Event Card.
+      </p>
+
+      <form id="statusSearchForm" class="portal-search-box">
+        <input type="text" id="statusQuery" class="portal-input" placeholder="Enter Participant UID or Email Address..." required autocomplete="off">
+        <button type="submit" class="portal-search-btn" id="searchSubmitBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Search Status
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- SEARCH RESULTS CONTAINER -->
+  <section class="section" id="resultsSection" style="display: none; padding-top: 2rem;">
+    <div class="container" style="max-width: 820px;" id="resultsContainer">
+      <!-- Injected via JavaScript -->
+    </div>
+  </section>
+
+  <!-- EMPTY / NOT FOUND HELPER -->
+  <section class="section" id="notFoundSection" style="display: none; padding-top: 2rem;">
+    <div class="container" style="max-width: 640px; text-align: center;">
+      <div style="background: #FEF2F2; border: 2px dashed #FCA5A5; border-radius: 24px; padding: 3rem 2rem;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEE2E2; color: #DC2626; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: #991B1B; margin-bottom: 0.5rem;">No Registration Record Found</h3>
+        <p style="color: #7F1D1D; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;" id="notFoundMessage">
+          We could not find an active registration matching that query. Please double-check your Participant UID or try the email address used during registration.
+        </p>
+        <div style="font-size: 0.95rem; color: #475569;">
+          Need assistance? Call our hotline: <a href="tel:7200981134" style="color: #0284C7; font-weight: 800;">+91 72009 81134</a> or email <a href="mailto:reach@vadivacreativelabs.com" style="color: #0284C7; font-weight: 700;">reach@vadivacreativelabs.com</a>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK EVENT SHORTCUTS -->
+  <section class="section" style="background: #F8FAFC; border-top: 1px solid #E2E8F0;">
+    <div class="container" style="max-width: 900px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: #0F172A;">Browse 2026 Flagship Events</h3>
+        <p style="color: #64748B;">Haven't registered yet? Explore our upcoming innovation programs:</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+        <a href="kids-maker-fair-2026.html" style="background: #FFFFFF; border: 2px solid #BAE6FD; border-radius: 18px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; transition: transform 0.2s ease;">
+          <span style="font-size: 0.75rem; font-weight: 800; color: #FF6B00; text-transform: uppercase;">29 Nov 2026 • ₹99</span>
+          <h4 style="font-size: 1.2rem; font-weight: 800; color: #0F172A; margin: 0.4rem 0 0.5rem;">Kids Maker Fair &amp; Repair Mela</h4>
+          <p style="color: #64748B; font-size: 0.85rem; margin: 0;">Make it. Fix it. Reuse it! Ages 6–16 at Santhome.</p>
+        </a>
+
+        <a href="protospark-forge-2026.html" style="background: #FFFFFF; border: 2px solid #BAE6FD; border-radius: 18px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; transition: transform 0.2s ease;">
+          <span style="font-size: 0.75rem; font-weight: 800; color: #0284C7; text-transform: uppercase;">26–30 Dec 2026 • ₹6,000</span>
+          <h4 style="font-size: 1.2rem; font-weight: 800; color: #0F172A; margin: 0.4rem 0 0.5rem;">ProtoSpark Forge</h4>
+          <p style="color: #64748B; font-size: 0.85rem; margin: 0;">Prototype → Product 5-Day Residential Camp at TVIS Ponneri.</p>
+        </a>
+
+        <a href="shipwreck-island-2026.html" style="background: #FFFFFF; border: 2px solid #BAE6FD; border-radius: 18px; padding: 1.5rem; text-decoration: none; color: inherit; display: block; transition: transform 0.2s ease;">
+          <span style="font-size: 0.75rem; font-weight: 800; color: #D97706; text-transform: uppercase;">26–30 Dec 2026 • ₹6,000</span>
+          <h4 style="font-size: 1.2rem; font-weight: 800; color: #0F172A; margin: 0.4rem 0 0.5rem;">Shipwreck Island</h4>
+          <p style="color: #64748B; font-size: 0.85rem; margin: 0;">3 Days to Build Your Way Home! Grades 5–11 Stay-in Camp.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>2026 Flagship Events</h4>
+          <ul>
+            <li><a href="kids-maker-fair-2026.html">Kids Maker Fair &amp; Repair Mela</a></li>
+            <li><a href="protospark-forge-2026.html">ProtoSpark Forge</a></li>
+            <li><a href="shipwreck-island-2026.html">Shipwreck Island</a></li>
+            <li><a href="registration-status.html">Registration Status Check</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/events.html">Camps &amp; Festivals</a></li>
+            <li><a href="/gallery.html">Gallery</a></li>
+            <li><a href="/terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Connect</h4>
+          <div class="footer-contact-info">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Operating Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>A Product of Velammal Knowledge Park</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/events/event-common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchForm = document.getElementById('statusSearchForm');
+      const searchInput = document.getElementById('statusQuery');
+      const searchBtn = document.getElementById('searchSubmitBtn');
+      const resultsSection = document.getElementById('resultsSection');
+      const resultsContainer = document.getElementById('resultsContainer');
+      const notFoundSection = document.getElementById('notFoundSection');
+      const notFoundMessage = document.getElementById('notFoundMessage');
+
+      // Check URL query parameters (e.g. ?uid=KMF26-XXXX or ?q=...)
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryParam = urlParams.get('uid') || urlParams.get('email') || urlParams.get('q');
+      if (queryParam) {
+        searchInput.value = queryParam;
+        performStatusSearch(queryParam);
+      }
+
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const val = searchInput.value.trim();
+        if (val) {
+          performStatusSearch(val);
+        }
+      });
+
+      async function performStatusSearch(query) {
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = 'Searching...';
+        resultsSection.style.display = 'none';
+        notFoundSection.style.display = 'none';
+
+        try {
+          let data = null;
+
+          // 1. Try PHP API endpoint
+          try {
+            const res = await fetch(`/api/event-registration.php?action=status&q=${encodeURIComponent(query)}`);
+            if (res.ok) {
+              data = await res.json();
+            }
+          } catch (e1) {}
+
+          // 2. Try Node endpoint
+          if (!data || !data.records) {
+            try {
+              const res2 = await fetch(`/api/event-registration?action=status&q=${encodeURIComponent(query)}`);
+              if (res2.ok) {
+                data = await res2.json();
+              }
+            } catch (e2) {}
+          }
+
+          // 3. Fallback: Query Google Apps Script Web App directly
+          if (!data || !data.records) {
+            try {
+              const gasRes = await fetch(`https://script.google.com/macros/s/AKfycbxK6vANPdnlY8k0c0y7XZFLFzVjBuwX3d3niWDKg1sSfvPSN78k1qMImEBhSLK-uSp35Q/exec?action=status&q=${encodeURIComponent(query)}`);
+              if (gasRes.ok) {
+                data = await gasRes.json();
+              }
+            } catch (e3) {}
+          }
+
+          if (data && data.success && data.records && data.records.length > 0) {
+            renderResults(data.records);
+          } else {
+            notFoundSection.style.display = 'block';
+            notFoundMessage.innerText = data?.error || `No record found for "${query}". Please verify your Participant UID or Email.`;
+          }
+        } catch (err) {
+          notFoundSection.style.display = 'block';
+          notFoundMessage.innerText = 'Unable to connect to status verification server: ' + err.message;
+        } finally {
+          searchBtn.disabled = false;
+          searchBtn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Search Status
+          `;
+        }
+      }
+
+      function renderResults(records) {
+        resultsContainer.innerHTML = '';
+
+        records.forEach(record => {
+          const isPaid = (record.paymentStatus || '').toLowerCase() === 'paid';
+          const isConfirmed = (record.registrationStatus || '').toLowerCase() === 'confirmed';
+          const statusClass = isPaid ? 'status-paid' : 'status-pending';
+
+          const cardHtml = `
+            <div class="portal-result-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: gap; gap: 1rem;">
+                <div>
+                  <span class="event-info-pill" style="background: #E0F2FE; color: #0284C7; margin-bottom: 0.5rem;">
+                    ${record.eventName}
+                  </span>
+                  <h2 style="font-size: 2rem; font-weight: 800; color: #0F172A; margin: 0.25rem 0;">
+                    ${record.studentName}
+                  </h2>
+                  <div style="color: #64748B; font-size: 0.95rem;">
+                    Parent: <strong>${record.parentName}</strong> • ${record.schoolName}, ${record.city}
+                  </div>
+                </div>
+
+                <div style="text-align: right;">
+                  <span class="event-status-badge ${statusClass}">
+                    ${isPaid ? '✓ PAID' : '⏳ PAYMENT PENDING'}
+                  </span>
+                  <div style="font-family: var(--event-font-mono); font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.5rem;">
+                    ${record.participantUID}
+                  </div>
+                </div>
+              </div>
+
+              <div class="portal-meta-grid">
+                <div class="portal-meta-item">
+                  <strong>Registration Status</strong>
+                  <span style="color: ${isConfirmed ? '#15803D' : '#C2410C'};">
+                    ${record.registrationStatus || (isPaid ? 'Confirmed' : 'Pending')}
+                  </span>
+                </div>
+                <div class="portal-meta-item">
+                  <strong>Fee &amp; Payment</strong>
+                  <span>₹${record.amountINR || record.eventFee || '99'} INR</span>
+                </div>
+                <div class="portal-meta-item">
+                  <strong>Event Date</strong>
+                  <span>${record.eventDate || '2026'}</span>
+                </div>
+                <div class="portal-meta-item">
+                  <strong>Venue</strong>
+                  <span>${record.eventVenue || 'Vadiva Campus'}</span>
+                </div>
+              </div>
+
+              <!-- Action to re-download card -->
+              <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn-card-action btn-download-png" onclick="window.VadivaEvents.downloadEventCardPNG('${record.participantUID}', '${record.studentName}', '${record.eventName}')" style="padding: 0.85rem 2rem; font-size: 1.05rem;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Download Digital Event Card (PNG)
+                </button>
+                <button class="btn-card-action btn-print-card" onclick="window.print()" style="padding: 0.85rem 1.75rem;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print / Save PDF
+                </button>
+              </div>
+            </div>
+          `;
+          resultsContainer.innerHTML += cardHtml;
+        });
+
+        resultsSection.style.display = 'block';
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Mobile Menu Toggle
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const nav = document.querySelector('.main-nav');
+      if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+          nav.classList.toggle('active');
+          toggle.classList.toggle('active');
+        });
+      }
+    });
+  </script>
 </body>
 </html>
