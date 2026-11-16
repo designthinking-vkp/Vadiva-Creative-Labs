@@ -307,6 +307,16 @@
             } catch (e2) {}
           }
 
+          // 3. Fallback: Query Google Apps Script Web App directly
+          if (!data || !data.records) {
+            try {
+              const gasRes = await fetch(`https://script.google.com/macros/s/AKfycbxK6vANPdnlY8k0c0y7XZFLFzVjBuwX3d3niWDKg1sSfvPSN78k1qMImEBhSLK-uSp35Q/exec?action=status&q=${encodeURIComponent(query)}`);
+              if (gasRes.ok) {
+                data = await gasRes.json();
+              }
+            } catch (e3) {}
+          }
+
           if (data && data.success && data.records && data.records.length > 0) {
             renderResults(data.records);
           } else {

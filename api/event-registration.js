@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const BACKUP_FILE = path.join(__dirname, 'event_registrations_backup.json');
+const EVENT_GAS_URL = process.env.EVENT_GAS_URL || 'https://script.google.com/macros/s/AKfycbxK6vANPdnlY8k0c0y7XZFLFzVjBuwX3d3niWDKg1sSfvPSN78k1qMImEBhSLK-uSp35Q/exec';
 
 const EVENT_CATALOG = {
   'kids-maker-fair-2026': {
@@ -78,6 +79,35 @@ function getLocalBackup() {
 function saveLocalBackup(records) {
   try {
     fs.writeFileSync(BACKUP_FILE, JSON.stringify(records, null, 2), 'utf8');
+  } catch (e) {}
+}
+
+function forwardToGas(payload) {
+  if (!EVENT_GAS_URL || !EVENT_GAS_URL.includes('AKfy')) return;
+  try {
+    const postData = JSON.stringify(payload);
+    const parsed = new URL(EVENT_GAS_URL);
+    function follow(url, data) {
+      const u = new URL(url);
+      const req = https.request({
+        hostname: u.hostname,
+        port: 443,
+        path: u.pathname + u.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(data)
+        }
+      }, (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          follow(res.headers.location, data);
+        }
+      });
+      req.on('error', () => {});
+      req.write(data);
+      req.end();
+    }
+    follow(EVENT_GAS_URL, postData);
   } catch (e) {}
 }
 
@@ -157,7 +187,7 @@ module.exports = async (req, res) => {
           const json = JSON.parse(responseBody);
           if (apiRes.statusCode >= 200 && apiRes.statusCode < 300 && json.id) {
             const records = getLocalBackup();
-            records.push({
+            const newRec = {
               participantUID,
               eventName: eventInfo.title,
               eventSlug: eventInfo.id,
@@ -172,8 +202,12 @@ module.exports = async (req, res) => {
               registrationStatus: 'Pending',
               paymentStatus: 'Pending',
               createdAt: new Date().toISOString()
-            });
+            };
+            records.push(newRec);
             saveLocalBackup(records);
+
+            // Forward provisional registration to Google Apps Script
+            forwardToGas(Object.assign({ action: 'register' }, newRec));
 
             return res.status(200).json({
               success: true,
@@ -228,6 +262,15 @@ module.exports = async (req, res) => {
       }
     }
     saveLocalBackup(records);
+
+    // Forward confirmed payment to Google Apps Script
+    forwardToGas({
+      action: 'confirmPayment',
+      participantUID: updated ? updated.participantUID : participantUID,
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      eventName: updated ? updated.eventName : ''
+    });
 
     return res.status(200).json({
       success: true,

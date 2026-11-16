@@ -11,7 +11,7 @@ if (!defined('EVENT_SPREADSHEET_ID')) {
 
 // Google Apps Script Web App URL for Event Registrations
 if (!defined('EVENT_GAS_URL')) {
-    define('EVENT_GAS_URL', getenv('EVENT_GAS_URL') ?: 'https://script.google.com/macros/s/AKfycby_EVENT_REG_APPS_SCRIPT_ID/exec');
+    define('EVENT_GAS_URL', getenv('EVENT_GAS_URL') ?: 'https://script.google.com/macros/s/AKfycbxK6vANPdnlY8k0c0y7XZFLFzVjBuwX3d3niWDKg1sSfvPSN78k1qMImEBhSLK-uSp35Q/exec');
 }
 
 // Google Cloud Service Account Key Path (optional, for direct Google Sheets API v4 access)

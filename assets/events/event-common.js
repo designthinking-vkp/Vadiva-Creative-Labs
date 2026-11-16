@@ -256,6 +256,22 @@
                 } catch (e) {}
               }
 
+              // Also ensure direct sync with Google Apps Script Web App
+              try {
+                fetch('https://script.google.com/macros/s/AKfycbxK6vANPdnlY8k0c0y7XZFLFzVjBuwX3d3niWDKg1sSfvPSN78k1qMImEBhSLK-uSp35Q/exec', {
+                  method: 'POST',
+                  mode: 'no-cors',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    action: 'confirmPayment',
+                    participantUID: orderRes.participantUID,
+                    razorpayOrderId: paymentResponse.razorpay_order_id,
+                    razorpayPaymentId: paymentResponse.razorpay_payment_id,
+                    eventName: orderRes.event.title
+                  })
+                }).catch(() => {});
+              } catch (gasErr) {}
+
               // Build participant record for Digital Event Card
               const confirmedRecord = {
                 participantUID: orderRes.participantUID,
