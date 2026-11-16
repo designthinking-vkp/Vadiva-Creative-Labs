@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProtoSpark Forge 2026 | Prototype → Product Bootcamp | Vadiva Creative Labs</title>
+  <meta name="description" content="Arrive with an idea or a prototype. Leave with a product, the proof behind it, and a pitch. 26–30 December 2026 at TVIS, Ponneri. Grades 8–12. ₹6,000.">
+  <link rel="icon" type="image/png" href="../assets/logo.png">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../assets/events/event-common.css">
+
+  <style>
+    :root {
+      --psf-dark: #0A192F;
+      --psf-dark-card: #112240;
+      --psf-dark-border: #233554;
+      --psf-cyan: #64FFDA;
+      --psf-orange: #FF6B00;
+      --psf-yellow: #FBBF24;
+      --psf-blue: #0284C7;
+      --psf-text-light: #CCD6F6;
+      --psf-text-muted: #8892B0;
+    }
+
+    body {
+      background-color: var(--psf-dark);
+      color: var(--psf-text-light);
+      font-family: var(--font-body);
+    }
+
+    /* Dark High-Tech Hero */
+    .psf-hero {
+      position: relative;
+      background: radial-gradient(circle at 80% 20%, rgba(2, 132, 199, 0.25) 0%, transparent 60%),
+                  radial-gradient(circle at 10% 80%, rgba(255, 107, 0, 0.2) 0%, transparent 60%),
+                  linear-gradient(180deg, #07101E 0%, #0A192F 100%);
+      padding: 4.5rem 0 5rem;
+      border-bottom: 1px solid var(--psf-dark-border);
+      overflow: hidden;
+    }
+
+    .psf-badge-dec {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(251, 191, 36, 0.15);
+      color: #FBBF24;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .psf-title {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 0.75rem;
+    }
+
+    .psf-title span {
+      background: linear-gradient(135deg, #FBBF24 0%, #FF6B00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .psf-tagline-pill {
+      display: inline-block;
+      background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%);
+      color: #FFFFFF;
+      font-weight: 900;
+      font-size: 1.15rem;
+      padding: 0.5rem 1.75rem;
+      border-radius: 50px;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 25px rgba(255, 107, 0, 0.4);
+    }
+
+    .psf-headline-quote {
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.4;
+      margin-bottom: 2rem;
+      border-left: 4px solid #FBBF24;
+      padding-left: 1.25rem;
+      max-width: 680px;
+    }
+
+    /* Key Details Bar */
+    .psf-details-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(17, 34, 64, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--psf-dark-border);
+      border-radius: 20px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .psf-detail-item {
+      flex: 1 1 160px;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .psf-detail-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(2, 132, 199, 0.2);
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(2, 132, 199, 0.3);
+    }
+
+    .psf-fee-box {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: #0A192F;
+      border-radius: 16px;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+    }
+
+    .psf-fee-val {
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1;
+      color: #0A192F;
+    }
+
+    /* Track Cards (Who Can Join) */
+    .psf-track-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .psf-track-card {
+      background: var(--psf-dark-card);
+      border: 1px solid var(--psf-dark-border);
+      border-radius: 20px;
+      padding: 2.25rem;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .psf-track-card:hover {
+      transform: translateY(-4px);
+      border-color: #FBBF24;
+    }
+
+    .psf-track-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+
+    /* 5-Day Interactive Timeline */
+    .psf-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+      position: relative;
+    }
+
+    .psf-day-card {
+      background: var(--psf-dark-card);
+      border: 1px solid var(--psf-dark-border);
+      border-radius: 18px;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .psf-day-card:hover {
+      border-color: var(--psf-orange);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(255, 107, 0, 0.2);
+    }
+
+    .psf-day-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-weight: 900;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+    }
+
+    .psf-day-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+    }
+
+    .psf-day-desc {
+      font-size: 0.9rem;
+      color: var(--psf-text-muted);
+      line-height: 1.5;
+    }
+
+    /* StartupTN Opportunity Banner */
+    .psf-startuptn-banner {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(251, 191, 36, 0.15) 100%);
+      border: 2px solid #F59E0B;
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin: 3.5rem 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: center;
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .psf-startuptn-banner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    /* Dark Mode Styled Form Wrapper */
+    .psf-form-card {
+      background: #0D1F38;
+      border: 1px solid var(--psf-dark-border);
+      border-radius: 28px;
+      padding: 2.75rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .psf-form-card .event-field-label {
+      color: #E2E8F0;
+    }
+
+    .psf-form-card .event-field-input {
+      background: #112240;
+      border-color: #233554;
+      color: #FFFFFF;
+    }
+
+    .psf-form-card .event-field-input:focus {
+      border-color: #FBBF24;
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header" style="background: rgba(10, 25, 47, 0.95); border-bottom: 1px solid var(--psf-dark-border);">
+    <div class="container header-container">
+      <div class="logo">
+        <a href="https://vadivacreativelabs.com/" aria-label="Vadiva Creative Labs Home">
+          <img src="../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 50px; width: auto; filter: brightness(0) invert(1); display: block;">
+        </a>
+      </div>
+      
+      <nav class="main-nav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="../index.html" class="nav-link" style="color: #CCD6F6;">Home</a></li>
+          <li class="nav-item"><a href="../about.html" class="nav-link" style="color: #CCD6F6;">About Us</a></li>
+          <li class="nav-item"><a href="../events.html" class="nav-link active" style="color: #FBBF24;">Events &amp; Camps</a></li>
+          <li class="nav-item"><a href="../gallery.html" class="nav-link" style="color: #CCD6F6;">Gallery</a></li>
+          <li class="nav-item"><a href="registration-status.html" class="nav-link" style="color: #64FFDA; font-weight: 700;">Check Status</a></li>
+          <li class="nav-item"><a href="../contact.html" class="nav-link" style="color: #CCD6F6;">Contact</a></li>
+        </ul>
+        <div class="mobile-drawer-cta">
+          <a href="#apply" class="btn btn-sm btn-primary" style="background: #FF6B00; border-color: #FF6B00;">Apply Now (₹6,000)</a>
+          <a href="registration-status.html" class="btn btn-sm btn-secondary">Check Status</a>
+        </div>
+      </nav>
+
+      <div class="header-action">
+        <a href="registration-status.html" class="btn btn-sm btn-secondary" style="color: #CCD6F6; border-color: #233554;">Check Status</a>
+        <a href="#apply" class="btn btn-sm btn-primary" style="background: #FF6B00; border-color: #FF6B00;">Apply Now (₹6,000)</a>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION -->
+  <section class="psf-hero" id="hero">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;" class="hero-grid-2col">
+        <div style="max-width: 720px;">
+          <div class="psf-badge-dec">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            DECEMBER CAMP 2026 • 5 DAYS, 4 NIGHTS
+          </div>
+
+          <h1 class="psf-title">
+            ProtoSpark <span>Forge</span>
+          </h1>
+
+          <div class="psf-tagline-pill">
+            PROTOTYPE → PRODUCT
+          </div>
+
+          <div class="psf-headline-quote">
+            "Arrive with an idea or a prototype. Leave with a product, the proof behind it, and a pitch."
+          </div>
+
+          <!-- Key Details Bar -->
+          <div class="psf-details-bar">
+            <div class="psf-detail-item">
+              <div class="psf-detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+              <div>
+                <span class="event-details-label" style="color: #8892B0;">Date &amp; Duration</span>
+                <span class="event-details-value" style="color: #FFFFFF;">26–30 DEC 2026<br><small style="color: #38BDF8;">5 Days, 4 Nights</small></span>
+              </div>
+            </div>
+
+            <div class="psf-detail-item">
+              <div class="psf-detail-icon" style="color: #FBBF24; background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div>
+                <span class="event-details-label" style="color: #8892B0;">Campus Venue</span>
+                <span class="event-details-value" style="color: #FFFFFF;">TVIS, Ponneri<br><small style="color: #FBBF24;">Sleep Over Camp</small></span>
+              </div>
+            </div>
+
+            <div class="psf-detail-item">
+              <div class="psf-detail-icon" style="color: #64FFDA; background: rgba(100, 255, 218, 0.15); border-color: rgba(100, 255, 218, 0.3);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div>
+                <span class="event-details-label" style="color: #8892B0;">Eligible Grades</span>
+                <span class="event-details-value" style="color: #FFFFFF;">Grades 8 – 12<br><small style="color: #64FFDA;">Innovators</small></span>
+              </div>
+            </div>
+
+            <div class="psf-fee-box">
+              <span class="event-details-label" style="color: #0A192F; font-weight: 800;">Programme Fee</span>
+              <span class="psf-fee-val">₹6,000</span>
+              <span style="font-size: 0.7rem; font-weight: 700; color: #0A192F; opacity: 0.85;">per student, all inclusive</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="#apply" class="btn btn-primary" style="background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%); border: none; padding: 1rem 2.25rem; font-size: 1.1rem; border-radius: 50px; font-weight: 800; box-shadow: 0 0 25px rgba(255, 107, 0, 0.5);">
+              APPLY NOW (₹6,000)
+            </a>
+            <a href="#journey" class="btn btn-secondary" style="border-color: #233554; color: #CCD6F6; padding: 1rem 2rem; border-radius: 50px; font-weight: 700;">
+              VIEW 5-DAY ROADMAP
+            </a>
+          </div>
+        </div>
+
+        <!-- Poster Visual -->
+        <div style="max-width: 480px; margin: 0 auto; width: 100%;">
+          <div style="background: #112240; border-radius: 24px; padding: 1rem; border: 2px solid #233554; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);">
+            <img src="../assets/events/protospark-forge-poster.jpg" alt="ProtoSpark Forge Official Poster" style="width: 100%; height: auto; border-radius: 18px; display: block;">
+            <div style="text-align: center; margin-top: 1rem; font-weight: 700; color: #FBBF24; font-size: 0.95rem;">
+              📞 Enquiries &amp; Group Nominations: <strong>72009 81134</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ABOUT PROTOSPARK FORGE -->
+  <section class="section" id="about" style="border-bottom: 1px solid var(--psf-dark-border);">
+    <div class="container">
+      <div style="max-width: 840px; margin: 0 auto; text-align: center;">
+        <span class="event-info-pill" style="background: rgba(2, 132, 199, 0.15); color: #38BDF8; margin-bottom: 1rem;">Engineering Product Sprint</span>
+        <h2 style="font-size: 2.5rem; font-weight: 800; color: #FFFFFF; margin-bottom: 1.25rem;">Transforming School Projects into Venture-Grade Products</h2>
+        <p style="font-size: 1.15rem; color: var(--psf-text-muted); line-height: 1.7;">
+          Most student inventions remain stuck at cardboard models or science fair posters. ProtoSpark Forge is Vadiva's intensive 5-day, 4-night residential sprint engineered to bridge the gap between proof-of-concept and market product. Students redesign their mechanics, calculate bill-of-materials, conduct stress-tests, fabricate enclosures, and build investor-ready pitch dossiers.
+        </p>
+      </div>
+
+      <!-- 3. WHO CAN JOIN? -->
+      <div class="psf-track-grid">
+        <div class="psf-track-card">
+          <span class="psf-track-badge" style="background: rgba(251, 191, 36, 0.2); color: #FBBF24;">
+            🏆 Track 1 • By Invitation
+          </span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.75rem;">Finalists</h3>
+          <p style="color: var(--psf-text-muted); line-height: 1.6; font-size: 1rem; margin-bottom: 1.25rem;">
+            ProtoSpark and Vadiva Tech Fest finalists ready to elevate their winning builds from regional showcases into production-grade hardware systems.
+          </p>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; color: #94A3B8; font-size: 0.9rem;">
+            <li>✓ Prototype audit by senior hardware mentors</li>
+            <li>✓ Rapid iteration with laser/CNC &amp; additive 3D printing</li>
+            <li>✓ Cost sheet and industrial manufacturing assessment</li>
+          </ul>
+        </div>
+
+        <div class="psf-track-card">
+          <span class="psf-track-badge" style="background: rgba(100, 255, 218, 0.2); color: #64FFDA;">
+            🔍 Track 2 • Short Application
+          </span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.75rem;">Curious Ones</h3>
+          <p style="color: var(--psf-text-muted); line-height: 1.6; font-size: 1rem; margin-bottom: 1.25rem;">
+            Students in grades 8–12 without an existing prototype who bring curiosity, hunger to solve real-world problems, and a desire to learn hands-on venture engineering.
+          </p>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; color: #94A3B8; font-size: 0.9rem;">
+            <li>✓ Paired with active problem cards &amp; live mentors</li>
+            <li>✓ Rapid mechanical &amp; electronic assembly fundamentals</li>
+            <li>✓ Co-designing a working prototype within 48 hours</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FIVE-DAY LEARNING JOURNEY (INTERACTIVE TIMELINE) -->
+  <section class="section" id="journey" style="background: #07101E; border-bottom: 1px solid var(--psf-dark-border);">
+    <div class="container">
+      <div style="text-align: center; max-width: 760px; margin: 0 auto;">
+        <span class="event-info-pill" style="background: rgba(255, 107, 0, 0.15); color: #FF6B00;">5 Days, 5 Things You'll Make</span>
+        <h2 style="font-size: 2.5rem; font-weight: 800; color: #FFFFFF; margin: 0.75rem 0 1rem;">The 5-Day Forge Journey</h2>
+        <p style="color: var(--psf-text-muted); font-size: 1.1rem;">
+          An aggressive, milestone-driven curriculum engineered to mirror real-world Silicon Valley and hardware incubators:
+        </p>
+      </div>
+
+      <div class="psf-timeline">
+        <!-- DAY 1 -->
+        <div class="psf-day-card">
+          <div class="psf-day-circle">01</div>
+          <h4 class="psf-day-title">DAY 1</h4>
+          <div style="color: #FBBF24; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase;">Team Charter + Prototype Audit</div>
+          <p class="psf-day-desc">
+            Assemble engineering crews, dissect current prototype flaws, stress-test mechanical load, and map failure points.
+          </p>
+        </div>
+
+        <!-- DAY 2 -->
+        <div class="psf-day-card">
+          <div class="psf-day-circle" style="background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);">02</div>
+          <h4 class="psf-day-title">DAY 2</h4>
+          <div style="color: #38BDF8; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase;">Problem Card + Redesign Plan</div>
+          <p class="psf-day-desc">
+            Frame user pain points, draft engineering CAD schematics, source precision electronics, and plan Version 2.0 architecture.
+          </p>
+        </div>
+
+        <!-- DAY 3 -->
+        <div class="psf-day-card">
+          <div class="psf-day-circle" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">03</div>
+          <h4 class="psf-day-title">DAY 3</h4>
+          <div style="color: #FBBF24; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase;">Working V2 + Cost Sheet</div>
+          <p class="psf-day-desc">
+            Fabricate physical Version 2.0 build with laser-cut chassis, 3D printed fittings, and calculate unit Bill of Materials (BOM).
+          </p>
+        </div>
+
+        <!-- DAY 4 -->
+        <div class="psf-day-card">
+          <div class="psf-day-circle" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">04</div>
+          <h4 class="psf-day-title">DAY 4</h4>
+          <div style="color: #A78BFA; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase;">Test Report, Brand Kit, Pitch</div>
+          <p class="psf-day-desc">
+            Field-test operational reliability, establish product identity &amp; logo, and rehearse venture pitch decks with jury coaches.
+          </p>
+        </div>
+
+        <!-- DAY 5 -->
+        <div class="psf-day-card">
+          <div class="psf-day-circle" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">05</div>
+          <h4 class="psf-day-title">DAY 5</h4>
+          <div style="color: #34D399; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase;">Demo Day, Final Product + Dossier</div>
+          <p class="psf-day-desc">
+            Live public showcase before industry evaluators. Defend functioning hardware builds, unit economics, and handover dossiers.
+          </p>
+        </div>
+      </div>
+
+      <!-- 6. STARTUPTN OPPORTUNITY -->
+      <div class="psf-startuptn-banner">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: #F59E0B; color: #0A192F; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        </div>
+        <div>
+          <span style="font-size: 0.85rem; font-weight: 800; color: #FBBF24; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.25rem;">
+            Prestigious Acceleration Pathway
+          </span>
+          <h3 style="font-size: 1.85rem; font-weight: 900; color: #FFFFFF; margin: 0 0 0.5rem;">
+            Top Teams Go to the StartupTN Event in January 2027!
+          </h3>
+          <p style="color: var(--psf-text-light); font-size: 1.05rem; line-height: 1.6; margin: 0;">
+            Outstanding teams graduating from ProtoSpark Forge with defensible prototypes and robust unit economics will be nominated for direct pitch presentations to StartupTN ecosystem mentors and venture catalysts.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LEARNING OUTCOMES & 7. PROGRAMME INFORMATION -->
+  <section class="section" id="outcomes" style="border-bottom: 1px solid var(--psf-dark-border);">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: center;">
+        <div>
+          <span class="event-info-pill" style="background: rgba(100, 255, 218, 0.15); color: #64FFDA; margin-bottom: 0.75rem;">Tangible Takeaways</span>
+          <h2 style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; margin-bottom: 1.25rem;">What Every Participant Graduates With</h2>
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: var(--psf-dark-card); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--psf-dark-border);">
+              <h4 style="color: #FFFFFF; font-size: 1.1rem; margin-bottom: 0.25rem;">1. Working Hardware V2.0 Product</h4>
+              <p style="color: var(--psf-text-muted); font-size: 0.9rem; margin: 0;">Engineered with durable laser-cut/3D-printed enclosures and soldered electronics.</p>
+            </div>
+            <div style="background: var(--psf-dark-card); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--psf-dark-border);">
+              <h4 style="color: #FFFFFF; font-size: 1.1rem; margin-bottom: 0.25rem;">2. Technical Product Dossier</h4>
+              <p style="color: var(--psf-text-muted); font-size: 0.9rem; margin: 0;">Comprehensive documentation including circuit schematics, failure test logs, and BOM sheets.</p>
+            </div>
+            <div style="background: var(--psf-dark-card); padding: 1.25rem; border-radius: 14px; border: 1px solid var(--psf-dark-border);">
+              <h4 style="color: #FFFFFF; font-size: 1.1rem; margin-bottom: 0.25rem;">3. High-Impact Pitch Deck</h4>
+              <p style="color: var(--psf-text-muted); font-size: 0.9rem; margin: 0;">Defendable venture slides trained under professional jury feedback.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: var(--psf-dark-card); border: 2px solid var(--psf-dark-border); border-radius: 24px; padding: 2.5rem;">
+          <h3 style="color: #FFFFFF; font-size: 1.6rem; font-weight: 800; margin-bottom: 1.25rem;">Residential Camp Logistics</h3>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; color: var(--psf-text-light);">
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: #FBBF24;">📍</span>
+              <div><strong>Campus:</strong> TVIS (The Velammal International School), Ponneri, Chennai.</div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: #FBBF24;">🛏️</span>
+              <div><strong>Accommodation:</strong> Secure on-campus air-conditioned dormitories with 24/7 warden supervision.</div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: #FBBF24;">🥗</span>
+              <div><strong>Meals:</strong> Nutritious hygienic breakfast, lunch, high-tea, and dinner provided throughout all 5 days.</div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: #FBBF24;">🔬</span>
+              <div><strong>Lab Facilities:</strong> High-speed Wi-Fi, 3D printers, laser cutters, CNC machines, oscilloscopes, and hand tools.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. APPLICATION FORM (STRICT FIVE-FIELD REQUIREMENT) -->
+  <section class="section" id="apply" style="background: #07101E;">
+    <div class="container" style="max-width: 720px;">
+      <div class="psf-form-card">
+        <div class="event-form-header">
+          <span class="event-info-pill" style="background: rgba(251, 191, 36, 0.2); color: #FBBF24; margin-bottom: 0.75rem;">Official Application</span>
+          <h2 class="event-form-title" style="color: #FFFFFF;">APPLY NOW</h2>
+          <p class="event-form-subtitle" style="color: var(--psf-text-muted);">
+            Complete the details below to apply for this event and proceed with registration.
+          </p>
+          <div style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255, 107, 0, 0.2); color: #FF6B00; border: 1px solid rgba(255, 107, 0, 0.3); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700;">
+            <span>ProtoSpark Forge 2026 • All-Inclusive Fee: ₹6,000</span>
+          </div>
+        </div>
+
+        <!-- STRICT FIVE-FIELD FORM -->
+        <form id="protoSparkForm" novalidate>
+          <div class="event-form-fields grid-2col">
+            <!-- 1. Parent Name -->
+            <div class="event-field-group">
+              <label class="event-field-label" for="parentName">
+                Parent Name <span class="required-star">*</span>
+              </label>
+              <input type="text" id="parentName" name="parentName" class="event-field-input" placeholder="e.g. Dr. S. Annamalai" required autocomplete="name">
+            </div>
+
+            <!-- 2. Student Name -->
+            <div class="event-field-group">
+              <label class="event-field-label" for="studentName">
+                Student Name <span class="required-star">*</span>
+              </label>
+              <input type="text" id="studentName" name="studentName" class="event-field-input" placeholder="e.g. K. Adithya" required>
+            </div>
+
+            <!-- 3. School Name -->
+            <div class="event-field-group full-width">
+              <label class="event-field-label" for="schoolName">
+                School Name <span class="required-star">*</span>
+              </label>
+              <input type="text" id="schoolName" name="schoolName" class="event-field-input" placeholder="e.g. TVIS Ponneri / DAV Boys Mogappair" required>
+            </div>
+
+            <!-- 4. Email ID -->
+            <div class="event-field-group">
+              <label class="event-field-label" for="email">
+                Email ID <span class="required-star">*</span>
+              </label>
+              <input type="email" id="email" name="email" class="event-field-input" placeholder="e.g. parent@example.com" required autocomplete="email">
+            </div>
+
+            <!-- 5. City -->
+            <div class="event-field-group">
+              <label class="event-field-label" for="city">
+                City <span class="required-star">*</span>
+              </label>
+              <input type="text" id="city" name="city" class="event-field-input" placeholder="e.g. Chennai / Coimbatore" required>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem;">
+            <button type="submit" class="event-submit-btn" style="background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%); color: #FFFFFF;">
+              <span>PROCEED TO PAYMENT (₹6,000)</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="event-trust-badge" style="color: var(--psf-text-muted);">
+            <span>🔒 Bank-Grade Razorpay Encryption</span>
+            <span>⚡ Instant Participant UID</span>
+            <span>🎫 Downloadable Digital Event Pass</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FAQS SECTION -->
+  <section class="section" id="faqs" style="border-bottom: 1px solid var(--psf-dark-border);">
+    <div class="container" style="max-width: 800px;">
+      <div style="text-align: center; margin-bottom: 2.5rem;">
+        <span class="event-info-pill" style="background: rgba(2, 132, 199, 0.15); color: #38BDF8;">Candidate Inquiries</span>
+        <h2 style="font-size: 2.2rem; font-weight: 800; color: #FFFFFF; margin: 0.75rem 0;">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="kmf-faq-item" style="background: var(--psf-dark-card); border-color: var(--psf-dark-border);">
+        <div class="kmf-faq-header" style="color: #FFFFFF;">
+          <span>What is included in the ₹6,000 fee?</span>
+          <span>+</span>
+        </div>
+        <div class="kmf-faq-body" style="color: var(--psf-text-muted);">
+          The ₹6,000 fee covers the complete 5 days and 4 nights: air-conditioned accommodation at TVIS Ponneri, all meals and snacks, hardware lab consumable materials (3D filaments, sensors, acrylic, fasteners), mentor sessions, and demo day participation.
+        </div>
+      </div>
+
+      <div class="kmf-faq-item" style="background: var(--psf-dark-card); border-color: var(--psf-dark-border);">
+        <div class="kmf-faq-header" style="color: #FFFFFF;">
+          <span>Can individual students apply without a pre-formed team?</span>
+          <span>+</span>
+        </div>
+        <div class="kmf-faq-body" style="color: var(--psf-text-muted);">
+          Absolutely! Under Track 2 ("Curious Ones"), individual applicants are evaluated and matched during Day 1 Team Charter with complementary peers based on skills and problem interests.
+        </div>
+      </div>
+
+      <div class="kmf-faq-item" style="background: var(--psf-dark-card); border-color: var(--psf-dark-border);">
+        <div class="kmf-faq-header" style="color: #FFFFFF;">
+          <span>What safety and supervision measures are in place?</span>
+          <span>+</span>
+        </div>
+        <div class="kmf-faq-body" style="color: var(--psf-text-muted);">
+          TVIS Ponneri is an enclosed, gated residential campus with 24/7 biometric security, resident infirmary and medical nurse on call, separate boys and girls hostel wings with dedicated floor wardens, and strict mentor supervision.
+        </div>
+      </div>
+
+      <div class="kmf-faq-item" style="background: var(--psf-dark-card); border-color: var(--psf-dark-border);">
+        <div class="kmf-faq-header" style="color: #FFFFFF;">
+          <span>How does the StartupTN pathway work?</span>
+          <span>+</span>
+        </div>
+        <div class="kmf-faq-body" style="color: var(--psf-text-muted);">
+          Evaluators during Day 5 Demo Day select high-potential projects demonstrating verified product function and viable unit economics. Top teams are nominated to present directly at the official StartupTN celebration in January 2027.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CONTACT INFORMATION -->
+  <section class="section" id="contact">
+    <div class="container text-center">
+      <div style="background: linear-gradient(135deg, #0A192F 0%, #112240 100%); border: 2px solid var(--psf-dark-border); border-radius: 28px; padding: 3rem 2rem; max-width: 900px; margin: 0 auto;">
+        <h2 style="color: #FFFFFF; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">Admissions &amp; Coordinator Desk</h2>
+        <p style="color: var(--psf-text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem;">
+          Have questions regarding syllabus, school deputation or travel? Connect directly with our programme manager:
+        </p>
+        <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+          <a href="tel:7200981134" style="background: #FF6B00; color: #FFFFFF; font-weight: 800; padding: 0.85rem 1.75rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 20px rgba(255,107,0,0.4);">
+            📞 72009 81134
+          </a>
+          <a href="mailto:reach@vadivacreativelabs.com" style="background: rgba(255, 255, 255, 0.05); color: #CCD6F6; border: 1px solid var(--psf-dark-border); font-weight: 700; padding: 0.85rem 1.75rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+            ✉️ reach@vadivacreativelabs.com
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="site-footer" style="background: #07101E; border-top: 1px solid var(--psf-dark-border);">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <img src="../assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem; filter: brightness(0) invert(1);">
+          <p style="color: #8892B0;">An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+        </div>
+        <div class="footer-col footer-links">
+          <h4 style="color: #FFFFFF;">2026 Flagship Events</h4>
+          <ul>
+            <li><a href="kids-maker-fair-2026.html" style="color: #8892B0;">Kids Maker Fair &amp; Repair Mela</a></li>
+            <li><a href="protospark-forge-2026.html" style="color: #8892B0;">ProtoSpark Forge</a></li>
+            <li><a href="shipwreck-island-2026.html" style="color: #8892B0;">Shipwreck Island</a></li>
+            <li><a href="registration-status.html" style="color: #8892B0;">Registration Status Check</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-links">
+          <h4 style="color: #FFFFFF;">Explore</h4>
+          <ul>
+            <li><a href="../about.html" style="color: #8892B0;">About Us</a></li>
+            <li><a href="../events.html" style="color: #8892B0;">Camps &amp; Festivals</a></li>
+            <li><a href="../gallery.html" style="color: #8892B0;">Gallery</a></li>
+            <li><a href="../terms.html" style="color: #8892B0;">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4 style="color: #FFFFFF;">Connect</h4>
+          <div class="footer-contact-info" style="color: #8892B0;">
+            <p><strong>Hotline:</strong> +91 72009 81134</p>
+            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
+            <p><strong>Venue:</strong> TVIS Campus, Ponneri</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom" style="border-top: 1px solid var(--psf-dark-border); color: #8892B0;">
+        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
+        <p>A Product of Velammal Knowledge Park</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/events/event-common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Strict 5-Field Form
+      window.VadivaEvents.initEventForm('protoSparkForm', 'protospark-forge-2026');
+
+      // Mobile Menu Toggle
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const nav = document.querySelector('.main-nav');
+      if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+          nav.classList.toggle('active');
+          toggle.classList.toggle('active');
+        });
+      }
+
+      // Smooth scroll for anchors
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

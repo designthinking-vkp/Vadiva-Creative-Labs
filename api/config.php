@@ -28,3 +28,6 @@ if (!defined('PROTOSPARK_ADMIN_INITIAL_BCRYPT')) {
 if (!defined('PROTOSPARK_ADMIN_SECRET')) {
     define('PROTOSPARK_ADMIN_SECRET', getenv('PROTOSPARK_ADMIN_SECRET') ?: 'protospark_visitor_pass_mgmt_secret_token_2026_vkp_vadiva');
 }
+
+// 2026 Flagship Events Configuration (Spreadsheet ID: 1U3I2U_xMa0ChSSxCbYTrzlAV2f2wjBWZ3P6sF4RufF0)
+require_once __DIR__ . '/event-config.php';
