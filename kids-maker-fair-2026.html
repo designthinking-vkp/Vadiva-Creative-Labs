@@ -23,13 +23,13 @@
             "secondary-fixed-dim": "#93ccff",
             "surface-dim": "#c7dbff",
             "on-surface-variant": "#584237",
-            "surface": "#f9f9ff",
+            "surface": "#f0f4ff",
             "surface-container-lowest": "#ffffff",
             "on-secondary": "#ffffff",
             "surface-bright": "#f9f9ff",
             "primary-fixed-dim": "#ffb693",
             "on-primary-fixed-variant": "#7a3000",
-            "background": "#f9f9ff",
+            "background": "#f0f4ff",
             "primary-fixed": "#ffdbcb",
             "error": "#ba1a1a",
             "surface-tint": "#a04100",
@@ -72,18 +72,6 @@
             "xl": "0.75rem",
             "full": "9999px"
           },
-          spacing: {
-            "space-md": "1rem",
-            "space-xs": "0.25rem",
-            "space-2xl": "4rem",
-            "space-lg": "1.5rem",
-            "space-xl": "2.5rem",
-            "margin-desktop": "2.5rem",
-            "gutter": "1.25rem",
-            "space-sm": "0.5rem",
-            "margin": "1rem",
-            "gutter-desktop": "2rem"
-          },
           fontFamily: {
             "display-hero-mobile": ["Outfit", "sans-serif"],
             "body-sm": ["Plus Jakarta Sans", "sans-serif"],
@@ -102,7 +90,7 @@
           fontSize: {
             "display-hero-mobile": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "800" }],
             "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-            "display-hero": ["52px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "800" }],
             "label-lg": ["16px", { lineHeight: "22px", letterSpacing: "0.01em", fontWeight: "600" }],
             "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
             "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.015em", fontWeight: "700" }],
@@ -129,9 +117,9 @@
 </head>
 <body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen">
 
-  <!-- RESPONSIVE TOP HEADER -->
-  <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,28,59,0.06)] pt-safe">
-    <div class="max-w-6xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+  <!-- FULL-WIDTH DESKTOP & MOBILE TOP HEADER -->
+  <header class="fixed top-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_2px_16px_rgba(0,28,59,0.06)] pt-safe border-b border-surface-container">
+    <div class="w-full max-w-[1600px] mx-auto h-16 px-4 sm:px-6 lg:px-10 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="/events" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" title="Back to Events &amp; Camps">
           <span class="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -140,196 +128,186 @@
           <img alt="Vadiva Creative Labs Logo" class="h-9 w-auto object-contain shrink-0" src="/assets/logo.png">
         </a>
         <span class="hidden sm:inline-block h-5 w-px bg-outline-variant/60 mx-1"></span>
-        <h1 class="font-headline-sm text-base sm:text-headline-sm text-on-surface">Kids Maker Fair &amp; Repair Mela</h1>
+        <h1 class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold">Kids Maker Fair &amp; Repair Mela 2026</h1>
       </div>
 
       <div class="flex items-center gap-2.5">
-        <a href="/events" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors">
+        <a href="/events" class="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors">
           All Events
         </a>
-        <a href="/registration-status" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" title="Check Registration Status">
+        <a href="/registration-status" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" title="Check Registration Status">
           <span class="material-symbols-outlined text-[17px]">verified</span>
-          <span class="hidden sm:inline">Check Status</span>
+          <span class="hidden sm:inline">Check Registration Status</span>
         </a>
-        <a class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container text-secondary hover:bg-surface-container-high transition-colors" href="tel:7200981134" title="Call Helpline: 72009 81134">
-          <span class="material-symbols-outlined text-[20px]">call</span>
+        <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" href="tel:7200981134" title="Call Helpline: 72009 81134">
+          <span class="material-symbols-outlined text-[18px]">call</span>
+          <span class="hidden lg:inline">72009 81134</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- MAIN RESPONSIVE CONTAINER -->
-  <main class="flex-1 w-full pt-20 pb-28 lg:pb-16 bg-surface relative overflow-x-hidden">
-    <!-- Ambient playful backdrop shapes -->
-    <div class="absolute top-12 right-0 w-72 h-72 rounded-full bg-secondary-fixed/40 blur-3xl pointer-events-none"></div>
-    <div class="absolute top-64 -left-16 w-64 h-64 rounded-full bg-primary-fixed/40 blur-3xl pointer-events-none"></div>
+  <!-- FULL-WIDTH RESPONSIVE DESKTOP WORKSPACE -->
+  <main class="flex-1 w-full pt-20 pb-28 lg:pb-12 bg-gradient-to-b from-[#e8f0fe] via-[#f4f7ff] to-[#f0f4ff] relative overflow-x-hidden">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 pt-2 sm:pt-4">
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 sm:pt-4">
-      <!-- 2-COLUMN DESKTOP GRID / MOBILE STACK -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- WIDE 12-COLUMN DESKTOP GRID (NO LEFT/RIGHT EMPTY MARGINS) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
 
-        <!-- LEFT COLUMN (7 COLS ON DESKTOP): POSTER + EVENT DETAILS -->
-        <div class="lg:col-span-7 flex flex-col gap-6">
+        <!-- LEFT COLUMN (7 COLS ON DESKTOP): SIDE-BY-SIDE POSTER + DETAILS -->
+        <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-6">
 
-          <!-- HERO & UNCROPPED POSTER CARD -->
-          <section class="relative rounded-3xl bg-surface-container-lowest p-4 sm:p-6 shadow-[0_12px_32px_rgba(0,28,59,0.08)]">
-            <!-- Top Title & Tagline Header -->
-            <div class="flex flex-col items-center text-center mb-5">
-              <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm mb-2.5 font-bold tracking-wide">
-                <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">build</span>
-                VADIVA CREATIVE LABS PRESENTS • AGES 6–16 YEARS
-              </div>
-              <h2 class="font-display-hero-mobile text-display-hero-mobile sm:text-display-hero text-on-surface tracking-tight leading-tight">
-                Kids Maker Fair <span class="text-secondary">&amp; Repair Mela</span>
-              </h2>
-              <div class="mt-3 inline-block bg-primary-container text-on-primary px-5 py-1.5 rounded-full font-label-lg text-label-lg shadow-[0_4px_14px_rgba(243,112,33,0.35)] transform -rotate-1">
-                Make it. Fix it. Reuse it! 🛠️
-              </div>
-            </div>
+          <!-- TOP HERO SHOWCASE CARD (SIDE-BY-SIDE ON DESKTOP: UNCROPPED POSTER + HERO COPY) -->
+          <section class="rounded-3xl bg-surface-container-lowest p-5 sm:p-7 shadow-[0_12px_32px_rgba(0,28,59,0.07)] border border-surface-container">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
 
-            <!-- Full Uncropped Official Poster (Natural 4:5 Portrait Aspect Ratio, Zero Cropping/Overlap) -->
-            <div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high shadow-sm">
-              <img alt="Kids Maker Fair &amp; Repair Mela Official Poster" class="w-full h-auto block object-contain" src="/assets/events/maker-fair-poster.jpg">
-            </div>
+              <!-- Uncropped Official Poster (5 cols on desktop) -->
+              <div class="md:col-span-5">
+                <div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high shadow-md">
+                  <img alt="Kids Maker Fair &amp; Repair Mela Official Poster" class="w-full h-auto block object-contain" src="/assets/events/maker-fair-poster.jpg">
+                </div>
+              </div>
 
-            <!-- Mobile Quick Jump Button -->
-            <div class="mt-5 flex justify-center lg:hidden">
-              <a href="#registration-section" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all">
-                <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
-                <span>Register Now • ₹99</span>
-                <span class="material-symbols-outlined text-[18px]">arrow_downward</span>
-              </a>
-            </div>
-          </section>
+              <!-- Hero Headline, Callout & Specs (7 cols on desktop) -->
+              <div class="md:col-span-7 flex flex-col items-start text-left">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm mb-3 font-bold tracking-wide">
+                  <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">build</span>
+                  VADIVA CREATIVE LABS • AGES 6–16 YEARS
+                </div>
 
-          <!-- INVITATION CALLOUT -->
-          <section class="rounded-2xl bg-secondary-fixed/40 p-5 shadow-sm">
-            <div class="flex items-start gap-3.5">
-              <div class="w-11 h-11 rounded-xl bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                <span class="material-symbols-outlined text-[24px]">rocket_launch</span>
-              </div>
-              <div class="flex flex-col">
-                <h3 class="font-headline-sm text-headline-sm text-on-surface leading-snug">
-                  Calling all young makers, fixers &amp; inventors aged <span class="text-primary font-bold">6–16!</span>
-                </h3>
-                <p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-relaxed">
-                  Come and spend a day of <strong class="text-primary">hands-on fun</strong> working with wood, waste, tools &amp; technology. You'll go home with <strong class="text-secondary">new skills</strong> and something extraordinary that you built yourself!
-                </p>
-              </div>
-            </div>
-          </section>
+                <h2 class="font-display-hero-mobile text-display-hero-mobile xl:text-display-hero text-on-surface tracking-tight leading-tight">
+                  Kids Maker Fair <span class="text-secondary">&amp; Repair Mela</span>
+                </h2>
 
-          <!-- QUICK EVENT SPECS (2x2 GRID - NO TRUNCATION) -->
-          <section class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <!-- Date -->
-            <div class="rounded-2xl bg-surface-container-lowest p-4 flex items-center gap-3.5 shadow-sm">
-              <div class="w-11 h-11 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Date</span>
-                <span class="font-headline-sm text-headline-sm text-on-surface font-bold">29th Nov 2026</span>
-              </div>
-            </div>
+                <div class="mt-3 inline-block bg-primary-container text-on-primary px-5 py-1.5 rounded-full font-label-lg text-label-lg shadow-[0_4px_14px_rgba(243,112,33,0.35)]">
+                  Make it. Fix it. Reuse it! 🛠️
+                </div>
 
-            <!-- Timing -->
-            <div class="rounded-2xl bg-surface-container-lowest p-4 flex items-center gap-3.5 shadow-sm">
-              <div class="w-11 h-11 rounded-xl bg-secondary-fixed text-secondary flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">schedule</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Timing</span>
-                <span class="font-label-lg text-label-lg font-bold text-on-surface">10:30 AM – 3:30 PM</span>
-              </div>
-            </div>
+                <div class="mt-4 rounded-2xl bg-secondary-fixed/35 p-4 border border-secondary-fixed">
+                  <h3 class="font-headline-sm text-base sm:text-lg text-on-surface font-bold leading-snug">
+                    Calling all young makers, fixers &amp; inventors aged <span class="text-primary font-extrabold">6–16!</span>
+                  </h3>
+                  <p class="font-body-sm text-body-sm sm:text-body-md text-on-surface-variant mt-1.5 leading-relaxed">
+                    Come and spend a day of <strong class="text-primary">hands-on fun</strong> working with wood, waste, tools &amp; technology. You'll go home with <strong class="text-secondary">new skills</strong> and something extraordinary that you made yourself!
+                  </p>
+                </div>
 
-            <!-- Venue -->
-            <div class="rounded-2xl bg-surface-container-lowest p-4 flex items-center gap-3.5 shadow-sm">
-              <div class="w-11 h-11 rounded-xl bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Venue</span>
-                <span class="font-label-lg text-label-lg font-bold text-on-surface">Santhome, Vadiva Creative Labs</span>
-              </div>
-            </div>
+                <!-- 2x2 Quick Specs Grid Inside Hero -->
+                <div class="grid grid-cols-2 gap-3 w-full mt-4">
+                  <div class="rounded-xl bg-surface-container-low p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[11px] text-on-surface-variant uppercase block">Date</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">29th Nov 2026</span>
+                    </div>
+                  </div>
 
-            <!-- Price Highlight -->
-            <div class="rounded-2xl bg-primary-container text-on-primary p-4 flex items-center justify-between shadow-[0_6px_18px_rgba(243,112,33,0.3)]">
-              <div class="flex flex-col">
-                <span class="font-label-sm text-label-sm text-on-primary/90 uppercase font-bold tracking-wider">Entry Fee</span>
-                <span class="font-display-hero-mobile text-[28px] leading-tight font-extrabold">₹99</span>
+                  <div class="rounded-xl bg-surface-container-low p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-secondary-fixed text-secondary flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">schedule</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[11px] text-on-surface-variant uppercase block">Timing</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">10:30 AM – 3:30 PM</span>
+                    </div>
+                  </div>
+
+                  <div class="rounded-xl bg-surface-container-low p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[11px] text-on-surface-variant uppercase block">Venue</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">Santhome, Chennai</span>
+                    </div>
+                  </div>
+
+                  <div class="rounded-xl bg-primary-container text-on-primary p-3 flex items-center justify-between shadow-sm">
+                    <div>
+                      <span class="font-label-sm text-[11px] text-on-primary/90 uppercase font-bold block">Entry Fee</span>
+                      <span class="font-headline-md text-headline-md font-extrabold leading-none">₹99</span>
+                    </div>
+                    <span class="px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-primary font-label-sm text-[11px] font-bold">
+                      All-incl.
+                    </span>
+                  </div>
+                </div>
               </div>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-bold shadow-sm">
-                All-inclusive
-              </span>
+
             </div>
           </section>
 
-          <!-- WHAT'S INCLUDED (CARDS) -->
-          <section>
-            <div class="flex items-center justify-between mb-3.5">
-              <div class="flex items-center gap-2">
+          <!-- WHAT'S INSIDE THE MELA (3 ZONES + FEATURED TRACKS) -->
+          <section class="rounded-3xl bg-surface-container-lowest p-5 sm:p-6 shadow-sm border border-surface-container">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2.5">
                 <div class="w-2.5 h-6 rounded-full bg-primary"></div>
-                <h3 class="font-headline-sm text-headline-sm text-on-surface">What's Inside the Mela</h3>
+                <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">What's Inside the Mela</h3>
               </div>
-              <span class="font-label-sm text-label-sm text-primary font-bold">Hands-on Zones</span>
+              <span class="px-3 py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold">Hands-on Maker Zones</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3.5">
-              <!-- Fun Activity -->
-              <div class="rounded-2xl bg-surface-container-lowest p-4 flex flex-col items-center text-center shadow-sm">
-                <div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary mb-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div class="rounded-2xl bg-surface-container-low p-4 flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
                   <span class="material-symbols-outlined text-[26px]">smart_toy</span>
                 </div>
-                <span class="font-label-lg text-label-lg font-bold text-on-surface leading-tight">Fun-filled Activity</span>
-                <span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Live games &amp; maker challenges</span>
+                <div>
+                  <span class="font-label-lg text-label-lg font-bold text-on-surface block">Fun-filled Activity</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 block">Live games, tinkering &amp; creative challenges</span>
+                </div>
               </div>
 
-              <!-- Maker Skills -->
-              <div class="rounded-2xl bg-surface-container-lowest p-4 flex flex-col items-center text-center shadow-sm">
-                <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary mb-2.5">
+              <div class="rounded-2xl bg-surface-container-low p-4 flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
                   <span class="material-symbols-outlined text-[26px]">home_repair_service</span>
                 </div>
-                <span class="font-label-lg text-label-lg font-bold text-on-surface leading-tight">Makerskills Stations</span>
-                <span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Wood, tools &amp; electronics</span>
+                <div>
+                  <span class="font-label-lg text-label-lg font-bold text-on-surface block">Makerskills Stations</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 block">Woodcraft, fixing tools &amp; electronics</span>
+                </div>
               </div>
 
-              <!-- Certificate -->
-              <div class="rounded-2xl bg-surface-container-lowest p-4 flex flex-col items-center text-center shadow-sm">
-                <div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary mb-2.5">
+              <div class="rounded-2xl bg-surface-container-low p-4 flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0">
                   <span class="material-symbols-outlined text-[26px]">workspace_premium</span>
                 </div>
-                <span class="font-label-lg text-label-lg font-bold text-on-surface leading-tight">Official Certificate</span>
-                <span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Awarded to all participants</span>
+                <div>
+                  <span class="font-label-lg text-label-lg font-bold text-on-surface block">Official Certificate</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 block">Awarded to all young maker participants</span>
+                </div>
               </div>
             </div>
 
-            <!-- Workshop track chips preview -->
-            <div class="rounded-2xl bg-surface-container-low p-4 flex flex-wrap items-center gap-2.5">
-              <span class="font-label-sm text-label-sm text-on-surface-variant font-bold">Featured Tracks:</span>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm font-semibold shadow-xs">🪵 Toy Woodcraft</span>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-xs">⚡ Gadget Fix Lab</span>
-              <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-tertiary font-label-sm text-label-sm font-semibold shadow-xs">♻️ Upcycle Inventions</span>
+            <div class="rounded-2xl bg-surface-container p-3.5 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-label-sm text-label-sm text-on-surface-variant font-bold mr-1">Featured Tracks:</span>
+                <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm font-semibold shadow-xs">🪵 Toy Woodcraft</span>
+                <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-xs">⚡ Gadget Fix Lab</span>
+                <span class="px-3 py-1 rounded-full bg-surface-container-lowest text-tertiary font-label-sm text-label-sm font-semibold shadow-xs">♻️ Upcycle Inventions</span>
+              </div>
+              <span class="font-label-sm text-label-sm text-secondary font-bold">Take home what you build!</span>
             </div>
           </section>
 
-          <!-- EVENT ORGANIZER & VENUE LOCATION -->
+          <!-- ORGANIZER & VENUE MAP SIDE-BY-SIDE -->
           <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="rounded-2xl bg-surface-container-lowest p-5 flex flex-col justify-between gap-3 shadow-sm">
-              <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-headline-sm shrink-0">
+            <div class="rounded-3xl bg-surface-container-lowest p-5 flex flex-col justify-between gap-3 shadow-sm border border-surface-container">
+              <div class="flex items-center gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-headline-sm shrink-0">
                   V
                 </div>
-                <div class="flex flex-col">
-                  <span class="font-headline-sm text-headline-sm text-on-surface">Vadiva Creative Labs</span>
-                  <span class="font-label-sm text-label-sm text-on-surface-variant">Experiential maker learning in Chennai</span>
+                <div>
+                  <span class="font-headline-sm text-headline-sm text-on-surface font-bold block">Vadiva Creative Labs</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant">Pioneering experiential maker learning in Chennai</span>
                 </div>
               </div>
               <div class="flex items-center justify-between pt-3 border-t border-surface-container">
                 <div class="flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
-                  <span class="font-label-sm text-label-sm text-on-surface font-semibold">Trained Safety Mentors</span>
+                  <span class="font-label-sm text-label-sm text-on-surface font-semibold">Trained Safety Mentors on Floor</span>
                 </div>
                 <a class="inline-flex items-center gap-1 text-secondary font-label-sm text-label-sm font-bold hover:underline" href="tel:7200981134">
                   <span>72009 81134</span>
@@ -338,13 +316,13 @@
               </div>
             </div>
 
-            <div class="w-full min-h-[150px] rounded-2xl bg-cover bg-center overflow-hidden shadow-sm relative flex items-end p-3.5" style="background-image: url('/assets/events/stitch-kmf-map.jpg')">
-              <div class="w-full bg-surface-container-lowest/95 backdrop-blur-md rounded-xl p-3 flex items-center justify-between shadow-sm">
+            <div class="w-full min-h-[145px] rounded-3xl bg-cover bg-center overflow-hidden shadow-sm relative flex items-end p-3.5 border border-surface-container" style="background-image: url('/assets/events/stitch-kmf-map.jpg')">
+              <div class="w-full bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between shadow-sm">
                 <div class="flex flex-col min-w-0 pr-2">
-                  <span class="font-label-md text-label-md font-bold text-on-surface truncate">Santhome, Chennai</span>
-                  <span class="font-label-sm text-label-sm text-on-surface-variant truncate">Vadiva Creative Labs Campus</span>
+                  <span class="font-label-md text-label-md font-bold text-on-surface truncate">Santhome, Vadiva Creative Labs</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant truncate">Near Santhome High Road, Chennai</span>
                 </div>
-                <a class="px-3 py-1.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shrink-0 flex items-center gap-1 shadow-sm" href="https://maps.google.com/?q=Santhome+Chennai" target="_blank" rel="noopener">
+                <a class="px-3.5 py-1.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shrink-0 flex items-center gap-1 shadow-sm" href="https://maps.google.com/?q=Santhome+Chennai" target="_blank" rel="noopener">
                   <span>Map</span>
                   <span class="material-symbols-outlined text-[14px]">directions</span>
                 </a>
@@ -354,75 +332,73 @@
 
         </div>
 
-        <!-- RIGHT COLUMN (5 COLS ON DESKTOP, STICKY): REGISTRATION FORM -->
-        <div class="lg:col-span-5 lg:sticky lg:top-24" id="registration-section">
-          <div class="rounded-3xl bg-surface-container-lowest p-6 sm:p-7 shadow-[0_12px_40px_rgba(0,28,59,0.1)] border border-surface-container">
+        <!-- RIGHT COLUMN (5 COLS / 4 COLS ON XL, STICKY): REGISTRATION FORM -->
+        <div class="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-20" id="registration-section">
+          <div class="rounded-3xl bg-surface-container-lowest p-6 sm:p-7 shadow-[0_16px_48px_rgba(0,28,59,0.12)] border-2 border-secondary-fixed">
             <!-- Form Header -->
             <div class="flex items-center justify-between pb-4 mb-5 border-b border-surface-container">
               <div>
                 <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">Fast Pass Entry</span>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-1">Book Maker Pass</h3>
+                <h3 class="font-headline-md text-headline-md text-on-surface font-bold mt-1">Book Maker Pass</h3>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-secondary shrink-0">
+              <div class="w-12 h-12 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-sm">
                 <span class="material-symbols-outlined text-[26px]">confirmation_number</span>
               </div>
             </div>
 
-            <form class="flex flex-col gap-4" id="maker-registration-form">
-              <div class="flex flex-col gap-1.5">
+            <form class="flex flex-col gap-3.5" id="maker-registration-form">
+              <div class="flex flex-col gap-1">
                 <label class="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between" for="studentName">
                   <span>Student Name <span class="text-primary">*</span></span>
                   <span class="font-label-sm text-label-sm text-on-surface-variant">Ages 6–16</span>
                 </label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="studentName" id="studentName" placeholder="e.g. Aarav Sharma" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="studentName" id="studentName" placeholder="e.g. Aarav Sharma" required type="text">
               </div>
 
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-1">
                 <label class="font-label-md text-label-md text-on-surface font-semibold" for="parentName">
                   Parent / Guardian Name <span class="text-primary">*</span>
                 </label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="parentName" id="parentName" placeholder="e.g. Priya Sharma" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="parentName" id="parentName" placeholder="e.g. Priya Sharma" required type="text">
               </div>
 
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-1">
                 <label class="font-label-md text-label-md text-on-surface font-semibold" for="schoolName">
                   School Name <span class="text-primary">*</span>
                 </label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="schoolName" id="schoolName" placeholder="e.g. St. Bede's / Chettinad Vidyashram" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="schoolName" id="schoolName" placeholder="e.g. St. Bede's / Chettinad Vidyashram" required type="text">
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div class="flex flex-col gap-1.5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
                   <label class="font-label-md text-label-md text-on-surface font-semibold" for="contactNumber">
                     Contact Number <span class="text-primary">*</span>
                   </label>
-                  <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="contactNumber" id="contactNumber" placeholder="Phone / WhatsApp" required type="tel">
+                  <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="contactNumber" id="contactNumber" placeholder="Phone / WhatsApp" required type="tel">
                 </div>
 
-                <div class="flex flex-col gap-1.5">
+                <div class="flex flex-col gap-1">
                   <label class="font-label-md text-label-md text-on-surface font-semibold" for="city">
                     City <span class="text-primary">*</span>
                   </label>
-                  <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="city" id="city" placeholder="e.g. Chennai" required type="text">
+                  <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="city" id="city" placeholder="e.g. Chennai" required type="text">
                 </div>
               </div>
 
-              <div class="flex flex-col gap-1.5">
+              <div class="flex flex-col gap-1">
                 <label class="font-label-md text-label-md text-on-surface font-semibold" for="email">
                   Email ID <span class="text-primary">*</span>
                 </label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="email" id="email" placeholder="e.g. parent@example.com" required type="email">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="email" id="email" placeholder="e.g. parent@example.com" required type="email">
               </div>
 
               <!-- Price Summary Box -->
-              <div class="rounded-2xl bg-surface-container-low p-4 flex items-center justify-between mt-1">
+              <div class="rounded-2xl bg-surface-container-low p-4 flex items-center justify-between mt-1 border border-surface-container-high">
                 <div class="flex flex-col">
                   <span class="font-label-md text-label-md font-bold text-on-surface">Entry Pass Fee</span>
                   <span class="font-label-sm text-label-sm text-on-surface-variant">All-inclusive workshop access &amp; kit</span>
                 </div>
-                <div class="flex items-baseline gap-1">
-                  <span class="font-display-hero-mobile text-[30px] font-extrabold text-primary" id="total-price">₹99</span>
-                </div>
+                <span class="font-display-hero-mobile text-[30px] font-extrabold text-primary" id="total-price">₹99</span>
               </div>
 
               <button class="w-full h-14 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(243,112,33,0.35)] hover:opacity-95 active:translate-y-0.5 transition-all mt-1 cursor-pointer" type="submit">

@@ -23,13 +23,13 @@
             "secondary-fixed-dim": "#93ccff",
             "surface-dim": "#c7dbff",
             "on-surface-variant": "#584237",
-            "surface": "#f9f9ff",
+            "surface": "#f0f4ff",
             "surface-container-lowest": "#ffffff",
             "on-secondary": "#ffffff",
             "surface-bright": "#f9f9ff",
             "primary-fixed-dim": "#ffb693",
             "on-primary-fixed-variant": "#7a3000",
-            "background": "#f9f9ff",
+            "background": "#f0f4ff",
             "primary-fixed": "#ffdbcb",
             "error": "#ba1a1a",
             "surface-tint": "#a04100",
@@ -72,18 +72,6 @@
             "xl": "0.75rem",
             "full": "9999px"
           },
-          spacing: {
-            "space-md": "1rem",
-            "space-xs": "0.25rem",
-            "space-2xl": "4rem",
-            "space-lg": "1.5rem",
-            "space-xl": "2.5rem",
-            "margin-desktop": "2.5rem",
-            "gutter": "1.25rem",
-            "space-sm": "0.5rem",
-            "margin": "1rem",
-            "gutter-desktop": "2rem"
-          },
           fontFamily: {
             "display-hero-mobile": ["Outfit", "sans-serif"],
             "body-sm": ["Plus Jakarta Sans", "sans-serif"],
@@ -102,7 +90,7 @@
           fontSize: {
             "display-hero-mobile": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "800" }],
             "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
-            "display-hero": ["52px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "800" }],
             "label-lg": ["16px", { lineHeight: "22px", letterSpacing: "0.01em", fontWeight: "600" }],
             "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }],
             "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.015em", fontWeight: "700" }],
@@ -129,9 +117,9 @@
 </head>
 <body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen">
 
-  <!-- RESPONSIVE TOP HEADER -->
-  <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,28,59,0.06)] pt-safe">
-    <div class="max-w-6xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+  <!-- FULL-WIDTH DESKTOP & MOBILE TOP HEADER -->
+  <header class="fixed top-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_2px_16px_rgba(0,28,59,0.06)] pt-safe border-b border-surface-container">
+    <div class="w-full max-w-[1600px] mx-auto h-16 px-4 sm:px-6 lg:px-10 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="/events" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" title="Back to Events &amp; Camps">
           <span class="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -140,121 +128,117 @@
           <img alt="Vadiva Creative Labs Logo" class="h-9 w-auto object-contain shrink-0" src="/assets/logo.png">
         </a>
         <span class="hidden sm:inline-block h-5 w-px bg-outline-variant/60 mx-1"></span>
-        <h1 class="font-headline-sm text-base sm:text-headline-sm text-on-surface">Shipwreck Island 2026</h1>
+        <h1 class="font-headline-sm text-base sm:text-headline-sm text-on-surface font-bold">Shipwreck Island 2026</h1>
       </div>
 
       <div class="flex items-center gap-2.5">
-        <a href="/events" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors">
+        <a href="/events" class="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors">
           All Events
         </a>
-        <a href="/registration-status" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" title="Check Registration Status">
+        <a href="/registration-status" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" title="Check Registration Status">
           <span class="material-symbols-outlined text-[17px]">verified</span>
-          <span class="hidden sm:inline">Check Status</span>
+          <span class="hidden sm:inline">Check Registration Status</span>
         </a>
-        <a class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container text-secondary hover:bg-surface-container-high transition-colors" href="tel:7200981134" title="Call Helpline: 72009 81134">
-          <span class="material-symbols-outlined text-[20px]">call</span>
+        <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity" href="tel:7200981134" title="Call Helpline: 72009 81134">
+          <span class="material-symbols-outlined text-[18px]">call</span>
+          <span class="hidden lg:inline">72009 81134</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- MAIN RESPONSIVE CONTAINER -->
-  <main class="flex-1 w-full pt-20 pb-28 lg:pb-16 bg-surface relative overflow-x-hidden">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 sm:pt-4">
-      <!-- 2-COLUMN DESKTOP GRID / MOBILE STACK -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+  <!-- FULL-WIDTH RESPONSIVE DESKTOP WORKSPACE -->
+  <main class="flex-1 w-full pt-20 pb-28 lg:pb-12 bg-gradient-to-b from-[#e8f0fe] via-[#f4f7ff] to-[#f0f4ff] relative overflow-x-hidden">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 pt-2 sm:pt-4">
 
-        <!-- LEFT COLUMN (7 COLS ON DESKTOP): HERO + POSTER + SKILLS & QUEST -->
-        <div class="lg:col-span-7 flex flex-col gap-6">
+      <!-- WIDE 12-COLUMN DESKTOP GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
 
-          <!-- HERO & UNCROPPED POSTER CARD -->
-          <section class="relative w-full rounded-3xl bg-surface-container-lowest p-4 sm:p-6 shadow-[0_12px_32px_rgba(0,28,59,0.08)]">
-            <!-- Top Badges & Title -->
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-              <span class="px-3.5 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm flex items-center gap-1.5 font-bold">
-                <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">sailing</span>
-                Winter Camp 2026 • Hands-on STEM Odyssey
-              </span>
-              <span class="px-3 py-1 rounded-full bg-primary-container text-on-primary text-label-sm font-label-sm shadow-sm flex items-center gap-1 font-bold">
-                <span class="material-symbols-outlined text-[14px]">local_fire_department</span>
-                Limited Crew Spots
-              </span>
-            </div>
+        <!-- LEFT COLUMN (7 COLS / 8 COLS ON XL): SIDE-BY-SIDE POSTER + DETAILS -->
+        <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-6">
 
-            <h2 class="font-display-hero-mobile text-display-hero-mobile sm:text-display-hero text-on-surface leading-tight">
-              Shipwreck <span class="text-secondary">Island</span>
-            </h2>
-            <p class="font-headline-sm text-headline-sm text-primary font-bold mt-1">
-              3 days to build your way home!
-            </p>
-            <p class="font-body-md text-body-md text-on-surface-variant mt-2 mb-5 leading-relaxed">
-              A storm has wrecked our ship. No signal, no rescue boat. Build a seaworthy new ship with your crew and sail home!
-            </p>
+          <!-- HERO & UNCROPPED POSTER CARD (SIDE-BY-SIDE ON DESKTOP) -->
+          <section class="relative w-full rounded-3xl bg-surface-container-lowest p-5 sm:p-7 shadow-[0_12px_32px_rgba(0,28,59,0.07)] border border-surface-container">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
 
-            <!-- Full Uncropped Official Poster (Natural 4:5 Portrait Aspect Ratio, Zero Cropping/Overlap) -->
-            <div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high shadow-sm">
-              <img class="w-full h-auto block object-contain" alt="Shipwreck Island 2026 Official Poster" src="/assets/events/shipwreck-island-poster.jpg">
-            </div>
-
-            <button onclick="document.getElementById('register-section').scrollIntoView({behavior: 'smooth'})" class="lg:hidden w-full mt-5 h-12 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-1.5 shadow-md active:scale-[0.98] transition-transform cursor-pointer">
-              <span>Register Now • ₹6,000</span>
-              <span class="material-symbols-outlined text-[18px]">arrow_downward</span>
-            </button>
-          </section>
-
-          <!-- QUICK META METRICS GRID -->
-          <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex items-start gap-2.5">
-              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary shrink-0">
-                <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+              <!-- Uncropped Official Poster (5 cols on desktop) -->
+              <div class="md:col-span-5">
+                <div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-low border border-surface-container-high shadow-md">
+                  <img class="w-full h-auto block object-contain" alt="Shipwreck Island 2026 Official Poster" src="/assets/events/shipwreck-island-poster.jpg">
+                </div>
               </div>
-              <div class="min-w-0">
-                <span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Duration</span>
-                <span class="font-label-md text-label-md text-on-surface font-bold block">26–30 Dec</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant block leading-tight">2026 Camp</span>
-              </div>
-            </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex items-start gap-2.5">
-              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
-                <span class="material-symbols-outlined text-[20px]">location_on</span>
-              </div>
-              <div class="min-w-0">
-                <span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Venue</span>
-                <span class="font-label-md text-label-md text-on-surface font-bold block">TVIS Ponneri</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant block leading-tight">Eco Campus</span>
-              </div>
-            </div>
+              <!-- Hero Storyline & Specs (7 cols on desktop) -->
+              <div class="md:col-span-7 flex flex-col items-start text-left">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="px-3.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm flex items-center gap-1.5 font-bold">
+                    <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">sailing</span>
+                    Winter Camp 2026 • Hands-on STEM Odyssey
+                  </span>
+                </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm flex items-start gap-2.5">
-              <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary shrink-0">
-                <span class="material-symbols-outlined text-[20px]">school</span>
-              </div>
-              <div class="min-w-0">
-                <span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Eligibility</span>
-                <span class="font-label-md text-label-md text-on-surface font-bold block">Grades 5–11</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant block leading-tight">Stay-in Camp</span>
-              </div>
-            </div>
+                <h2 class="font-display-hero-mobile text-display-hero-mobile xl:text-display-hero text-on-surface leading-tight">
+                  Shipwreck <span class="text-secondary">Island</span>
+                </h2>
+                <div class="mt-2 inline-block bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1 rounded-full font-headline-sm text-headline-sm font-extrabold">
+                  3 days to build your way home! ⛵
+                </div>
 
-            <div class="bg-tertiary-fixed rounded-2xl p-3.5 shadow-sm flex items-start gap-2.5">
-              <div class="w-10 h-10 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-[20px]">payments</span>
+                <p class="font-body-md text-body-md text-on-surface-variant mt-3.5 leading-relaxed">
+                  A storm has wrecked our ship. No signal, no rescue boat. Build a seaworthy new ship with your crew and <strong>sail home!</strong>
+                </p>
+
+                <!-- 2x2 Quick Specs Grid Inside Hero -->
+                <div class="grid grid-cols-2 gap-3 w-full mt-4">
+                  <div class="bg-surface-container-low rounded-xl p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[10px] text-on-surface-variant block uppercase">Duration</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">26–30 Dec 2026</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-xl p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">location_on</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[10px] text-on-surface-variant block uppercase">Venue</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">TVIS Ponneri</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-surface-container-low rounded-xl p-3 flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">school</span>
+                    </div>
+                    <div>
+                      <span class="font-label-sm text-[10px] text-on-surface-variant block uppercase">Eligibility</span>
+                      <span class="font-label-md text-label-md text-on-surface font-bold">Grades 5–11</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-tertiary-fixed rounded-xl p-3 flex items-center justify-between">
+                    <div>
+                      <span class="font-label-sm text-[10px] text-on-tertiary-container block uppercase font-bold">Per Student</span>
+                      <span class="font-headline-sm text-headline-sm text-on-tertiary-fixed font-extrabold leading-none">₹6,000</span>
+                    </div>
+                    <span class="px-2 py-0.5 bg-white/80 text-on-tertiary-fixed rounded-full text-[10px] font-bold">Stay-In</span>
+                  </div>
+                </div>
               </div>
-              <div class="min-w-0">
-                <span class="font-label-sm text-label-sm text-on-tertiary-container block uppercase tracking-wider">Per Student</span>
-                <span class="font-headline-sm text-headline-sm text-on-tertiary-fixed font-bold block leading-none mt-0.5">₹6,000</span>
-                <span class="font-body-sm text-[11px] text-on-tertiary-container block leading-tight mt-0.5">All Inclusive</span>
-              </div>
+
             </div>
           </section>
 
           <!-- MAKER SKILLS ARSENAL (8 SKILLS) -->
-          <section>
-            <div class="flex items-center justify-between mb-3.5">
+          <section class="rounded-3xl bg-surface-container-lowest p-5 sm:p-6 shadow-sm border border-surface-container">
+            <div class="flex items-center justify-between mb-4">
               <div>
                 <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Practical Mastery</span>
-                <h3 class="font-headline-md text-headline-md text-on-surface leading-tight">You'll Saw, Stitch, Print, Code &amp; Create</h3>
+                <h3 class="font-headline-md text-headline-md text-on-surface font-bold leading-tight">You'll Saw, Stitch, Print, Code &amp; Create</h3>
               </div>
               <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
                 <span class="material-symbols-outlined text-[22px]">handyman</span>
@@ -262,151 +246,131 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-primary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">carpenter</span>
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">carpenter</span>
                 </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Carpentry</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Hull Craft</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-secondary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">styler</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Sewing</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Rigging Sails</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-secondary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">architecture</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">3D Printing</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Rudders &amp; Parts</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-primary-container mb-2">
-                  <span class="material-symbols-outlined text-[24px]">precision_manufacturing</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Laser &amp; CNC</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Precision Gears</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-tertiary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">smart_toy</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Robotics</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Auto-Beacon</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-primary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">science</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">STEM Lab</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Buoyancy Physics</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-tertiary mb-2">
-                  <span class="material-symbols-outlined text-[24px]">palette</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Art Design</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Crew Insignia</span>
-              </div>
-
-              <div class="bg-surface-container-lowest p-3.5 rounded-2xl flex flex-col items-center text-center shadow-sm">
-                <div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-secondary-container mb-2">
-                  <span class="material-symbols-outlined text-[24px]">explore</span>
-                </div>
-                <span class="font-label-md text-label-md text-on-surface font-bold leading-snug">Mainland Expedition</span>
-                <span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Water Launch</span>
-              </div>
-            </div>
-          </section>
-
-          <!-- CAMP TIMELINE & EXPERIENCE -->
-          <section class="bg-surface-container-low rounded-3xl p-5">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-primary text-[22px]">route</span>
-              <h4 class="font-headline-sm text-headline-sm text-on-surface">The Survival Quest Journey</h4>
-            </div>
-            <div class="space-y-3">
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-sm text-label-sm shrink-0 shadow-sm mt-0.5">01</div>
-                <div class="flex-1 bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm">
-                  <span class="font-label-lg text-label-lg text-on-surface font-bold block">The Crash &amp; Survival Kits</span>
-                  <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Camp check-in at TVIS Ponneri, safety induction, crew division &amp; unboxing maker gear.</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center font-label-sm text-label-sm shrink-0 mt-0.5 font-bold">02</div>
-                <div class="flex-1 bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm">
-                  <span class="font-label-lg text-label-lg text-on-surface font-bold block">Hydrodynamics &amp; Hull Framing</span>
-                  <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Hands-on woodwork, CAD prototyping, and testing displacement hulls in wave tanks.</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center font-label-sm text-label-sm shrink-0 mt-0.5 font-bold">03</div>
-                <div class="flex-1 bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm">
-                  <span class="font-label-lg text-label-lg text-on-surface font-bold block">Power, Rigging &amp; Navigation Avionics</span>
-                  <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Microcontroller integration, solar telemetry circuit soldering, and sail stitching.</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-label-sm shrink-0 mt-0.5 shadow-sm">04</div>
-                <div class="flex-1 bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm">
-                  <div class="flex items-center justify-between flex-wrap gap-2">
-                    <span class="font-label-lg text-label-lg text-on-surface font-bold">The Grand Regatta &amp; Mainland Expedition</span>
-                    <span class="bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-[10px] px-2.5 py-0.5 rounded-full font-bold">Parents Invited</span>
-                  </div>
-                  <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Open-water launch demonstration, project showcase, and family celebration ceremony.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- PARENT TRUST & VENUE MAP -->
-          <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm">
-              <h4 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
-                <span class="material-symbols-outlined text-secondary text-[24px]">verified_user</span>
-                Stay-In Safety Assurance
-              </h4>
-              <div class="grid grid-cols-2 gap-2.5 mt-3.5">
-                <div class="bg-surface-container p-3 rounded-xl">
-                  <span class="material-symbols-outlined text-primary text-[20px]">security</span>
-                  <span class="font-label-md text-label-md text-on-surface block font-semibold mt-0.5">24/7 Care</span>
-                  <p class="font-body-sm text-[11px] text-on-surface-variant">Dedicated dorm wardens</p>
-                </div>
-                <div class="bg-surface-container p-3 rounded-xl">
-                  <span class="material-symbols-outlined text-secondary text-[20px]">restaurant</span>
-                  <span class="font-label-md text-label-md text-on-surface block font-semibold mt-0.5">Nutritious Meals</span>
-                  <p class="font-body-sm text-[11px] text-on-surface-variant">Wholesome daily dining</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm flex flex-col justify-between">
-              <div class="flex items-center justify-between mb-2">
                 <div>
-                  <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Camp Location</span>
-                  <h4 class="font-headline-sm text-headline-sm text-on-surface">TVIS Campus, Ponneri</h4>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Carpentry</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Hull Craft</span>
                 </div>
-                <a class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary" href="https://maps.google.com/?q=Velammal+International+School+Ponneri" target="_blank" rel="noopener">
-                  <span class="material-symbols-outlined text-[18px]">near_me</span>
-                </a>
               </div>
-              <div class="w-full h-28 bg-cover bg-center rounded-xl overflow-hidden relative shadow-inner" style="background-image: url('/assets/events/stitch-swi-map.jpg')">
-                <div class="absolute bottom-2 left-2 bg-surface-container-lowest/90 px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1 shadow-sm">
-                  <span class="material-symbols-outlined text-primary text-[15px]">pin_drop</span>
-                  <span class="font-label-sm text-label-sm text-on-surface font-semibold">Ponneri Camp Base</span>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-secondary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">styler</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Sewing</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Rigging Sails</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-secondary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">architecture</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">3D Printing</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Rudders</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary-container shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">precision_manufacturing</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Laser &amp; CNC</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Gears</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-tertiary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">smart_toy</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Robotics</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Auto-Beacon</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">science</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">STEM Lab</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Buoyancy</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-tertiary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">palette</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Art Design</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Insignia</span>
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-secondary shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[22px]">explore</span>
+                </div>
+                <div>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Expedition</span>
+                  <span class="font-body-sm text-[11px] text-on-surface-variant">Water Launch</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- THE SURVIVAL QUEST + SAFETY & MAP -->
+          <section class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-7 bg-surface-container-lowest rounded-3xl p-5 shadow-sm border border-surface-container">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-primary text-[22px]">route</span>
+                <h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">The Survival Quest Journey</h4>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div class="bg-surface-container-low p-3 rounded-2xl">
+                  <span class="font-label-sm text-primary font-bold">PHASE 01</span>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">The Crash &amp; Survival Kits</span>
+                  <p class="font-body-sm text-xs text-on-surface-variant mt-0.5">Safety induction, crew division &amp; unboxing maker gear.</p>
+                </div>
+                <div class="bg-surface-container-low p-3 rounded-2xl">
+                  <span class="font-label-sm text-secondary font-bold">PHASE 02</span>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Hull Framing &amp; CAD</span>
+                  <p class="font-body-sm text-xs text-on-surface-variant mt-0.5">Hands-on woodwork &amp; testing hulls in wave tanks.</p>
+                </div>
+                <div class="bg-surface-container-low p-3 rounded-2xl">
+                  <span class="font-label-sm text-secondary font-bold">PHASE 03</span>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Avionics &amp; Sail Rigging</span>
+                  <p class="font-body-sm text-xs text-on-surface-variant mt-0.5">Microcontroller integration &amp; sail stitching.</p>
+                </div>
+                <div class="bg-surface-container-low p-3 rounded-2xl">
+                  <span class="font-label-sm text-primary font-bold">PHASE 04</span>
+                  <span class="font-label-md text-label-md text-on-surface font-bold block">Grand Regatta Launch</span>
+                  <p class="font-body-sm text-xs text-on-surface-variant mt-0.5">Open-water launch &amp; parent showcase ceremony.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-5 bg-surface-container-lowest rounded-3xl p-5 shadow-sm border border-surface-container flex flex-col justify-between gap-3">
+              <div>
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Stay-In Camp Venue</span>
+                <h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">TVIS Campus, Ponneri</h4>
+                <p class="font-body-sm text-xs text-on-surface-variant mt-0.5">24/7 Dorm Wardens, Paramedic On-Site &amp; 4 Wholesome Meals/Day</p>
+              </div>
+              <div class="w-full h-32 bg-cover bg-center rounded-2xl overflow-hidden relative shadow-inner" style="background-image: url('/assets/events/stitch-swi-map.jpg')">
+                <div class="absolute bottom-2 left-2 right-2 bg-surface-container-lowest/95 px-3 py-1.5 rounded-xl backdrop-blur-md flex items-center justify-between shadow-sm">
+                  <span class="font-label-sm text-label-sm text-on-surface font-semibold">Ponneri Eco Campus</span>
+                  <a href="https://maps.google.com/?q=Velammal+International+School+Ponneri" target="_blank" rel="noopener" class="text-secondary font-label-sm text-label-sm font-bold flex items-center gap-0.5">
+                    Map <span class="material-symbols-outlined text-[14px]">near_me</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -414,57 +378,57 @@
 
         </div>
 
-        <!-- RIGHT COLUMN (5 COLS ON DESKTOP, STICKY): REGISTRATION FORM -->
-        <div class="lg:col-span-5 lg:sticky lg:top-24" id="register-section">
-          <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-7 shadow-[0_12px_40px_rgba(0,28,59,0.1)] border border-surface-container">
+        <!-- RIGHT COLUMN (5 COLS / 4 COLS ON XL, STICKY): REGISTRATION FORM -->
+        <div class="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-20" id="register-section">
+          <div class="bg-surface-container-lowest rounded-3xl p-6 sm:p-7 shadow-[0_16px_48px_rgba(0,28,59,0.12)] border-2 border-secondary-fixed">
             <div class="flex items-center justify-between pb-4 mb-5 border-b border-surface-container">
               <div>
                 <span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Winter Camp 2026</span>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-0.5">Camper Registration</h3>
+                <h3 class="font-headline-md text-headline-md text-on-surface font-bold mt-0.5">Camper Registration</h3>
               </div>
               <div class="w-12 h-12 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined text-[24px]">assignment_turned_in</span>
               </div>
             </div>
 
-            <form class="space-y-4" id="campRegistrationForm">
+            <form class="space-y-3.5" id="campRegistrationForm">
               <div>
                 <label class="font-label-md text-label-md text-on-surface block mb-1" for="studentName">Student Name <span class="text-primary">*</span></label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="studentName" id="studentName" placeholder="e.g. Aarav Sharma" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="studentName" id="studentName" placeholder="e.g. Aarav Sharma" required type="text">
               </div>
 
               <div>
                 <label class="font-label-md text-label-md text-on-surface block mb-1" for="parentName">Parent / Guardian Name <span class="text-primary">*</span></label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="parentName" id="parentName" placeholder="e.g. Priya Sharma" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="parentName" id="parentName" placeholder="e.g. Priya Sharma" required type="text">
               </div>
 
               <div>
                 <label class="font-label-md text-label-md text-on-surface block mb-1" for="schoolName">School Name <span class="text-primary">*</span></label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="schoolName" id="schoolName" placeholder="e.g. Chettinad Vidyashram" required type="text">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="schoolName" id="schoolName" placeholder="e.g. Chettinad Vidyashram" required type="text">
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="font-label-md text-label-md text-on-surface block mb-1" for="contactNumber">Contact Number <span class="text-primary">*</span></label>
                   <div class="relative flex items-center">
                     <span class="absolute left-3.5 font-label-md text-label-md text-on-surface-variant font-medium">+91</span>
-                    <input class="w-full h-12 pl-12 pr-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="contactNumber" id="contactNumber" placeholder="72009 81134" required type="tel">
+                    <input class="w-full h-11 pl-12 pr-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="contactNumber" id="contactNumber" placeholder="72009 81134" required type="tel">
                   </div>
                 </div>
 
                 <div>
                   <label class="font-label-md text-label-md text-on-surface block mb-1" for="city">City <span class="text-primary">*</span></label>
-                  <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="city" id="city" placeholder="e.g. Chennai" required type="text">
+                  <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="city" id="city" placeholder="e.g. Chennai" required type="text">
                 </div>
               </div>
 
               <div>
                 <label class="font-label-md text-label-md text-on-surface block mb-1" for="email">Email ID <span class="text-primary">*</span></label>
-                <input class="w-full h-12 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="email" id="email" placeholder="parent@example.com" required type="email">
+                <input class="w-full h-11 px-3.5 rounded-xl bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-secondary transition-all placeholder:text-on-surface-variant/50" name="email" id="email" placeholder="parent@example.com" required type="email">
               </div>
 
               <!-- Price Breakdown -->
-              <div class="p-4 rounded-2xl bg-surface-container flex flex-col gap-2">
+              <div class="p-4 rounded-2xl bg-surface-container flex flex-col gap-1.5">
                 <div class="flex items-center justify-between text-on-surface font-label-sm text-label-sm">
                   <span>Stay-in Camp, Meals &amp; Accommodation</span>
                   <span class="font-semibold">Included</span>
@@ -488,13 +452,9 @@
                 <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
               </button>
 
-              <div class="flex items-center justify-center gap-2 text-center pt-1">
-                <span class="font-body-sm text-body-sm text-on-surface-variant">Prefer phone registration?</span>
-                <a class="font-label-md text-label-md text-secondary font-bold flex items-center gap-1 hover:underline" href="tel:7200981134">
-                  <span class="material-symbols-outlined text-[16px]">call</span>
-                  72009 81134
-                </a>
-              </div>
+              <p class="font-label-sm text-label-sm text-center text-on-surface-variant">
+                Instant Digital Event Card &amp; QR Pass generated right after payment.
+              </p>
             </form>
           </div>
         </div>
