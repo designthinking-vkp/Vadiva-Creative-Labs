@@ -363,7 +363,8 @@ if (typeof document !== 'undefined' && document.addEventListener) {
   const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
   const normFile = currentFile.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
 
-  const activityCenterSubpages = ['activity-center', 'events', 'services', 'parents'];
+  const activityCenterSubpages = ['activity-center', 'events', 'services', 'parents', 'kids-maker-fair-2026', 'protospark-forge-2026', 'shipwreck-island-2026', 'registration-status'];
+  const eventSubpages = ['kids-maker-fair-2026', 'protospark-forge-2026', 'shipwreck-island-2026', 'registration-status'];
 
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
@@ -372,7 +373,7 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     // Normalize href
     const normHref = href.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
 
-    if (normHref !== '' && normFile === normHref) {
+    if (normHref !== '' && (normFile === normHref || (normHref === 'events' && eventSubpages.includes(normFile)))) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');

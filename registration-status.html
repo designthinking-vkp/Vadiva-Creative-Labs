@@ -99,35 +99,51 @@
 </head>
 <body>
 
-  <!-- Site Navigation Header -->
+    <!-- Header Section -->
   <header class="site-header">
     <div class="container header-container">
       <div class="logo">
         <a href="https://vadivacreativelabs.com/" aria-label="Vadiva Creative Labs Home">
-          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 50px; width: auto; display: block;">
+          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 52px; width: auto; display: block;">
         </a>
       </div>
-      
+
       <nav class="main-nav" aria-label="Main Navigation">
         <ul class="nav-list">
-          <li class="nav-item"><a href="/index.html" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="/about.html" class="nav-link">About Us</a></li>
-          <li class="nav-item"><a href="/events.html" class="nav-link">Events &amp; Camps</a></li>
+          <li class="nav-item nav-dropdown">
+            <a href="/activity-center.html" class="nav-link dropdown-toggle active" aria-haspopup="true" aria-expanded="false" id="activityCenterDropdown">
+              Activity Center
+              <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="activityCenterDropdown">
+              <li><a href="/events.html" class="dropdown-item active">Events &amp; Camps</a></li>
+              <li><a href="/services.html" class="dropdown-item">Services</a></li>
+              <li><a href="/parents.html" class="dropdown-item">Parent Hub</a></li>
+            </ul>
+          </li>
           <li class="nav-item"><a href="/gallery.html" class="nav-link">Gallery</a></li>
-          <li class="nav-item"><a href="/registration-status.html" class="nav-link active" style="color: #0284C7; font-weight: 700;">Check Status</a></li>
           <li class="nav-item"><a href="/contact.html" class="nav-link">Contact</a></li>
         </ul>
         <div class="mobile-drawer-cta">
-          <a href="/events.html" class="btn btn-sm btn-primary">Browse 2026 Events</a>
+          <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-secondary">Sign In</a>
+          <a href="#" class="btn btn-sm btn-secondary payment-nav-link">Online Payment</a>
+          <a href="/contact.html" class="btn btn-sm btn-primary">Partner With Us</a>
         </div>
       </nav>
 
       <div class="header-action">
-        <a href="/events.html" class="btn btn-sm btn-primary">Browse 2026 Events</a>
+        <a href="https://learn.vadivacreativelabs.com/login" class="btn btn-sm btn-primary header-cta">Sign In</a>
+        <a href="#" class="btn btn-sm btn-primary header-payment-btn payment-nav-link">Online Payment</a>
+        <a href="/contact.html" class="btn btn-sm btn-primary header-cta">Partner With Us</a>
       </div>
 
       <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </header>
@@ -210,29 +226,32 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+    <!-- Footer Section -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col footer-about">
-          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
+          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo"
+            style="height: 38px; width: auto; margin-bottom: 1.25rem;">
+          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking,
+            creativity, and real-world problem-solving.</p>
         </div>
         <div class="footer-col footer-links">
-          <h4>2026 Flagship Events</h4>
+          <h4>Enterprise</h4>
           <ul>
-            <li><a href="/kids-maker-fair-2026.html">Kids Maker Fair &amp; Repair Mela</a></li>
-            <li><a href="/protospark-forge-2026.html">ProtoSpark Forge</a></li>
-            <li><a href="/shipwreck-island-2026.html">Shipwreck Island</a></li>
-            <li><a href="/registration-status.html">Registration Status Check</a></li>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/services.html">Services &amp; Frameworks</a></li>
+            <li><a href="/contact.html">Partner Inquiries</a></li>
           </ul>
         </div>
         <div class="footer-col footer-links">
-          <h4>Explore</h4>
+          <h4>Ecosystem</h4>
           <ul>
-            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/activity-center.html">Activity Center</a></li>
             <li><a href="/events.html">Camps &amp; Festivals</a></li>
             <li><a href="/gallery.html">Gallery</a></li>
+            <li><a href="/parents.html">Parent Hub</a></li>
             <li><a href="/terms.html">Terms &amp; Conditions</a></li>
           </ul>
         </div>
@@ -241,18 +260,20 @@
           <div class="footer-contact-info">
             <p><strong>Hotline:</strong> +91 72009 81134</p>
             <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Operating Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
+            <p><strong>Hours:</strong> Mon - Sat | 09:00 - 18:30 IST</p>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>A Product of Velammal Knowledge Park</p>
+        <p>Designed with ❤️ by VKP Team</p>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="/main.js"></script>
   <script src="/assets/events/event-common.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
