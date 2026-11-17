@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery Admin Login | Vadiva Creative Labs</title>
   <meta name="description" content="Secure internal administration sign-in for managing and publishing Vadiva event media, albums, and categories.">
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="assets/css/gallery-admin.css">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/css/gallery-admin.css">
 </head>
 <body class="admin-body not-logged-in" style="background:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;">
 
   <div class="admin-login-screen" id="adminLoginScreen" style="display:flex;">
     <div class="admin-login-card">
       <div class="login-header">
-        <a href="gallery.html">
-          <img src="assets/logo.png" alt="Vadiva Creative Labs Logo" class="login-brand-logo">
+        <a href="/gallery.html">
+          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" class="login-brand-logo">
         </a>
         <span class="login-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -100,12 +100,12 @@
       </div>
 
       <div class="login-footer-links">
-        <a href="gallery.html">&larr; Return to Public Gallery</a>
+        <a href="/gallery.html">&larr; Return to Public Gallery</a>
       </div>
     </div>
   </div>
 
-  <script src="assets/js/gallery-store.js"></script>
+  <script src="/assets/js/gallery-store.js"></script>
   <script>
     // If already logged in, redirect straight to gallery-admin.html
     const user = VadivaGalleryStore.getCurrentUser();

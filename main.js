@@ -192,10 +192,11 @@ if (typeof document !== 'undefined' && document.addEventListener) {
     document.querySelectorAll('a').forEach(link => {
       const href = link.getAttribute('href');
       if (href && href.endsWith('.html') && !href.startsWith('http')) {
-        if (href === 'index.html') {
-          link.setAttribute('href', './');
+        if (href === 'index.html' || href === '/index.html') {
+          link.setAttribute('href', '/');
         } else {
-          link.setAttribute('href', href.replace('.html', ''));
+          const cleanHref = href.replace('.html', '');
+          link.setAttribute('href', cleanHref.startsWith('/') ? cleanHref : '/' + cleanHref.replace(/^\.\//, ''));
         }
       }
     });
@@ -358,7 +359,7 @@ if (typeof document !== 'undefined' && document.addEventListener) {
 
   // 2. Active Link Highlighting
   const navLinks = document.querySelectorAll('nav.main-nav a');
-  const currentPath = window.location.pathname;
+  const currentPath = window.location.pathname.replace(/\/+$/, '');
   const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
   const normFile = currentFile.replace('.html', '').replace(/^\.\//, '').replace(/^\//, '');
 

@@ -8,6 +8,11 @@ DirectoryIndex index.php index.html index.htm
 </IfModule>
 RewriteRule ^api/ - [E=nrc:1]
 
+# Redirect trailing slashes on non-directories to clean URL (e.g. /events/ -> /events)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} ^/(.+)/$
+RewriteRule ^ /%1 [R=301,L]
+
 # 2026 Flagship Event Landing Pages & Registration Status Portal
 RewriteRule ^events/?$ events.html [L]
 RewriteRule ^(?:events/)?kids-maker-fair-2026/?$ kids-maker-fair-2026.html [L]

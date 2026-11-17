@@ -220,7 +220,7 @@
     let html = `
       <!-- Hero Primary Feature -->
       <div class="featured-hero-card" data-media-id="${hero.id}">
-        <img src="${hero.fileUrl}" alt="${hero.title}" class="featured-hero-img" loading="eager" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+        <img src="${hero.fileUrl}" alt="${hero.title}" class="featured-hero-img" loading="eager" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
         <div class="featured-hero-overlay"></div>
         <div class="featured-hero-content">
           <div class="featured-badge-row">
@@ -251,7 +251,7 @@
         <div class="featured-sub-grid">
           ${subItems.map(item => `
             <div class="featured-sub-card" data-media-id="${item.id}">
-              <img src="${item.thumbnailUrl || item.fileUrl}" alt="${item.title}" class="featured-sub-img" loading="lazy" onerror="this.src='assets/protospark/Vadiva tech&design Fest 2.jpeg'">
+              <img src="${item.thumbnailUrl || item.fileUrl}" alt="${item.title}" class="featured-sub-img" loading="lazy" onerror="this.src='/assets/protospark/Vadiva tech&design Fest 2.jpeg'">
               <div class="featured-sub-overlay"></div>
               <div class="featured-sub-content">
                 <div class="featured-badge-row" style="margin-bottom: 0.35rem;">
@@ -295,7 +295,7 @@
       return `
         <div class="album-card ${isActive ? 'active-album' : ''}" data-album-id="${album.id}">
           <div class="album-cover-wrap">
-            <img src="${album.coverImage}" alt="${album.name}" class="album-cover-img" loading="lazy" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+            <img src="${album.coverImage}" alt="${album.name}" class="album-cover-img" loading="lazy" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
             <div class="album-count-badge">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -428,7 +428,7 @@
       return `
         <article class="media-item-card" data-index="${index}" data-id="${item.id}">
           <div class="media-thumb-wrapper">
-            <img src="${item.thumbnailUrl || item.fileUrl}" alt="${item.title}" class="media-thumb-img" loading="lazy" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+            <img src="${item.thumbnailUrl || item.fileUrl}" alt="${item.title}" class="media-thumb-img" loading="lazy" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
             <span class="media-type-badge">
               ${isVideo ? `
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -534,7 +534,7 @@
       `;
     } else {
       dom.lightboxMedia.innerHTML = `
-        <img src="${item.fileUrl}" alt="${item.title}" class="lightbox-img" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+        <img src="${item.fileUrl}" alt="${item.title}" class="lightbox-img" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
       `;
     }
 

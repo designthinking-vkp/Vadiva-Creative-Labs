@@ -598,7 +598,7 @@
         dom.dashboardRecentUploads.innerHTML = recent.map(item => `
           <tr>
             <td style="width: 50px;">
-              <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+              <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
             </td>
             <td>
               <strong>${item.title}</strong>
@@ -621,7 +621,7 @@
       const albums = VadivaGalleryStore.getAlbums(false).slice(0, 4);
       dom.dashboardRecentAlbums.innerHTML = albums.map(alb => `
         <div style="display: flex; gap: 0.85rem; align-items: center; padding: 0.75rem; border: 1px solid var(--admin-border); border-radius: 8px; background: white;">
-          <img src="${alb.coverImage}" style="width: 54px; height: 54px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+          <img src="${alb.coverImage}" style="width: 54px; height: 54px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
           <div>
             <strong style="font-size: 0.9rem; display: block;">${alb.name}</strong>
             <span style="font-size: 0.75rem; color: #64748b;">${alb.mediaCount} items • ${alb.eventDate || alb.year}</span>
@@ -785,7 +785,7 @@
                 <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="VadivaGalleryAdmin.toggleSelect('${item.id}', this.checked)">
               </div>
               <span class="admin-status-badge status-${item.status}">${item.status}</span>
-              <img src="${item.thumbnailUrl || item.fileUrl}" class="admin-media-thumb" alt="${item.title}" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+              <img src="${item.thumbnailUrl || item.fileUrl}" class="admin-media-thumb" alt="${item.title}" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
               <div class="admin-card-inner">
                 <h4 class="admin-card-inner-title">${item.title}</h4>
                 <div class="admin-card-inner-meta">
@@ -827,7 +827,7 @@
                 <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="VadivaGalleryAdmin.toggleSelect('${item.id}', this.checked)">
               </td>
               <td style="width: 50px;">
-                <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+                <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
               </td>
               <td>
                 <strong>${item.title}</strong>
@@ -893,7 +893,7 @@
 
     dom.albumsGrid.innerHTML = albums.map(alb => `
       <div class="admin-card" style="padding: 1.25rem; display: flex; flex-direction: column;">
-        <img src="${alb.coverImage}" style="width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 8px; margin-bottom: 0.85rem;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+        <img src="${alb.coverImage}" style="width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 8px; margin-bottom: 0.85rem;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.35rem;">
           <h4 style="margin: 0; font-size: 1.1rem;">${alb.name}</h4>
           <span class="admin-status-badge status-${alb.status}">${alb.status}</span>
@@ -967,7 +967,7 @@
     dom.featuredItemsList.innerHTML = featured.map((item, idx) => `
       <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: white; border: 1px solid var(--admin-border); border-radius: 8px; margin-bottom: 0.75rem;">
         <span style="font-size: 1.25rem; font-weight: 800; color: #94a3b8; width: 24px;">${idx + 1}</span>
-        <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+        <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
         <div style="flex-grow: 1;">
           <strong>${item.title}</strong>
           <div style="font-size: 0.78rem; color: #64748b;">${item.eventName || item.albumName} • ${item.categoryName}</div>
@@ -998,7 +998,7 @@
     dom.videosTableBody.innerHTML = videos.map(vid => `
       <tr>
         <td style="width: 50px;">
-          <img src="${vid.thumbnailUrl || vid.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/national level.jpeg'">
+          <img src="${vid.thumbnailUrl || vid.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/national level.jpeg'">
         </td>
         <td>
           <strong>${vid.title}</strong>
@@ -1036,7 +1036,7 @@
           return `
             <tr>
               <td style="width: 50px;">
-                <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+                <img src="${item.thumbnailUrl || item.fileUrl}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
               </td>
               <td><strong>${item.title}</strong></td>
               <td>${item.type.toUpperCase()}</td>
@@ -1308,7 +1308,7 @@
         `;
       } else {
         container.innerHTML = `
-          <img src="${item.fileUrl}" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:8px;" onerror="this.src='assets/techfest/Vadiva Tech&Design Fest.jpeg'">
+          <img src="${item.fileUrl}" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:8px;" onerror="this.src='/assets/techfest/Vadiva Tech&Design Fest.jpeg'">
         `;
       }
       modal.classList.add('active');
@@ -1334,7 +1334,7 @@
         document.getElementById('albumModalTitle').textContent = 'Create New Album';
         document.getElementById('albumName').value = '';
         document.getElementById('albumEventName').value = '';
-        document.getElementById('albumCover').value = 'assets/techfest/Vadiva Tech&Design Fest.jpeg';
+        document.getElementById('albumCover').value = '/assets/techfest/Vadiva Tech&Design Fest.jpeg';
         document.getElementById('albumDesc').value = '';
         document.getElementById('albumDate').value = '2026';
         document.getElementById('albumModalCategory').value = 'cat_tech_events';
