@@ -34,3 +34,7 @@ api/rate_limits/
 *.pdf
 *.zip
 scratch/
+
+Vadiva Assets/
+fdp/node_modules/
+
