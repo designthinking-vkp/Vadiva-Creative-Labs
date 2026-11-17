@@ -10,14 +10,16 @@ RewriteRule ^api/ - [E=nrc:1]
 
 # 2026 Flagship Event Landing Pages & Registration Status Portal
 RewriteRule ^events/?$ events.html [L]
-RewriteRule ^events/kids-maker-fair-2026/?$ events/kids-maker-fair-2026.html [L]
-RewriteRule ^events/protospark-forge-2026/?$ events/protospark-forge-2026.html [L]
-RewriteRule ^events/shipwreck-island-2026/?$ events/shipwreck-island-2026.html [L]
-RewriteRule ^(?:events/)?registration-status/?$ events/registration-status.html [L]
+RewriteRule ^(?:events/)?kids-maker-fair-2026/?$ kids-maker-fair-2026.html [L]
+RewriteRule ^(?:events/)?protospark-forge-2026/?$ protospark-forge-2026.html [L]
+RewriteRule ^(?:events/)?shipwreck-island-2026/?$ shipwreck-island-2026.html [L]
+RewriteRule ^(?:events/)?registration-status/?$ registration-status.html [L]
 
 # 301 Permanent Redirects for Completed Event Pages (Protospark & Tech Fest) to Gallery
+RewriteCond %{REQUEST_URI} !protospark-forge-2026 [NC]
 RewriteRule ^protospark.*$ /gallery [R=301,L]
 RewriteRule ^techfest.*$ /gallery [R=301,L]
+RewriteCond %{REQUEST_URI} !protospark-forge-2026 [NC]
 RewriteRule ^(?:protospark|techfestregistration).*\.html$ /gallery [R=301,L]
 
 # 1. External Redirect: Redirect direct requests for page.html to /page

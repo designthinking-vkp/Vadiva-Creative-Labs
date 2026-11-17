@@ -354,7 +354,7 @@
       headerBg: 'linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%)'
     };
 
-    const statusCheckUrl = `${window.location.origin}/events/registration-status?uid=${encodeURIComponent(record.participantUID)}`;
+    const statusCheckUrl = `${window.location.origin}/registration-status?uid=${encodeURIComponent(record.participantUID)}`;
     const qrUrl = SimpleQR.getDataURL(statusCheckUrl, 160);
 
     modal.innerHTML = `
@@ -448,7 +448,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: #64748B;">
-          UID saved in your records. You can check status anytime at <a href="/events/registration-status" style="color: #0284C7; font-weight: 600;">Registration Status Portal</a>.
+          UID saved in your records. You can check status anytime at <a href="/registration-status" style="color: #0284C7; font-weight: 600;">Registration Status Portal</a>.
         </div>
       </div>
     `;
@@ -532,12 +532,12 @@
 
     ctx.fillStyle = '#64748B';
     ctx.font = '18px sans-serif';
-    ctx.fillText('Vadiva Creative Labs — https://vadivacreativelabs.com/events/registration-status', 60, 728);
+    ctx.fillText('Vadiva Creative Labs — https://vadivacreativelabs.com/registration-status', 60, 728);
 
     // Load QR Image onto canvas
     const qrImg = new Image();
     qrImg.crossOrigin = 'anonymous';
-    const verifyUrl = `${window.location.origin}/events/registration-status?uid=${encodeURIComponent(uid)}`;
+    const verifyUrl = `${window.location.origin}/registration-status?uid=${encodeURIComponent(uid)}`;
     qrImg.src = SimpleQR.getDataURL(verifyUrl, 260);
 
     qrImg.onload = function() {
