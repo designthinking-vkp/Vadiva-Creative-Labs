@@ -107,16 +107,23 @@
       }
     }
   </script>
-  <style>
-    @layer base {
-      html, body { margin: 0; padding: 0; scroll-behavior: smooth; }
-      body { overscroll-behavior: none; }
-      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
-      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: auto !important;
+      min-height: 100%;
+      overscroll-behavior-y: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
   </style>
 </head>
-<body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen">
+<body class="bg-surface font-body-md text-on-surface">
 
     <!-- Header Section -->
   <header class="site-header">
@@ -168,7 +175,7 @@
   </header>
 
   <!-- FULL-WIDTH RESPONSIVE DESKTOP WORKSPACE -->
-  <main class="flex-1 w-full pt-6 pb-28 lg:pb-14 bg-gradient-to-b from-[#e8f0fe] via-[#f4f7ff] to-[#f0f4ff] relative overflow-x-hidden">
+  <main class="w-full pt-6 pb-28 lg:pb-14 bg-gradient-to-b from-[#e8f0fe] via-[#f4f7ff] to-[#f0f4ff] relative">
     <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10 pt-2 sm:pt-4">
 
       <!-- WIDE 12-COLUMN DESKTOP GRID (NO LEFT/RIGHT EMPTY MARGINS) -->
