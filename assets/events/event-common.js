@@ -92,22 +92,24 @@
       const parentNameInput = form.querySelector('[name="parentName"]');
       const studentNameInput = form.querySelector('[name="studentName"]');
       const schoolNameInput = form.querySelector('[name="schoolName"]');
+      const contactInput = form.querySelector('[name="contactNumber"], [name="parentPhone"]');
       const emailInput = form.querySelector('[name="email"]');
       const cityInput = form.querySelector('[name="city"]');
       const submitBtn = form.querySelector('button[type="submit"]');
 
       // Clear previous error states
-      [parentNameInput, studentNameInput, schoolNameInput, emailInput, cityInput].forEach(inp => {
+      [parentNameInput, studentNameInput, schoolNameInput, contactInput, emailInput, cityInput].forEach(inp => {
         if (inp) inp.classList.remove('input-error');
       });
 
       const parentName = (parentNameInput ? parentNameInput.value : '').trim();
       const studentName = (studentNameInput ? studentNameInput.value : '').trim();
       const schoolName = (schoolNameInput ? schoolNameInput.value : '').trim();
+      const contactNumber = (contactInput ? contactInput.value : '').trim();
       const email = (emailInput ? emailInput.value : '').trim();
       const city = (cityInput ? cityInput.value : '').trim();
 
-      // STRICT FIVE-FIELD VALIDATION
+      // STRICT FIELD VALIDATION
       let errors = [];
       if (!parentName) {
         errors.push('Parent Name is required.');
@@ -120,6 +122,10 @@
       if (!schoolName) {
         errors.push('School Name is required.');
         if (schoolNameInput) schoolNameInput.classList.add('input-error');
+      }
+      if (contactInput && !contactNumber) {
+        errors.push('Contact Number is required.');
+        contactInput.classList.add('input-error');
       }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('A valid Email address is required.');
@@ -155,6 +161,7 @@
           parentName,
           studentName,
           schoolName,
+          contactNumber,
           email,
           city,
           event: eventSlug
@@ -204,13 +211,15 @@
           order_id: orderRes.order_id,
           prefill: {
             name: studentName,
-            email: email
+            email: email,
+            contact: contactNumber
           },
           notes: {
             participantUID: orderRes.participantUID,
             parentName: parentName,
             studentName: studentName,
             schoolName: schoolName,
+            contactNumber: contactNumber,
             city: city
           },
           theme: {
@@ -569,5 +578,100 @@
   };
   window.closeEventModal = closeEventModal;
   window.downloadEventCardPNG = downloadEventCardPNG;
+
+  // Dynamic Entrance & Interactive Effects for Stitch Event Landing Pages
+  function initStitchDynamicEffects() {
+    if (document.getElementById('stitch-dynamic-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'stitch-dynamic-styles';
+    style.textContent = `
+      @keyframes floatSlow {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-10px) scale(1.03); }
+      }
+      @keyframes floatReverse {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(8px) rotate(2deg); }
+      }
+      @keyframes shimmerGlow {
+        0%, 100% { box-shadow: 0 8px 24px rgba(243, 112, 33, 0.35); }
+        50% { box-shadow: 0 12px 32px rgba(243, 112, 33, 0.6); }
+      }
+      .stitch-reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .stitch-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .stitch-card-hover {
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      }
+      .stitch-card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 32px rgba(0, 28, 59, 0.12);
+      }
+      .stitch-float {
+        animation: floatSlow 5s ease-in-out infinite;
+      }
+      .stitch-float-alt {
+        animation: floatReverse 6s ease-in-out infinite;
+      }
+      .stitch-cta-glow {
+        animation: shimmerGlow 2.8s ease-in-out infinite;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add scroll-reveal to sections and cards
+    const revealTargets = document.querySelectorAll('main section, main > div > div, .grid > div');
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+      revealTargets.forEach((el, idx) => {
+        // Keep hero immediately visible
+        if (idx > 1 && !el.classList.contains('fixed')) {
+          el.classList.add('stitch-reveal');
+          obs.observe(el);
+        }
+      });
+    }
+
+    // Add subtle hover lift to cards
+    document.querySelectorAll('.rounded-xl, .rounded-2xl').forEach(card => {
+      if (!card.closest('form') && !card.classList.contains('fixed')) {
+        card.classList.add('stitch-card-hover');
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId && targetId.length > 1) {
+          const target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStitchDynamicEffects);
+  } else {
+    initStitchDynamicEffects();
+  }
 
 })(window);

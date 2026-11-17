@@ -1,858 +1,236 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kids Maker Fair &amp; Repair Mela 2026 | Vadiva Creative Labs</title>
-  <meta name="description" content="Calling all young makers, fixers and inventors aged 6–16! Join us on 29 November 2026 at Santhome, Vadiva Creative Labs. Entry Fee: ₹99.">
-  <link rel="icon" type="image/png" href="/assets/logo.png">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/assets/events/event-common.css">
-
-  <style>
-    :root {
-      --kmf-blue: #0284C7;
-      --kmf-blue-dark: #0369A1;
-      --kmf-blue-light: #E0F2FE;
-      --kmf-orange: #FF6B00;
-      --kmf-orange-dark: #EA580C;
-      --kmf-orange-light: #FFF7ED;
-      --kmf-yellow: #FBBF24;
-      --kmf-yellow-light: #FEF3C7;
-      --kmf-bg: #FFFFFF;
-      --kmf-card-bg: #FFFFFF;
-      --kmf-radius: 20px;
-    }
-
-    body {
-      background-color: var(--kmf-bg);
-      color: #0F172A;
-      font-family: var(--font-body);
-    }
-
-    /* Maker Fair Playful Hero */
-    .kmf-hero {
-      position: relative;
-      background: radial-gradient(circle at 10% 20%, #E0F2FE 0%, #FFFFFF 60%), radial-gradient(circle at 90% 80%, #FFF7ED 0%, #FFFFFF 50%);
-      padding: 4rem 0 5rem;
-      overflow: hidden;
-    }
-
-    .kmf-hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #FEF3C7;
-      color: #92400E;
-      font-weight: 800;
-      font-size: 0.85rem;
-      padding: 0.5rem 1.25rem;
-      border-radius: 9999px;
-      border: 2px solid #FDE68A;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .kmf-hero-title {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 900;
-      color: var(--kmf-blue-dark);
-      line-height: 1.1;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
-    }
-
-    .kmf-hero-title span {
-      color: var(--kmf-orange);
-      display: inline-block;
-      position: relative;
-    }
-
-    .kmf-ribbon-tagline {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--kmf-orange) 0%, var(--kmf-orange-dark) 100%);
-      color: #FFFFFF;
-      font-weight: 800;
-      font-size: 1.35rem;
-      padding: 0.6rem 2rem;
-      border-radius: 50px;
-      box-shadow: 0 8px 16px -4px rgba(255, 107, 0, 0.35);
-      margin-bottom: 1.5rem;
-      transform: rotate(-1deg);
-    }
-
-    .kmf-hero-desc {
-      font-size: 1.2rem;
-      color: #334155;
-      line-height: 1.6;
-      max-width: 620px;
-      margin-bottom: 2rem;
-    }
-
-    .kmf-details-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      background: #FFFFFF;
-      border: 2px solid #BAE6FD;
-      border-radius: 20px;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 12px 24px -6px rgba(2, 132, 199, 0.12);
-      margin-bottom: 2rem;
-    }
-
-    .kmf-detail-card {
-      flex: 1 1 180px;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
-
-    .kmf-icon-circle {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: var(--kmf-blue-light);
-      color: var(--kmf-blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .kmf-fee-highlight {
-      background: linear-gradient(135deg, #FF6B00 0%, #EA580C 100%);
-      color: #FFFFFF;
-      border-radius: 16px;
-      padding: 0.75rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow: 0 8px 16px rgba(255, 107, 0, 0.3);
-    }
-
-    .kmf-fee-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      opacity: 0.9;
-      font-weight: 700;
-    }
-
-    .kmf-fee-val {
-      font-size: 1.85rem;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .kmf-cta-group {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .kmf-btn-primary {
-      background: linear-gradient(135deg, var(--kmf-orange) 0%, var(--kmf-orange-dark) 100%);
-      color: #FFFFFF;
-      font-weight: 800;
-      padding: 1rem 2.25rem;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      text-decoration: none;
-      box-shadow: 0 10px 20px -5px rgba(255, 107, 0, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .kmf-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px -6px rgba(255, 107, 0, 0.5);
-    }
-
-    .kmf-btn-secondary {
-      background: #FFFFFF;
-      color: var(--kmf-blue-dark);
-      font-weight: 700;
-      padding: 0.95rem 2rem;
-      border-radius: 50px;
-      font-size: 1.05rem;
-      text-decoration: none;
-      border: 2px solid #BAE6FD;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .kmf-btn-secondary:hover {
-      background: var(--kmf-blue-light);
-      border-color: var(--kmf-blue);
-      transform: translateY(-2px);
-    }
-
-    /* Pillars Section */
-    .kmf-pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .kmf-pillar-card {
-      background: #FFFFFF;
-      border: 2px solid #E2E8F0;
-      border-radius: 20px;
-      padding: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      position: relative;
-    }
-
-    .kmf-pillar-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.08);
-      border-color: var(--kmf-blue);
-    }
-
-    .kmf-pillar-tag {
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 0.35rem 0.85rem;
-      border-radius: 8px;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-
-    /* Activities Grid */
-    .kmf-activities-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.75rem;
-      margin-top: 2.5rem;
-    }
-
-    .kmf-activity-card {
-      background: #FFFFFF;
-      border-radius: 20px;
-      border: 2px solid #F1F5F9;
-      padding: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .kmf-activity-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--kmf-orange);
-    }
-
-    .kmf-activity-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.25rem;
-    }
-
-    /* FAQs Accordion */
-    .kmf-faq-item {
-      background: #FFFFFF;
-      border: 2px solid #E2E8F0;
-      border-radius: 16px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      transition: border-color 0.2s ease;
-    }
-
-    .kmf-faq-item:hover {
-      border-color: var(--kmf-blue);
-    }
-
-    .kmf-faq-header {
-      padding: 1.25rem 1.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #0F172A;
-    }
-
-    .kmf-faq-body {
-      padding: 0 1.5rem 1.25rem;
-      color: #475569;
-      line-height: 1.6;
-      font-size: 1rem;
-    }
-
-    /* Poster Preview Sidecard */
-    .kmf-poster-card {
-      background: #FFFFFF;
-      border-radius: 24px;
-      padding: 1rem;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-      border: 3px solid #BAE6FD;
-      position: relative;
-    }
-
-    .kmf-poster-card img {
-      width: 100%;
-      height: auto;
-      border-radius: 18px;
-      display: block;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Site Navigation Header -->
-  <header class="site-header">
-    <div class="container header-container">
-      <div class="logo">
-        <a href="https://vadivacreativelabs.com/" aria-label="Vadiva Creative Labs Home">
-          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 50px; width: auto; display: block;">
-        </a>
-      </div>
-      
-      <nav class="main-nav" aria-label="Main Navigation">
-        <ul class="nav-list">
-          <li class="nav-item"><a href="/index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="/about.html" class="nav-link">About Us</a></li>
-          <li class="nav-item"><a href="/events.html" class="nav-link active">Events &amp; Camps</a></li>
-          <li class="nav-item"><a href="/gallery.html" class="nav-link">Gallery</a></li>
-          <li class="nav-item"><a href="/registration-status.html" class="nav-link" style="color: var(--kmf-orange); font-weight: 700;">Check Status</a></li>
-          <li class="nav-item"><a href="/contact.html" class="nav-link">Contact</a></li>
-        </ul>
-        <div class="mobile-drawer-cta">
-          <a href="#apply" class="btn btn-sm btn-primary">Apply Now (₹99)</a>
-          <a href="/registration-status.html" class="btn btn-sm btn-secondary">Check Status</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><title>Kids Maker Fair &amp; Repair Mela 2026 | Vadiva Creative Labs</title><link rel="icon" type="image/png" href="/assets/logo.png"><link rel="stylesheet" href="/assets/events/event-common.css"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;} main > div { max-width: 680px; margin: 0 auto; width: 100%; } header > div { max-width: 680px; margin: 0 auto; width: 100%; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary": "#006398", "on-tertiary": "#ffffff", "secondary-fixed-dim": "#93ccff", "surface-dim": "#c7dbff", "on-surface-variant": "#584237", "surface": "#f9f9ff", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "surface-bright": "#f9f9ff", "primary-fixed-dim": "#ffb693", "on-primary-fixed-variant": "#7a3000", "background": "#f9f9ff", "primary-fixed": "#ffdbcb", "error": "#ba1a1a", "surface-tint": "#a04100", "primary": "#a04100", "on-primary": "#ffffff", "outline-variant": "#e0c0b2", "inverse-primary": "#ffb693", "on-tertiary-fixed-variant": "#5c4300", "on-tertiary-container": "#3e2c00", "on-error-container": "#93000a", "on-secondary-fixed-variant": "#004b73", "on-secondary-fixed": "#001d31", "surface-container-high": "#dee8ff", "tertiary": "#795900", "secondary-fixed": "#cce5ff", "outline": "#8c7166", "on-primary-fixed": "#341000", "tertiary-fixed": "#ffdf9f", "on-surface": "#001c3b", "inverse-surface": "#193151", "error-container": "#ffdad6", "primary-container": "#f37021", "tertiary-container": "#bf8f00", "surface-container-highest": "#d5e3ff", "secondary-container": "#5bb8fe", "on-tertiary-fixed": "#261a00", "on-primary-container": "#541f00", "surface-container": "#e7eeff", "surface-container-low": "#f0f3ff", "tertiary-fixed-dim": "#f9bd22", "surface-variant": "#d5e3ff", "on-error": "#ffffff", "inverse-on-surface": "#ebf1ff", "on-background": "#001c3b", "on-secondary-container": "#00476e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-md": "1rem", "space-xs": "0.25rem", "space-2xl": "4rem", "space-lg": "1.5rem", "space-xl": "2.5rem", "margin-desktop": "2.5rem", "gutter": "1.25rem", "space-sm": "0.5rem", "margin": "1rem", "gutter-desktop": "2rem" }, fontFamily: { "display-hero-mobile": ["Outfit"], "body-sm": ["Plus Jakarta Sans"], "display-hero": ["Outfit"], "label-lg": ["Outfit"], "label-sm": ["Outfit"], "headline-xl": ["Outfit"], "headline-md": ["Outfit"], "body-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Outfit"], "headline-lg": ["Outfit"], "headline-xl-mobile": ["Outfit"], "label-md": ["Outfit"] }, fontSize: { "display-hero-mobile": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "800" }], "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }], "display-hero": ["56px", { lineHeight: "64px", letterSpacing: "-0.02em", fontWeight: "800" }], "label-lg": ["16px", { lineHeight: "22px", letterSpacing: "0.01em", fontWeight: "600" }], "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "700" }], "headline-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.015em", fontWeight: "700" }], "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }], "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }], "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }], "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }], "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "700" }], "headline-xl-mobile": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "700" }], "label-md": ["14px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "600" }] } } } }</script></head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_12px_rgba(0,28,59,0.05)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-2"><button class="w-11 h-11 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors min-h-[44px] min-w-[44px]" onclick="if(window.history.length > 1){history.back();}else{window.location.href='/events';}"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="Vadiva Creative Labs Logo" class="h-8 w-auto object-contain" src="/assets/logo.png"><h1 class="font-headline-sm text-headline-sm text-on-surface ml-1">Camp Registration</h1></div><div class="flex items-center gap-2"><a class="flex items-center justify-center w-11 h-11 rounded-full bg-surface-container text-secondary min-h-[44px] min-w-[44px]" href="tel:7200981134"><span class="material-symbols-outlined text-[20px]">call</span></a><a href="/registration-status" title="Check Registration Status" class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm hover:scale-105 transition-transform"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></a></div></div></header><main class="flex flex-col relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full pb-28">
+<!-- TOP HERO BANNER & HIGHLIGHT -->
+<section class="relative px-margin pt-4 pb-6 overflow-hidden">
+<!-- Ambient playful backdrop shapes -->
+<div class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-secondary-fixed/50 blur-2xl pointer-events-none"></div>
+<div class="absolute top-28 -left-12 w-36 h-36 rounded-full bg-primary-fixed/40 blur-xl pointer-events-none"></div>
+<!-- Main Visual Card inspired by Poster -->
+<div class="relative w-full rounded-2xl bg-surface-container-lowest p-4 shadow-[0_12px_32px_rgba(0,28,59,0.08)] overflow-hidden">
+<div class="relative w-full h-72 rounded-xl overflow-hidden mb-4 bg-surface-container">
+<img alt="Kids Maker Fair &amp; Repair Mela Poster" class="w-full h-full object-cover object-top" src="/assets/events/maker-fair-poster.jpg">
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent flex items-end p-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-md">
+<span class="material-symbols-outlined text-[16px]">celebration</span>
+            Ages 6 – 16 Years
+          </span>
+</div>
+</div>
+<!-- Playful 3D Styled Title Badge Component -->
+<div class="flex flex-col items-center text-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm mb-2 font-bold tracking-wide">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">build</span>
+          VADIVA CREATIVE LABS PRESENTS
         </div>
-      </nav>
-
-      <div class="header-action">
-        <a href="/registration-status.html" class="btn btn-sm btn-secondary" style="border: 1px solid #CBD5E1;">Check Status</a>
-        <a href="#apply" class="btn btn-sm btn-primary" style="background: var(--kmf-orange); border-color: var(--kmf-orange);">Apply Now (₹99)</a>
-      </div>
-
-      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
-
-  <!-- 1. HERO SECTION -->
-  <section class="kmf-hero" id="hero">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;" class="hero-grid-2col">
-        <div style="max-width: 680px;">
-          <div class="kmf-hero-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            Sunday Carnival Special • 29 November 2026
-          </div>
-
-          <h1 class="kmf-hero-title">
-            KIDS MAKER FAIR &amp;<br>
-            <span>REPAIR MELA</span>
-          </h1>
-
-          <div class="kmf-ribbon-tagline">
-            Make it. Fix it. Reuse it!
-          </div>
-
-          <p class="kmf-hero-desc">
-            Calling all young makers, fixers and inventors aged <strong>6–16!</strong> Come and spend a day exploring creativity, practical making, repairing, reusing and learning through hands-on fun working with wood, waste, tools &amp; technology. You'll go home with new skills and something you made yourself!
+<h2 class="font-display-hero-mobile text-display-hero-mobile text-on-surface tracking-tight leading-tight">
+          Kids Maker Fair <br>
+<span class="text-secondary">&amp; Repair Mela</span>
+</h2>
+<!-- Tagline Ribbon Pill -->
+<div class="mt-2.5 inline-block bg-primary-container text-on-primary px-5 py-1.5 rounded-full font-label-lg text-label-lg shadow-[0_4px_14px_rgba(243,112,33,0.35)] transform -rotate-1">
+          Make it. Fix it. Reuse it! 🛠️
+        </div>
+<a href="#registration-section" class="mt-3.5 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[20px]">confirmation_number</span><span>Register Now • ₹99</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+</div>
+</section>
+<!-- INVITATION CALLOUT -->
+<section class="px-margin mb-6">
+<div class="rounded-2xl bg-secondary-fixed/40 p-4.5 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+<span class="material-symbols-outlined text-[22px]">rocket_launch</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-snug">
+            Calling all young makers, fixers &amp; inventors aged <span class="text-primary font-bold">6–16!</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+            Come and spend a day of <strong class="text-primary">hands-on fun</strong> working with wood, waste, tools &amp; technology. You'll go home with <strong class="text-secondary">new skills</strong> and something extraordinary that you built yourself!
           </p>
-
-          <!-- Prominent Details & Entry Fee -->
-          <div class="kmf-details-bar">
-            <div class="kmf-detail-card">
-              <div class="kmf-icon-circle">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-              </div>
-              <div>
-                <span class="event-details-label">Date &amp; Time</span>
-                <span class="event-details-value">29 Nov 2026<br><small style="color: #64748B; font-weight: 500;">10:30 AM – 3:30 PM</small></span>
-              </div>
-            </div>
-
-            <div class="kmf-detail-card">
-              <div class="kmf-icon-circle" style="background: #FEF3C7; color: #D97706;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              </div>
-              <div>
-                <span class="event-details-label">Venue</span>
-                <span class="event-details-value">Santhome<br><small style="color: #64748B; font-weight: 500;">Vadiva Creative Labs</small></span>
-              </div>
-            </div>
-
-            <div class="kmf-detail-card">
-              <div class="kmf-icon-circle" style="background: #F3E8FF; color: #9333EA;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-              </div>
-              <div>
-                <span class="event-details-label">Eligible Age</span>
-                <span class="event-details-value">6 – 16 Years<br><small style="color: #64748B; font-weight: 500;">Young Makers</small></span>
-              </div>
-            </div>
-
-            <div class="kmf-fee-highlight">
-              <span class="kmf-fee-label">Entry Fee</span>
-              <span class="kmf-fee-val">₹99</span>
-            </div>
-          </div>
-
-          <div class="kmf-cta-group">
-            <a href="#apply" class="kmf-btn-primary">
-              APPLY NOW (₹99)
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </a>
-            <a href="#activities" class="kmf-btn-secondary">
-              EXPLORE ACTIVITIES
-            </a>
-          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- QUICK EVENT SPECS (GRID) -->
+<section class="px-margin mb-6">
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Date -->
+<div class="rounded-xl bg-surface-container-lowest p-3.5 flex items-center gap-3 shadow-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Date</span>
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">29th Nov 2026</span>
+</div>
+</div>
+<!-- Timing -->
+<div class="rounded-xl bg-surface-container-lowest p-3.5 flex items-center gap-3 shadow-sm">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Timing</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">10:30 AM – 3:30 PM</span>
+</div>
+</div>
+<!-- Venue -->
+<div class="rounded-xl bg-surface-container-lowest p-3.5 flex items-center gap-3 shadow-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Venue</span>
+<span class="font-label-md text-label-md font-bold text-on-surface truncate">Santhome, Chennai</span>
+</div>
+</div>
+<!-- Price Highlight -->
+<div class="rounded-xl bg-primary-container text-on-primary p-3.5 flex items-center justify-between shadow-[0_6px_18px_rgba(243,112,33,0.3)]">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-primary/90 uppercase font-bold tracking-wider">Entry Fee</span>
+<span class="font-display-hero-mobile text-[26px] leading-tight font-extrabold">₹99</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-bold shadow-sm">
+          All-inclusive
+        </span>
+</div>
+</div>
+</section>
+<!-- WHAT'S INCLUDED (CARDS) -->
+<section class="px-margin mb-8">
+<div class="flex items-center justify-between mb-3.5">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-6 rounded-full bg-primary"></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">What's Inside the Mela</h3>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">4 Hands-on Zones</span>
+</div>
+<div class="grid grid-cols-3 gap-2.5 mb-3">
+<!-- Fun Activity -->
+<div class="rounded-xl bg-surface-container-lowest p-3 flex flex-col items-center text-center shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-secondary mb-2">
+<span class="material-symbols-outlined text-[26px]">smart_toy</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface leading-tight">Fun-filled Activity</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Live games &amp; challenges</span>
+<a href="#registration-section" class="mt-3.5 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[20px]">confirmation_number</span><span>Register Now • ₹99</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+<!-- Maker Skills -->
+<div class="rounded-xl bg-surface-container-lowest p-3 flex flex-col items-center text-center shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined text-[26px]">home_repair_service</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface leading-tight">Makerskills Stations</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Wood &amp; electronics</span>
+<a href="#registration-section" class="mt-3.5 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[20px]">confirmation_number</span><span>Register Now • ₹99</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+<!-- Certificate -->
+<div class="rounded-xl bg-surface-container-lowest p-3 flex flex-col items-center text-center shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary mb-2">
+<span class="material-symbols-outlined text-[26px]">workspace_premium</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface leading-tight">Official Certificate</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">For all participants</span>
+<a href="#registration-section" class="mt-3.5 inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all"><span class="material-symbols-outlined text-[20px]">confirmation_number</span><span>Register Now • ₹99</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+</div>
+<!-- Workshop track chips preview -->
+<div class="rounded-xl bg-surface-container-low p-3.5 flex flex-wrap items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold">Featured Tracks:</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm font-semibold shadow-xs">🪵 Toy Woodcraft</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-xs">⚡ Gadget Fix Lab</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-tertiary font-label-sm text-label-sm font-semibold shadow-xs">♻️ Upcycle Inventions</span>
+</div>
+</section>
+<!-- QUICK REGISTRATION & TICKET BOOKING FORM -->
+<section class="px-margin mb-8" id="registration-section">
+<div class="rounded-2xl bg-surface-container-lowest p-5 shadow-[0_8px_30px_rgba(0,28,59,0.06)]">
+<!-- Section Header -->
+<div class="flex items-center justify-between pb-4 mb-5">
+<div>
+<span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">Fast Pass Entry</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">Book Maker Pass</h3>
+</div>
+<div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+</div>
+</div>
+<form class="flex flex-col gap-4" id="maker-registration-form"><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between"><span>Student Name <span class="text-primary">*</span></span><span class="font-label-sm text-label-sm text-on-surface-variant">Young Maker</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="studentName" id="studentName" placeholder="e.g. Aarav Sharma" required type="text"></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold">Parent / Guardian Name <span class="text-primary">*</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="parentName" id="parentName" placeholder="e.g. Priya Sharma" required type="text"></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold">School Name <span class="text-primary">*</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="schoolName" id="schoolName" placeholder="e.g. St. Bede's / Chettinad Vidyashram" required type="text"></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold">Contact Number <span class="text-primary">*</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="contactNumber" id="contactNumber" placeholder="Phone / WhatsApp number" required type="tel"></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold">Email ID <span class="text-primary">*</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="email" id="email" placeholder="e.g. parent@example.com" required type="email"></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface font-semibold">City <span class="text-primary">*</span></label><input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md placeholder:text-outline outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#006398] transition-all" name="city" id="city" placeholder="e.g. Chennai" required type="text"></div><div class="rounded-xl bg-surface-container-low p-4 flex items-center justify-between mt-1"><div class="flex flex-col"><span class="font-label-md text-label-md font-bold text-on-surface">Entry Pass Fee</span><span class="font-label-sm text-label-sm text-on-surface-variant">All-inclusive workshop access &amp; kit</span></div><div class="flex items-baseline gap-1"><span class="font-display-hero-mobile text-[28px] font-extrabold text-primary" id="total-price">₹99</span></div></div><button class="w-full h-14 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(243,112,33,0.35)] active:translate-y-0.5 transition-all mt-1" type="submit"><span class="material-symbols-outlined text-[20px]">local_activity</span><span id="cta-button-text">Book ₹99 Ticket Now</span></button><p class="font-label-sm text-label-sm text-center text-on-surface-variant">Instant WhatsApp Ticket Pass &amp; Entry QR sent right after booking.</p></form>
+</div>
+</section>
+<!-- EVENT ORGANIZER & TRUST BADGE -->
+<section class="px-margin mb-6">
+<div class="rounded-2xl bg-surface-container-lowest p-4.5 flex flex-col gap-3 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-headline-sm">
+          V
         </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Vadiva Creative Labs</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pioneering experiential maker learning in Chennai</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Trained Safety Mentors on Floor</span>
+</div>
+<a class="inline-flex items-center gap-1 text-secondary font-label-sm text-label-sm font-bold" href="tel:7200981134">
+<span>72009 81134</span>
+<span class="material-symbols-outlined text-[16px]">call</span>
+</a>
+</div>
+</div>
+</section>
+<!-- VENUE LOCATION EMBED PREVIEW -->
+<section class="px-margin mb-6">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-6 rounded-full bg-secondary"></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Workshop Location</h3>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Santhome, Chennai</span>
+</div>
+<div class="w-full h-44 rounded-2xl bg-cover bg-center overflow-hidden shadow-sm relative flex items-end p-3.5" data-location="Santhome, Chennai" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcYxF_2Z3L1El7L5xp8ifCTCRpFlLm7meWGNdZnK1zVO4cYEZRFwt9D49nHKpB49rRzz8pR-8sOfGYYCtr8TfnsTaPnE1sN7pTnD0zG4hOBa8GBVQL9SSCdSRntmp18fTiL3gGenMIGOYhTQvXmX76VTsguuazE2BXLApHhnARYT33RCTBVV1f1R53DjBe2oHt0b_HWqELIuwC3OmCdQ3TnOyDdWE6oPA90fNHT-4')">
+<div class="w-full bg-surface-container-lowest/95 backdrop-blur-md rounded-xl p-3 flex items-center justify-between">
+<div class="flex flex-col min-w-0 pr-2">
+<span class="font-label-md text-label-md font-bold text-on-surface truncate">Vadiva Creative Labs</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Near Santhome High Road, Chennai</span>
+</div>
+<a class="px-3 py-1.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-bold shrink-0 flex items-center gap-1 shadow-sm" href="https://maps.google.com" target="_blank">
+<span>Map</span>
+<span class="material-symbols-outlined text-[14px]">directions</span>
+</a>
+</div>
+</div>
+</section>
+<!-- STICKY BOTTOM CONVERSION DOCK (FLOATING BAR) -->
+<div class="fixed bottom-0 inset-x-0 z-40 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,28,59,0.1)] px-margin py-3 pb-safe">
+<div class="max-w-md mx-auto flex items-center justify-between gap-3">
+<!-- Fee overview -->
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Entry Ticket</span>
+<div class="flex items-baseline gap-1">
+<span class="font-display-hero-mobile text-[24px] font-extrabold text-primary" id="floating-price">₹99</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">/ child</span>
+</div>
+</div>
+<!-- Action Button (Smooth scrolls to form) -->
+<a class="flex-1 h-12 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-1.5 shadow-[0_6px_20px_rgba(243,112,33,0.35)] active:scale-[0.98] transition-all" href="#registration-section">
+<span class="material-symbols-outlined text-[18px]">airplane_ticket</span>
+<span>Register Pass</span>
+</a>
+<!-- Quick Call Button -->
+<a class="w-12 h-12 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 shadow-xs" href="tel:7200981134" title="Call Support">
+<span class="material-symbols-outlined text-[20px]">phone</span>
+</a>
+</div>
+</div>
+</div>
+<script src="/assets/events/event-common.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.VadivaEvents) {
+      window.VadivaEvents.initEventForm('maker-registration-form', 'kids-maker-fair-2026');
+    }
+  });
+</script></main>
 
-        <!-- Official Poster Visual Card -->
-        <div style="max-width: 460px; margin: 0 auto; width: 100%;">
-          <div class="kmf-poster-card">
-            <img src="/assets/events/maker-fair-poster.jpg" alt="Kids Maker Fair &amp; Repair Mela Official Poster">
-            <div style="text-align: center; margin-top: 1rem; font-weight: 700; color: #0369A1; font-size: 0.95rem;">
-              📞 Register by Call / WhatsApp: <strong>72009 81134</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. ABOUT THE MAKER FAIR -->
-  <section class="section" id="about" style="background: #F8FAFC;">
-    <div class="container">
-      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <span class="event-info-pill" style="background: #E0F2FE; color: #0369A1; margin-bottom: 1rem;">Experiential Learning Arena</span>
-        <h2 style="font-size: 2.4rem; font-weight: 800; color: #0F172A; margin-bottom: 1.25rem;">Where Young Curious Minds Become Real Creators</h2>
-        <p style="font-size: 1.15rem; color: #475569; line-height: 1.7;">
-          At Vadiva Creative Labs, we believe children learn best when their hands are on the tools. The Kids Maker Fair &amp; Repair Mela is an immersive celebration where young inventors discover that things around them aren't black boxes — they are assembled from parts that can be understood, repaired, reimagined, and rebuilt.
-        </p>
-      </div>
-
-      <!-- 3. MAKE IT, FIX IT, REUSE IT CONCEPT -->
-      <div class="kmf-pillars-grid">
-        <div class="kmf-pillar-card">
-          <span class="kmf-pillar-tag" style="background: #FFEDD5; color: #C2410C;">Pillar 1</span>
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: #FFEDD5; color: #EA580C; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-          </div>
-          <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: #0F172A;">MAKE IT</h3>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Raw materials become working mechanisms. Kids cut, sand, fasten, and assemble their own tactile projects using child-safe maker tools.
-          </p>
-        </div>
-
-        <div class="kmf-pillar-card">
-          <span class="kmf-pillar-tag" style="background: #E0F2FE; color: #0369A1;">Pillar 2</span>
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          </div>
-          <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: #0F172A;">FIX IT</h3>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Learn to diagnose why things stop working! In our Repair Mela station, children unscrew broken toys and everyday gadgets to discover gears, wires, and fixes.
-          </p>
-        </div>
-
-        <div class="kmf-pillar-card">
-          <span class="kmf-pillar-tag" style="background: #FEF3C7; color: #92400E;">Pillar 3</span>
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: #FEF3C7; color: #D97706; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-          </div>
-          <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: #0F172A;">REUSE IT</h3>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Transform discarded cardboard, bottles, and scrap components into creative automata and kinetic contraptions. Sustainability meets engineering innovation!
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. FUNFILLED ACTIVITIES -->
-  <section class="section" id="activities">
-    <div class="container">
-      <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-        <span class="event-info-pill" style="background: #FFEDD5; color: #C2410C;">Hands-On Stations</span>
-        <h2 style="font-size: 2.3rem; font-weight: 800; margin: 0.75rem 0 1rem;">Funfilled Activity Arenas</h2>
-        <p style="color: #64748B; font-size: 1.1rem;">
-          Five immersive activity stations guided by experienced makers and engineers:
-        </p>
-      </div>
-
-      <div class="kmf-activities-grid">
-        <div class="kmf-activity-card">
-          <div class="kmf-activity-icon" style="background: #E0F2FE; color: #0284C7;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 20h20"></path><path d="M5 20v-4"></path><path d="M19 20v-4"></path><path d="M4 16h16"></path><path d="M12 4v8"></path></svg>
-          </div>
-          <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Woodcraft &amp; Hand Tools</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Practice using real child-friendly hand tools: miniature hammers, screwdrivers, sandpaper, and brackets to craft a personalized keepsake.
-          </p>
-        </div>
-
-        <div class="kmf-activity-card">
-          <div class="kmf-activity-icon" style="background: #FFEDD5; color: #EA580C;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"></path></svg>
-          </div>
-          <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Toy Surgery &amp; Teardown Lab</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Ever wondered what's inside a remote-controlled car or electric fan? Deconstruct and inspect circuits, motor gears, and wiring safely.
-          </p>
-        </div>
-
-        <div class="kmf-activity-card">
-          <div class="kmf-activity-icon" style="background: #FEF3C7; color: #D97706;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-          </div>
-          <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Electronics &amp; Circuit Prototyping</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Snap together conductive circuits, light up LEDs, wire simple switches, and discover the fundamentals of clean electrical currents.
-          </p>
-        </div>
-
-        <div class="kmf-activity-card">
-          <div class="kmf-activity-icon" style="background: #DCFCE7; color: #16A34A;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-          </div>
-          <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Upcycled Kinetic Automata</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Harness cams, linkages, and recycled materials to build a moving automata sculpture that waves, spins, or jumps when cranked.
-          </p>
-        </div>
-
-        <div class="kmf-activity-card">
-          <div class="kmf-activity-icon" style="background: #F3E8FF; color: #9333EA;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M9 9h6v6H9z"></path><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path></svg>
-          </div>
-          <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Creative Robotics &amp; Bristlebots</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6;">
-            Construct buzzing micro-robots powered by coin cells and vibration motors, competing in a friendly maze obstacle sprint.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. MAKER SKILLS & 6. CERTIFICATES -->
-  <section class="section" style="background: #F8FAFC;">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: center;">
-        <div>
-          <span class="event-info-pill" style="background: #BAE6FD; color: #0369A1; margin-bottom: 0.75rem;">Skills That Last a Lifetime</span>
-          <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 1.25rem; color: #0F172A;">Maker Skills Kids Take Home</h2>
-          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;">
-            <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
-              <span style="color: #16A34A; font-weight: 900; font-size: 1.2rem;">✓</span>
-              <div><strong>Mechanical Tool Fluency:</strong> Safe understanding of hand tools, torque, fasteners, and measurements.</div>
-            </li>
-            <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
-              <span style="color: #16A34A; font-weight: 900; font-size: 1.2rem;">✓</span>
-              <div><strong>Diagnostic Troubleshooting:</strong> Formulating hypotheses on why devices fail and testing step-by-step solutions.</div>
-            </li>
-            <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
-              <span style="color: #16A34A; font-weight: 900; font-size: 1.2rem;">✓</span>
-              <div><strong>Material Resourcefulness:</strong> Viewing household scrap as creative structural engineering materials.</div>
-            </li>
-            <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
-              <span style="color: #16A34A; font-weight: 900; font-size: 1.2rem;">✓</span>
-              <div><strong>Confidence &amp; Creator Mindset:</strong> The profound psychological shift from a passive consumer to an active builder.</div>
-            </li>
-          </ul>
-        </div>
-
-        <div style="background: #FFFFFF; border: 2px dashed #BAE6FD; border-radius: 24px; padding: 2.5rem; text-align: center; box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);">
-          <div style="width: 64px; height: 64px; border-radius: 50%; background: #FEF3C7; color: #D97706; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-          </div>
-          <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; color: #0F172A;">Official Maker Certificate</h3>
-          <p style="color: #64748B; font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
-            Every registered child who completes the day's experiences receives the <strong>Vadiva Creative Labs Young Maker Certificate of Participation</strong> celebrating their curiosity, handcraft skills, and inventions.
-          </p>
-          <div style="display: inline-block; background: #DCFCE7; color: #16A34A; font-weight: 700; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.9rem;">
-            Included with ₹99 Entry Pass
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. WHY PARTICIPATE & 8. EVENT INFORMATION -->
-  <section class="section" id="info">
-    <div class="container">
-      <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
-        <span class="event-info-pill" style="background: #FFEDD5; color: #C2410C;">Event Logistics</span>
-        <h2 style="font-size: 2.3rem; font-weight: 800; margin: 0.75rem 0 1rem;">Why Parents Choose Vadiva Maker Fair</h2>
-        <p style="color: #64748B; font-size: 1.1rem;">
-          In an era of screen saturation, the Maker Fair provides 5 hours of rich, screen-free, tactile exploration under the attentive supervision of experienced educators.
-        </p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-        <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: 1.75rem;">
-          <h4 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">📅 Date &amp; Hours</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6; margin: 0;">
-            <strong>Sunday, 29 November 2026</strong><br>
-            10:30 AM – 3:30 PM (5 action-packed hours).
-          </p>
-        </div>
-
-        <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: 1.75rem;">
-          <h4 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">📍 Location</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6; margin: 0;">
-            <strong>Santhome, Vadiva Creative Labs</strong><br>
-            Chennai, Tamil Nadu. Dedicated parking &amp; parents lounge available.
-          </p>
-        </div>
-
-        <div style="background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; padding: 1.75rem;">
-          <h4 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">🎟️ Transparent Entry Fee</h4>
-          <p style="color: #64748B; font-size: 0.95rem; line-height: 1.6; margin: 0;">
-            <strong>₹99 per child</strong><br>
-            Includes activity access, take-home build materials, and official certificate.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. APPLICATION FORM (STRICT FIVE-FIELD REQUIREMENT) -->
-  <section class="section" id="apply" style="background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);">
-    <div class="container" style="max-width: 720px;">
-      <div class="event-form-wrapper">
-        <div class="event-form-header">
-          <span class="event-info-pill" style="background: #E0F2FE; color: #0369A1; margin-bottom: 0.75rem;">Official Registration</span>
-          <h2 class="event-form-title" style="color: #0F172A;">APPLY NOW</h2>
-          <p class="event-form-subtitle">
-            Complete the details below to apply for this event and proceed with registration.
-          </p>
-          <div style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; background: #FFEDD5; color: #C2410C; padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700;">
-            <span>Kids Maker Fair &amp; Repair Mela • Entry Fee: ₹99</span>
-          </div>
-        </div>
-
-        <!-- STRICT FIVE-FIELD FORM -->
-        <form id="makerFairForm" novalidate>
-          <div class="event-form-fields grid-2col">
-            <!-- 1. Parent Name -->
-            <div class="event-field-group">
-              <label class="event-field-label" for="parentName">
-                Parent Name <span class="required-star">*</span>
-              </label>
-              <input type="text" id="parentName" name="parentName" class="event-field-input" placeholder="e.g. Ramesh Kumar" required autocomplete="name">
-            </div>
-
-            <!-- 2. Student Name -->
-            <div class="event-field-group">
-              <label class="event-field-label" for="studentName">
-                Student Name <span class="required-star">*</span>
-              </label>
-              <input type="text" id="studentName" name="studentName" class="event-field-input" placeholder="e.g. Aarav Ramesh" required>
-            </div>
-
-            <!-- 3. School Name -->
-            <div class="event-field-group full-width">
-              <label class="event-field-label" for="schoolName">
-                School Name <span class="required-star">*</span>
-              </label>
-              <input type="text" id="schoolName" name="schoolName" class="event-field-input" placeholder="e.g. Velammal Vidyalaya, Chennai" required>
-            </div>
-
-            <!-- 4. Email ID -->
-            <div class="event-field-group">
-              <label class="event-field-label" for="email">
-                Email ID <span class="required-star">*</span>
-              </label>
-              <input type="email" id="email" name="email" class="event-field-input" placeholder="e.g. parent@example.com" required autocomplete="email">
-            </div>
-
-            <!-- 5. City -->
-            <div class="event-field-group">
-              <label class="event-field-label" for="city">
-                City <span class="required-star">*</span>
-              </label>
-              <input type="text" id="city" name="city" class="event-field-input" placeholder="e.g. Chennai" required>
-            </div>
-          </div>
-
-          <div style="margin-top: 2rem;">
-            <button type="submit" class="event-submit-btn" style="background: linear-gradient(135deg, var(--kmf-orange) 0%, var(--kmf-orange-dark) 100%); color: #FFFFFF;">
-              <span>PROCEED TO PAYMENT (₹99)</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-
-          <div class="event-trust-badge">
-            <span>🔒 Secure Razorpay Payment</span>
-            <span>⚡ Instant Participant UID</span>
-            <span>🎟️ Downloadable Digital Event Pass</span>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. FAQS SECTION -->
-  <section class="section" id="faqs" style="background: #F8FAFC;">
-    <div class="container" style="max-width: 800px;">
-      <div style="text-align: center; margin-bottom: 2.5rem;">
-        <span class="event-info-pill" style="background: #E0F2FE; color: #0369A1;">Help &amp; Answers</span>
-        <h2 style="font-size: 2.2rem; font-weight: 800; margin: 0.75rem 0;">Frequently Asked Questions</h2>
-      </div>
-
-      <div class="kmf-faq-item">
-        <div class="kmf-faq-header">
-          <span>Who can attend the Maker Fair?</span>
-          <span>+</span>
-        </div>
-        <div class="kmf-faq-body">
-          Any child aged between 6 and 16 years with a curiosity for making, building, or fixing things! No prior workshop experience is required. Activities are tailored to different age groups.
-        </div>
-      </div>
-
-      <div class="kmf-faq-item">
-        <div class="kmf-faq-header">
-          <span>Can parents accompany their children?</span>
-          <span>+</span>
-        </div>
-        <div class="kmf-faq-body">
-          Yes! Parents are welcome to attend, observe, and cheer their children on. We also have a comfortable parents lounge with seating and refreshments.
-        </div>
-      </div>
-
-      <div class="kmf-faq-item">
-        <div class="kmf-faq-header">
-          <span>Are the tools and workshops safe for young children?</span>
-          <span>+</span>
-        </div>
-        <div class="kmf-faq-body">
-          Safety is our absolute highest priority. All workstations are guided by certified educators and makers. Hand tools are calibrated for young learners, and safety goggles and gear are provided where necessary.
-        </div>
-      </div>
-
-      <div class="kmf-faq-item">
-        <div class="kmf-faq-header">
-          <span>What does the ₹99 entry fee cover?</span>
-          <span>+</span>
-        </div>
-        <div class="kmf-faq-body">
-          The ₹99 fee includes entry to all stations, consumable workshop materials for the projects your child builds, and an official participation certificate.
-        </div>
-      </div>
-
-      <div class="kmf-faq-item">
-        <div class="kmf-faq-header">
-          <span>How do I receive my Participant UID and Event Card?</span>
-          <span>+</span>
-        </div>
-        <div class="kmf-faq-body">
-          Immediately after completing the ₹99 payment, a personalized Digital Event Card with your unique Participant UID and QR code will appear on screen for download as a PNG or PDF. You can also re-download it anytime using our Registration Status portal.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 11. CONTACT INFORMATION -->
-  <section class="section" id="contact">
-    <div class="container text-center">
-      <div style="background: #0284C7; color: #FFFFFF; border-radius: 28px; padding: 3rem 2rem; max-width: 900px; margin: 0 auto;">
-        <h2 style="color: #FFFFFF; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">Have Questions? We're Here to Help!</h2>
-        <p style="color: #BAE6FD; font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem;">
-          Feel free to reach out to our event coordinator team anytime for guidance or group bookings.
-        </p>
-        <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-          <a href="tel:7200981134" style="background: #FFFFFF; color: #0284C7; font-weight: 800; padding: 0.85rem 1.75rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-            📞 72009 81134
-          </a>
-          <a href="mailto:reach@vadivacreativelabs.com" style="background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border: 2px solid #FFFFFF; font-weight: 700; padding: 0.85rem 1.75rem; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-            ✉️ reach@vadivacreativelabs.com
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 12. FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-about">
-          <img src="/assets/logo.png" alt="Vadiva Creative Labs Logo" style="height: 38px; width: auto; margin-bottom: 1.25rem;">
-          <p>An innovation-driven education enterprise designed to transform how institutions cultivate thinking, creativity, and real-world problem-solving.</p>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>2026 Flagship Events</h4>
-          <ul>
-            <li><a href="/kids-maker-fair-2026.html">Kids Maker Fair &amp; Repair Mela</a></li>
-            <li><a href="/protospark-forge-2026.html">ProtoSpark Forge</a></li>
-            <li><a href="/shipwreck-island-2026.html">Shipwreck Island</a></li>
-            <li><a href="/registration-status.html">Registration Status Check</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-links">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="/about.html">About Us</a></li>
-            <li><a href="/events.html">Camps &amp; Festivals</a></li>
-            <li><a href="/gallery.html">Gallery</a></li>
-            <li><a href="/terms.html">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col footer-contact">
-          <h4>Connect</h4>
-          <div class="footer-contact-info">
-            <p><strong>Hotline:</strong> +91 72009 81134</p>
-            <p><strong>Email:</strong> reach@vadivacreativelabs.com</p>
-            <p><strong>Venue:</strong> Santhome, Vadiva Creative Labs</p>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Vadiva Creative Labs. All rights reserved.</p>
-        <p>A Product of Velammal Knowledge Park</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="/assets/events/event-common.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize Strict 5-Field Form
-      window.VadivaEvents.initEventForm('makerFairForm', 'kids-maker-fair-2026');
-
-      // Mobile Menu Toggle
-      const toggle = document.querySelector('.mobile-menu-toggle');
-      const nav = document.querySelector('.main-nav');
-      if (toggle && nav) {
-        toggle.addEventListener('click', () => {
-          nav.classList.toggle('active');
-          toggle.classList.toggle('active');
-        });
-      }
-
-      // Smooth scroll for anchors
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
-      });
-    });
-  </script>
-</body>
-</html>
+</body></html>
